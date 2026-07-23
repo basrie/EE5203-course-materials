@@ -68,9 +68,10 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
+<link rel="stylesheet" href="styles/index_cards.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -114,9 +115,7 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -139,158 +138,160 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="ee5203-microprocessors" class="level1">
-<h1>EE5203 Microprocessors</h1>
-<p>Course materials for the 2026-2027 offering: theory slides, study sheets, practice worksheets, and laboratory guides for each lecture.</p>
-<p>Lectures 1-4 form a cumulative Embedded C foundation, and each laboratory builds on the previous week’s working project. Lecture numbers describe instructional order, not calendar weeks — the weekly schedule, graded pre-lab quizzes, submissions, and announcements are in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a>. Worked solutions are released in CATS after the corresponding session.</p>
-<section id="course-documents" class="level2">
-<h2 class="anchored" data-anchor-id="course-documents">Course documents</h2>
-<ul>
-<li><a href="./SYLLABUS.html">Syllabus — outcomes, weekly rhythm, assessment, project timeline</a></li>
-<li><a href="./resources/references/academic_references.html">Academic references and further reading</a></li>
-<li><a href="./resources/companions/EE5203_Toolchain_Boot_Companion.html">From C to Silicon — toolchain, memory, and boot companion</a></li>
-</ul>
-</section>
-<section id="lecture-1---embedded-systems-the-c-toolchain-and-debugging" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-1---embedded-systems-the-c-toolchain-and-debugging">Lecture 1 - Embedded Systems, the C Toolchain, and Debugging</h2>
-<ul>
-<li><a href="./lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L01_microprocessor-systems-toolchain/practice/EE5203_Microprocessors_Lecture1_Study_Sheet.html">Study sheet</a></li>
-<li><a href="./lectures/L01_microprocessor-systems-toolchain/practice/EE5203_Microprocessors_Lecture1_Worksheet.html">Practice worksheet</a></li>
-<li><a href="./lectures/L01_microprocessor-systems-toolchain/practice/EE5203_Microprocessors_Lecture1_C_Readiness_Diagnostic.html">Embedded C readiness diagnostic</a></li>
-<li>Pre-lab quiz — in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a> under Tests &amp; Quizzes (two attempts, highest score)</li>
-<li><a href="./lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Lab.html">Lab guide</a></li>
-<li><a href="./lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Reference.html">Lab reference</a></li>
-</ul>
-</section>
-<section id="lecture-2-values-decisions-loops-and-arrays" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-2-values-decisions-loops-and-arrays">Lecture 2 — Values, Decisions, Loops, and Arrays</h2>
-<ul>
-<li><a href="./lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html">Study sheet</a></li>
-<li><a href="./lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Worksheet.html">Practice worksheet</a></li>
-<li>Pre-lab quiz — in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a> under Tests &amp; Quizzes (two attempts, highest score)</li>
-<li><a href="./lectures/L02_c-for-embedded-systems/lab/EE5203_Microprocessors_Lecture2_Lab.html">Lab guide</a></li>
-</ul>
-</section>
-<section id="lecture-3-functions-arrays-strings-and-multiple-c-files" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-3-functions-arrays-strings-and-multiple-c-files">Lecture 3 — Functions, Arrays, Strings, and Multiple C Files</h2>
-<ul>
-<li><a href="./lectures/L03_pointers-memory-registers/theory/EE5203_Microprocessors_Lecture3_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L03_pointers-memory-registers/practice/EE5203_Microprocessors_Lecture3_Study_Sheet.html">Study sheet</a></li>
-<li><a href="./lectures/L03_pointers-memory-registers/practice/EE5203_Microprocessors_Lecture3_Worksheet.html">Practice worksheet</a></li>
-<li>Pre-lab quiz — in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a> under Tests &amp; Quizzes (two attempts, highest score)</li>
-<li><a href="./lectures/L03_pointers-memory-registers/lab/EE5203_Microprocessors_Lecture3_Lab.html">Lab guide</a></li>
-<li><a href="./lectures/L03_pointers-memory-registers/lab/starter/README.html">Starter files</a></li>
-</ul>
-</section>
-<section id="lecture-4-pointers-structures-bits-registers-and-gpio" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-4-pointers-structures-bits-registers-and-gpio">Lecture 4 — Pointers, Structures, Bits, Registers, and GPIO</h2>
-<ul>
-<li><a href="./lectures/L04_gpio-bare-metal/theory/EE5203_Microprocessors_Lecture4_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L04_gpio-bare-metal/practice/EE5203_Microprocessors_Lecture4_Study_Sheet.html">Study sheet</a></li>
-<li><a href="./lectures/L04_gpio-bare-metal/practice/EE5203_Microprocessors_Lecture4_Worksheet.html">Practice worksheet</a></li>
-<li>Pre-lab quiz — in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a> under Tests &amp; Quizzes (two attempts, highest score)</li>
-<li><a href="./lectures/L04_gpio-bare-metal/lab/EE5203_Microprocessors_Lecture4_Lab.html">Lab guide — Bare-Metal GPIO</a></li>
-<li>Homework — External GPIO Control: posted in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a> under Assignments</li>
-</ul>
-</section>
-<section id="lecture-5-gpio-and-hardware-abstraction" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-5-gpio-and-hardware-abstraction">Lecture 5 — GPIO and Hardware Abstraction</h2>
-<ul>
-<li><a href="./lectures/L05_gpio-hal-abstraction/theory/EE5203_Microprocessors_Lecture5_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L05_gpio-hal-abstraction/practice/EE5203_Microprocessors_Lecture5_Study_Sheet.html">Study sheet</a></li>
-<li><a href="./lectures/L05_gpio-hal-abstraction/practice/EE5203_Microprocessors_Lecture5_Worksheet.html">Practice worksheet</a></li>
-<li>Pre-lab quiz — in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a> under Tests &amp; Quizzes (two attempts, highest score)</li>
-<li><a href="./lectures/L05_gpio-hal-abstraction/lab/EE5203_Microprocessors_Lecture5_Lab.html">Lab guide — GPIO with the HAL</a></li>
-</ul>
-</section>
-<section id="lecture-6-interrupts-and-the-nvic" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-6-interrupts-and-the-nvic">Lecture 6 — Interrupts and the NVIC</h2>
-<ul>
-<li><a href="./lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L06_interrupts/practice/EE5203_Microprocessors_Lecture6_Study_Sheet.html">Study sheet</a></li>
-<li><a href="./lectures/L06_interrupts/practice/EE5203_Microprocessors_Lecture6_Worksheet.html">Practice worksheet</a></li>
-<li>Pre-lab quiz — in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a> under Tests &amp; Quizzes (two attempts, highest score)</li>
-<li><a href="./lectures/L06_interrupts/lab/EE5203_Microprocessors_Lecture6_Lab.html">Lab guide — Button Interrupts (EXTI)</a></li>
-<li>Homework — HAL Interrupts: posted in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a> under Assignments</li>
-</ul>
-<hr>
-<div class="callout callout-style-default callout-note callout-titled" title="Lectures 7-14 are being revised">
+<div class="lead-note">
+<p>Course materials for the 2026-2027 offering: theory slides, study sheets, practice worksheets, and laboratory guides for each lecture. Lecture numbers describe instructional order, not calendar weeks — the weekly schedule, graded pre-lab quizzes, homework, submissions, and announcements are in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a>. Worked solutions are released in CATS after the corresponding session.</p>
+</div>
+<div class="doc-grid">
+<a class="doc-card" href="SYLLABUS.html"><strong>Syllabus</strong><span>Outcomes, tools, weekly rhythm, assessment, and the project timeline</span></a>
+<a class="doc-card" href="resources/companions/EE5203_Toolchain_Boot_Companion.html"><strong>From C to Silicon</strong><span>Toolchain, memory, and boot companion — how your code reaches the chip</span></a>
+<a class="doc-card" href="resources/references/academic_references.html"><strong>References</strong><span>Academic references and further reading, mapped to each lecture</span></a>
+</div>
+
+<p class="section-label">Lectures 1-6 · 2026-27 packages</p>
+<div class="lecture-grid">
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L01</span><span class="lec-title">Embedded Systems, the C Toolchain, and Debugging</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html">Theory</a>
+    <a class="pill" href="lectures/L01_microprocessor-systems-toolchain/practice/EE5203_Microprocessors_Lecture1_Study_Sheet.html">Study sheet</a>
+    <a class="pill" href="lectures/L01_microprocessor-systems-toolchain/practice/EE5203_Microprocessors_Lecture1_Worksheet.html">Worksheet</a>
+    <a class="pill" href="lectures/L01_microprocessor-systems-toolchain/practice/EE5203_Microprocessors_Lecture1_C_Readiness_Diagnostic.html">C diagnostic</a>
+    <a class="pill lab" href="lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Lab.html">Lab guide</a>
+    <a class="pill" href="lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Reference.html">Lab reference</a>
+    <a class="pill cats" href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873" title="Graded — taken in CATS Tests &amp; Quizzes">Quiz · CATS</a>
+  </div>
+</div>
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L02</span><span class="lec-title">Values, Decisions, Loops, and Arrays</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html">Theory</a>
+    <a class="pill" href="lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html">Study sheet</a>
+    <a class="pill" href="lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Worksheet.html">Worksheet</a>
+    <a class="pill lab" href="lectures/L02_c-for-embedded-systems/lab/EE5203_Microprocessors_Lecture2_Lab.html">Lab guide</a>
+    <a class="pill cats" href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873" title="Graded — taken in CATS Tests &amp; Quizzes">Quiz · CATS</a>
+  </div>
+</div>
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L03</span><span class="lec-title">Functions, Arrays, Strings, and Multiple C Files</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L03_pointers-memory-registers/theory/EE5203_Microprocessors_Lecture3_Theory.html">Theory</a>
+    <a class="pill" href="lectures/L03_pointers-memory-registers/practice/EE5203_Microprocessors_Lecture3_Study_Sheet.html">Study sheet</a>
+    <a class="pill" href="lectures/L03_pointers-memory-registers/practice/EE5203_Microprocessors_Lecture3_Worksheet.html">Worksheet</a>
+    <a class="pill lab" href="lectures/L03_pointers-memory-registers/lab/EE5203_Microprocessors_Lecture3_Lab.html">Lab guide</a>
+    <a class="pill" href="lectures/L03_pointers-memory-registers/lab/starter/README.html">Starter files</a>
+    <a class="pill cats" href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873" title="Graded — taken in CATS Tests &amp; Quizzes">Quiz · CATS</a>
+  </div>
+</div>
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L04</span><span class="lec-title">Pointers, Structures, Bits, Registers, and GPIO</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L04_gpio-bare-metal/theory/EE5203_Microprocessors_Lecture4_Theory.html">Theory</a>
+    <a class="pill" href="lectures/L04_gpio-bare-metal/practice/EE5203_Microprocessors_Lecture4_Study_Sheet.html">Study sheet</a>
+    <a class="pill" href="lectures/L04_gpio-bare-metal/practice/EE5203_Microprocessors_Lecture4_Worksheet.html">Worksheet</a>
+    <a class="pill lab" href="lectures/L04_gpio-bare-metal/lab/EE5203_Microprocessors_Lecture4_Lab.html">Lab guide</a>
+    <a class="pill cats" href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873" title="Graded — taken in CATS Tests &amp; Quizzes">Quiz · CATS</a>
+    <a class="pill cats" href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873" title="Graded — posted in CATS Assignments">Homework · CATS</a>
+  </div>
+</div>
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L05</span><span class="lec-title">GPIO and Hardware Abstraction</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L05_gpio-hal-abstraction/theory/EE5203_Microprocessors_Lecture5_Theory.html">Theory</a>
+    <a class="pill" href="lectures/L05_gpio-hal-abstraction/practice/EE5203_Microprocessors_Lecture5_Study_Sheet.html">Study sheet</a>
+    <a class="pill" href="lectures/L05_gpio-hal-abstraction/practice/EE5203_Microprocessors_Lecture5_Worksheet.html">Worksheet</a>
+    <a class="pill lab" href="lectures/L05_gpio-hal-abstraction/lab/EE5203_Microprocessors_Lecture5_Lab.html">Lab guide</a>
+    <a class="pill cats" href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873" title="Graded — taken in CATS Tests &amp; Quizzes">Quiz · CATS</a>
+  </div>
+</div>
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L06</span><span class="lec-title">Interrupts and the NVIC</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html">Theory</a>
+    <a class="pill" href="lectures/L06_interrupts/practice/EE5203_Microprocessors_Lecture6_Study_Sheet.html">Study sheet</a>
+    <a class="pill" href="lectures/L06_interrupts/practice/EE5203_Microprocessors_Lecture6_Worksheet.html">Worksheet</a>
+    <a class="pill lab" href="lectures/L06_interrupts/lab/EE5203_Microprocessors_Lecture6_Lab.html">Lab guide</a>
+    <a class="pill cats" href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873" title="Graded — taken in CATS Tests &amp; Quizzes">Quiz · CATS</a>
+    <a class="pill cats" href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873" title="Graded — posted in CATS Assignments">Homework · CATS</a>
+  </div>
+</div>
+</div>
+
+<p class="section-label">Lectures 7-14 · being revised</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Last year's versions, published as a preview">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Lectures 7-14 are being revised
+Last year’s versions, published as a preview
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The materials below are last year’s versions, published as a preview while each package is rebuilt to the Lecture 1-6 standard. Expect them to change before their lab week; the current version is always announced in CATS.</p>
+<p>Each package below will be replaced in sequence to the Lecture 1-6 standard before its lab week; the current version is always announced in CATS.</p>
 </div>
 </div>
-</section>
-<section id="lecture-7-timers-tim" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-7-timers-tim">Lecture 7 — Timers (TIM)</h2>
-<ul>
-<li><a href="./lectures/L07_timers/theory/EE5203_Microprocessors_Lecture7_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L07_timers/lab/EE5203_Microprocessors_Lecture7_Lab.html">Lab guide — Timer Interrupts</a></li>
-</ul>
-</section>
-<section id="lecture-8-pulse-width-modulation" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-8-pulse-width-modulation">Lecture 8 — Pulse-Width Modulation</h2>
-<ul>
-<li><a href="./lectures/L08_pwm-motor-control/theory/EE5203_Microprocessors_Lecture8_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L08_pwm-motor-control/lab/EE5203_Microprocessors_Lecture8_Lab.html">Lab guide — Fading LEDs and Controlling Servos</a></li>
-</ul>
-</section>
-<section id="lecture-9-input-capture" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-9-input-capture">Lecture 9 — Input Capture</h2>
-<ul>
-<li><a href="./lectures/L09_input-capture/theory/EE5203_Microprocessors_Lecture9_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L09_input-capture/lab/EE5203_Microprocessors_Lecture9_Lab.html">Lab guide — Measure Your Own PWM</a></li>
-</ul>
-</section>
-<section id="lecture-10-analog-to-digital-conversion-adc" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-10-analog-to-digital-conversion-adc">Lecture 10 — Analog-to-Digital Conversion (ADC)</h2>
-<ul>
-<li><a href="./lectures/L10_adc/theory/EE5203_Microprocessors_Lecture10_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L10_adc/lab/EE5203_Microprocessors_Lecture10_Lab.html">Lab guide — Reading the Analog World</a></li>
-</ul>
-</section>
-<section id="lecture-11-the-bridge-to-assembly" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-11-the-bridge-to-assembly">Lecture 11 — The Bridge to Assembly</h2>
-<ul>
-<li><a href="./lectures/L11_assembly-disassembly/theory/EE5203_Microprocessors_Lecture11_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L11_assembly-disassembly/lab/EE5203_Microprocessors_Lecture11_Lab.html">Lab guide — The Disassembly View</a></li>
-</ul>
-</section>
-<section id="lecture-12-synchronous-serial-i2c-and-spi" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-12-synchronous-serial-i2c-and-spi">Lecture 12 — Synchronous Serial: I2C and SPI</h2>
-<ul>
-<li><a href="./lectures/L12_i2c-spi/theory/EE5203_Microprocessors_Lecture12_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L12_i2c-spi/lab/EE5203_Microprocessors_Lecture12_Lab.html">Lab slides — Analog Sensors and LCDs</a></li>
-<li><a href="./lectures/L12_i2c-spi/lab/EE5203_Microprocessors_Lecture12_Lab_Potentiometer.html">Lab slides (potentiometer version)</a></li>
-</ul>
-</section>
-<section id="lecture-13-dma-displays-and-motors" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-13-dma-displays-and-motors">Lecture 13 — DMA, Displays, and Motors</h2>
-<ul>
-<li><a href="./lectures/L13_dma-displays/theory/EE5203_Microprocessors_Lecture13_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L13_dma-displays/lab/EE5203_Microprocessors_Lecture13_Lab.html">Lab slides — TFT Display and SPI with DMA</a></li>
-<li><a href="./lectures/L13_dma-displays/practice/EE5203_Microprocessors_Lecture13_DMA_Extract.html">DMA deck extract</a></li>
-</ul>
-</section>
-<section id="lecture-14-final-project-presentations-and-course-wrap-up" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-14-final-project-presentations-and-course-wrap-up">Lecture 14 — Final Project Presentations and Course Wrap-up</h2>
-<ul>
-<li><a href="./lectures/L14_integration-review/theory/EE5203_Microprocessors_Lecture14_Theory.html">Theory slides</a></li>
-<li><a href="./lectures/L14_integration-review/lab/EE5203_Microprocessors_Lecture14_Lab.html">Lab slides — Final Project Development and Demonstrations</a></li>
-</ul>
+<div class="lecture-grid legacy">
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L07</span><span class="lec-title">Timers (TIM)</span><span class="badge-legacy">2025-26 preview</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L07_timers/theory/EE5203_Microprocessors_Lecture7_Theory.html">Theory</a>
+    <a class="pill lab" href="lectures/L07_timers/lab/EE5203_Microprocessors_Lecture7_Lab.html">Lab guide</a>
+  </div>
+</div>
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L08</span><span class="lec-title">Pulse-Width Modulation</span><span class="badge-legacy">2025-26 preview</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L08_pwm-motor-control/theory/EE5203_Microprocessors_Lecture8_Theory.html">Theory</a>
+    <a class="pill lab" href="lectures/L08_pwm-motor-control/lab/EE5203_Microprocessors_Lecture8_Lab.html">Lab guide</a>
+  </div>
+</div>
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L09</span><span class="lec-title">Input Capture</span><span class="badge-legacy">2025-26 preview</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L09_input-capture/theory/EE5203_Microprocessors_Lecture9_Theory.html">Theory</a>
+    <a class="pill lab" href="lectures/L09_input-capture/lab/EE5203_Microprocessors_Lecture9_Lab.html">Lab guide</a>
+  </div>
+</div>
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L10</span><span class="lec-title">Analog-to-Digital Conversion (ADC)</span><span class="badge-legacy">2025-26 preview</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L10_adc/theory/EE5203_Microprocessors_Lecture10_Theory.html">Theory</a>
+    <a class="pill lab" href="lectures/L10_adc/lab/EE5203_Microprocessors_Lecture10_Lab.html">Lab guide</a>
+  </div>
+</div>
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L11</span><span class="lec-title">The Bridge to Assembly</span><span class="badge-legacy">2025-26 preview</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L11_assembly-disassembly/theory/EE5203_Microprocessors_Lecture11_Theory.html">Theory</a>
+    <a class="pill lab" href="lectures/L11_assembly-disassembly/lab/EE5203_Microprocessors_Lecture11_Lab.html">Lab guide</a>
+  </div>
+</div>
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L12</span><span class="lec-title">Synchronous Serial: I2C and SPI</span><span class="badge-legacy">2025-26 preview</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L12_i2c-spi/theory/EE5203_Microprocessors_Lecture12_Theory.html">Theory</a>
+    <a class="pill lab" href="lectures/L12_i2c-spi/lab/EE5203_Microprocessors_Lecture12_Lab.html">Lab slides</a>
+    <a class="pill lab" href="lectures/L12_i2c-spi/lab/EE5203_Microprocessors_Lecture12_Lab_Potentiometer.html">Lab (potentiometer)</a>
+  </div>
+</div>
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L13</span><span class="lec-title">DMA, Displays, and Motors</span><span class="badge-legacy">2025-26 preview</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L13_dma-displays/theory/EE5203_Microprocessors_Lecture13_Theory.html">Theory</a>
+    <a class="pill lab" href="lectures/L13_dma-displays/lab/EE5203_Microprocessors_Lecture13_Lab.html">Lab slides</a>
+    <a class="pill" href="lectures/L13_dma-displays/practice/EE5203_Microprocessors_Lecture13_DMA_Extract.html">DMA extract</a>
+  </div>
+</div>
+<div class="lecture-card">
+  <div class="lec-head"><span class="lec-code">L14</span><span class="lec-title">Final Project Presentations and Course Wrap-up</span><span class="badge-legacy">2025-26 preview</span></div>
+  <div class="lec-links">
+    <a class="pill" href="lectures/L14_integration-review/theory/EE5203_Microprocessors_Lecture14_Theory.html">Theory</a>
+    <a class="pill lab" href="lectures/L14_integration-review/lab/EE5203_Microprocessors_Lecture14_Lab.html">Lab slides</a>
+  </div>
+</div>
+</div>
 
 
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
