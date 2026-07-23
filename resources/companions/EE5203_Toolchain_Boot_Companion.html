@@ -233,7 +233,7 @@ div.mermaid svg .cluster-label {
 </header>
 
 
-<p><em>A companion reference for EE5203 Microprocessors. It answers the questions the lectures deliberately defer: what actually happens between saving <code>main.c</code> and the LED blinking. Read it alongside <a href="../../lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html">L01</a> (the toolchain), <a href="../../lectures/L04_gpio-bare-metal/theory/EE5203_Microprocessors_Lecture4_Theory.html">L04</a> (registers and memory-mapped I/O), <a href="../../lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html">L06</a> (the vector table), and <a href="../../lectures/L11_assembly-disassembly/theory/EE5203_Microprocessors_Lecture11_Theory.html">L11</a> (the bridge to assembly). You need to know C; you do not need to know anything about compilers, linkers, or boot ROMs — that is what this document is for.</em></p>
+<p><em>A companion reference for EE5203 Microprocessors. It answers the questions the lectures deliberately defer: what actually happens between saving <code>main.c</code> and the LED blinking. Read it alongside <a href="../../lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html">L01</a> (the toolchain), <a href="../../lectures/L04_gpio-bare-metal/theory/EE5203_Microprocessors_Lecture4_Theory.html">L04</a> (registers and memory-mapped I/O), <a href="../../lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html">L06</a> (the vector table), and the optional assembly deck (the bridge to assembly — available in CATS). You need to know C; you do not need to know anything about compilers, linkers, or boot ROMs — that is what this document is for.</em></p>
 <p>Every concrete number in this companion is real: the memory sizes and addresses come from the STM32F401RE on your Nucleo board, the linker-script and startup-code excerpts come from ST’s actual generated files, and the tool names are the ones in the course toolchain (STM32CubeMX, CMake + Ninja, <code>arm-none-eabi-gcc</code> 14.3, and the ST-LINK tools from STM32CubeCLT, driven from VS Code).</p>
 <section id="sec-pipeline" class="level1 page-columns page-full" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> The big picture</h1>
@@ -460,7 +460,7 @@ Course tie-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This is <a href="../../lectures/L04_gpio-bare-metal/theory/EE5203_Microprocessors_Lecture4_Theory.html">L04’s punchline</a> extended: <code>GPIOA-&gt;ODR</code> was never special syntax — it is a pointer to address <code>0x4002 0014</code>, and the pin changed because a <code>str</code> instruction (<a href="../../lectures/L11_assembly-disassembly/theory/EE5203_Microprocessors_Lecture11_Theory.html">L11</a>) wrote to that address. Peripherals are just the third kind of memory: not storage at all, but hardware listening on the bus.</p>
+<p>This is <a href="../../lectures/L04_gpio-bare-metal/theory/EE5203_Microprocessors_Lecture4_Theory.html">L04’s punchline</a> extended: <code>GPIOA-&gt;ODR</code> was never special syntax — it is a pointer to address <code>0x4002 0014</code>, and the pin changed because a <code>str</code> instruction (the assembly deck’s subject) wrote to that address. Peripherals are just the third kind of memory: not storage at all, but hardware listening on the bus.</p>
 </div>
 </div>
 </section>
@@ -681,7 +681,7 @@ Why this matters
 </section>
 <section id="reset_handler-line-by-line" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="reset_handler-line-by-line"><span class="header-section-number">5.3</span> Reset_Handler, line by line</h2>
-<p>This is the real generated code, lightly condensed — with <a href="../../lectures/L11_assembly-disassembly/theory/EE5203_Microprocessors_Lecture11_Theory.html">L11</a> behind you, you can now read it:</p>
+<p>This is the real generated code, lightly condensed — with the optional assembly deck behind you, you can now read it:</p>
 <pre class="text"><code>Reset_Handler:
   ldr  sp, =_estack        @ stack at the top of RAM (linker symbol)
   bl   SystemInit          @ minimal clock/system setup (C function)
