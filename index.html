@@ -24,6 +24,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="site_libs/quarto-search/fuse.min.js"></script>
@@ -39,11 +40,11 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -69,11 +70,48 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body>
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">EE5203 Microprocessors</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./SYLLABUS.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./resources/companions/EE5203_Toolchain_Boot_Companion.html"> 
+<span class="menu-text">From C to Silicon</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./resources/references/academic_references.html"> 
+<span class="menu-text">References</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -108,7 +146,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="course-documents" class="level2">
 <h2 class="anchored" data-anchor-id="course-documents">Course documents</h2>
 <ul>
-<li><a href="./COURSE_STRUCTURE.html">Course structure and instructional sequence</a></li>
+<li><a href="./SYLLABUS.html">Syllabus — outcomes, weekly rhythm, assessment, project timeline</a></li>
 <li><a href="./resources/references/academic_references.html">Academic references and further reading</a></li>
 <li><a href="./resources/companions/EE5203_Toolchain_Boot_Companion.html">From C to Silicon — toolchain, memory, and boot companion</a></li>
 </ul>
@@ -143,7 +181,7 @@ ul.task-list li input[type="checkbox"] {
 <li><a href="./lectures/L03_pointers-memory-registers/practice/EE5203_Microprocessors_Lecture3_Worksheet.html">Practice worksheet</a></li>
 <li>Pre-lab quiz — in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a> under Tests &amp; Quizzes (two attempts, highest score)</li>
 <li><a href="./lectures/L03_pointers-memory-registers/lab/EE5203_Microprocessors_Lecture3_Lab.html">Lab guide</a></li>
-<li><a href="lectures/L03_pointers-memory-registers/lab/starter/README.md">Starter files</a></li>
+<li><a href="./lectures/L03_pointers-memory-registers/lab/starter/README.html">Starter files</a></li>
 </ul>
 </section>
 <section id="lecture-4-pointers-structures-bits-registers-and-gpio" class="level2">
@@ -154,7 +192,7 @@ ul.task-list li input[type="checkbox"] {
 <li><a href="./lectures/L04_gpio-bare-metal/practice/EE5203_Microprocessors_Lecture4_Worksheet.html">Practice worksheet</a></li>
 <li>Pre-lab quiz — in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a> under Tests &amp; Quizzes (two attempts, highest score)</li>
 <li><a href="./lectures/L04_gpio-bare-metal/lab/EE5203_Microprocessors_Lecture4_Lab.html">Lab guide — Bare-Metal GPIO</a></li>
-<li><a href="./lectures/L04_gpio-bare-metal/practice/EE5203_Microprocessors_Lecture4_Homework.html">Homework — External GPIO Control</a></li>
+<li>Homework — External GPIO Control: posted in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a> under Assignments</li>
 </ul>
 </section>
 <section id="lecture-5-gpio-and-hardware-abstraction" class="level2">
@@ -175,8 +213,22 @@ ul.task-list li input[type="checkbox"] {
 <li><a href="./lectures/L06_interrupts/practice/EE5203_Microprocessors_Lecture6_Worksheet.html">Practice worksheet</a></li>
 <li>Pre-lab quiz — in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a> under Tests &amp; Quizzes (two attempts, highest score)</li>
 <li><a href="./lectures/L06_interrupts/lab/EE5203_Microprocessors_Lecture6_Lab.html">Lab guide — Button Interrupts (EXTI)</a></li>
-<li><a href="./lectures/L06_interrupts/practice/EE5203_Microprocessors_Lecture6_Homework.html">Homework — HAL Interrupts</a></li>
+<li>Homework — HAL Interrupts: posted in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a> under Assignments</li>
 </ul>
+<hr>
+<div class="callout callout-style-default callout-note callout-titled" title="Lectures 7-14 are being revised">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Lectures 7-14 are being revised
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The materials below are last year’s versions, published as a preview while each package is rebuilt to the Lecture 1-6 standard. Expect them to change before their lab week; the current version is always announced in CATS.</p>
+</div>
+</div>
 </section>
 <section id="lecture-7-timers-tim" class="level2">
 <h2 class="anchored" data-anchor-id="lecture-7-timers-tim">Lecture 7 — Timers (TIM)</h2>

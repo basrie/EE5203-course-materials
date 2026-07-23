@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>course_structure – EE5203 Microprocessors</title>
+<title>EE5203 Microprocessors — Syllabus – EE5203 Microprocessors</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,6 +24,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="site_libs/quarto-search/fuse.min.js"></script>
@@ -39,11 +40,11 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -69,38 +70,89 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body>
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">EE5203 Microprocessors</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./SYLLABUS.html" aria-current="page"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./resources/companions/EE5203_Toolchain_Boot_Companion.html"> 
+<span class="menu-text">From C to Silicon</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./resources/references/academic_references.html"> 
+<span class="menu-text">References</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="COURSE_STRUCTURE.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+    <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="SYLLABUS.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">EE5203 Microprocessors — Syllabus</h1>
+<p class="subtitle lead">2026-2027 · Istanbul Kültür University · Electrical &amp; Electronics Engineering</p>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="ee5203-microprocessors---2026-2027-course-structure" class="level1">
-<h1>EE5203 Microprocessors - 2026-2027 Course Structure</h1>
-<p>Status: design baseline for iteration. Lecture 1 is the reference package; later lecture materials will be revised after that package is approved.</p>
-<section id="course-design-statement" class="level2">
-<h2 class="anchored" data-anchor-id="course-design-statement">Course Design Statement</h2>
-<p>EE5203 develops embedded-system competence through a C-first STM32 pathway. Students first build reliable Embedded C foundations, then learn enough register-level programming to understand the machine, and finally use STM32 HAL to implement increasingly complex peripherals and integrated systems.</p>
-<p>The course follows four principles:</p>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="what-this-course-is" class="level2">
+<h2 class="anchored" data-anchor-id="what-this-course-is">What this course is</h2>
+<p>EE5203 develops embedded-system competence through a C-first STM32 pathway. You first build reliable Embedded C foundations, then learn enough register-level programming to understand the machine, and finally use the STM32 HAL to implement increasingly complex peripherals and an integrated project of your own.</p>
+<p>Four ideas shape every week:</p>
 <ol type="1">
-<li><strong>Embedded C receives four full lectures.</strong> Later material assumes demonstrated competence in functions, arrays, bitwise operations, pointers, structures, memory, and <code>volatile</code>.</li>
-<li><strong>Register literacy, HAL fluency.</strong> GPIO and simple register operations are implemented directly. Complex peripherals are implemented with HAL while students inspect and interpret the important registers.</li>
-<li><strong>Laboratories fade their scaffolding.</strong> Early labs teach the workflow; later labs provide specifications, references, tests, and individual checkoffs.</li>
-<li><strong>The project starts early and grows through milestones.</strong> Students see the destination in L01, form teams in L05, and demonstrate working subsystems throughout the term.</li>
+<li><strong>Embedded C comes first.</strong> Four full lectures build the C you need; everything later assumes it.</li>
+<li><strong>Register literacy, HAL fluency.</strong> You implement GPIO directly on registers once, so that when you use HAL afterwards you know what it does.</li>
+<li><strong>Labs fade their scaffolding.</strong> Early labs walk you through the workflow; later labs hand you a specification and expect a working, explained result.</li>
+<li><strong>The project starts early.</strong> You see the destination in Lecture 1, form teams mid-term, and demonstrate working subsystems as milestones — not one big demo at the end.</li>
 </ol>
 </section>
 <section id="learning-outcomes" class="level2">
-<h2 class="anchored" data-anchor-id="learning-outcomes">Learning Outcomes</h2>
+<h2 class="anchored" data-anchor-id="learning-outcomes">Learning outcomes</h2>
 <p>By the end of the course, a successful student can:</p>
 <ol type="1">
 <li>Write, compile, debug, and test Embedded C programs.</li>
@@ -111,24 +163,63 @@ ul.task-list li input[type="checkbox"] {
 <li>Integrate, test, document, demonstrate, and individually explain an STM32-based embedded system.</li>
 </ol>
 </section>
-<section id="stable-instructional-sequence" class="level2">
-<h2 class="anchored" data-anchor-id="stable-instructional-sequence">Stable Instructional Sequence</h2>
-<p>Lecture IDs describe reusable instructional order, not calendar weeks.</p>
+<section id="tools-and-hardware" class="level2">
+<h2 class="anchored" data-anchor-id="tools-and-hardware">Tools and hardware</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Item</th>
+<th>What we use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Board</td>
+<td>ST Nucleo-F401RE (provided in the laboratory)</td>
+</tr>
+<tr class="even">
+<td>Configuration</td>
+<td>STM32CubeMX (pin configuration and project generation)</td>
+</tr>
+<tr class="odd">
+<td>Development</td>
+<td>VS Code with the course STM32 profile (edit, build, flash, debug)</td>
+</tr>
+<tr class="even">
+<td>Where things run</td>
+<td>Laboratory PCs are fully set up; personal installation instructions are on the <a href="./lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Reference.html">L01 lab reference page</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="weekly-rhythm" class="level2">
+<h2 class="anchored" data-anchor-id="weekly-rhythm">Weekly rhythm</h2>
+<p>Each lecture package on this site has the same parts, used in the same order:</p>
+<ol type="1">
+<li><strong>Prepare</strong> — a short study task and the pre-lab quiz (taken in CATS, two attempts, highest score counts).</li>
+<li><strong>Learn</strong> — the theory session and its study sheet.</li>
+<li><strong>Practise</strong> — a 30-45 minute worksheet; worked solutions are released in CATS after the corresponding session.</li>
+<li><strong>Lab</strong> — the lab guide, with an individual checkoff and a short oral check. Every lab follows the same cycle: warm-up, foundation checkpoint, independent core task, individual modification, oral check.</li>
+<li><strong>Review</strong> — a mastery checklist and exam-style questions inside the study sheet.</li>
+</ol>
+<p>Graded pre-lab quizzes and homework are <strong>only</strong> in CATS — they are not published on this site. Announcements, submissions, and the weekly calendar schedule also live in <a href="https://cats.iku.edu.tr/portal/site/73b05db0-fe7e-46e4-b7c3-b2aa1b6b2873">CATS</a>.</p>
+</section>
+<section id="course-sequence" class="level2">
+<h2 class="anchored" data-anchor-id="course-sequence">Course sequence</h2>
+<p>Lecture numbers describe instructional order, not calendar weeks.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>ID</th>
 <th>Topic</th>
-<th>Central student performance</th>
-<th>Abstraction policy</th>
-<th>Project connection</th>
+<th>Central performance</th>
+<th>Project step</th>
 </tr>
 </thead>
 <tbody>
@@ -136,373 +227,148 @@ ul.task-list li input[type="checkbox"] {
 <td>L01</td>
 <td>Embedded systems, C toolchain, and debugging</td>
 <td>Build, flash, debug, and modify Blinky</td>
-<td>HAL used as a working black box; inspect the workflow</td>
-<td>See example projects and identify possible inputs/outputs</td>
+<td>See example projects</td>
 </tr>
 <tr class="even">
 <td>L02</td>
 <td>Values, decisions, loops, and arrays</td>
-<td>Process a fixed sensor-data array in one C file</td>
-<td>Ordinary C plus debugger</td>
-<td>Identify project input and processing data</td>
+<td>Process a sensor-data array in one C file</td>
+<td>Identify project inputs</td>
 </tr>
 <tr class="odd">
 <td>L03</td>
 <td>Functions, arrays, strings, and modular C</td>
 <td>Decompose the sensor program into functions and files</td>
-<td>Ordinary C plus debugger</td>
-<td>Identify project processing functions</td>
+<td>Identify processing functions</td>
 </tr>
 <tr class="even">
 <td>L04</td>
 <td>Pointers, structures, bits, registers, and GPIO</td>
-<td>Explain masks and control PA5 through CMSIS registers</td>
-<td>Carefully scaffolded direct register access</td>
-<td>Draft individual project idea canvas</td>
+<td>Control PA5 through CMSIS registers</td>
+<td>Individual idea canvas</td>
 </tr>
 <tr class="odd">
 <td>L05</td>
 <td>GPIO and hardware abstraction</td>
 <td>Rebuild GPIO with HAL and compare the two interfaces</td>
-<td>Register-versus-HAL comparison</td>
-<td>Teams form; project launched</td>
+<td>Teams form; project launch</td>
 </tr>
 <tr class="even">
 <td>L06</td>
-<td>HAL GPIO and systematic debugging</td>
-<td>Rebuild GPIO with HAL and compare abstractions</td>
-<td>Full register-versus-HAL comparison</td>
+<td>Interrupts and the NVIC</td>
+<td>Implement and explain an event-driven application</td>
 <td>Proposal and block diagram</td>
 </tr>
 <tr class="odd">
 <td>L07</td>
-<td>Interrupts, NVIC, and state-based design</td>
-<td>Implement and explain an event-driven application</td>
-<td>HAL implementation with register inspection</td>
-<td>Technical design review</td>
+<td>Timers and non-blocking time</td>
+<td>Generate periodic events without blocking delays</td>
+<td>Design review</td>
 </tr>
 <tr class="even">
 <td>L08</td>
-<td>Timers and non-blocking time</td>
-<td>Generate periodic events without blocking delays</td>
-<td>One minimal register demonstration; HAL core work</td>
+<td>PWM and motor control</td>
+<td>Generate and control timed output signals</td>
 <td>First peripheral milestone</td>
 </tr>
 <tr class="odd">
 <td>L09</td>
-<td>PWM, output compare, and input capture</td>
-<td>Generate and measure timed signals</td>
-<td>HAL plus timer-register inspection</td>
-<td>Actuator or measurement milestone</td>
+<td>Input capture</td>
+<td>Measure signals you generate</td>
+<td>Measurement milestone</td>
 </tr>
 <tr class="even">
 <td>L10</td>
 <td>ADC and sensor acquisition</td>
 <td>Acquire, scale, and validate analog data</td>
-<td>HAL plus status/configuration inspection</td>
 <td>Data-acquisition milestone</td>
 </tr>
 <tr class="odd">
 <td>L11</td>
-<td>UART and PC communication</td>
-<td>Implement logging and command input</td>
-<td>HAL; interpret baud/frame settings and flags</td>
-<td>Communication milestone</td>
+<td>The bridge to assembly</td>
+<td>Read the disassembly behind your C</td>
+<td>—</td>
 </tr>
 <tr class="even">
 <td>L12</td>
-<td>I2C and SPI fundamentals</td>
-<td>Interface one synchronous serial device deeply</td>
-<td>HAL; read timing diagrams and status evidence</td>
+<td>I2C and SPI</td>
+<td>Interface a synchronous serial device</td>
 <td>Sensor/display integration</td>
 </tr>
 <tr class="odd">
 <td>L13</td>
-<td>System integration and project clinic</td>
-<td>Integrate peripherals, diagnose faults, and test requirements</td>
-<td>Student selects appropriate abstraction</td>
-<td>Working integrated prototype</td>
+<td>DMA, displays, and integration</td>
+<td>Integrate peripherals and diagnose faults</td>
+<td>Working prototype</td>
 </tr>
 <tr class="even">
 <td>L14</td>
-<td>Demonstration, oral defense, and reflection</td>
+<td>Demonstration and defense</td>
 <td>Demonstrate, test, and individually explain the system</td>
-<td>Full-system reasoning</td>
-<td>Final project assessment</td>
+<td>Final assessment</td>
 </tr>
 </tbody>
 </table>
-<p>Assembly/disassembly is supporting architectural literacy, integrated into L01, L04, and L05. DMA, TFT displays, stepper motors, and similar advanced devices are optional project or extension tracks rather than simultaneous core requirements.</p>
 </section>
-<section id="assessment-baseline" class="level2">
-<h2 class="anchored" data-anchor-id="assessment-baseline">Assessment Baseline</h2>
-<p>This model preserves the 2025-2026 grade-workbook weights while improving what each category measures. It must be reconciled with Akademik Paket and CATS before publication.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 30%">
-<col style="width: 40%">
-<col style="width: 30%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Category</th>
-<th style="text-align: right;">Weight</th>
-<th>Internal structure</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Midterm</td>
-<td style="text-align: right;">25%</td>
-<td>15% written reasoning + 10% individual toolchain practical (VS Code)</td>
-</tr>
-<tr class="even">
-<td>Project</td>
-<td style="text-align: right;">20%</td>
-<td>Proposal, subsystem milestones, integration, final demo, report, and oral defense</td>
-</tr>
-<tr class="odd">
-<td>Laboratory</td>
-<td style="text-align: right;">25%</td>
-<td>15% individual lab checkoffs + 10% pre-lab quizzes/homework</td>
-</tr>
-<tr class="even">
-<td>Final</td>
-<td style="text-align: right;">30%</td>
-<td>Applied written assessment with an approved reference/datasheet policy</td>
-</tr>
-</tbody>
-</table>
-<p>The term <strong>Laboratory</strong> must refer to directly observed laboratory performance, not merely an average of quizzes and homework.</p>
-</section>
-<section id="laboratory-progression" class="level2">
-<h2 class="anchored" data-anchor-id="laboratory-progression">Laboratory Progression</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Stage</th>
-<th>Lectures</th>
-<th>Material supplied</th>
-<th>Student responsibility</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Fully guided</td>
-<td>L01-L02</td>
-<td>Setup detail, screenshots where essential, starter code, frequent checkpoints</td>
-<td>Learn the workflow and make a small individual change</td>
-</tr>
-<tr class="even">
-<td>Guided completion</td>
-<td>L03-L05</td>
-<td>Circuit/configuration information and meaningful TODOs</td>
-<td>Complete core C/register expressions and demonstrate them</td>
-</tr>
-<tr class="odd">
-<td>Structured independence</td>
-<td>L06-L08</td>
-<td>Requirements, references, acceptance tests, minimal starter project</td>
-<td>Select configuration and program structure</td>
-</tr>
-<tr class="even">
-<td>Specification driven</td>
-<td>L09-L12</td>
-<td>Functional specification, constraints, test cases, documentation links</td>
-<td>Create, implement, debug, and verify the solution</td>
-</tr>
-<tr class="odd">
-<td>Integration</td>
-<td>L13-L14</td>
-<td>System requirements and milestone rubric</td>
-<td>Integrate, test, document, demonstrate, and defend</td>
-</tr>
-</tbody>
-</table>
-<p>Every lab uses the same cycle:</p>
-<p><code>Prepare -&gt; 15-minute concept brief -&gt; Foundation checkpoint -&gt; Independent core task -&gt; Individual modification -&gt; Oral check</code></p>
+<section id="assessment" class="level2">
+<h2 class="anchored" data-anchor-id="assessment">Assessment</h2>
+<p>Assessment combines a midterm (including an individual toolchain practical), laboratory performance (individual checkoffs plus pre-lab quizzes and homework), the term project (proposal, milestones, integration, demo, report, and oral defense), and a final examination. Official weights follow the <a href="https://akademikpaket.iku.edu.tr/TR/ects_bolum.php?ders_id=2913&amp;ects=ders_detay&amp;f=4&amp;m=1&amp;p=12&amp;r=0&amp;yariyil=5">ECTS course record</a>; any clarifications are announced in CATS.</p>
+<p>Laboratory credit reflects <strong>directly observed performance</strong>: checkoffs are individual, and every lab ends with a short oral check where you explain your own work.</p>
 </section>
 <section id="project-timeline" class="level2">
-<h2 class="anchored" data-anchor-id="project-timeline">Project Timeline</h2>
+<h2 class="anchored" data-anchor-id="project-timeline">Project timeline</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
+<col style="width: 50%">
+<col style="width: 50%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Point</th>
-<th>Activity</th>
-<th>Evidence</th>
+<th>Milestone</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>L01</td>
-<td>Show achievable examples</td>
-<td>No graded submission</td>
-</tr>
-<tr class="even">
-<td>L03</td>
-<td>Explore hardware and possible functions</td>
-<td>Individual idea list</td>
-</tr>
-<tr class="odd">
 <td>L04</td>
-<td>Publish framework and scope model</td>
-<td>One-page idea canvas</td>
+<td>One-page individual idea canvas</td>
 </tr>
 <tr class="even">
 <td>L05</td>
-<td>Form teams and launch</td>
-<td>Team and preliminary topic</td>
+<td>Teams form; preliminary topic</td>
 </tr>
 <tr class="odd">
 <td>L06</td>
-<td>Proposal checkpoint</td>
-<td>Problem, block diagram, components, minimum viable system</td>
+<td>Proposal: problem, block diagram, components, minimum viable system</td>
 </tr>
 <tr class="even">
 <td>L07</td>
-<td>Design review</td>
-<td>Pins, peripherals, data flow, responsibilities, risks</td>
+<td>Design review: pins, peripherals, data flow, responsibilities, risks</td>
 </tr>
 <tr class="odd">
 <td>L08-L09</td>
-<td>First hardware milestone</td>
-<td>One input or output peripheral working</td>
+<td>First hardware milestone — one input or output peripheral working</td>
 </tr>
 <tr class="even">
 <td>L10</td>
-<td>Data-acquisition milestone</td>
 <td>Acquired and validated sensor data</td>
 </tr>
 <tr class="odd">
-<td>L11</td>
-<td>Communication milestone</td>
-<td>UART logging or command interface</td>
+<td>L11-L12</td>
+<td>Communication / integration milestone</td>
 </tr>
 <tr class="even">
-<td>L12</td>
-<td>Integration milestone</td>
-<td>Input, processing, output, and communication connected</td>
+<td>L13</td>
+<td>Readiness review: working prototype and test evidence</td>
 </tr>
 <tr class="odd">
-<td>L13</td>
-<td>Readiness review</td>
-<td>Working prototype and test evidence</td>
-</tr>
-<tr class="even">
 <td>L14</td>
-<td>Final assessment</td>
 <td>Demonstration, report, presentation, and individual oral defense</td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="core-material-package" class="level2">
-<h2 class="anchored" data-anchor-id="core-material-package">Core Material Package</h2>
-<p>Each lecture has one landing-page section with:</p>
-<ol type="1">
-<li><strong>Prepare:</strong> objectives, short preparation task, and pre-lab quiz.</li>
-<li><strong>Learn:</strong> core theory deck and two-page study sheet.</li>
-<li><strong>Practise:</strong> 30-45 minute worksheet and delayed worked solutions.</li>
-<li><strong>Lab:</strong> lab guide, reference page, starter files when justified, checkoff requirements, and submission link.</li>
-<li><strong>Review:</strong> mastery checklist and 5-8 exam-style questions.</li>
-</ol>
-<p>Material limits:</p>
-<ul>
-<li>Core theory deck: target 28-32 slides; hard maximum 35.</li>
-<li>Laboratory opening deck/briefing: maximum 12-15 slides when slides are needed.</li>
-<li>Study sheet: maximum two pages.</li>
-<li>Student lab guide: maximum two pages and normally 700-900 words.</li>
-<li>Practice worksheet: 30-45 minutes of work.</li>
-<li>Pre-lab quiz: five questions, two attempts, highest score recorded.</li>
-<li>Complete solutions remain under <code>private/solutions/</code> until their release time.</li>
-</ul>
-<p>Instructor-side, each lecture also carries an instructor guide and a <strong>one-page TA prep sheet</strong> (<code>private/instructor/L##/TA_Prep_L##.md</code>): prep checklist (the TA does the lab on hardware before the session), expected-evidence quick reference, a symptom-to-first-question triage table, rubric summary, oral spot-checks, and boundaries (what not to reveal). General TA policy — the evidence-first triage method, checkoff etiquette, solutions-access rules — lives once in <code>private/instructor/TA_HANDBOOK.md</code>; prep sheets stay lecture-specific.</p>
-</section>
-<section id="exit-tickets-and-in-lecture-pulse-checks-google-forms" class="level2">
-<h2 class="anchored" data-anchor-id="exit-tickets-and-in-lecture-pulse-checks-google-forms">Exit Tickets and In-Lecture Pulse Checks (Google Forms)</h2>
-<p>Every theory deck ends with an exit ticket delivered as a <strong>Google Forms quiz</strong> reached by a QR code on the closing slide (3 questions from the deck’s exit question, plus a required student-number field). Standard settings, proven with the L02 template form:</p>
-<ul>
-<li>Quiz mode; release grades immediately; show missed questions and points but <strong>hide correct answers</strong> (limits leakage from early finishers’ screens). The key is revealed in the next lecture’s retrieval segment.</li>
-<li>Collect <strong>verified</strong> email addresses (Google sign-in required) and limit to one response per account. Students sign in with personal Gmail, so the student number is the roster key; the verified email links one person’s tickets across weeks.</li>
-<li>Ungraded: the tickets inform teaching (which misconception is alive in the room) and feed the retrieval slides — they never enter the grade workbook.</li>
-<li>Production: copy the previous lecture’s form in Drive (settings and structure carry over), swap the questions, publish, regenerate the QR (<code>segno</code> one-liner into <code>lectures/L##_*/assets/exit_ticket_qr.svg</code>). Form URLs are logged per lecture in <code>MATERIALS_STATUS.md</code>.</li>
-<li>Graded pre-lab quizzes stay in CATS Tests &amp; Quizzes, not Google Forms — anything touching the Laboratory grade needs the official LMS record and the two-attempt policy. Quiz sources (<code>*PreLab_Quiz*.qmd</code>) are master copies for CATS only: they are excluded from the rendered site (<code>_quarto.yml</code>) and must never appear on the public GitHub Pages site.</li>
-</ul>
-</section>
-<section id="theory-deck-pattern" class="level2">
-<h2 class="anchored" data-anchor-id="theory-deck-pattern">Theory Deck Pattern</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Section</th>
-<th style="text-align: right;">Typical slides</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Opening problem and outcomes</td>
-<td style="text-align: right;">2-3</td>
-</tr>
-<tr class="even">
-<td>Retrieval from previous lecture</td>
-<td style="text-align: right;">3-4</td>
-</tr>
-<tr class="odd">
-<td>Concept block 1</td>
-<td style="text-align: right;">5-6</td>
-</tr>
-<tr class="even">
-<td>Guided example/live coding</td>
-<td style="text-align: right;">4-5</td>
-</tr>
-<tr class="odd">
-<td>Concept block 2</td>
-<td style="text-align: right;">5-6</td>
-</tr>
-<tr class="even">
-<td>Student practice/discussion</td>
-<td style="text-align: right;">4-5</td>
-</tr>
-<tr class="odd">
-<td>Common mistakes/debugging</td>
-<td style="text-align: right;">2-3</td>
-</tr>
-<tr class="even">
-<td>Summary, exit question, lab preview</td>
-<td style="text-align: right;">2-3</td>
-</tr>
-</tbody>
-</table>
-<p>One core slide normally serves one instructional purpose. Full programs, alternative implementations, long setup sequences, detailed peripheral tables, bonus topics, and complete solutions belong in references, source files, or appendices rather than the planned teaching sequence.</p>
-</section>
-<section id="registerhal-boundary" class="level2">
-<h2 class="anchored" data-anchor-id="registerhal-boundary">Register/HAL Boundary</h2>
-<ul>
-<li>Use CMSIS symbolic register structures, not repeated raw numeric addresses.</li>
-<li>Implement RCC enable and GPIO fundamentals directly at register level.</li>
-<li>Use HAL for interrupts, timers, PWM, input capture, ADC, UART, I2C/SPI, and advanced integration after explaining the hardware model.</li>
-<li>Inspect important registers after HAL configuration.</li>
-<li>Declare the ownership model of every exercise: bare metal, HAL, or one controlled post-HAL register modification.</li>
-<li>Keep LL as an optional industry reference rather than a third core dialect.</li>
-</ul>
-</section>
-<section id="iteration-rule" class="level2">
-<h2 class="anchored" data-anchor-id="iteration-rule">Iteration Rule</h2>
-<p>L01 is the reference implementation for navigation, document length, visual hierarchy, preparation, practice, lab checkoffs, and instructor support. Revise L01 until approved before mechanically applying its pattern to L02-L14.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

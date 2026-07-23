@@ -24,6 +24,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
@@ -39,11 +40,11 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -69,11 +70,48 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body>
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">EE5203 Microprocessors</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../SYLLABUS.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resources/companions/EE5203_Toolchain_Boot_Companion.html"> 
+<span class="menu-text">From C to Silicon</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../../resources/references/academic_references.html" aria-current="page"> 
+<span class="menu-text">References</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -201,7 +239,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="even">
 <td><strong>The toolchain</strong> — compile, link, flash, debug</td>
-<td>Yiu 2014, ch.&nbsp;2 (development flow and what CMSIS standardizes); the build console of any CubeIDE project shows each stage’s real output</td>
+<td>Yiu 2014, ch.&nbsp;2 (development flow and what CMSIS standardizes); the VS Code build terminal of any generated project shows each stage’s real output</td>
 </tr>
 <tr class="odd">
 <td><strong>First C statements</strong> — <code>main()</code>, declarations, <code>if</code>, <code>while (1)</code></td>
@@ -402,7 +440,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="odd">
 <td><strong>Vector table and the startup file</strong></td>
-<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=40">PM0214 Rev 10, §2.3.4 <em>Vector table</em> — p.&nbsp;40</a>; Yiu 2014, §4.4 and §8.5; the generated <code>startup_stm32f401retx.s</code> in every CubeIDE project is the concrete instance</td>
+<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=40">PM0214 Rev 10, §2.3.4 <em>Vector table</em> — p.&nbsp;40</a>; Yiu 2014, §4.4 and §8.5; the generated <code>startup_stm32f401retx.s</code> in every CubeMX-generated project is the concrete instance</td>
 </tr>
 <tr class="even">
 <td><strong><code>EXTI15_10_IRQHandler</code> / HAL helper / callback chain</strong></td>
@@ -589,7 +627,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="l11-the-bridge-to-assembly" class="level2">
 <h2 class="anchored" data-anchor-id="l11-the-bridge-to-assembly">L11 — The Bridge to Assembly</h2>
-<p>Every listing in the deck is real output of <code>arm-none-eabi-gcc</code> 14.3 — the toolchain inside STM32CubeIDE — compiled for Cortex-M4 at <code>-O0</code> and <code>-O2</code>.</p>
+<p>Every listing in the deck is real output of <code>arm-none-eabi-gcc</code> 14.3 — the toolchain inside STM32CubeCLT — compiled for Cortex-M4 at <code>-O0</code> and <code>-O2</code>.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
