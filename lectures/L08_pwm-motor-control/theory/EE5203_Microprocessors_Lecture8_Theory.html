@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.42">
+
+  <meta name="author" content="Basri Erdogan">
+  <title>EE5203 Microprocessors</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
+  <link rel="stylesheet" href="../../L01_microprocessor-systems-toolchain/assets/styles.css">
+  <link rel="stylesheet" href="../../L02_c-for-embedded-systems/assets/week2.css">
+  <link href="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">EE5203 Microprocessors</h1>
+  <p class="subtitle">L08 - Pulse-Width Modulation</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Basri Erdogan 
+</div>
+</div>
+</div>
+
+</section>
+<section id="one-number-any-brightness" class="slide level2">
+<h2>One number, any brightness</h2>
+<div class="big-question">
+<p>This line makes LD2 glow at 25 % brightness—no loop, no delay, no interrupt. The hardware does everything.</p>
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="dv">250</span><span class="op">);</span>   <span class="co">// why 250?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>By the end, you will explain the number, choose the frequency, and drive a servo with the same idea. Next lecture, the same hardware runs backwards—to <em>measure</em> signals instead.</p>
+<aside class="notes">
+<p>Live demo first if hardware is ready: change 250 to 950 and to 20, show brightness. Then promise the deck explains every register behind it.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-story-so-far" class="slide level2">
+<h2>The story so far</h2>
+<div class="vertical-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>WEEK 4-5:</strong> you set a pin high or low—two levels, nothing between.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>WEEK 6:</strong> events interrupt the program.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>WEEK 7:</strong> a hardware counter measures time: clock → <code>PSC</code> → <code>CNT</code> → <code>ARR</code> → update.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <strong>TODAY:</strong> the counter takes over a <em>pin</em> and generates a waveform—brightness, position, speed.</p>
+</div>
+</div>
+</section>
+<section id="todays-objectives" class="slide level2">
+<h2>Today’s objectives</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Explain PWM: frequency from <code>ARR</code>, duty cycle from <code>CCR</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Configure a PWM channel (HAL and registers) on the real 16 MHz clock.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Dim an LED and position a hobby servo with the correct timings.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> Verify a channel’s configuration—and change a duty live—in the SFR view.</p>
+</div>
+</div>
+</section>
+<section id="week-7-recap-the-time-base" class="slide level2">
+<h2>Week 7 recap: the time base</h2>
+<p>Everything today sits on last week’s pipeline. Thirty-second check:</p>
+<div class="prompt-list compact-prompts">
+<div class="prompt-item">
+<p><span>1</span> From 16 MHz, what do <code>PSC = 15</code> and <code>ARR = 999</code> produce?</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> Which register holds the live count, and what happens when it reaches <code>ARR</code>?</p>
+</div>
+<div class="prompt-item">
+<p><span>3</span> Why the two +1s?</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p>1 MHz counting, update every 1 ms; <code>CNT</code> rolls to 0 and <code>UIF</code> sets; hardware divides by <em>value + 1</em>. If any of these felt shaky—revisit L07 before the lab.</p>
+</div>
+</section>
+<section id="two-levels-are-not-enough" class="slide level2">
+<h2>Two levels are not enough</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>DIM AN LED:</strong> “half brightness” is not high and not low.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>POSITION A SERVO:</strong> the motor wants a <em>pulse width</em>, repeated precisely.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>DRIVE A MOTOR:</strong> speed control means controlling <em>average</em> power.</p>
+</div>
+</div>
+<div class="relationship-strip">
+<p>A digital pin has two levels—but it can switch between them <em>fast</em>. Control the ratio, and the average becomes any value you want.</p>
+</div>
+</section>
+<section id="pwm-the-duty-cycle" class="slide level2">
+<h2>PWM: the duty cycle</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../assets/images/duty_family.svg" class="quarto-figure quarto-figure-center" alt="Three PWM waveforms at the same one kilohertz frequency with duty cycles of 25, 50 and 75 percent; a dashed line marks each waveform's average level" height="350"></p>
+</figure>
+</div>
+<p><strong>Duty cycle</strong> = the fraction of each period spent HIGH. The LED, the motor, and your eye all respond to the <strong>average</strong>.</p>
+<div class="source-note">
+<p>In-lecture demos: <a href="../assets/htmls/pwm_animation.html">duty vs.&nbsp;mean value</a> · <a href="../assets/htmls/pwm_adjustable_rc_filter.html">PWM through an RC filter</a>.</p>
+</div>
+</section>
+<section id="the-mechanism-cnt-vs-ccr" class="slide level2">
+<h2>The mechanism: CNT vs CCR</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../assets/images/pwm_mechanism.svg" class="quarto-figure quarto-figure-center" alt="Top: the counter sawtooth with the compare value CCR1 at 350 marked as a dashed line; the counter crosses it once per period. Bottom: the pin output, high while the counter is below CCR1, giving a 35 percent duty cycle" height="470"></p>
+</figure>
+</div>
+<aside class="notes">
+<p>This is the whole lecture in one figure. The sawtooth is last week’s slide — literally the same figure with one new dashed line. Spend time here.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="one-new-register" class="slide level2">
+<h2>One new register</h2>
+<p>Week 7’s pipeline, plus a compare stage:</p>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <code>CNT</code> still counts 0 → <code>ARR</code>, update, repeat—nothing changed.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Each channel adds a <em>capture/compare register</em> <code>CCR1…CCR4</code> and a comparator against <code>CNT</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> In <em>PWM mode 1</em> the pin is HIGH while <code>CNT &lt; CCR</code>, LOW after the match.</p>
+</div>
+</div>
+<div class="relationship-strip">
+<p><code>ARR</code> still owns the <em>frequency</em>. <code>CCR</code> owns the <em>duty</em>. Two registers, two independent knobs.</p>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=336">RM0368 Rev 6, §13.3.9 <em>PWM mode</em> — p.&nbsp;336</a>.</p>
+</div>
+</section>
+<section id="the-channel-in-hardware" class="slide level2">
+<h2>The channel, in hardware</h2>
+<svg class="story-visual" viewbox="0 0 1440 500" style="max-height:460px" role="img" aria-labelledby="chanhw-title">
+<title id="chanhw-title">
+Simplified hardware diagram of one timer channel: the time base counter feeds a comparator against CCR1; in output-compare direction the comparator drives the PWM output logic onto pin PA5; in input-capture direction an edge detector on the same pin latches the counter value into CCR1
+</title>
+<defs> <marker id="ch-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> <marker id="ch-arrow-g" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#3f7f58"></path></marker> </defs> <rect x="30" y="50" width="1180" height="420" rx="16" fill="#fbfdfe" stroke="#c8d8e2" stroke-width="4"></rect> <text x="52" y="86" fill="#174f73" font-size="21" font-weight="700">TIM2 — one capture/compare channel</text> <rect x="60" y="140" width="250" height="90" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2.5"></rect> <text x="185" y="178" text-anchor="middle" fill="#5a6b76" font-size="16" font-weight="700" letter-spacing="1">TIME BASE (L07)</text> <text x="185" y="210" text-anchor="middle" fill="#174f73" font-size="19" font-weight="700" font-family="ui-monospace, Menlo, monospace">clock → PSC → CNT</text> <line x1="310" y1="185" x2="360" y2="185" stroke="#2b789f" stroke-width="4" marker-end="url(#ch-arrow)"></line> <circle cx="420" cy="185" r="42" fill="#ffffff" stroke="#174f73" stroke-width="3"></circle> <text x="420" y="177" text-anchor="middle" fill="#174f73" font-size="19" font-weight="700">CNT</text> <text x="420" y="202" text-anchor="middle" fill="#174f73" font-size="19" font-weight="700">&lt; CCR ?</text> <rect x="330" y="290" width="180" height="44" rx="6" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="420" y="318" text-anchor="middle" fill="#174f73" font-size="17" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;CCR1</text> <line x1="420" y1="290" x2="420" y2="232" stroke="#2b789f" stroke-width="3" marker-end="url(#ch-arrow)"></line> <g class="fragment"> <line x1="462" y1="165" x2="540" y2="165" stroke="#2b789f" stroke-width="4" marker-end="url(#ch-arrow)"></line> <rect x="548" y="120" width="260" height="90" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect> <text x="678" y="158" text-anchor="middle" fill="#5a6b76" font-size="16" font-weight="700" letter-spacing="1">OUTPUT COMPARE</text> <text x="678" y="190" text-anchor="middle" fill="#174f73" font-size="18" font-weight="700">PWM mode 1 logic</text> <line x1="808" y1="165" x2="880" y2="165" stroke="#2b789f" stroke-width="4" marker-end="url(#ch-arrow)"></line> <text x="845" y="147" text-anchor="middle" fill="#5a6b76" font-size="15">drives</text> </g> <g class="fragment"> <rect x="888" y="120" width="230" height="130" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect> <text x="1003" y="158" text-anchor="middle" fill="#d47b28" font-size="16" font-weight="700" letter-spacing="1">THE PIN</text> <text x="1003" y="192" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700">PA5 · LD2</text> <text x="1003" y="222" text-anchor="middle" fill="#5a6b76" font-size="15">alternate function AF1</text> </g> <g class="fragment"> <line x1="943" y1="250" x2="943" y2="310" stroke="#3f7f58" stroke-width="3.5" marker-end="url(#ch-arrow-g)"></line> <rect x="548" y="310" width="260" height="90" rx="10" fill="#edf6f0" stroke="#3f7f58" stroke-width="2.5"></rect> <text x="678" y="348" text-anchor="middle" fill="#3f7f58" font-size="16" font-weight="700" letter-spacing="1">INPUT CAPTURE</text> <text x="678" y="380" text-anchor="middle" fill="#174f73" font-size="18" font-weight="700">edge detector (TI1)</text> <path d="M 943 355 H 816" fill="none" stroke="#3f7f58" stroke-width="3.5" marker-end="url(#ch-arrow-g)"></path> <line x1="943" y1="310" x2="943" y2="355" stroke="#3f7f58" stroke-width="3.5"></line> <text x="880" y="337" text-anchor="middle" fill="#5a6b76" font-size="15">listens</text> <path d="M 548 355 C 500 355, 480 340, 466 322" fill="none" stroke="#3f7f58" stroke-width="3.5" marker-end="url(#ch-arrow-g)"></path> <text x="470" y="368" text-anchor="end" fill="#3f7f58" font-size="16" font-weight="700">edge → CCR1 ← CNT</text> </g> <text x="620" y="448" text-anchor="middle" fill="#5a6b76" font-size="19">Same CCR1, two directions: <tspan fill="#2b789f" font-weight="700">compare writes the pin</tspan> · <tspan fill="#3f7f58" font-weight="700">capture reads the pin</tspan></text> <text x="1240" y="180" fill="#174f73" font-size="18" font-weight="700">out: PWM</text> <text x="1240" y="210" fill="#5a6b76" font-size="15">today</text> <text x="1240" y="355" fill="#3f7f58" font-size="18" font-weight="700">in: capture</text> <text x="1240" y="385" fill="#5a6b76" font-size="15">next lecture</text>
+</svg>
+</section>
+<section id="frequency-and-duty-with-numbers" class="slide level2">
+<h2>Frequency and duty, with numbers</h2>
+<p>For a 1 kHz, 35 % PWM from the 16 MHz clock:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a></a>16 MHz ÷ (PSC + 1)  = 16 MHz ÷ 16    = 1 MHz     (PSC = 15)</span>
+<span id="cb2-2"><a></a>1 MHz  ÷ (ARR + 1)  = 1 MHz ÷ 1000   = 1 kHz     (ARR = 999)</span>
+<span id="cb2-3"><a></a>duty   = CCR ÷ (ARR + 1) = 350 ÷ 1000 = 35 %     (CCR = 350)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="relationship-strip">
+<p><code>PSC = 15</code> makes one tick = 1 µs. Keep it all term: every <code>ARR</code> and <code>CCR</code> is then a time in microseconds.</p>
+</div>
+</section>
+<section id="the-100-subtlety" class="slide level2">
+<h2>The 100 % subtlety</h2>
+<p>With <code>ARR = 999</code>, the counter has <strong>1000</strong> states—so:</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: right;"><code>CCR1</code></th>
+<th>Pin behavior</th>
+<th style="text-align: right;">Duty</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;"><code>0</code></td>
+<td>never high</td>
+<td style="text-align: right;">0 %</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><code>350</code></td>
+<td>high for 350 of 1000 states</td>
+<td style="text-align: right;">35 %</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;"><code>999</code></td>
+<td>high for 999 of 1000 states</td>
+<td style="text-align: right;">99.9 %</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><code>1000</code></td>
+<td><code>CNT &lt; 1000</code> is <em>always</em> true</td>
+<td style="text-align: right;">true 100 %</td>
+</tr>
+</tbody>
+</table>
+<div class="relationship-strip">
+<p>The +1 rule strikes again: full-on needs <code>CCR = ARR + 1</code>, not <code>CCR = ARR</code>.</p>
+</div>
+</section>
+<section id="practice-pick-the-three-values" class="slide level2">
+<h2>Practice: pick the three values</h2>
+<p>Required: <strong>2 kHz</strong> PWM at <strong>30 %</strong> duty from 16 MHz, keeping the 1 µs tick.</p>
+<div class="prompt-list compact-prompts">
+<div class="prompt-item">
+<p><span>1</span> <code>PSC</code>?</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> <code>ARR</code>?</p>
+</div>
+<div class="prompt-item">
+<p><span>3</span> <code>CCR1</code>?</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p><code>PSC = 15</code> (1 MHz), <code>ARR = 499</code> (500 µs period → 2 kHz), <code>CCR1 = 150</code> (150/500 = 30 %).</p>
+</div>
+</section>
+<section id="the-pin-joins-the-timer" class="slide level2">
+<h2>The pin joins the timer</h2>
+<p>The GPIO lessons return: PA5 must be <em>handed over</em> to TIM2.</p>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <code>MODER</code> bits 11:10 = <code>10</code> — <em>alternate function</em>, the fourth mode from L04’s table.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <code>AFR</code> selects <em>which</em> peripheral: AF1 routes PA5 to <code>TIM2_CH1</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> From then on the timer drives the pin—<code>HAL_GPIO_WritePin</code> no longer applies.</p>
+</div>
+</div>
+<div class="relationship-strip">
+<p>PA5 is LD2. The LED you have blinked since Week 1 is wired to a timer channel—today it dims with zero wiring.</p>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=162">RM0368 Rev 6, <code>GPIOx_AFRL</code> — p.&nbsp;162</a>; the pin-to-AF table is in the STM32F401RE datasheet (DS10086), <em>Alternate function mapping</em>.</p>
+</div>
+</section>
+<section id="cubemx-configuration" class="slide level2">
+<h2>CubeMX configuration</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Click <code>PA5</code> → select <code>TIM2_CH1</code> (replaces the <code>GPIO_Output</code> role it had all term).</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> In <em>Timers → TIM2</em>: Clock Source <code>Internal</code>, Channel 1 = <code>PWM Generation CH1</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Parameters: Prescaler <code>15</code>, Counter Period <code>999</code>, Pulse <code>0</code> (start dark).</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> Generate; verify <code>MX_TIM2_Init()</code> and the AF pin setup in the generated GPIO code.</p>
+</div>
+</div>
+</section>
+<section id="the-generated-init" class="slide level2">
+<h2>The generated init</h2>
+<div class="sourceCode" id="cb3" data-code-line-numbers="1-8|4|6|10-15|12|13"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a></a>htim2<span class="op">.</span>Instance               <span class="op">=</span> TIM2<span class="op">;</span></span>
+<span id="cb3-2"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Prescaler         <span class="op">=</span> <span class="dv">15</span><span class="op">;</span>     <span class="co">// 16 MHz -&gt; 1 MHz: 1 tick = 1 us</span></span>
+<span id="cb3-3"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>CounterMode       <span class="op">=</span> TIM_COUNTERMODE_UP<span class="op">;</span></span>
+<span id="cb3-4"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Period            <span class="op">=</span> <span class="dv">999</span><span class="op">;</span>    <span class="co">// 1 MHz -&gt; 1 kHz PWM</span></span>
+<span id="cb3-5"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>AutoReloadPreload <span class="op">=</span> TIM_AUTORELOAD_PRELOAD_ENABLE<span class="op">;</span></span>
+<span id="cb3-6"><a></a>HAL_TIM_PWM_Init<span class="op">(&amp;</span>htim2<span class="op">);</span></span>
+<span id="cb3-7"><a></a></span>
+<span id="cb3-8"><a></a>TIM_OC_InitTypeDef sConfigOC <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb3-9"><a></a>sConfigOC<span class="op">.</span>OCMode     <span class="op">=</span> TIM_OCMODE_PWM1<span class="op">;</span>      <span class="co">// high while CNT &lt; CCR</span></span>
+<span id="cb3-10"><a></a>sConfigOC<span class="op">.</span>Pulse      <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>                    <span class="co">// initial CCR1: 0 % duty</span></span>
+<span id="cb3-11"><a></a>sConfigOC<span class="op">.</span>OCPolarity <span class="op">=</span> TIM_OCPOLARITY_HIGH<span class="op">;</span></span>
+<span id="cb3-12"><a></a>HAL_TIM_PWM_ConfigChannel<span class="op">(&amp;</span>htim2<span class="op">,</span> <span class="op">&amp;</span>sConfigOC<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>Pulse</code> is the HAL’s name for the <code>CCR</code> value—just as <code>Period</code> was its name for <code>ARR</code>.</p>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=1065">UM1725 Rev 8, TIM functions — p.&nbsp;1065</a>.</p>
+</div>
+</section>
+<section id="start-it-then-steer-it" class="slide level2">
+<h2>Start it, then steer it</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a></a>HAL_TIM_PWM_Start<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span>            <span class="co">// once</span></span>
+<span id="cb4-2"><a></a></span>
+<span id="cb4-3"><a></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="dv">250</span><span class="op">);</span>   <span class="co">// 25 %</span></span>
+<span id="cb4-4"><a></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="dv">800</span><span class="op">);</span>   <span class="co">// 80 %</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> After <code>Start</code>, the hardware produces the waveform forever—the CPU is completely free.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Changing duty is one register write. No loop is “running the PWM.”</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <code>CCR</code> is <em>preloaded</em> (L07’s preload lesson): the new duty takes effect at the next period—never mid-pulse, so no glitches.</p>
+</div>
+</div>
+</section>
+<section id="a-breathing-led" class="slide level2">
+<h2>A breathing LED</h2>
+<div class="sourceCode" id="cb5" data-code-line-numbers="1-13|5-7|8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a></a>HAL_TIM_PWM_Start<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span></span>
+<span id="cb5-2"><a></a></span>
+<span id="cb5-3"><a></a><span class="dt">uint32_t</span> t_fade <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="dt">int32_t</span> duty <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> dir <span class="op">=</span> <span class="op">+</span><span class="dv">5</span><span class="op">;</span></span>
+<span id="cb5-4"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-5"><a></a>    <span class="cf">if</span> <span class="op">((</span>g_ms <span class="op">-</span> t_fade<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">10</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span>          <span class="co">// Week 7's tick pattern</span></span>
+<span id="cb5-6"><a></a>        t_fade <span class="op">=</span> g_ms<span class="op">;</span></span>
+<span id="cb5-7"><a></a>        duty <span class="op">+=</span> dir<span class="op">;</span></span>
+<span id="cb5-8"><a></a>        <span class="cf">if</span> <span class="op">(</span>duty <span class="op">&gt;=</span> <span class="dv">1000</span> <span class="op">||</span> duty <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span> dir <span class="op">=</span> <span class="op">-</span>dir<span class="op">;</span></span>
+<span id="cb5-9"><a></a>        __HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="op">(</span><span class="dt">uint32_t</span><span class="op">)</span>duty<span class="op">);</span></span>
+<span id="cb5-10"><a></a>    <span class="op">}</span></span>
+<span id="cb5-11"><a></a>    <span class="co">/* other work continues */</span></span>
+<span id="cb5-12"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="relationship-strip">
+<p>The timer makes the light; the 1 ms tick schedules the <em>changes</em>. Two timers, two jobs, zero blocking.</p>
+</div>
+</section>
+<section id="many-channels-one-time-base" class="slide level2">
+<h2>Many channels, one time base</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> TIM2–TIM4 each provide <em>four channels</em>: <code>CCR1</code> … <code>CCR4</code>, one comparator each.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> All four share <code>PSC</code>, <code>ARR</code>, <code>CNT</code> — <em>same frequency</em>, independent duty cycles.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Four LEDs, or a servo pair, or an RGB strip—from one timer.</p>
+</div>
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim3<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="dv">250</span><span class="op">);</span>   <span class="co">// 25 %</span></span>
+<span id="cb6-2"><a></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim3<span class="op">,</span> TIM_CHANNEL_2<span class="op">,</span> <span class="dv">750</span><span class="op">);</span>   <span class="co">// 75 %, same 1 kHz</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="the-servo-contract" class="slide level2">
+<h2>The servo contract</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../assets/images/servo_timing.svg" class="quarto-figure quarto-figure-center" alt="Three PWM waveforms at 50 hertz: a 1 millisecond pulse commands 0 degrees, 1.5 milliseconds commands 90 degrees, 2 milliseconds commands 180 degrees; the servo reads the pulse width, not the duty cycle" height="430"></p>
+</figure>
+</div>
+</section>
+<section id="servo-numbers" class="slide level2">
+<h2>Servo numbers</h2>
+<p>The 1 µs tick makes the contract trivial:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a></a>PSC = 15      → 1 MHz: one tick = 1 µs</span>
+<span id="cb7-2"><a></a>ARR = 19999   → 20 000 µs frame = 20 ms → 50 Hz</span>
+<span id="cb7-3"><a></a>CCR = 1000    → 1.0 ms pulse →   0°</span>
+<span id="cb7-4"><a></a>CCR = 1500    → 1.5 ms pulse →  90°</span>
+<span id="cb7-5"><a></a>CCR = 2000    → 2.0 ms pulse → 180°</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="relationship-strip">
+<p><code>CCR</code> <em>is</em> the pulse width in microseconds. Choose units once, and the register values become readable.</p>
+</div>
+<aside class="notes">
+<p>Ask: what duty cycle is a 1.5 ms pulse in a 20 ms frame? (7.5 %) — then stress the servo doesn’t care about that number, only the width.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="positioning-the-servo" class="slide level2">
+<h2>Positioning the servo</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a><span class="co">/* TIM3 CH1 on PA6 (AF2), PSC = 15, ARR = 19999 */</span></span>
+<span id="cb8-2"><a></a>HAL_TIM_PWM_Start<span class="op">(&amp;</span>htim3<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span></span>
+<span id="cb8-3"><a></a></span>
+<span id="cb8-4"><a></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim3<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="dv">1500</span><span class="op">);</span>  <span class="co">// center: 90 deg</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Clamp commands to <code>1000…2000</code>—outside the contract, cheap servos buzz or strain.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> The servo holds its angle as long as pulses keep coming; the timer keeps them coming.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Sweep by stepping <code>CCR</code> from the tick loop, exactly like the breathing LED.</p>
+</div>
+</div>
+</section>
+<section id="practice-servo-at-45" class="slide level2">
+<h2>Practice: servo at 45°</h2>
+<div class="prompt-list compact-prompts">
+<div class="prompt-item">
+<p><span>1</span> With the servo numbers above, what <code>CCR</code> commands 45°?</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> What does <code>CCR = 2600</code> risk?</p>
+</div>
+<div class="prompt-item">
+<p><span>3</span> Could this servo share TIM2 with the 1 kHz LED? Why not?</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p>45° is halfway between 0° (1000) and 90° (1500) → <code>CCR = 1250</code>. 2600 µs is outside the contract—mechanical strain. And no: channels share <code>ARR</code>, so one timer = one frequency; the LED runs at 1 kHz, the servo needs 50 Hz.</p>
+</div>
+</section>
+<section id="the-pwm-registers" class="slide level2">
+<h2>The PWM registers</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Register</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>TIM2-&gt;CCR1</code> … <code>CCR4</code></td>
+<td>compare value — the duty, per channel</td>
+</tr>
+<tr class="even">
+<td><code>TIM2-&gt;CCMR1/2</code></td>
+<td>channel mode: output, PWM mode 1, preload enable</td>
+</tr>
+<tr class="odd">
+<td><code>TIM2-&gt;CCER</code></td>
+<td>channel output enable (<code>CC1E</code>) + polarity (<code>CC1P</code>)</td>
+</tr>
+<tr class="even">
+<td><code>TIM2-&gt;PSC</code> / <code>ARR</code> / <code>CNT</code></td>
+<td>the L07 time base, unchanged</td>
+</tr>
+</tbody>
+</table>
+<div class="relationship-strip">
+<p><code>CCR</code> is named <em>capture/compare</em> for a reason—next lecture the same register works in the other direction.</p>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=362">RM0368 Rev 6, <code>TIMx_CCMR1</code> — p.&nbsp;362</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=366"><code>TIMx_CCER</code> — p.&nbsp;366</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=367"><code>TIMx_CCR1</code> — p.&nbsp;367</a>.</p>
+</div>
+</section>
+<section id="register-evidence" class="slide level2">
+<h2>Register evidence</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Pause anywhere: <code>TIM2-&gt;CCR1</code> holds your duty; <code>CNT</code> keeps moving.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Write <code>CCR1</code> from the SFR view and watch the brightness change—no code at all.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <code>CCER</code> bit 0 (<code>CC1E</code>) kills or revives the output live.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <code>MODER</code> bits 11:10 read <code>10</code>—the pin belongs to the timer, not to <code>WritePin</code>.</p>
+</div>
+</div>
+<p>A successful build proves none of this. The SFR view does.</p>
+</section>
+<section id="common-pwm-mistakes" class="slide level2">
+<h2>Common PWM mistakes</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>WRONG CLOCK ASSUMED:</strong> 84 MHz examples on our 16 MHz board—every frequency off by 5.25×.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>02</span> <strong>PIN NOT HANDED OVER:</strong> <code>MODER</code> still <code>01</code> (output)—<code>WritePin</code> works, PWM doesn’t.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>03</span> <strong>CCR vs ARR CONFUSION:</strong> duty above 100 % requested, or frequency “changed” via CCR.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>04</span> <strong>THE 100 % OFF-BY-ONE:</strong> <code>CCR = ARR</code> is 99.9 %, not full-on.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>05</span> <strong>SERVO OUT OF CONTRACT:</strong> pulses outside 1–2 ms strain the mechanics.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>06</span> <strong>ONE TIMER, ONE FREQUENCY:</strong> channels share <code>ARR</code>—the 1 kHz LED and the 50 Hz servo need different timers.</p>
+</div>
+</div>
+</section>
+<section id="laboratory-mission" class="slide level2">
+<h2>Laboratory mission</h2>
+<div class="big-question">
+<p>Breathe LD2 with TIM2 PWM, then position and sweep a servo with TIM3—every value chosen from 16 MHz, every change scheduled by the Week 7 tick.</p>
+</div>
+<p>You will show:</p>
+<ol type="1">
+<li><code>PSC</code>/<code>ARR</code>/<code>CCR</code> chosen from 16 MHz, with units explained;</li>
+<li>the AF handover of PA5 in the <code>.ioc</code> and the generated code;</li>
+<li>a live duty change from the SFR view;</li>
+<li>the servo obeying 1000–2000 µs commands, clamped;</li>
+<li>one individual variation, predicted before flashing.</li>
+</ol>
+</section>
+<section id="mastery-checklist" class="slide level2">
+<h2>Mastery checklist</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>✓</span> Explain PWM frequency (<code>ARR</code>) and duty (<code>CCR</code>) with the mechanism figure.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Configure a PWM channel in CubeMX and read the generated code.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Dim the LED from the tick loop without blocking.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Command a servo angle as a pulse width in microseconds.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Verify and steer the channel from the SFR view.</p>
+</div>
+</div>
+<p>Next: input capture—the same channel hardware, run in reverse, timestamps signals instead of making them.</p>
+</section>
+<section id="exit-ticket" class="slide level2">
+<h2>Exit ticket</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a>htim3<span class="op">.</span>Init<span class="op">.</span>Prescaler <span class="op">=</span> <span class="dv">15</span><span class="op">;</span></span>
+<span id="cb9-2"><a></a>htim3<span class="op">.</span>Init<span class="op">.</span>Period    <span class="op">=</span> <span class="dv">4999</span><span class="op">;</span></span>
+<span id="cb9-3"><a></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim3<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="dv">1250</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list ticket-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>FREQUENCY:</strong> What is the PWM frequency?</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>DUTY:</strong> What is the duty cycle?</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>KNOBS:</strong> Which register changes the frequency, and which the duty?</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <strong>EVIDENCE:</strong> Which register would you write from the SFR view to change the duty live?</p>
+</div>
+</div>
+<div class="source-note">
+<p>Every concept in this lecture, with page-linked sources: <a href="../../../resources/references/academic_references.html">academic references</a>.</p>
+</div>
+
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>EE5203 - L08</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../../../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../../../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+
+        height: 900,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

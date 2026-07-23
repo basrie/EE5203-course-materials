@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PWM → RC Filter Visualizer</title>
+  <style>
+    :root{
+      --bg:#ffffff; --fg:#0f172a; --sub:#475569; --accent:#2563eb; --grid:#e2e8f0;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background:var(--bg); color:var(--fg); line-height:1.35;
+    }
+    header{ padding:10px 14px; border-bottom:1px solid var(--grid); position:sticky; top:0; backdrop-filter: blur(6px); background: color-mix(in oklab, var(--bg) 92%, transparent); z-index:2;}
+    h1{ margin:0; font-size:clamp(20px, 2.6vw, 34px); font-weight:700;}
+    .sub{ color:var(--sub); font-size:clamp(12px, 1.5vw, 16px);} 
+
+    .wrap{ max-width:1200px; margin:0 auto; padding:10px 14px 12px; height: calc(100% - 56px); display:grid; grid-template-rows: auto 1fr auto auto; min-height:0; }
+    .panel{ display:grid; grid-template-columns: repeat(12,1fr); gap:12px; align-items:end; }
+    .control{ grid-column: span 12; display:grid; grid-template-columns: repeat(12,1fr); gap:10px; }
+    .ctrl{ grid-column: span 6; }
+    .ctrl.wide{ grid-column: span 12; }
+    label{ display:block; font-weight:600; margin-bottom:6px; font-size:clamp(14px,1.4vw,18px);} 
+    input[type="range"]{ width:100%; accent-color:var(--accent); }
+    .val{ font-variant-numeric: tabular-nums; color:var(--sub); font-size:clamp(12px,1.2vw,16px);} 
+    .row{ margin-top:6px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    select, button{ font-size:16px; padding:8px 10px; border-radius:10px; border:1px solid var(--grid); background:#fff; }
+    button{ background:var(--accent); color:white; border:none; box-shadow: 0 6px 16px color-mix(in oklab, var(--accent), transparent 80%); }
+
+    .charts{ display:grid; grid-template-columns:1fr; grid-template-rows: 1fr 1fr; gap:10px; margin-top:10px; min-height:0; }
+    .card{ border:1px solid var(--grid); border-radius:16px; padding:10px 10px 12px; box-shadow: 0 8px 20px rgba(2,6,23,.03); display:flex; flex-direction:column; min-height:0; }
+    .card h2{ margin:0 0 6px 6px; font-size: clamp(16px,2.0vw,22px); }
+    canvas{ width:100%; height:100%; display:block; border-radius:12px; background:white; flex: 1 1 auto; min-height:0; }
+    .legend{ display:flex; gap:18px; align-items:center; flex-wrap:wrap; margin:8px 6px 0; color:var(--sub); font-size:clamp(12px,1.4vw,15px); }
+    .chip{ display:inline-flex; align-items:center; gap:8px; }
+    .dot{ width:12px; height:12px; border-radius:50%; background:#000; }
+    .dot.pwm{ background:#111827; }
+    .dot.filt{ background:#2563eb; }
+
+    .stats{ display:flex; gap:18px; flex-wrap:wrap; margin:8px 6px 0; color:var(--sub); font-size:clamp(12px,1.4vw,15px); }
+    .mono{ font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1;
+           font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; color:var(--fg); }
+    footer{ color:var(--sub); font-size:12px; text-align:center; padding:12px 0 20px; }
+
+    @media (min-width: 900px){
+      .ctrl{ grid-column: span 4; }
+      .ctrl.wide{ grid-column: span 8; }
+    }
+
+    details{ margin-top:16px; border:1px solid var(--grid); border-radius:12px; padding:8px 12px; }
+    details summary{ cursor:pointer; font-weight:600; }
+    .pass{ color: #065f46; }
+    .fail{ color: #b91c1c; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PWM → RC / Higher‑Order Filter Visualizer</h1>
+    <div class="sub">Adjust duty cycle and filter cutoff to see ripple vs. smooth DC. Optionally cascade multiple 1st‑order stages.</div>
+  </header>
+
+  <div class="wrap">
+    <section class="panel">
+      <div class="control">
+        <div class="ctrl">
+          <label>Duty Cycle <span class="val" id="dutyVal">50 %</span></label>
+          <input id="duty" type="range" min="0" max="100" step="1" value="50" />
+          <div class="row sub">Sets high‑time / period of PWM</div>
+        </div>
+        <div class="ctrl">
+          <label>PWM Frequency <span class="val" id="fpwmVal">500 Hz</span></label>
+          <input id="fpwm" type="range" min="10" max="2000" step="1" value="500" />
+          <div class="row sub">Keep it below ~1/10 of sample Nyquist for clarity</div>
+        </div>
+        <div class="ctrl">
+          <label>Filter Cutoff (fc) <span class="val" id="fcVal">50 Hz</span></label>
+          <input id="fc" type="range" min="1" max="200" step="1" value="50" />
+          <div class="row sub">Lower <em>fc</em> ⇒ smoother output, less ripple</div>
+        </div>
+        <div class="ctrl">
+          <label>Filter Order <span class="val" id="orderVal">1</span></label>
+          <input id="order" type="range" min="1" max="4" step="1" value="1" />
+          <div class="row sub">Cascaded 1st‑order stages (1–4)</div>
+        </div>
+        <div class="ctrl wide">
+          <label>Timebase / Sweep Speed <span class="val" id="speedVal">1×</span></label>
+          <input id="speed" type="range" min="0.25" max="4" step="0.25" value="1" />
+          <div class="row sub">Controls horizontal speed so you can pack more or fewer PWM periods on screen</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="charts">
+      <div class="card">
+        <h2>PWM</h2>
+        <div class="legend">
+          <span class="chip"><span class="dot pwm"></span>PWM waveform</span>
+        </div>
+        <canvas id="pwm"></canvas>
+        <div class="stats">
+          <div>Period <span class="mono" id="periodTxt">2.000 ms</span></div>
+          <div>TH (high time) <span class="mono" id="thTxt">1.000 ms</span></div>
+          <div>TL (low time) <span class="mono" id="tlTxt">1.000 ms</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Filter Output</h2>
+        <div class="legend">
+          <span class="chip"><span class="dot filt"></span>V<sub>out</sub> (RC cascaded)</span>
+        </div>
+        <canvas id="filt"></canvas>
+        <div class="stats">
+          <div>DC level (expected) <span class="mono" id="dcExp">0.500</span></div>
+          <div>Mean (measured) <span class="mono" id="meanTxt">0.500</span></div>
+          <div>Ripple (pp) <span class="mono" id="rippleTxt">0.000</span></div>
+          <div>RMS ripple <span class="mono" id="rmsTxt">0.000</span></div>
+        </div>
+      </div>
+    </section>
+
+    <details>
+      <summary>Diagnostics / Self‑tests</summary>
+      <div id="diag" class="sub"></div>
+    </details>
+
+    <footer>Tip: set a very low cutoff (e.g., 5–20 Hz) while keeping PWM at 500–1000 Hz to make the output nearly flat.</footer>
+  </div>
+
+  <script>
+    // --- Simulation parameters ---
+    const sr = 100_000;                 // Synthetic sample rate (Hz) for the discrete simulation
+    const dt = 1 / sr;                  // Sample interval
+    const viewSeconds = 1.8;            // Window length shown in canvases
+    const maxBuffer = Math.floor(sr * viewSeconds);
+
+    // State
+    let duty = 0.50;
+    let fPWM = 500;                     // Hz
+    let fc = 50;                        // Hz cutoff per stage
+    let order = 1;                      // stages to cascade
+    let speed = 1;                      // sweep multiplier
+
+    // Persistent filter states for cascaded 1st-order sections
+    let stages = [0];                   // will be resized to match 'order'
+
+    // Elements
+    const el = (id)=>document.getElementById(id);
+    const dutyEl = el('duty');
+    const fpwmEl = el('fpwm');
+    const fcEl = el('fc');
+    const orderEl = el('order');
+    const speedEl = el('speed');
+
+    const dutyVal = el('dutyVal');
+    const fpwmVal = el('fpwmVal');
+    const fcVal = el('fcVal');
+    const orderVal = el('orderVal');
+    const speedVal = el('speedVal');
+
+    const periodTxt = el('periodTxt');
+    const thTxt = el('thTxt');
+    const tlTxt = el('tlTxt');
+    const dcExp = el('dcExp');
+    const meanTxt = el('meanTxt');
+    const rippleTxt = el('rippleTxt');
+    const rmsTxt = el('rmsTxt');
+
+    const cPWM = el('pwm');
+    const cOut = el('filt');
+    const gPWM = cPWM.getContext('2d');
+    const gOut = cOut.getContext('2d');
+
+    // Resize canvas to device pixel ratio for crisp lines
+    function fitCanvas(canvas){
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // draw in CSS pixels
+      ctx.lineWidth = 2;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+    }
+
+    function fitAll(){ fitCanvas(cPWM); fitCanvas(cOut); }
+    if (typeof ResizeObserver !== 'undefined'){
+      new ResizeObserver(fitAll).observe(cPWM);
+      new ResizeObserver(fitAll).observe(cOut);
+    } else {
+      window.addEventListener('resize', fitAll);
+    }
+    fitAll();
+
+    // Buffers (ring behavior)
+    let t = 0; // simulated time
+    const bufPWM = new Float32Array(maxBuffer).fill(0);
+    const bufOut = new Float32Array(maxBuffer).fill(0);
+    let writeIdx = 0;
+
+    function resetBuffers(){
+      bufPWM.fill(0); bufOut.fill(0);
+      writeIdx = 0; t = 0;
+    }
+
+    function resizeStages(){
+      if(stages.length === 0) stages = [duty];
+      if(stages.length > order){
+        stages = stages.slice(0, order);
+      } else {
+        while(stages.length < order){
+          const last = stages[stages.length-1] ?? duty;
+          stages.push(last);
+        }
+      }
+    }
+
+    function rcAlpha(fc){
+      // Discrete-time 1st-order low-pass derived from continuous RC: alpha = dt/(RC+dt), RC = 1/(2πfc)
+      const RC = 1 / (2 * Math.PI * Math.max(1e-6, fc));
+      return dt / (RC + dt);
+    }
+
+    function stepSim(samples){
+      // Simulate PWM then cascade N RC stages
+      const a = rcAlpha(fc);
+      resizeStages();
+      for(let n=0;n<samples;n++){
+        // PWM source in [0,1]
+        const period = 1 / fPWM;
+        const ph = (t % period) / period; // 0..1
+        const x = (ph < duty) ? 1 : 0;
+
+        // write pwm to buffer
+        bufPWM[writeIdx] = x;
+
+        // cascade 1st-order stages: y += a*(x - y)
+        let y = x;
+        for(let k=0;k<order;k++){
+          const prev = stages[k] ?? duty;
+          const next = prev + a * (y - prev);
+          stages[k] = next;
+          y = next;
+        }
+        bufOut[writeIdx] = y; // write filtered output once per iteration
+
+        // advance ring pointer/time
+        writeIdx++; if(writeIdx >= maxBuffer) writeIdx = 0;
+        t += dt * speed; // sweep speed increases simulated time advance per drawn sample
+      }
+    }
+
+    function drawGrid(ctx, w, h){
+      ctx.clearRect(0,0,w,h);
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      const stepX = Math.max(40, w/10);
+      for(let x=0; x<=w; x+=stepX){ ctx.moveTo(x,0); ctx.lineTo(x,h); }
+      const stepY = Math.max(40, h/6);
+      for(let y=0; y<=h; y+=stepY){ ctx.moveTo(0,y); ctx.lineTo(w,y); }
+      ctx.stroke();
+    }
+
+    function drawTrace(ctx, buffer, color){
+      const w = ctx.canvas.clientWidth;
+      const h = ctx.canvas.clientHeight;
+      drawGrid(ctx, w, h);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 4; // thicker lines as requested
+      ctx.beginPath();
+
+      const N = Math.min(maxBuffer, Math.floor(w));
+      // start from newest (writeIdx-1) and move forwards so trace scrolls left→right
+      let idx = (writeIdx - N + maxBuffer) % maxBuffer;
+      for(let i=0;i<N;i++){
+        const v = buffer[idx];
+        const x = i;                    // screen x (pixels)
+        const y = (1 - v) * (h - 8) + 4; // 0 at bottom margin → top pixel
+        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        idx++; if(idx >= maxBuffer) idx = 0;
+      }
+      ctx.stroke();
+    }
+
+    function drawPWM(ctx, buffer){
+      const w = ctx.canvas.clientWidth;
+      const h = ctx.canvas.clientHeight;
+      drawGrid(ctx, w, h);
+
+      // Shade ON/OFF regions with different translucent colors
+      const N = Math.min(maxBuffer, Math.floor(w));
+      let idx = (writeIdx - N + maxBuffer) % maxBuffer;
+      let runVal = buffer[idx];
+      let runStartX = 0;
+      for(let i=0;i<=N;i++){
+        const atEnd = (i===N);
+        const v = atEnd ? runVal : buffer[idx];
+        if(atEnd || v !== runVal){
+          const runW = i - runStartX;
+          if(runW > 0){
+            ctx.fillStyle = runVal > 0.5 ? 'rgba(16,185,129,0.14)' : 'rgba(239,68,68,0.12)'; // green for ON, red for OFF
+            ctx.fillRect(runStartX, 0, runW, h);
+          }
+          runVal = v;
+          runStartX = i;
+        }
+        if(!atEnd){ idx++; if(idx>=maxBuffer) idx=0; }
+      }
+
+      // Draw the PWM trace on top
+      ctx.strokeStyle = '#111827';
+      ctx.lineWidth = 4; // thicker
+      ctx.beginPath();
+      idx = (writeIdx - N + maxBuffer) % maxBuffer;
+      for(let i=0;i<N;i++){
+        const v = buffer[idx];
+        const x = i;
+        const y = (1 - v) * (h - 8) + 4;
+        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        idx++; if(idx >= maxBuffer) idx = 0;
+      }
+      ctx.stroke();
+    }
+
+    function stats(){
+      // compute over last few PWM periods for ripple/mean
+      const periods = Math.max(2, Math.min(20, Math.floor((cOut.clientWidth / 60))));
+      const samplesPerPeriod = Math.max(1, Math.floor(sr / fPWM));
+      const span = Math.min(maxBuffer-1, periods * samplesPerPeriod);
+      let idx = (writeIdx - span + maxBuffer) % maxBuffer;
+      let sum=0, sum2=0, vmin=1e9, vmax=-1e9;
+      for(let i=0;i<span;i++){
+        const v = bufOut[idx];
+        sum += v; sum2 += v*v; if(v<vmin) vmin=v; if(v>vmax) vmax=v;
+        idx++; if(idx>=maxBuffer) idx=0;
+      }
+      const mean = sum / span;
+      const rms = Math.sqrt(sum2/span - mean*mean);
+      meanTxt.textContent = mean.toFixed(3);
+      rippleTxt.textContent = (vmax - vmin).toFixed(3);
+      rmsTxt.textContent = rms.toFixed(4);
+    }
+
+    function updateLabels(){
+      dutyVal.textContent = Math.round(duty*100) + ' %';
+      fpwmVal.textContent = Math.round(fPWM) + ' Hz';
+      fcVal.textContent = Math.round(fc) + ' Hz';
+      orderVal.textContent = order;
+      speedVal.textContent = (Math.round(speed*100)/100) + '×';
+      const T = 1 / fPWM;
+      periodTxt.textContent = (T*1000).toFixed(3) + ' ms';
+      thTxt.textContent = (T*duty*1000).toFixed(3) + ' ms';
+      tlTxt.textContent = (T*(1-duty)*1000).toFixed(3) + ' ms';
+      dcExp.textContent = duty.toFixed(3);
+    }
+
+    function quickSettle(periods = 40){
+      // Temporarily run the simulation forward without drawing so the filter reaches steady state
+      const savedSpeed = speed;
+      speed = 1; // settle with real-time steps
+      const samplesPerPeriod = Math.max(1, Math.floor(sr / fPWM));
+      const total = Math.min(maxBuffer-1, periods * samplesPerPeriod);
+      for(let i=0;i<total;i++) stepSim(1);
+      speed = savedSpeed;
+    }
+
+    function tick(){
+      // advance simulation by a chunk tied to canvas width
+      const samples = Math.max(50, Math.min(4000, Math.floor(cPWM.clientWidth * 1.2)));
+      stepSim(samples);
+      drawPWM(gPWM, bufPWM);           // shaded ON/OFF + thick line
+      drawTrace(gOut, bufOut, '#2563eb');
+      stats();
+      requestAnimationFrame(tick);
+    }
+
+    // UI bindings — guard against missing elements so we never crash
+    function onDutyChange(v){
+      duty = v; updateLabels();
+      stages = stages.map(()=>duty);
+      quickSettle(10);
+    }
+    function onFpwmChange(v){
+      fPWM = v; updateLabels();
+      resetBuffers();
+      quickSettle(50);
+    }
+    function onFcChange(v){
+      fc = Math.min(200, Math.max(1, v)); updateLabels();
+      resetBuffers();
+      quickSettle(60);
+    }
+    function onOrderChange(v){
+      order = Math.max(1, Math.min(4, v)); updateLabels();
+      stages = new Array(order).fill(duty);
+      resetBuffers();
+      quickSettle(80);
+    }
+
+    const controlsOK = dutyEl && fpwmEl && fcEl && orderEl && speedEl;
+    if(controlsOK){
+      dutyEl.addEventListener('input', e=> onDutyChange(e.target.value/100));
+      fpwmEl.addEventListener('input', e=> onFpwmChange(+e.target.value));
+      fcEl.addEventListener('input', e=> onFcChange(+e.target.value));
+      orderEl.addEventListener('input', e=> onOrderChange(+e.target.value));
+      speedEl.addEventListener('input', e=>{ speed = +e.target.value; updateLabels(); });
+    } else {
+      console.warn('One or more controls are missing in the DOM', {dutyEl, fpwmEl, fcEl, orderEl, speedEl});
+    }
+
+    // -----------------
+    // Self‑tests (run once on load) — do not affect the live sim
+    // -----------------
+    function simulateOffline(params){
+      const { duty, fPWM, fc, order, seconds=1.2, settle=0.4 } = params;
+      const srT = 20_000; const dtT = 1/srT;
+      const RC = 1/(2*Math.PI*Math.max(1e-6, fc));
+      const a = dtT/(RC+dtT);
+      let t=0;
+      const stagesT = new Array(order).fill(duty);
+      const total = Math.floor(srT*(seconds+settle));
+      const startMeasure = Math.floor(srT*settle);
+      let sum=0, sum2=0, vmin=1e9, vmax=-1e9, count=0;
+      for(let n=0;n<total;n++){
+        const period = 1/fPWM; const ph = (t%period)/period;
+        const x = (ph < duty) ? 1 : 0;
+        let y=x;
+        for(let k=0;k<order;k++){
+          const prev = stagesT[k];
+          const next = prev + a*(y - prev);
+          stagesT[k] = next; y = next;
+        }
+        if(n>=startMeasure){
+          sum+=y; sum2+=y*y; if(y<vmin) vmin=y; if(y>vmax) vmax=y; count++;
+        }
+        t += dtT;
+      }
+      const mean = sum/count; const rms = Math.sqrt(sum2/count - mean*mean);
+      return { mean, ripplePP: (vmax-vmin), rms };
+    }
+
+    function runTests(){
+      const results = [];
+      // Existing tests — unchanged
+      let r = simulateOffline({ duty:0.25, fPWM:1000, fc:10, order:1, seconds:1.5, settle:0.5 });
+      results.push({name:'Low fc, duty=0.25 ⇒ mean≈0.25 & small ripple', pass: Math.abs(r.mean-0.25)<0.03 && r.ripplePP<0.03, data:r});
+
+      r = simulateOffline({ duty:0.75, fPWM:1000, fc:10, order:1 });
+      results.push({name:'Low fc, duty=0.75 ⇒ mean≈0.75 & small ripple', pass: Math.abs(r.mean-0.75)<0.03 && r.ripplePP<0.03, data:r});
+
+      const r1 = simulateOffline({ duty:0.5, fPWM:800, fc:20, order:1 });
+      const r3 = simulateOffline({ duty:0.5, fPWM:800, fc:20, order:3 });
+      results.push({name:'Order 3 ripple < Order 1 ripple', pass: r3.ripplePP < r1.ripplePP*0.7, data:{order1:r1, order3:r3}});
+
+      const rh = simulateOffline({ duty:0.5, fPWM:800, fc:3000, order:1 });
+      results.push({name:'High fc produces notable ripple', pass: rh.ripplePP > 0.1, data:rh});
+
+      // Added tests — do not change existing ones
+      // Test 5: Increasing PWM frequency (same fc) should reduce ripple
+      const rLowF = simulateOffline({ duty:0.5, fPWM:300, fc:30, order:1});
+      const rHighF = simulateOffline({ duty:0.5, fPWM:1500, fc:30, order:1});
+      results.push({name:'Higher fPWM reduces ripple at same fc', pass: rHighF.ripplePP < rLowF.ripplePP*0.7, data:{f300:rLowF, f1500:rHighF}});
+
+      // Test 6: Order 4 has less ripple than order 2 (same fc)
+      const r2 = simulateOffline({ duty:0.6, fPWM:900, fc:20, order:2});
+      const r4 = simulateOffline({ duty:0.6, fPWM:900, fc:20, order:4});
+      results.push({name:'Order 4 ripple < Order 2 ripple', pass: r4.ripplePP < r2.ripplePP*0.7, data:{order2:r2, order4:r4}});
+
+      // Render
+      const diag = document.getElementById('diag');
+      const rows = results.map((res,i)=>{
+        const cls = res.pass ? 'pass' : 'fail';
+        const extra = JSON.stringify(res.data, (k,v)=> typeof v==='number'? +v.toFixed(4): v);
+        return `<div class="${cls}">[${res.pass?'✓':'✗'}] Test ${i+1}: ${res.name} — ${extra}</div>`;
+      }).join('');
+      diag.innerHTML = rows;
+    }
+
+    // Kick off
+    updateLabels();
+    runTests();
+    tick();
+  </script>
+</body>
+</html>

@@ -1,0 +1,916 @@
+/* Lecture 6 additions. The base visual system comes from Lectures 1 and 2. */
+
+.reveal section img {
+  max-height: 570px;
+  object-fit: contain;
+}
+
+.reveal section p.source-note,
+.reveal section .source-note {
+  color: #5f7380;
+  font-size: 0.58em;
+}
+
+.reveal section pre code {
+  max-height: 560px;
+}
+
+.reveal section .columns pre.sourceCode {
+  font-size: 0.68em;
+}
+
+/* L06 interrupt-path visuals */
+
+.reveal .irq-node {
+  display: flex;
+  min-width: 0;
+  min-height: 150px;
+  padding: 18px 14px;
+  border: 2px solid var(--ee-line);
+  border-top-width: 8px;
+  border-radius: 10px;
+  background: #ffffff;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.reveal .irq-node strong {
+  color: var(--ee-blue-dark);
+  font-size: 0.82em;
+  line-height: 1.08;
+}
+
+.reveal .irq-node-title {
+  color: var(--ee-blue-dark);
+  font-size: 0.78em;
+  font-weight: 700;
+  line-height: 1.08;
+}
+
+.reveal .irq-node-title code {
+  font-size: 0.82em;
+  line-height: 1.08;
+}
+
+.reveal .irq-node-detail,
+.reveal .irq-node-value {
+  font-size: 0.58em;
+  line-height: 1.2;
+}
+
+.reveal .irq-node-value code {
+  font-size: 1em;
+}
+
+.reveal .irq-node span,
+.reveal .irq-node code {
+  font-size: 0.6em;
+  line-height: 1.2;
+}
+
+.reveal .irq-node-signal {
+  border-top-color: var(--ee-orange);
+}
+
+.reveal .irq-node-hardware,
+.reveal .irq-node-request {
+  border-top-color: var(--ee-blue-mid);
+  background: var(--ee-blue-pale);
+}
+
+.reveal .irq-node-controller {
+  border-top-color: var(--ee-green);
+  background: #edf6f0;
+}
+
+.reveal .irq-node-lookup {
+  border-top-color: var(--ee-orange);
+  background: #fff4e8;
+}
+
+.reveal .irq-node-code,
+.reveal .irq-node-software {
+  border-top-color: var(--ee-blue-dark);
+}
+
+.reveal .irq-arrow,
+.reveal .irq-arrow-large {
+  color: var(--ee-blue-mid);
+  font-weight: 700;
+  text-align: center;
+}
+
+.reveal .irq-arrow {
+  font-size: 1.1em;
+}
+
+.reveal .irq-arrow-large {
+  font-size: 1.8em;
+}
+
+.reveal .irq-journey {
+  display: grid;
+  grid-template-columns:
+    minmax(125px, 0.9fr) auto
+    minmax(135px, 1fr) auto
+    minmax(145px, 1.08fr) auto
+    minmax(125px, 0.9fr) auto
+    minmax(135px, 1fr) auto
+    minmax(170px, 1.25fr) auto
+    minmax(145px, 1.08fr);
+  align-items: center;
+  gap: 8px;
+  margin-top: 95px;
+}
+
+.reveal .irq-journey + p {
+  margin-top: 65px;
+  text-align: center;
+}
+
+.reveal .irq-journey-lab {
+  margin-top: 85px;
+}
+
+.reveal .irq-journey-lab .irq-node {
+  min-height: 140px;
+}
+
+.reveal .exti-merge-visual {
+  display: grid;
+  grid-template-columns: 420px auto minmax(320px, 1fr) auto 270px;
+  align-items: center;
+  gap: 38px;
+  margin: 20px 35px 0;
+}
+
+.reveal .exti-bank {
+  position: relative;
+  display: grid;
+  gap: 9px;
+  padding-right: 48px;
+}
+
+.reveal .exti-bank::after {
+  position: absolute;
+  top: 24px;
+  right: 14px;
+  bottom: 24px;
+  width: 4px;
+  background: var(--ee-blue-mid);
+  content: "";
+}
+
+.reveal .exti-line {
+  display: grid;
+  grid-template-columns: 175px 1fr;
+  align-items: center;
+  min-height: 58px;
+  color: var(--ee-muted);
+  font-size: 0.68em;
+}
+
+.reveal .exti-line span {
+  padding: 7px 14px;
+  border-left: 6px solid var(--ee-line);
+}
+
+.reveal .exti-line small {
+  display: block;
+  color: var(--ee-muted);
+  font-size: 0.66em;
+}
+
+.reveal .exti-line i {
+  display: block;
+  height: 3px;
+  background: var(--ee-line);
+}
+
+.reveal .exti-line-active {
+  color: var(--ee-blue-dark);
+  font-weight: 700;
+}
+
+.reveal .exti-line-active span {
+  border-left-color: var(--ee-orange);
+  background: #fff4e8;
+}
+
+.reveal .exti-line-active i {
+  height: 5px;
+  background: var(--ee-orange);
+}
+
+.reveal .exti-merge-visual .irq-node {
+  min-height: 230px;
+}
+
+.reveal .exti-merge-visual + p {
+  margin-top: 28px;
+  text-align: center;
+}
+
+.reveal .flag-handoff {
+  display: grid;
+  grid-template-columns:
+    minmax(180px, 1fr) auto
+    minmax(220px, 1.15fr)
+    minmax(240px, 1.2fr) auto
+    minmax(230px, 1.15fr) auto
+    minmax(230px, 1.15fr);
+  align-items: stretch;
+  gap: 14px;
+  margin-top: 100px;
+}
+
+.reveal .flag-step,
+.reveal .flag-boundary {
+  display: flex;
+  min-height: 190px;
+  padding: 20px 18px;
+  border-top: 8px solid var(--ee-blue-mid);
+  background: var(--ee-blue-pale);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.reveal .flag-step small {
+  color: var(--ee-muted);
+  font-size: 0.48em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.reveal .flag-step strong,
+.reveal .flag-step code,
+.reveal .flag-boundary strong {
+  font-size: 0.7em;
+}
+
+.reveal .flag-step span,
+.reveal .flag-boundary span {
+  font-size: 0.56em;
+}
+
+.reveal .flag-boundary {
+  border-top-color: var(--ee-orange);
+  background: #fff4e8;
+}
+
+.reveal .flag-step-software {
+  border-top-color: var(--ee-green);
+  background: #edf6f0;
+}
+
+.reveal .flag-handoff + p {
+  margin-top: 55px;
+  text-align: center;
+}
+
+/* Polling versus interrupt */
+
+.reveal .edge-wave {
+  display: grid;
+  grid-template-columns: 110px minmax(280px, 1fr) 24px minmax(280px, 1fr) 110px;
+  align-items: stretch;
+  height: 85px;
+  margin: 18px 210px 0;
+  color: var(--ee-blue-dark);
+}
+
+.reveal .edge-wave .wave-segment {
+  display: block;
+}
+
+.reveal .wave-label {
+  align-self: start;
+  padding-top: 5px;
+  font-size: 0.58em;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.reveal .wave-label-low {
+  align-self: end;
+  padding-top: 0;
+  padding-bottom: 3px;
+  text-align: right;
+}
+
+.reveal .wave-high {
+  margin-top: 18px;
+  border-top: 6px solid var(--ee-blue-mid);
+}
+
+.reveal .wave-fall {
+  height: 58px;
+  margin-top: 18px;
+  border-right: 6px solid var(--ee-orange);
+}
+
+.reveal .wave-low {
+  margin-bottom: 3px;
+  border-bottom: 6px solid var(--ee-blue-mid);
+}
+
+.reveal .edge-caption {
+  margin: 2px 0 28px;
+  color: var(--ee-muted);
+  font-size: 0.58em;
+  text-align: center;
+}
+
+.reveal .compare-lanes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  margin: 0 95px;
+}
+
+.reveal .compare-lane {
+  min-height: 245px;
+  padding: 18px 24px;
+  border-top: 7px solid var(--ee-orange);
+  background: #fff4e8;
+}
+
+.reveal .compare-lane-interrupt {
+  border-top-color: var(--ee-green);
+  background: #edf6f0;
+}
+
+.reveal .compare-lane-title {
+  margin-bottom: 25px;
+  color: var(--ee-blue-dark);
+  font-size: 0.64em;
+  font-weight: 700;
+}
+
+.reveal .compare-sequence {
+  display: flex;
+  min-height: 72px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.reveal .compare-step {
+  padding: 10px 15px;
+  border-bottom: 4px solid var(--ee-line);
+  font-size: 0.56em;
+}
+
+.reveal .compare-step-active {
+  border-bottom-color: var(--ee-orange);
+  font-weight: 700;
+}
+
+.reveal .compare-lane-interrupt .compare-step-active {
+  border-bottom-color: var(--ee-green);
+}
+
+.reveal .compare-arrow,
+.reveal .compare-loop {
+  color: var(--ee-blue-mid);
+  font-size: 0.6em;
+  font-weight: 700;
+}
+
+.reveal .compare-lanes + p {
+  margin-top: 28px;
+  text-align: center;
+}
+
+/* Pause, handler, and resume */
+
+.reveal .execution-stack {
+  display: grid;
+  gap: 6px;
+  margin: 38px 130px 0;
+}
+
+.reveal .execution-lane {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  min-height: 130px;
+  border-top: 7px solid var(--ee-blue-mid);
+  background: var(--ee-blue-pale);
+  align-items: center;
+}
+
+.reveal .execution-lane-interrupt {
+  border-top-color: var(--ee-orange);
+  background: #fff4e8;
+}
+
+.reveal .execution-lane-title {
+  padding: 0 22px;
+  color: var(--ee-blue-dark);
+  font-size: 0.62em;
+  font-weight: 700;
+}
+
+.reveal .execution-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.reveal .execution-step {
+  min-width: 185px;
+  padding: 13px 18px;
+  border-bottom: 4px solid var(--ee-line);
+  font-size: 0.58em;
+  text-align: center;
+}
+
+.reveal .execution-step-marker {
+  border-bottom-color: var(--ee-green);
+  font-weight: 700;
+}
+
+.reveal .execution-arrow {
+  color: var(--ee-blue-mid);
+  font-size: 0.7em;
+  font-weight: 700;
+}
+
+.reveal .execution-down {
+  color: var(--ee-muted);
+  font-size: 0.52em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.reveal .execution-stack + p {
+  margin-top: 24px;
+  text-align: center;
+}
+
+/* Motion-led story visuals */
+
+.reveal .story-visual {
+  display: block;
+  width: 100%;
+  max-height: 650px;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.reveal .story-visual text {
+  font-family: inherit;
+}
+
+.reveal .story-divider {
+  stroke: var(--ee-line);
+  stroke-width: 3;
+}
+
+.reveal .story-kicker {
+  fill: var(--ee-blue-dark);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.reveal .story-subtitle,
+.reveal .story-note,
+.reveal .story-small {
+  fill: var(--ee-muted);
+  font-size: 25px;
+}
+
+.reveal .story-label {
+  fill: var(--ee-blue-dark);
+  font-size: 27px;
+  font-weight: 700;
+}
+
+.reveal .poll-orbit {
+  fill: none;
+  stroke: var(--ee-blue-mid);
+  stroke-width: 8;
+  stroke-dasharray: 20 12;
+}
+
+.reveal .orbit-center {
+  fill: var(--ee-blue-dark);
+  font-size: 42px;
+  font-weight: 700;
+}
+
+.reveal .orbit-answer {
+  fill: var(--ee-orange);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.reveal .story-pulse {
+  fill: var(--ee-orange);
+}
+
+.reveal .signal-wave {
+  fill: none;
+  stroke: var(--ee-blue-mid);
+  stroke-width: 9;
+  stroke-linejoin: round;
+}
+
+.reveal .edge-marker {
+  stroke: var(--ee-orange);
+  stroke-width: 5;
+}
+
+.reveal .edge-label,
+.reveal .return-label {
+  fill: var(--ee-orange);
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.reveal .irq-route {
+  fill: none;
+  stroke: var(--ee-green);
+  stroke-width: 9;
+}
+
+.reveal #polling-arrow path {
+  fill: var(--ee-green);
+}
+
+.reveal .main-route {
+  fill: none;
+  stroke: var(--ee-blue-mid);
+  stroke-width: 11;
+}
+
+.reveal .detour-route {
+  fill: none;
+  stroke: var(--ee-orange);
+  stroke-width: 11;
+}
+
+.reveal .route-stop {
+  fill: #ffffff;
+  stroke: var(--ee-blue-mid);
+  stroke-width: 6;
+}
+
+.reveal .route-stop-interrupt {
+  stroke: var(--ee-orange);
+}
+
+.reveal .return-marker {
+  stroke: var(--ee-green);
+  stroke-width: 5;
+  stroke-dasharray: 10 8;
+}
+
+.reveal .interrupt-kicker {
+  fill: var(--ee-orange);
+}
+
+.reveal .marker-blue {
+  fill: var(--ee-blue-mid);
+}
+
+.reveal .marker-orange {
+  fill: var(--ee-orange);
+}
+
+.reveal .detour-story {
+  margin-top: 10px;
+}
+
+.reveal .detour-story .detour-label {
+  font-size: 22px;
+}
+
+.reveal .vertical-detour-layout {
+  display: grid;
+  grid-template-columns: 560px minmax(0, 1fr);
+  align-items: center;
+  gap: 55px;
+  margin: 10px 45px 0;
+}
+
+.reveal .detour-code-column {
+  align-self: center;
+}
+
+.reveal .detour-column-heading {
+  margin-bottom: 14px;
+  color: var(--ee-blue-dark);
+  font-size: 0.48em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.reveal .detour-loop-code {
+  margin: 0;
+  padding: 25px 20px;
+  border-left: 7px solid var(--ee-blue-mid);
+  background: #f5f8fa;
+  box-shadow: none;
+  font-size: 0.6em;
+  line-height: 1.45;
+}
+
+.reveal .detour-loop-code code {
+  display: block;
+  max-height: none;
+  color: var(--ee-blue-dark);
+  font-family: var(--r-code-font);
+  white-space: pre;
+}
+
+.reveal .detour-loop-code .code-line {
+  display: block;
+  padding: 0 10px;
+}
+
+.reveal .detour-loop-code b {
+  color: var(--ee-orange);
+  font-weight: 700;
+}
+
+.reveal .detour-loop-code .code-interrupt-line {
+  border-left: 4px solid var(--ee-orange);
+  color: var(--ee-orange);
+}
+
+.reveal .detour-loop-code .code-return-line {
+  border-left: 4px solid var(--ee-green);
+  background: #edf6f0;
+}
+
+.reveal .detour-loop-code .code-return-comment {
+  border-left: 4px solid var(--ee-green);
+  color: var(--ee-green);
+}
+
+.reveal .detour-code-note {
+  margin-top: 24px;
+  color: var(--ee-muted);
+  font-size: 0.5em;
+  line-height: 1.35;
+}
+
+.reveal .detour-code-note strong {
+  color: var(--ee-blue-dark);
+}
+
+.reveal .vertical-detour-scene {
+  display: block;
+  width: 100%;
+  max-height: 580px;
+  overflow: visible;
+}
+
+.reveal .vertical-detour-scene text {
+  font-family: inherit;
+}
+
+.reveal .detour-lane-title {
+  fill: var(--ee-blue-dark);
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.reveal .detour-lane-title-interrupt {
+  fill: var(--ee-orange);
+}
+
+.reveal .vertical-main-route,
+.reveal .vertical-loop-route {
+  fill: none;
+  stroke: var(--ee-blue-mid);
+  stroke-width: 8;
+}
+
+.reveal .vertical-paused-route {
+  fill: none;
+  stroke: var(--ee-line);
+  stroke-width: 4;
+  stroke-dasharray: 10 10;
+}
+
+.reveal .vertical-interrupt-route {
+  fill: none;
+  stroke: var(--ee-orange);
+  stroke-width: 8;
+}
+
+.reveal .vertical-main-stop {
+  fill: #ffffff;
+  stroke: var(--ee-blue-mid);
+  stroke-width: 6;
+}
+
+.reveal .vertical-interrupt-stop {
+  fill: #ffffff;
+  stroke: var(--ee-orange);
+  stroke-width: 6;
+}
+
+.reveal .vertical-main-label,
+.reveal .vertical-interrupt-label {
+  fill: var(--ee-blue-dark);
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.reveal .vertical-interrupt-code {
+  fill: var(--ee-muted);
+  font-family: var(--r-code-font);
+  font-size: 15px;
+}
+
+.reveal .vertical-loop-label,
+.reveal .vertical-paused-label {
+  fill: var(--ee-muted);
+  font-size: 15px;
+}
+
+.reveal .vertical-save-marker {
+  stroke: var(--ee-green);
+  stroke-width: 4;
+  stroke-dasharray: 8 7;
+}
+
+.reveal .vertical-save-label,
+.reveal .vertical-return-label {
+  fill: var(--ee-green);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.reveal .vertical-execution-guide {
+  fill: none;
+  stroke: none;
+}
+
+.reveal section.present .polling-pulse {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal .polling-pulse,
+  .reveal .irq-pulse,
+  .reveal .detour-pulse,
+  .reveal .vertical-execution-pulse {
+    display: none;
+  }
+}
+
+/* Plain-language journey map (advance organizer) */
+
+.reveal .journey-map {
+  grid-template-columns:
+    minmax(190px, 1fr) auto
+    minmax(190px, 1fr) auto
+    minmax(190px, 1fr) auto
+    minmax(190px, 1fr) auto
+    minmax(235px, 1.2fr);
+  margin-top: 110px;
+}
+
+.reveal .journey-map .irq-node {
+  min-height: 215px;
+  gap: 14px;
+}
+
+.reveal .journey-map .irq-node-title {
+  font-size: 0.95em;
+  letter-spacing: 0.04em;
+}
+
+.reveal .journey-map .irq-node-detail {
+  font-size: 0.6em;
+}
+
+/* "You are here" breadcrumb strip on concept slides */
+
+.reveal .journey-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 0 34px;
+}
+
+.reveal .journey-strip span {
+  padding: 5px 18px;
+  border: 2px solid var(--ee-line);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--ee-muted);
+  font-size: 0.4em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.reveal .journey-strip i {
+  color: var(--ee-line);
+  font-size: 0.45em;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.reveal .journey-strip span small {
+  margin-left: 9px;
+  color: var(--ee-orange);
+  font-size: 0.85em;
+}
+
+.reveal .journey-strip .strip-done {
+  border-color: var(--ee-green);
+  background: #edf6f0;
+}
+
+.reveal .journey-strip .strip-here {
+  border-color: var(--ee-orange);
+  background: #fff4e8;
+  color: var(--ee-blue-dark);
+}
+
+/* Phone analogy story visual */
+
+.reveal #phone-arrow path {
+  fill: var(--ee-green);
+}
+
+/* Complete-path animated scene */
+
+.reveal .scene-stage {
+  fill: var(--ee-blue-dark);
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.reveal .scene-name {
+  fill: var(--ee-muted);
+  font-size: 20px;
+}
+
+.reveal .scene-wire {
+  stroke: var(--ee-line);
+  stroke-width: 5;
+}
+
+.reveal .scene-road {
+  fill: none;
+  stroke: var(--ee-blue-mid);
+  stroke-width: 10;
+}
+
+.reveal .scene-outline {
+  fill: #ffffff;
+  stroke: var(--ee-blue-dark);
+  stroke-width: 5;
+}
+
+.reveal .scene-soft {
+  fill: #e8eef2;
+  stroke: var(--ee-line);
+  stroke-width: 3;
+}
+
+.reveal .scene-car {
+  fill: var(--ee-blue-dark);
+}
+
+.reveal .scene-dash {
+  stroke: var(--ee-green);
+  stroke-width: 5;
+  stroke-dasharray: 12 10;
+}
+
+.reveal .hw-scene {
+  max-height: 555px;
+}
+
+.reveal .hw-scene + p {
+  margin: 4px 0 0;
+  color: var(--ee-muted);
+  font-size: 0.56em;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal .scene-car,
+  .reveal .scene-pulse {
+    display: none;
+  }
+}

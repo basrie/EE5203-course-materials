@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.42">
+
+  <meta name="author" content="Basri Erdogan">
+  <title>EE5203 Microprocessors</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
+  <link rel="stylesheet" href="../../L01_microprocessor-systems-toolchain/assets/styles.css">
+  <link rel="stylesheet" href="../assets/week2.css">
+  <link href="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">EE5203 Microprocessors</h1>
+  <p class="subtitle">L02 - Values, Decisions, Loops, and Arrays</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Basri Erdogan 
+</div>
+</div>
+</div>
+
+</section>
+<section id="decisions-and-repetition" class="slide level2">
+<h2>Decisions and repetition</h2>
+<div class="big-question">
+<p>Last week, you built, flashed, and debugged a small C program. Today you will learn the C statements that make the program calculate, decide, and repeat.</p>
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a><span class="dt">int</span> temperature <span class="op">=</span> <span class="dv">24</span><span class="op">;</span></span>
+<span id="cb1-2"><a></a><span class="dt">int</span> fan_on <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-3"><a></a></span>
+<span id="cb1-4"><a></a><span class="cf">if</span> <span class="op">(</span>temperature <span class="op">&gt;</span> <span class="dv">22</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-5"><a></a>    fan_on <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb1-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Start by reading the code. Then predict the result before running it.</p>
+</section>
+<section id="todays-objectives" class="slide level2">
+<h2>Today’s objectives</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Store and change sensor values with variables.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Calculate with arithmetic operators.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Choose a result with <code>if</code>, <code>else if</code>, and <code>else</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> Repeat code with <code>for</code> and <code>while</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>05</span> Process all eight values in one array.</p>
+</div>
+</div>
+<p>The laboratory keeps everything in one <code>main.c</code> file.</p>
+</section>
+<section id="statement-order" class="slide level2">
+<h2>Statement order</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a></a><span class="dt">int</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-2"><a></a>count <span class="op">=</span> count <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb2-3"><a></a>count <span class="op">=</span> count <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Create <code>count</code> and give it the value <code>0</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Read the current value, add <code>1</code>, and store the result.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Do the same operation again.</p>
+</div>
+</div>
+<div class="relationship-strip">
+<p>After the third statement, <code>count</code> is <code>2</code>.</p>
+</div>
+</section>
+<section id="anatomy-of-a-variable" class="slide level2">
+<h2>Anatomy of a variable</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a></a><span class="dt">int</span> temperature <span class="op">=</span> <span class="dv">24</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <strong><code>int</code></strong> stores a whole number.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong><code>temperature</code></strong> is the name used by later statements.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong><code>24</code></strong> is the first value stored in the variable.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <strong><code>;</code></strong> ends the statement.</p>
+</div>
+</div>
+</section>
+<section id="assignment" class="slide level2">
+<h2>Assignment</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a></a><span class="dt">int</span> temperature <span class="op">=</span> <span class="dv">24</span><span class="op">;</span></span>
+<span id="cb4-2"><a></a></span>
+<span id="cb4-3"><a></a>temperature <span class="op">=</span> <span class="dv">18</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The second statement does not ask a question. It stores <code>18</code> in <code>temperature</code>.</p>
+<div class="columns">
+<div class="column" style="width:48%;">
+<p><strong>BEFORE</strong></p>
+<p><code>temperature</code> is <code>24</code></p>
+</div><div class="column" style="width:48%;">
+<p><strong>AFTER</strong></p>
+<p><code>temperature</code> is <code>18</code></p>
+</div></div>
+</section>
+<section id="arithmetic-operators" class="slide level2">
+<h2>Arithmetic operators</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a></a><span class="dt">int</span> a <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb5-2"><a></a><span class="dt">int</span> b <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb5-3"><a></a></span>
+<span id="cb5-4"><a></a><span class="dt">int</span> sum        <span class="op">=</span> a <span class="op">+</span> b<span class="op">;</span>   <span class="co">// 13</span></span>
+<span id="cb5-5"><a></a><span class="dt">int</span> difference <span class="op">=</span> a <span class="op">-</span> b<span class="op">;</span>   <span class="co">// 7</span></span>
+<span id="cb5-6"><a></a><span class="dt">int</span> product    <span class="op">=</span> a <span class="op">*</span> b<span class="op">;</span>   <span class="co">// 30</span></span>
+<span id="cb5-7"><a></a><span class="dt">int</span> quotient   <span class="op">=</span> a <span class="op">/</span> b<span class="op">;</span>   <span class="co">// 3</span></span>
+<span id="cb5-8"><a></a><span class="dt">int</span> remainder  <span class="op">=</span> a <span class="op">%</span> b<span class="op">;</span>   <span class="co">// 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="relationship-strip">
+<p>Both operands of <code>a / b</code> are integers, so the result is the whole-number quotient.</p>
+</div>
+</section>
+<section id="and" class="slide level2">
+<h2><code>++</code> and <code>+=</code></h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a><span class="dt">int</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-2"><a></a><span class="dt">int</span> sum <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb6-3"><a></a></span>
+<span id="cb6-4"><a></a>count<span class="op">++;</span>     <span class="co">// same result as count = count + 1</span></span>
+<span id="cb6-5"><a></a>sum <span class="op">+=</span> <span class="dv">5</span><span class="op">;</span>    <span class="co">// same result as sum = sum + 5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Use the longer form first when it makes the operation easier to understand.</p>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>After these statements, <code>count</code> is <code>1</code> and <code>sum</code> is <code>15</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="practice-predict-the-values" class="slide level2">
+<h2>Practice: predict the values</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb7-2"><a></a><span class="dt">int</span> y <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb7-3"><a></a></span>
+<span id="cb7-4"><a></a>x <span class="op">=</span> x <span class="op">+</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb7-5"><a></a>y <span class="op">*=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb7-6"><a></a>x<span class="op">++;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="prompt-list">
+<div class="prompt-item">
+<p><span>1</span> What is the final value of <code>x</code>?</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> What is the final value of <code>y</code>?</p>
+</div>
+<div class="prompt-item">
+<p><span>3</span> Which line would you execute first in the debugger?</p>
+</div>
+</div>
+</section>
+<section id="comparison-operators" class="slide level2">
+<h2>Comparison operators</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Expression</th>
+<th>Question</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>a == b</code></td>
+<td>Are the values equal?</td>
+</tr>
+<tr class="even">
+<td><code>a != b</code></td>
+<td>Are the values different?</td>
+</tr>
+<tr class="odd">
+<td><code>a &lt; b</code></td>
+<td>Is <code>a</code> smaller?</td>
+</tr>
+<tr class="even">
+<td><code>a &lt;= b</code></td>
+<td>Is <code>a</code> smaller or equal?</td>
+</tr>
+<tr class="odd">
+<td><code>a &gt; b</code></td>
+<td>Is <code>a</code> larger?</td>
+</tr>
+<tr class="even">
+<td><code>a &gt;= b</code></td>
+<td>Is <code>a</code> larger or equal?</td>
+</tr>
+</tbody>
+</table>
+<p>A comparison does not change either variable.</p>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=166">C11 draft N1570, §6.8.4 <em>Selection statements</em> — p.&nbsp;166</a> covers <code>if</code>; comparisons are §6.5.8–6.5.9.</p>
+</div>
+</section>
+<section id="vs" class="slide level2">
+<h2><code>=</code> vs <code>==</code></h2>
+<div class="columns">
+<div class="column" style="width:48%;">
+<p><strong>ASSIGNMENT</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a>status <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Store <code>1</code> in <code>status</code>.</p>
+</div><div class="column" style="width:48%;">
+<p><strong>COMPARISON</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a>status <span class="op">==</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Ask whether <code>status</code> contains <code>1</code>.</p>
+</div></div>
+<div class="debug-anti-pattern">
+<p>Using <code>=</code> when you mean <code>==</code> is a common beginner error.</p>
+</div>
+</section>
+<section id="the-if-statement" class="slide level2">
+<h2>The <code>if</code> statement</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a></a><span class="dt">int</span> temperature <span class="op">=</span> <span class="dv">24</span><span class="op">;</span></span>
+<span id="cb10-2"><a></a><span class="dt">int</span> fan_on <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb10-3"><a></a></span>
+<span id="cb10-4"><a></a><span class="cf">if</span> <span class="op">(</span>temperature <span class="op">&gt;</span> <span class="dv">22</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-5"><a></a>    fan_on <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb10-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Test <code>temperature &gt; 22</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> If it is true, execute the statement inside the braces.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> If it is false, skip that statement.</p>
+</div>
+</div>
+</section>
+<section id="the-ifelse-decision" class="slide level2">
+<h2>The <code>if/else</code> decision</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a></a><span class="cf">if</span> <span class="op">(</span>temperature <span class="op">&gt;</span> <span class="dv">22</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-2"><a></a>    fan_on <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb11-3"><a></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb11-4"><a></a>    fan_on <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb11-5"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Exactly one block runs.</p>
+<div class="relationship-strip">
+<p>For <code>temperature = 24</code>, the program stores <code>1</code>. For <code>temperature = 18</code>, it stores <code>0</code>.</p>
+</div>
+</section>
+<section id="else-if-chains" class="slide level2">
+<h2><code>else if</code> chains</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a></a><span class="cf">if</span> <span class="op">(</span>sample <span class="op">&lt;</span> <span class="dv">1500</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-2"><a></a>    status_code <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span>       <span class="co">// LOW</span></span>
+<span id="cb12-3"><a></a><span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>sample <span class="op">&gt;</span> <span class="dv">3000</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-4"><a></a>    status_code <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>        <span class="co">// HIGH</span></span>
+<span id="cb12-5"><a></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb12-6"><a></a>    status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>        <span class="co">// OK</span></span>
+<span id="cb12-7"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The program tests from top to bottom and stops at the first true condition.</p>
+</section>
+<section id="logical-operators" class="slide level2">
+<h2>Logical operators</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operator</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&amp;&amp;</code></td>
+<td>both conditions must be true</td>
+<td><code>sample &gt;= 0 &amp;&amp; sample &lt;= 4095</code></td>
+</tr>
+<tr class="even">
+<td><code>||</code></td>
+<td>at least one condition is true</td>
+<td><code>mode == 1 || mode == 2</code></td>
+</tr>
+<tr class="odd">
+<td><code>!</code></td>
+<td>reverse true and false</td>
+<td><code>!ready</code></td>
+</tr>
+</tbody>
+</table>
+<p>Use parentheses when they make the intended grouping clearer.</p>
+</section>
+<section id="practice-classify-one-sample" class="slide level2">
+<h2>Practice: classify one sample</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb13-1"><a></a><span class="dt">int</span> sample <span class="op">=</span> <span class="dv">2800</span><span class="op">;</span></span>
+<span id="cb13-2"><a></a><span class="dt">int</span> status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb13-3"><a></a></span>
+<span id="cb13-4"><a></a><span class="cf">if</span> <span class="op">(</span>sample <span class="op">&lt;</span> <span class="dv">1500</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-5"><a></a>    status_code <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb13-6"><a></a><span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>sample <span class="op">&gt;</span> <span class="dv">3000</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-7"><a></a>    status_code <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb13-8"><a></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb13-9"><a></a>    status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb13-10"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="prompt-list">
+<div class="prompt-item">
+<p><span>1</span> Which condition is tested first?</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> What is the final value of <code>status_code</code>?</p>
+</div>
+<div class="prompt-item">
+<p><span>3</span> What changes when <code>sample</code> is <code>3500</code>?</p>
+</div>
+</div>
+</section>
+<section id="the-while-loop" class="slide level2">
+<h2>The <code>while</code> loop</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a></a><span class="dt">int</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb14-2"><a></a></span>
+<span id="cb14-3"><a></a><span class="cf">while</span> <span class="op">(</span>count <span class="op">&lt;</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-4"><a></a>    count<span class="op">++;</span></span>
+<span id="cb14-5"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The loop tests <code>count &lt; 3</code> before every repetition.</p>
+<div class="relationship-strip">
+<p>The body runs with <code>count</code> equal to <code>0</code>, <code>1</code>, and <code>2</code>. The loop stops when <code>count</code> becomes <code>3</code>.</p>
+</div>
+</section>
+<section id="the-for-loop" class="slide level2">
+<h2>The <code>for</code> loop</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb15-2"><a></a>    <span class="co">/* use i */</span></span>
+<span id="cb15-3"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>START:</strong> create <code>i</code> with value <code>0</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>TEST:</strong> continue while <code>i &lt; 4</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>UPDATE:</strong> increase <code>i</code> after each repetition.</p>
+</div>
+</div>
+</section>
+<section id="loop-trace-table" class="slide level2">
+<h2>Loop trace table</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Repetition</th>
+<th style="text-align: right;"><code>i</code> before body</th>
+<th>Is <code>i &lt; 4</code> true?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td>yes</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td>yes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td>yes</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td>yes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">stop</td>
+<td style="text-align: right;">4</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p>The loop body runs four times, not five.</p>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=168">C11 draft N1570, §6.8.5 <em>Iteration statements</em> — p.&nbsp;168</a>.</p>
+</div>
+</section>
+<section id="which-statement-when" class="slide level2">
+<h2>Which statement when?</h2>
+<div class="vertical-list">
+<div class="vertical-item">
+<p><span>01</span> Use <code>if</code> when code may run once or may be skipped.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Use <code>while</code> when repetition depends on a condition.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Use <code>for</code> when a counter visits a known range.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> Use <code>while (1)</code> for the main loop of firmware that must keep running.</p>
+</div>
+</div>
+</section>
+<section id="the-forever-loop" class="slide level2">
+<h2>The forever loop</h2>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb16-2"><a></a><span class="op">{</span></span>
+<span id="cb16-3"><a></a>    <span class="co">/* initialization runs once */</span></span>
+<span id="cb16-4"><a></a></span>
+<span id="cb16-5"><a></a>    <span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-6"><a></a>        <span class="co">/* repeated work */</span></span>
+<span id="cb16-7"><a></a>    <span class="op">}</span></span>
+<span id="cb16-8"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The startup code calls <code>main()</code>. Initialization runs first; the infinite loop then keeps the firmware alive.</p>
+</section>
+<section id="the-uint16_t-type" class="slide level2">
+<h2>The <code>uint16_t</code> type</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a></a><span class="pp">#include </span><span class="im">&lt;stdint.h&gt;</span></span>
+<span id="cb17-2"><a></a></span>
+<span id="cb17-3"><a></a><span class="dt">uint16_t</span> sample <span class="op">=</span> <span class="dv">4095</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <code>uint</code> means unsigned integer: no negative values.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <code>16</code> means the storage has 16 bits.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <code>_t</code> is part of the standard type name.</p>
+</div>
+</div>
+<p>Use ordinary <code>int</code> for small counters and calculations in this week’s program.</p>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=307">C11 draft N1570, §7.20 <em>Integer types</em> <code>&lt;stdint.h&gt;</code> — p.&nbsp;307</a>.</p>
+</div>
+</section>
+<section id="arrays" class="slide level2">
+<h2>Arrays</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a></a><span class="dt">uint16_t</span> samples<span class="op">[</span><span class="dv">8</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb18-2"><a></a>    <span class="dv">850</span><span class="op">,</span> <span class="dv">1250</span><span class="op">,</span> <span class="dv">4095</span><span class="op">,</span> <span class="dv">4200</span><span class="op">,</span></span>
+<span id="cb18-3"><a></a>    <span class="dv">2050</span><span class="op">,</span> <span class="dv">900</span><span class="op">,</span> <span class="dv">3100</span><span class="op">,</span> <span class="dv">2800</span></span>
+<span id="cb18-4"><a></a><span class="op">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><code>uint16_t</code> is the type of every element.</li>
+<li><code>samples</code> is the array name.</li>
+<li><code>[8]</code> reserves space for eight elements.</li>
+</ul>
+</section>
+<section id="array-indexing" class="slide level2">
+<h2>Array indexing</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Expression</th>
+<th style="text-align: right;">Selected element</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>samples[0]</code></td>
+<td style="text-align: right;">first</td>
+</tr>
+<tr class="even">
+<td><code>samples[1]</code></td>
+<td style="text-align: right;">second</td>
+</tr>
+<tr class="odd">
+<td><code>samples[7]</code></td>
+<td style="text-align: right;">eighth</td>
+</tr>
+<tr class="even">
+<td><code>samples[8]</code></td>
+<td style="text-align: right;">invalid</td>
+</tr>
+</tbody>
+</table>
+<svg class="story-visual" viewbox="0 0 1440 200" role="img" aria-labelledby="arridx-title">
+<title id="arridx-title">
+An eight-element array drawn as cells with indices 0 through 7; a ninth dashed cell labeled index 8 is crossed out because it is outside the array
+</title>
+<rect x="320" y="56" width="96" height="64" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="368" y="44" text-anchor="middle" fill="#2b789f" font-size="19" font-weight="700" font-family="ui-monospace, Menlo, monospace">[0]</text> <text x="368" y="96" text-anchor="middle" fill="#174f73" font-size="21" font-family="ui-monospace, Menlo, monospace">850</text> <rect x="416" y="56" width="96" height="64" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="464" y="44" text-anchor="middle" fill="#2b789f" font-size="19" font-weight="700" font-family="ui-monospace, Menlo, monospace">[1]</text> <text x="464" y="96" text-anchor="middle" fill="#174f73" font-size="21" font-family="ui-monospace, Menlo, monospace">1250</text> <rect x="512" y="56" width="96" height="64" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="560" y="44" text-anchor="middle" fill="#2b789f" font-size="19" font-weight="700" font-family="ui-monospace, Menlo, monospace">[2]</text> <text x="560" y="96" text-anchor="middle" fill="#174f73" font-size="21" font-family="ui-monospace, Menlo, monospace">4095</text> <rect x="608" y="56" width="96" height="64" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="656" y="44" text-anchor="middle" fill="#2b789f" font-size="19" font-weight="700" font-family="ui-monospace, Menlo, monospace">[3]</text> <text x="656" y="96" text-anchor="middle" fill="#174f73" font-size="21" font-family="ui-monospace, Menlo, monospace">4200</text> <rect x="704" y="56" width="96" height="64" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="752" y="44" text-anchor="middle" fill="#2b789f" font-size="19" font-weight="700" font-family="ui-monospace, Menlo, monospace">[4]</text> <text x="752" y="96" text-anchor="middle" fill="#174f73" font-size="21" font-family="ui-monospace, Menlo, monospace">2050</text> <rect x="800" y="56" width="96" height="64" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="848" y="44" text-anchor="middle" fill="#2b789f" font-size="19" font-weight="700" font-family="ui-monospace, Menlo, monospace">[5]</text> <text x="848" y="96" text-anchor="middle" fill="#174f73" font-size="21" font-family="ui-monospace, Menlo, monospace">900</text> <rect x="896" y="56" width="96" height="64" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="944" y="44" text-anchor="middle" fill="#2b789f" font-size="19" font-weight="700" font-family="ui-monospace, Menlo, monospace">[6]</text> <text x="944" y="96" text-anchor="middle" fill="#174f73" font-size="21" font-family="ui-monospace, Menlo, monospace">3100</text> <rect x="992" y="56" width="96" height="64" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1040" y="44" text-anchor="middle" fill="#2b789f" font-size="19" font-weight="700" font-family="ui-monospace, Menlo, monospace">[7]</text> <text x="1040" y="96" text-anchor="middle" fill="#174f73" font-size="21" font-family="ui-monospace, Menlo, monospace">2800</text> <rect x="1088" y="56" width="96" height="64" fill="#fdecec" stroke="#c0392b" stroke-width="2" stroke-dasharray="7 5"></rect> <text x="1136" y="44" text-anchor="middle" fill="#c0392b" font-size="19" font-weight="700" font-family="ui-monospace, Menlo, monospace">[8]</text> <text x="1136" y="96" text-anchor="middle" fill="#c0392b" font-size="21" font-family="ui-monospace, Menlo, monospace">✗</text> <text x="704" y="162" text-anchor="middle" fill="#5a6b76" font-size="20">valid indices <tspan font-weight="700" fill="#2b789f" font-family="ui-monospace, Menlo, monospace">0…7</tspan> — <tspan fill="#c0392b" font-weight="700" font-family="ui-monospace, Menlo, monospace">samples[8]</tspan> is outside the array</text>
+</svg>
+</section>
+<section id="looping-over-an-array" class="slide level2">
+<h2>Looping over an array</h2>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb19-1"><a></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">8</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb19-2"><a></a>    samples<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> samples<span class="op">[</span>i<span class="op">]</span> <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb19-3"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>During each repetition, <code>i</code> selects one element.</p>
+<div class="relationship-strip">
+<p>The condition is <code>i &lt; 8</code>, not <code>i &lt;= 8</code>, because index <code>8</code> is invalid.</p>
+</div>
+</section>
+<section id="the-accumulator-pattern" class="slide level2">
+<h2>The accumulator pattern</h2>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb20-1"><a></a><span class="dt">int</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb20-2"><a></a></span>
+<span id="cb20-3"><a></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">8</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb20-4"><a></a>    sum <span class="op">+=</span> samples<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb20-5"><a></a><span class="op">}</span></span>
+<span id="cb20-6"><a></a></span>
+<span id="cb20-7"><a></a><span class="dt">int</span> average <span class="op">=</span> sum <span class="op">/</span> <span class="dv">8</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>sum</code> must start at zero. Each repetition adds one element.</p>
+</section>
+<section id="one-loop-several-results" class="slide level2">
+<h2>One loop, several results</h2>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb21-1"><a></a><span class="dt">int</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb21-2"><a></a><span class="dt">int</span> high_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb21-3"><a></a></span>
+<span id="cb21-4"><a></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">8</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb21-5"><a></a>    <span class="cf">if</span> <span class="op">(</span>samples<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> <span class="dv">4095</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-6"><a></a>        samples<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="dv">4095</span><span class="op">;</span></span>
+<span id="cb21-7"><a></a>    <span class="op">}</span></span>
+<span id="cb21-8"><a></a></span>
+<span id="cb21-9"><a></a>    sum <span class="op">+=</span> samples<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb21-10"><a></a></span>
+<span id="cb21-11"><a></a>    <span class="cf">if</span> <span class="op">(</span>samples<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> <span class="dv">2500</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-12"><a></a>        high_count<span class="op">++;</span></span>
+<span id="cb21-13"><a></a>    <span class="op">}</span></span>
+<span id="cb21-14"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This loop clamps invalid values, calculates a sum, and counts high samples.</p>
+</section>
+<section id="the-complete-week-2-program" class="slide level2">
+<h2>The complete Week 2 program</h2>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb22-1"><a></a><span class="dt">uint16_t</span> samples<span class="op">[</span><span class="dv">8</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb22-2"><a></a>    <span class="dv">850</span><span class="op">,</span> <span class="dv">1250</span><span class="op">,</span> <span class="dv">4095</span><span class="op">,</span> <span class="dv">4200</span><span class="op">,</span></span>
+<span id="cb22-3"><a></a>    <span class="dv">2050</span><span class="op">,</span> <span class="dv">900</span><span class="op">,</span> <span class="dv">3100</span><span class="op">,</span> <span class="dv">2800</span></span>
+<span id="cb22-4"><a></a><span class="op">};</span></span>
+<span id="cb22-5"><a></a></span>
+<span id="cb22-6"><a></a><span class="dt">int</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb22-7"><a></a><span class="dt">int</span> high_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb22-8"><a></a></span>
+<span id="cb22-9"><a></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">8</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb22-10"><a></a>    <span class="cf">if</span> <span class="op">(</span>samples<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> <span class="dv">4095</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb22-11"><a></a>        samples<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="dv">4095</span><span class="op">;</span></span>
+<span id="cb22-12"><a></a>    <span class="op">}</span></span>
+<span id="cb22-13"><a></a>    sum <span class="op">+=</span> samples<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb22-14"><a></a>    <span class="cf">if</span> <span class="op">(</span>samples<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> <span class="dv">2500</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb22-15"><a></a>        high_count<span class="op">++;</span></span>
+<span id="cb22-16"><a></a>    <span class="op">}</span></span>
+<span id="cb22-17"><a></a><span class="op">}</span></span>
+<span id="cb22-18"><a></a></span>
+<span id="cb22-19"><a></a><span class="dt">int</span> average <span class="op">=</span> sum <span class="op">/</span> <span class="dv">8</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="predict-then-verify" class="slide level2">
+<h2>Predict, then verify</h2>
+<div class="vertical-list">
+<div class="vertical-item">
+<p><span>01</span> Calculate the expected final array, sum, average, and high count.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Build with zero errors and read the first warning, if any.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Break after the loop and inspect the variables.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> Change one input value, predict again, and repeat the test.</p>
+</div>
+</div>
+</section>
+<section id="common-week-2-mistakes" class="slide level2">
+<h2>Common Week 2 mistakes</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Using <code>=</code> instead of <code>==</code> in a condition.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Forgetting to give an accumulator its starting value.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Writing <code>i &lt;= 8</code> and accessing <code>samples[8]</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> Forgetting to update the counter in a <code>while</code> loop.</p>
+</div>
+</div>
+</section>
+<section id="laboratory-mission" class="slide level2">
+<h2>Laboratory mission</h2>
+<div class="big-question">
+<p>Process eight simulated sensor values in one <code>main.c</code> file.</p>
+</div>
+<p>You will:</p>
+<ol type="1">
+<li>clamp values above <code>4095</code>;</li>
+<li>calculate the sum and average;</li>
+<li>count values above <code>2500</code>;</li>
+<li>select a numeric LOW, OK, or HIGH status;</li>
+<li>prove the result in the debugger.</li>
+</ol>
+</section>
+<section id="mastery-checklist" class="slide level2">
+<h2>Mastery checklist</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>✓</span> Trace assignment and arithmetic statements in order.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Explain the difference between <code>=</code> and <code>==</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Write an <code>if/else</code> decision.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Trace <code>while</code> and <code>for</code> loops.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Process indices <code>0</code> through <code>7</code> without leaving the array.</p>
+</div>
+</div>
+</section>
+<section id="exit-ticket" class="slide level2">
+<h2>Exit ticket</h2>
+<div class="columns">
+<div class="column" style="width:62%;">
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb23-1"><a></a><span class="dt">int</span> values<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">3</span><span class="op">,</span> <span class="dv">7</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">8</span><span class="op">};</span></span>
+<span id="cb23-2"><a></a><span class="dt">int</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb23-3"><a></a></span>
+<span id="cb23-4"><a></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb23-5"><a></a>    <span class="cf">if</span> <span class="op">(</span>values<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> <span class="dv">4</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb23-6"><a></a>        total <span class="op">+=</span> values<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb23-7"><a></a>    <span class="op">}</span></span>
+<span id="cb23-8"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol type="1">
+<li>Which elements are added?</li>
+<li>What is the final value of <code>total</code>?</li>
+<li>What invalid access would occur if the condition were <code>i &lt;= 4</code>?</li>
+</ol>
+</div><div class="column" style="width:38%;">
+<p><img data-src="../assets/exit_ticket_qr.svg" width="340"></p>
+<p>Scan and answer before you leave — sign in with your Google account. Ungraded; your answers shape the start of the next lecture.</p>
+</div></div>
+<div class="source-note">
+<p>Every concept in this lecture, with page-linked sources: <a href="../../../resources/references/academic_references.html">academic references</a>.</p>
+</div>
+
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>EE5203 - L02</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../../../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../../../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+
+        height: 900,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Timer Input Capture – Two Rising Edges</title>
+<style>
+  :root { --fg:#0b1220; --muted:#5b6b7c; --accent:#1166ff; --accent2:#ff3b30; --ok:#1aa34a; --bg:#ffffff; --panel:#f5f7fb; }
+  body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,Segoe UI,Roboto,Helvetica,Arial}
+  header{padding:16px 20px;border-bottom:1px solid #e6e9f0;background:var(--panel)}
+  h1{margin:0 0 6px 0;font-size:22px}
+  .wrap{display:grid;grid-template-columns: 320px 1fr;gap:16px;padding:16px 20px}
+  .controls{background:#fff;border:1px solid #e6e9f0;border-radius:12px;padding:12px 14px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+  .controls h2{font-size:16px;margin:4px 0 10px;color:#223}
+  .row{display:grid;grid-template-columns: 1fr 110px;gap:10px;align-items:center;margin:6px 0}
+  .row label{font-size:14px;color:#233}
+  .row input[type=number]{width:100%;padding:6px 8px;border:1px solid #d9dfeb;border-radius:8px;font-size:14px}
+  .btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+  button{cursor:pointer;border:1px solid #cfd7e6;background:#fff;border-radius:10px;padding:8px 12px;font-weight:600}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .canvasWrap{background:#fff;border:1px solid #e6e9f0;border-radius:12px;padding:10px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+  canvas{width:100%;height:520px;display:block}
+  .readout{display:grid;grid-template-columns: repeat(3,minmax(0,1fr));gap:12px;margin-top:10px}
+  .card{background:var(--panel);border:1px solid #e6e9f0;border-radius:10px;padding:10px}
+  .label{font-size:12px;color:var(--muted)}
+  .value{font-size:18px;font-weight:700;margin-top:2px}
+  .legend{display:flex;gap:16px;align-items:center;margin:8px 2px 0 2px;color:#233}
+  .dot{width:14px;height:4px;border-radius:2px;background:var(--accent);display:inline-block;margin-right:6px}
+  .dot.red{background:var(--accent2)}
+  .dot.gray{background:#8899aa}
+  .formula{font-size:14px;color:#223;margin-top:10px}
+  .small{font-size:12px;color:#566}
+</style>
+</head>
+<body>
+  <header>
+    <h1>Timer Input Capture (Two Rising Edges → Δticks &amp; Δt)</h1>
+    <div class="legend">
+      <span><span class="dot"></span>Timer counter (sawtooth)</span>
+      <span><span class="dot red"></span>External input (rising edges capture)</span>
+      <span><span class="dot gray" style="background:repeating-linear-gradient(90deg,#8899aa 0 6px,transparent 6px 12px);height:6px"></span>
+        Captured CCR lines</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="controls">
+      <h2>Parameters</h2>
+      <div class="row"><label>ARR (auto-reload)</label><input id="arr" type="number" step="1" min="10" value="9999"></div>
+      <div class="row"><label>PSC (prescaler)</label><input id="psc" type="number" step="1" min="0" value="83999"></div>
+      <div class="row"><label>Timer clock f<sub>CLK_PSC</sub> (Hz)</label><input id="fclk" type="number" step="100000" min="1000000" value="84000000"></div>
+      <div class="row"><label>Input period (ms)</label><input id="period" type="number" step="0.1" min="0.1" value="5000.0"></div>
+      <div class="row"><label>Pulse width (ms)</label><input id="pw" type="number" step="0.1" min="0.1" value="1000.0"></div>
+      <div class="btns">
+        <button id="replay" class="primary">Replay</button>
+        <button id="pause">Pause</button>
+        <button id="runTests" title="Log checks to console">Run tests</button>
+      </div>
+      <p class="small">Tip: Use ARR=999, rising edges ~3.6&nbsp;ms &amp; 9&nbsp;ms apart to get CCR≈300 and CCR≈750 (Δ=450 ticks) like your slide.</p>
+      <div class="formula">
+        f<sub>CLK_CNT</sub> = f<sub>CLK_PSC</sub> / (PSC+1)
+        <br/>Δt = Δticks / f<sub>CLK_CNT</sub>
+      </div>
+    </div>
+
+    <div class="canvasWrap">
+      <canvas id="cv" width="1400" height="520"></canvas>
+      <div class="readout">
+        <div class="card"><div class="label">CCR₁ (previous rising)</div><div id="ccr1" class="value">—</div></div>
+        <div class="card"><div class="label">CCR₂ (latest rising)</div><div id="ccr2" class="value">—</div></div>
+        <div class="card"><div class="label">Δticks / Δt / f</div><div id="delta" class="value">—</div></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const canvas = document.getElementById('cv');
+  const ctx = canvas.getContext('2d');
+
+  // UI elements
+  const el = id => document.getElementById(id);
+  const ARR   = el('arr');
+  const PSC   = el('psc');
+  const FCLK  = el('fclk');
+  const PERIOD= el('period');
+  const PW    = el('pw');
+  const CCR1o = el('ccr1');
+  const CCR2o = el('ccr2');
+  const DELTAo= el('delta');
+  const replayBtn = el('replay');
+  const pauseBtn  = el('pause');
+  const testsBtn  = el('runTests');
+
+  // Plot layout
+  const P = {l:70, r:20, t:20, b:60};
+  const HEAD_CAP = 0.50; // park the "now" line at 50% of the width after fill
+  const W = () => canvas.width - P.l - P.r;
+  const H = () => canvas.height - P.t - P.b;
+  const y0 = () => P.t + H();
+
+  // Pretty Hz formatter for on-canvas readout
+  function fmtHz(hz){
+    if (!Number.isFinite(hz)) return '—';
+    const units = [ ['Hz',1], ['kHz',1e3], ['MHz',1e6] ];
+    for (let i=units.length-1;i>=0;i--){
+      const [u, s] = units[i];
+      if (hz >= s) return `${(hz/s).toFixed(hz/s >= 100 ? 0 : hz/s >= 10 ? 1 : 2)} ${u}`;
+    }
+    return `${hz.toFixed(0)} Hz`;
+  }
+
+  // Sim & capture state
+  let running = true;
+  let t0 = performance.now();
+  let sim = null;
+
+  function resetSim(){
+    const arr = +ARR.value|0;
+    const psc = +PSC.value|0;
+    const fclk = +FCLK.value;
+    const per_ms = +PERIOD.value;
+    const pw_ms = Math.max(0.05, Math.min(+PW.value, per_ms*0.8));
+
+    const f_cnt = fclk / (psc + 1);
+    const tickPeriod = 1 / f_cnt; // seconds per tick
+
+    sim = {
+      arr, psc, fclk, f_cnt, tickPeriod,
+      per: per_ms/1000, pw: pw_ms/1000,
+      t: 0,            // simulation time (s)
+      ccrs: [],        // rolling window (prev, latest)
+      phase0: 0,       // absolute-time phase to make pulses start near right edge
+      nextRise: 0,
+      nextFall: 0,
+      justCapturedY: undefined,
+      cntPhase0: 0     // counter phase offset (seconds) so CNT starts near ARR
+    };
+
+    // reset UI readouts
+    CCR1o.textContent = '—';
+    CCR2o.textContent = '—';
+    DELTAo.textContent = '—';
+
+    // align the first rising edge with the "now" position
+    sim.phase0 = 0;            // tr = 0 at head
+    sim.nextRise = 0;          // first capture at t=0 if running
+    sim.nextFall = sim.nextRise + sim.pw;
+
+    // set counter initial phase so CNT(0) ≈ floor(0.9*(ARR+1))
+    const startFrac = 0.90; // 90% of period
+    sim.cntPhase0 = startFrac * (sim.arr + 1) * sim.tickPeriod;
+  }
+
+  function togglePause(){
+    running = !running;
+    pauseBtn.textContent = running ? 'Pause' : 'Resume';
+    t0 = performance.now();
+    requestAnimationFrame(loop);
+  }
+
+  replayBtn.onclick = () => { resetSim(); };
+  pauseBtn.onclick  = () => { togglePause(); };
+  testsBtn.onclick  = () => { runTests(); resetSim(); };
+
+  function yFor(counter) {
+    const frac = counter / sim.arr; // 0..1
+    return y0() - frac * H();
+  }
+
+  // === Time windows ===
+  function spanSec(){
+    return Math.max(sim.per*2.0, (sim.arr+1)*sim.tickPeriod*1.2);
+  }
+  function windowTimes(){
+    const span = spanSec();
+    const headRatio = Math.min(HEAD_CAP, sim.t/span); // fill until HEAD_CAP, then park
+    let tStart = sim.t - headRatio*span;
+    if (tStart < 0) tStart = 0; // avoid negative absolute time
+    const tEnd = tStart + span;
+    return {tStart, tEnd, headRatio};
+  }
+
+  // Map absolute time → x for the COUNTER (left-fill then mid-scroll)
+  function xForCounterTime(tAbs){
+    const {tStart, tEnd} = windowTimes();
+    const span = (tEnd - tStart);
+    return P.l + ((tAbs - tStart) / span) * W();
+  }
+
+  // Map absolute time → x for the INPUT (always approaches the counter head from the right)
+  function xForInputTime(tAbs){
+    const span = spanSec();
+    const {headRatio:r} = windowTimes(); // r in [0, HEAD_CAP]
+    const tStart2 = sim.t - span*r;           // place "now" at x = r*W()
+    const tEnd2   = sim.t + span*(1 - r);     // right edge
+    return P.l + ((tAbs - tStart2) / (tEnd2 - tStart2)) * W();
+  }
+
+  function drawAxes() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.strokeStyle = '#d5dbea';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(P.l, P.t, W(), H());
+    ctx.fillStyle = '#334';
+    ctx.font = '16px system-ui';
+    ctx.fillText('Timer counter', 10, 22);
+    ctx.fillText('t →', P.l + W() - 30, y0() + 40);
+
+    // Show counter clock frequency on the canvas
+    ctx.fillStyle = '#55637a';
+    ctx.font = '14px system-ui';
+    ctx.fillText(`f_CLK_CNT = ${fmtHz(sim.f_cnt)}`, P.l + 8, P.t + 16);
+
+    // ARR dashed line
+    const yARR = yFor(sim.arr);
+    ctx.save();
+    ctx.setLineDash([8,8]);
+    ctx.beginPath();
+    ctx.moveTo(P.l, yARR);
+    ctx.lineTo(P.l + W(), yARR);
+    ctx.strokeStyle = '#8899aa';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = '#445';
+    ctx.fillText(`ARR = ${sim.arr}`, P.l + 8, yARR - 6);
+    ctx.restore();
+
+    // Draw a NOW line at the head position to clarify capture location
+    const {headRatio} = windowTimes();
+    const headX = P.l + W()*headRatio;
+    ctx.save();
+    ctx.setLineDash([4,6]);
+    ctx.strokeStyle = '#9aa7bd';
+    ctx.beginPath(); ctx.moveTo(headX, P.t); ctx.lineTo(headX, P.t+H()); ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle = '#566';
+    ctx.font = '12px system-ui';
+    ctx.fillText('now', headX + 6, P.t + 14);
+  }
+
+  // Build the counter polyline so tests can check it doesn't draw past the head.
+  function getCounterPolyline(){
+    const arrT = (sim.arr+1)*sim.tickPeriod;
+    const {tStart, tEnd, headRatio} = windowTimes();
+    const span = (tEnd - tStart);
+    const steps = Math.floor(W()/3);
+    const headXLimit = P.l + W()*headRatio;
+    const pts = [];
+    for(let i=0;i<=steps;i++){
+      const s = i/steps;
+      const tAbs = tStart + s*span;
+      const x = xForCounterTime(tAbs);
+      if (x > headXLimit) break; // never draw beyond head
+      const phase = (((tAbs + sim.cntPhase0) % arrT) + arrT) % arrT;
+      const cnt = Math.floor(phase / sim.tickPeriod);
+      const y = yFor(cnt);
+      pts.push({x,y});
+    }
+    return pts;
+  }
+
+  function drawCounterRamp(){
+    const pts = getCounterPolyline();
+    if (pts.length === 0) return;
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.stroke();
+  }
+
+  function drawInputSignal(){
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim();
+
+    const per = sim.per, pw = sim.pw, phase0 = sim.phase0;
+    const span = spanSec();
+    const {headRatio:r} = windowTimes();
+    const tStart2 = sim.t - span*r;
+    const tEnd2   = sim.t + span*(1 - r);
+
+    // Only draw pulses that are at or to the RIGHT of the head during the initial fill.
+    const headX = P.l + W()*r;
+
+    // Choose k range covering current window generously (future oriented)
+    const firstK = Math.ceil((tStart2 - phase0)/per) - 1;
+    const lastK  = Math.ceil((tEnd2   - phase0 + per)/per) + 1;
+
+    for(let k=firstK; k<=lastK; k++){
+      const tr = k*per + phase0;      // rise time (phase-shifted)
+      const tf = tr + pw;              // fall time
+      const xr = xForInputTime(tr);
+      const xf = xForInputTime(tf);
+      const yb = y0()+0;              // baseline
+      const yh = y0() - H()*0.38;     // pulse height
+
+      // During the initial fill stage, hide any pulse that lies completely to the LEFT of the head
+      if (windowTimes().headRatio < HEAD_CAP && xr < headX && xf < headX) continue;
+
+      // vertical rising edge
+      if (xr >= P.l && xr <= P.l + W()){
+        ctx.beginPath(); ctx.moveTo(xr, yb); ctx.lineTo(xr, yh); ctx.stroke();
+      }
+      // high level (draw even if pulse is partially in view)
+      const clamp = (x) => Math.max(P.l, Math.min(P.l + W(), x));
+      const xStart = clamp(xr);
+      const xEnd   = clamp(xf);
+      if (xEnd > xStart){
+        ctx.beginPath();
+        ctx.moveTo(xStart, yh);
+        ctx.lineTo(xEnd,   yh);
+        ctx.stroke();
+      }
+
+      // vertical falling edge
+      if (xf >= P.l && xf <= P.l + W()){
+        ctx.beginPath(); ctx.moveTo(xf, yh); ctx.lineTo(xf, yb); ctx.stroke();
+      }
+    }
+
+    // baseline
+    ctx.strokeStyle = '#cc4455';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(P.l, y0()); ctx.lineTo(P.l + W(), y0()); ctx.stroke();
+    ctx.fillStyle = '#a33'; ctx.font = '14px system-ui';
+    ctx.fillText('External input signal', P.l + 8, y0() + 24);
+  }
+
+  function captureIfRisingEdgesCrossed(){
+    // Continuously capture every rising edge and keep a rolling window of the last two
+    while(sim.t >= sim.nextRise){
+      const arrT = (sim.arr+1)*sim.tickPeriod;
+      const phase = (((sim.nextRise + sim.cntPhase0) % arrT) + arrT) % arrT;
+      const cnt = Math.floor(phase / sim.tickPeriod);
+
+      // push and keep a rolling window of the last two captures
+      sim.ccrs.push(cnt);
+      if (sim.ccrs.length > 2) sim.ccrs.shift();
+
+      sim.justCapturedY = yFor(cnt); // for drawing a marker at the head
+      sim.nextRise = sim.nextRise + sim.per;
+      sim.nextFall += sim.per;
+
+      // Update readouts using rolling two
+      if (sim.ccrs.length >= 1) CCR1o.textContent = sim.ccrs[0].toString();
+      if (sim.ccrs.length === 2) {
+        CCR2o.textContent = sim.ccrs[1].toString();
+        const deltaTicks = (sim.ccrs[1] - sim.ccrs[0] + (sim.arr+1)) % (sim.arr+1);
+        const dt = deltaTicks / sim.f_cnt;
+        const freq = dt>0 ? (1/dt) : 0;
+        DELTAo.textContent = `${deltaTicks} ticks  |  ${dt.toFixed(6)} s  |  ${freq.toFixed(2)} Hz`;
+      }
+    }
+  }
+
+  function drawCapturedLines(){
+    // dashed CCR lines for captured values (only last two)
+    if(sim.ccrs.length>0){
+      ctx.save();
+      ctx.setLineDash([10,8]);
+      ctx.strokeStyle = '#8899aa';
+      ctx.lineWidth = 2;
+      ctx.font = '16px system-ui';
+      ctx.fillStyle = '#445';
+      const labels = ['CCR₁','CCR₂'];
+      sim.ccrs.forEach((val,i)=>{
+        const y = yFor(val);
+        ctx.beginPath(); ctx.moveTo(P.l,y); ctx.lineTo(P.l+W(),y); ctx.stroke();
+        ctx.fillText(`${labels[i]} = ${val}`, P.l + 8, y - 6);
+      });
+      ctx.restore();
+    }
+    // draw a capture marker at the head position when a capture just occurred
+    if (typeof sim.justCapturedY === 'number'){
+      const {headRatio} = windowTimes();
+      const headX = P.l + W()*headRatio;
+      ctx.fillStyle = '#1aa34a';
+      ctx.beginPath(); ctx.arc(headX, sim.justCapturedY, 6, 0, Math.PI*2); ctx.fill();
+      // fade marker after one frame
+      sim.justCapturedY = undefined;
+    }
+  }
+
+  function loop(now){
+    if(!running){return;}
+    const dt_ms = now - t0; t0 = now;
+    const dt = Math.min(0.05, dt_ms/1000);
+    sim.t += dt;
+
+    captureIfRisingEdgesCrossed();
+
+    drawAxes();
+    drawCounterRamp();
+    drawInputSignal();
+    drawCapturedLines();
+
+    requestAnimationFrame(loop);
+  }
+
+  // === Tests (console) ===
+  function runTests(){
+    let fails = 0; const assert = (cond, msg)=>{ if(!cond){ console.error('FAIL:', msg); fails++; } else { console.log('ok:', msg);} };
+    resetSim();
+
+    // 0) Counter starts ~90% of ARR+1
+    const arrT0 = (sim.arr+1)*sim.tickPeriod;
+    const cnt0 = Math.floor((((0 + sim.cntPhase0) % arrT0) + arrT0) % arrT0 / sim.tickPeriod);
+    const target0 = Math.floor(0.90*(sim.arr+1));
+    assert(Math.abs(cnt0 - target0) <= 1, 'counter starts near 90% of ARR+1');
+
+    // 1) windowTimes basic properties
+    let w = windowTimes();
+    assert(w.tEnd > w.tStart, 'windowTimes returns valid range');
+    assert(w.headRatio >= 0 && w.headRatio <= HEAD_CAP, 'headRatio within [0,HEAD_CAP] at start');
+
+    // 2) xForCounterTime monotonic over window
+    const leftX = xForCounterTime(w.tStart);
+    const rightX = xForCounterTime(w.tEnd);
+    assert(rightX > leftX, 'xForCounterTime maps start→left, end→right');
+
+    // 3) xForInputTime places "now" at head position
+    const headX = P.l + w.headRatio * W();
+    const nowX  = xForInputTime(sim.t);
+    assert(Math.abs(nowX - headX) < 1e-6 * W() + 1, 'xForInputTime(sim.t) ≈ head position');
+
+    // 4) Far-future edge is near right border (slides in from right)
+    const span = spanSec();
+    const nearRightX = xForInputTime(sim.t + span*(1 - w.headRatio));
+    assert(nearRightX > P.l + 0.9*W(), 'future edge drawn near right border');
+
+    // 5) Repeated calls to xForInputTime are finite (no recursion)
+    for(let i=0;i<200;i++){
+      const xx = xForInputTime(sim.t + i*0.001);
+      assert(Number.isFinite(xx), 'xForInputTime returns finite number');
+    }
+
+    // 6) Trigger two captures and check CCRs
+    const saveNext = sim.nextRise;
+    sim.t = sim.nextRise + 1e-6; captureIfRisingEdgesCrossed();
+    const afterFirst = sim.nextRise;
+    sim.t = sim.nextRise + 1e-6; captureIfRisingEdgesCrossed();
+    assert(sim.ccrs.length===2, 'two CCR captures after two rising edges');
+    assert(Math.abs(afterFirst - (saveNext + sim.per)) < 1e-9, 'nextRise advanced by one period after first capture');
+    sim.ccrs.forEach((v)=> assert(v>=0 && v<=sim.arr, 'CCR within [0, ARR]'));
+
+    // 7) After enough time, headRatio pins at HEAD_CAP
+    sim.t += spanSec()*10;
+    const w2 = windowTimes();
+    assert(Math.abs(w2.headRatio - HEAD_CAP) < 1e-9, 'headRatio pins at HEAD_CAP after fill');
+
+    // 8) Counter polyline never exceeds head x-position
+    resetSim();
+    const pts = getCounterPolyline();
+    const headX2 = P.l + windowTimes().headRatio * W();
+    const maxX = pts.reduce((m,p)=> Math.max(m,p.x), -Infinity);
+    assert(maxX <= headX2 + 1, 'counter drawing clips at head position');
+
+    // 9) Rolling window keeps last two & delta computed from them
+    resetSim();
+    sim.t = sim.nextRise + 1e-6; captureIfRisingEdgesCrossed(); // first
+    sim.t = sim.nextRise + 1e-6; captureIfRisingEdgesCrossed(); // second
+    const prevSecond = sim.ccrs[1];
+    sim.t = sim.nextRise + 1e-6; captureIfRisingEdgesCrossed(); // third
+    assert(sim.ccrs.length===2, 'rolling window keeps exactly two CCRs');
+    assert(sim.ccrs[0] === prevSecond, 'rolling window shifts: old second becomes new first');
+    const dNew = (sim.ccrs[1] - sim.ccrs[0] + (sim.arr+1)) % (sim.arr+1);
+    assert(Number.isFinite(dNew) && dNew >= 0 && dNew <= sim.arr+1, 'delta from rolling window is valid');
+
+    // 10) While-loop capture handles multiple missed edges in one step
+    resetSim();
+    const startRise = sim.nextRise;
+    sim.t = startRise + sim.per*5 + 1e-6; // jump ahead past 5 edges
+    captureIfRisingEdgesCrossed();
+    assert(Math.abs(sim.nextRise - (startRise + 6*sim.per)) < 1e-9, 'nextRise advanced across multiple edges');
+    assert(sim.ccrs.length===2, 'still only last two CCRs kept after batch capture');
+
+    console.log(fails? `Tests: ${fails} failure(s)` : 'All tests passed');
+  }
+
+  // Initialize and start
+  resetSim();
+  runTests();
+  resetSim();
+  requestAnimationFrame(ts => { t0 = ts; loop(ts); });
+
+  // Hi-DPI canvas
+  function resizeCanvas(){
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = canvas.clientWidth;
+    const cssH = canvas.clientHeight;
+    canvas.width  = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  const ro = new ResizeObserver(resizeCanvas);
+  ro.observe(canvas);
+  resizeCanvas();
+
+  [ARR, PSC, FCLK, PERIOD, PW].forEach(inp => inp.addEventListener('change', resetSim));
+})();
+</script>
+</body>
+</html>

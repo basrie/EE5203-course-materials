@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Academic References and Further Reading – EE5203 Microprocessors</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="academic_references.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Academic References and Further Reading</h1>
+<p class="subtitle lead">EE5203 Microprocessors — where the full story is</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The lectures in this course introduce each concept <strong>conceptually</strong>: enough mechanism to configure, use, and debug it, without the full architectural detail. This page maps every simplified concept to the authoritative document where the complete story lives, so that a curious student — or a future project — can go one level deeper with a known-good source instead of a random blog.</p>
+<p>Each lecture gets its own section. Entries are added as lectures are revised.</p>
+<section id="if-a-link-stops-working" class="level2">
+<h2 class="anchored" data-anchor-id="if-a-link-stops-working">If a link stops working</h2>
+<p>Links below point at the current official locations (verified 2026-07-17). If one rots:</p>
+<ul>
+<li><strong>ST documents</strong> (RM…, PM…, UM…, MB… numbers): search the document number at <a href="https://www.st.com">st.com</a>; the number uniquely identifies the document and survives site reorganizations.</li>
+<li><strong>Arm documents</strong> (DDI… numbers): search at <a href="https://developer.arm.com/documentation">developer.arm.com</a>.</li>
+<li><strong>Books</strong>: available through the university library or the cited publisher; Lee &amp; Seshia is free and legal at <a href="https://leeseshia.org">leeseshia.org</a>.</li>
+</ul>
+</section>
+<section id="primary-documents-used-throughout-the-course" class="level2">
+<h2 class="anchored" data-anchor-id="primary-documents-used-throughout-the-course">Primary documents used throughout the course</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Short name</th>
+<th>Full citation</th>
+<th>What it is for</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf"><strong>RM0368</strong></a></td>
+<td>STMicroelectronics, <em>RM0368: STM32F401xB/C and STM32F401xD/E advanced Arm®-based 32-bit MCUs — Reference Manual</em> (PDF)</td>
+<td>The register-level truth for every peripheral on our chip: GPIO, SYSCFG, EXTI, timers, ADC, I2C, SPI, DMA</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf"><strong>PM0214</strong></a></td>
+<td>STMicroelectronics, <em>PM0214: STM32 Cortex®-M4 MCUs and MPUs programming manual</em> (PDF)</td>
+<td>The processor core seen from software: instruction set, exception model, NVIC, SysTick, core registers</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.st.com/resource/en/user_manual/um1724-stm32-nucleo64-boards-mb1136-stmicroelectronics.pdf"><strong>UM1724</strong></a></td>
+<td>STMicroelectronics, <em>UM1724: STM32 Nucleo-64 boards (MB1136) — User Manual</em> (PDF)</td>
+<td>The board itself: B1 and LD2 circuits, jumpers, ST-LINK, power, <strong>board revision differences</strong></td>
+</tr>
+<tr class="even">
+<td><a href="https://www.st.com/resource/en/schematic_pack/mb1136-default-c04_schematic.pdf"><strong>MB1136 schematic</strong></a></td>
+<td>STMicroelectronics, <em>MB1136 schematic pack</em>, rev C-04 (PDF)</td>
+<td>The actual circuit diagram of the Nucleo-F401RE — the version used in lecture</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf"><strong>UM1725</strong></a></td>
+<td>STMicroelectronics, <em>UM1725: Description of STM32F4 HAL and low-layer drivers</em> (PDF)</td>
+<td>Signature and behavior of every <code>HAL_…</code> function the labs use</td>
+</tr>
+<tr class="even">
+<td><a href="https://shop.elsevier.com/books/the-definitive-guide-to-arm-cortex-m3-and-cortex-m4-processors/yiu/978-0-12-408082-9"><strong>Yiu 2014</strong></a></td>
+<td>J. Yiu, <em>The Definitive Guide to ARM® Cortex®-M3 and Cortex®-M4 Processors</em>, 3rd ed., Newnes, 2014. ISBN 978-0-12-408082-9</td>
+<td>The standard book-length treatment of the core: pipeline, exceptions, NVIC, low-power, debug</td>
+</tr>
+<tr class="odd">
+<td><a href="https://developer.arm.com/documentation/ddi0403/latest/"><strong>DDI 0403</strong></a></td>
+<td>Arm Ltd., <em>ARMv7-M Architecture Reference Manual</em> (Arm DDI 0403)</td>
+<td>The formal architecture specification — for when even Yiu is not precise enough</td>
+</tr>
+<tr class="even">
+<td><a href="https://leeseshia.org"><strong>Lee &amp; Seshia</strong></a></td>
+<td>E. A. Lee and S. A. Seshia, <em>Introduction to Embedded Systems: A Cyber-Physical Systems Approach</em>, 2nd ed., MIT Press, 2017 — <a href="https://ptolemy.berkeley.edu/books/leeseshia/releases/LeeSeshia_DigitalV2_2.pdf">free PDF</a></td>
+<td>The academic textbook view: interrupts, concurrency, real-time reasoning</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.oreilly.com/library/view/making-embedded-systems/9781098151539/"><strong>White 2024</strong></a></td>
+<td>E. White, <em>Making Embedded Systems</em>, 2nd ed., O’Reilly, 2024</td>
+<td>Practical engineering judgment: interrupt hygiene, debouncing, system design patterns</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf"><strong>C11</strong></a></td>
+<td>ISO/IEC 9899:2011, <em>Programming languages — C</em> (link is N1570, the final public draft, PDF)</td>
+<td>The C language standard; final authority on <code>volatile</code>, integer types, undefined behavior</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l01-embedded-systems-the-c-toolchain-and-debugging" class="level2">
+<h2 class="anchored" data-anchor-id="l01-embedded-systems-the-c-toolchain-and-debugging">L01 — Embedded Systems, the C Toolchain, and Debugging</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Concept as taught</th>
+<th>Where the full story is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>What an embedded system is</strong> — dedicated function + constraints</td>
+<td><a href="https://leeseshia.org">Lee &amp; Seshia</a>, ch.&nbsp;1 <em>Introduction</em> (free PDF); <a href="https://www.oreilly.com/library/view/making-embedded-systems/9781098151539/">White 2024</a>, ch.&nbsp;1</td>
+</tr>
+<tr class="even">
+<td><strong>The Nucleo-F401RE board</strong> — ST-LINK, LD2, B1, headers</td>
+<td><a href="https://www.st.com/resource/en/user_manual/um1724-stm32-nucleo64-boards-mb1136-stmicroelectronics.pdf#page=13">UM1724 Rev 17, §6 <em>Hardware layout</em> — p.&nbsp;13</a>; <a href="https://www.st.com/resource/en/schematic_pack/mb1136-default-c04_schematic.pdf">MB1136 C-04 schematic</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Processor / MCU / system model</strong></td>
+<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=17">PM0214 Rev 10, §2.1 <em>Programmers model</em> — p.&nbsp;17</a>; Yiu 2014, ch.&nbsp;1–2</td>
+</tr>
+<tr class="even">
+<td><strong>The toolchain</strong> — compile, link, flash, debug</td>
+<td>Yiu 2014, ch.&nbsp;2 (development flow and what CMSIS standardizes); the build console of any CubeIDE project shows each stage’s real output</td>
+</tr>
+<tr class="odd">
+<td><strong>First C statements</strong> — <code>main()</code>, declarations, <code>if</code>, <code>while (1)</code></td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=166">C11 (N1570), §6.8.4 <em>Selection statements</em> — p.&nbsp;166</a>; program startup is §5.1.2.2.1</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l02-values-decisions-loops-and-arrays" class="level2">
+<h2 class="anchored" data-anchor-id="l02-values-decisions-loops-and-arrays">L02 — Values, Decisions, Loops, and Arrays</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Concept as taught</th>
+<th>Where the full story is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong><code>if</code> / <code>else if</code> / <code>else</code></strong></td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=166">C11 (N1570), §6.8.4 <em>Selection statements</em> — p.&nbsp;166</a></td>
+</tr>
+<tr class="even">
+<td><strong><code>while</code> and <code>for</code> loops</strong></td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=168">C11 (N1570), §6.8.5 <em>Iteration statements</em> — p.&nbsp;168</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Arrays and indexing from zero</strong></td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=98">C11 (N1570), §6.5.2.1 <em>Array subscripting</em> — p.&nbsp;98</a> — out-of-range access is undefined behavior, which is why <code>samples[8]</code> is not “just the next value”</td>
+</tr>
+<tr class="even">
+<td><strong><code>uint16_t</code> and friends</strong></td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=307">C11 (N1570), §7.20 <em>Integer types</em> <code>&lt;stdint.h&gt;</code> — p.&nbsp;307</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Integer division</strong> — <code>a / b</code> truncates</td>
+<td>C11 §6.5.5 (multiplicative operators): division truncates toward zero</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l03-functions-arrays-strings-and-multiple-c-files" class="level2">
+<h2 class="anchored" data-anchor-id="l03-functions-arrays-strings-and-multiple-c-files">L03 — Functions, Arrays, Strings, and Multiple C Files</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Concept as taught</th>
+<th>Where the full story is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Declarations, definitions, calls</strong></td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=174">C11 (N1570), §6.9.1 <em>Function definitions</em> — p.&nbsp;174</a></td>
+</tr>
+<tr class="even">
+<td><strong>Pass by value</strong> — parameters are copies</td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=99">C11 (N1570), §6.5.2.2 <em>Function calls</em> — p.&nbsp;99</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Headers, multiple files, the linker</strong></td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=54">C11 (N1570), §6.2.2 <em>Linkages of identifiers</em> — p.&nbsp;54</a>; <code>#include</code> / <code>#define</code> are <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=184">§6.10 <em>Preprocessing directives</em> — p.&nbsp;184</a></td>
+</tr>
+<tr class="even">
+<td><strong>Why array parameters need a count</strong> — arrays decay to pointers</td>
+<td>C11 §6.7.6.3¶7; the L04 pointer material makes this concrete</td>
+</tr>
+<tr class="odd">
+<td><strong>C strings and <code>\0</code>; <code>strcmp</code></strong></td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=380">C11 (N1570), §7.24 <em>String handling</em> <code>&lt;string.h&gt;</code> — p.&nbsp;380</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l04-pointers-structures-bits-registers-and-gpio" class="level2">
+<h2 class="anchored" data-anchor-id="l04-pointers-structures-bits-registers-and-gpio">L04 — Pointers, Structures, Bits, Registers, and GPIO</h2>
+<p>The lecture builds <code>GPIOA-&gt;BSRR = (1U &lt;&lt; 5);</code> from its parts: addresses, pointers, structures, masks, and the GPIO registers.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Concept as taught</th>
+<th>Where the full story is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Addresses and memory</strong> — “memory is a numbered collection of storage locations”</td>
+<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=28">PM0214 Rev 10, §2.2 <em>Memory model</em> — p.&nbsp;28</a>: the real Cortex-M4 memory map, including where peripherals live</td>
+</tr>
+<tr class="even">
+<td><strong>Pointers: <code>&amp;</code> and <code>*</code></strong></td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=106">C11 (N1570), §6.5.3.2 <em>Address and indirection operators</em> — p.&nbsp;106</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Structures and <code>.</code> / <code>-&gt;</code></strong></td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=130">C11 (N1570), §6.7.2.1 <em>Structure and union specifiers</em> — p.&nbsp;130</a></td>
+</tr>
+<tr class="even">
+<td><strong>Bitwise operators, masks, the <code>U</code> suffix</strong></td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=112">C11 (N1570), §6.5.7 <em>Bitwise shift operators</em> — p.&nbsp;112</a>, then §6.5.10–6.5.12 for <code>&amp;</code>, <code>^</code>, <code>|</code>; §6.5.7 also explains why shifting <strong>signed</strong> values can be undefined behavior — the reason the <code>U</code> suffix matters</td>
+</tr>
+<tr class="odd">
+<td><strong>CMSIS register names</strong> — “the device header supplies the definition”</td>
+<td>The actual <a href="https://github.com/STMicroelectronics/cmsis-device-f4/blob/master/Include/stm32f401xe.h"><code>stm32f401xe.h</code></a> device header (<code>GPIO_TypeDef</code>, <code>GPIOA_BASE</code>); Yiu 2014, ch.&nbsp;2 on what CMSIS standardizes</td>
+</tr>
+<tr class="even">
+<td><strong><code>volatile</code> register members</strong></td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=140">C11 (N1570), §6.7.3 — p.&nbsp;140</a>; M. Barr, <a href="https://barrgroup.com/blog/how-use-cs-volatile-keyword"><em>How to Use C’s volatile Keyword</em></a></td>
+</tr>
+<tr class="odd">
+<td><strong>Peripheral clock gating</strong> — “enable the clock first”</td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=118">RM0368 Rev 6, <code>RCC_AHB1ENR</code> — p.&nbsp;118</a>; the RCC chapter (§6) explains <em>why</em> clocks are gated: power</td>
+</tr>
+<tr class="even">
+<td><strong>GPIO block, <code>MODER</code>, <code>BSRR</code></strong></td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=146">RM0368 Rev 6, §8 <em>GPIO</em> — p.&nbsp;146</a>; registers: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=158"><code>GPIOx_MODER</code> — p.&nbsp;158</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=161"><code>GPIOx_BSRR</code> — p.&nbsp;161</a> — including what the lecture skips: OTYPER, OSPEEDR, PUPDR</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l05-gpio-and-hardware-abstraction" class="level2">
+<h2 class="anchored" data-anchor-id="l05-gpio-and-hardware-abstraction">L05 — GPIO and Hardware Abstraction</h2>
+<p>The lecture connects every HAL name to the register behavior taught in L04: same hardware, second interface.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Concept as taught</th>
+<th>Where the full story is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>The HAL GPIO API</strong> — <code>GPIO_InitTypeDef</code>, <code>HAL_GPIO_Init</code>, <code>WritePin</code> / <code>TogglePin</code> / <code>ReadPin</code></td>
+<td><a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=447">UM1725 Rev 8, GPIO functions — p.&nbsp;447</a></td>
+</tr>
+<tr class="even">
+<td><strong>What the HAL actually executes</strong></td>
+<td>The <a href="https://github.com/STMicroelectronics/stm32f4xx-hal-driver/blob/master/Src/stm32f4xx_hal_gpio.c">source of <code>stm32f4xx_hal_gpio.c</code></a> — <code>HAL_GPIO_WritePin</code> is a single <code>BSRR</code> write</td>
+</tr>
+<tr class="odd">
+<td><strong>HAL names → register bits</strong> — <code>GPIO_MODE_OUTPUT_PP</code>, <code>GPIO_NOPULL</code>, speed</td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=146">RM0368 Rev 6, §8 <em>GPIO</em> — p.&nbsp;146</a>; registers: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=158"><code>GPIOx_MODER</code> — p.&nbsp;158</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=159"><code>GPIOx_PUPDR</code> — p.&nbsp;159</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=161"><code>GPIOx_BSRR</code> — p.&nbsp;161</a></td>
+</tr>
+<tr class="even">
+<td><strong>Floating inputs, pull-up / pull-down</strong></td>
+<td>RM0368 §8.3 (I/O port control); the electronics context in any circuits text — the lecture’s claim is only that an undriven CMOS input is undefined</td>
+</tr>
+<tr class="odd">
+<td><strong>B1 circuit — external pull-up, active-low</strong></td>
+<td><a href="https://www.st.com/resource/en/schematic_pack/mb1136-default-c04_schematic.pdf">MB1136 schematic rev C-04</a>; <a href="https://www.st.com/resource/en/user_manual/um1724-stm32-nucleo64-boards-mb1136-stmicroelectronics.pdf#page=24">UM1724 Rev 17, push-buttons — p.&nbsp;24</a>; confirmed against the <a href="https://github.com/STMicroelectronics/stm32f4xx-nucleo-bsp/blob/84b99c762908ef56f711acf970ab13d4ec278df6/stm32f4xx_nucleo.c#L250-L265">ST Nucleo BSP source</a></td>
+</tr>
+<tr class="even">
+<td><strong>Why abstraction layers exist — and what they cost</strong></td>
+<td><a href="https://www.oreilly.com/library/view/making-embedded-systems/9781098151539/">White 2024</a>, ch.&nbsp;2 (creating system diagrams / layering); Yiu 2014, ch.&nbsp;2 (what CMSIS standardizes and why)</td>
+</tr>
+<tr class="odd">
+<td><strong>Polling and its limits</strong> — “the loop asks again and again”</td>
+<td>Forward pointer: the L06 row <em>Polling vs.&nbsp;interrupts</em> above</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l06-gpio-interrupts" class="level2">
+<h2 class="anchored" data-anchor-id="l06-gpio-interrupts">L06 — GPIO Interrupts</h2>
+<p>The lecture walks one button press through five plain-language stages (PRESS → NOTICE → ASK → LOOK UP → RUN YOUR CODE). Each simplification below names the document that removes it.</p>
+<p>Page-anchored links (<code>#page=N</code>) below open the PDF at the cited page in the browser viewer. Page numbers were verified against the document revisions named in each entry (2026-07-17); if ST publishes a new revision, the section numbers in the text remain the reliable pointer.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Concept as taught</th>
+<th>Where the full story is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Polling vs.&nbsp;interrupts</strong> — “polling asks again and again”</td>
+<td><a href="https://leeseshia.org">Lee &amp; Seshia</a>, ch.&nbsp;10 <em>Input and Output</em> (interrupt mechanisms, latency, and when polling is actually the better design); Yiu 2014, §4.5</td>
+</tr>
+<tr class="even">
+<td><strong>What really happens between ASK and RUN YOUR CODE</strong> — register stacking, vector fetch, exception entry/return (we skipped this entirely)</td>
+<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=37">PM0214 Rev 10, §2.3 <em>Exception model</em> — p.&nbsp;37</a>; Yiu 2014, ch.&nbsp;8 (including the 12-cycle entry sequence and tail-chaining); <a href="https://developer.arm.com/documentation/ddi0403/latest/">DDI 0403</a>, §B1.5 for the formal definition</td>
+</tr>
+<tr class="odd">
+<td><strong>EXTI</strong> — “a set of hardware edge detectors”</td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=205">RM0368 Rev 6, §10 <em>EXTI</em> — p.&nbsp;205</a>: block diagram, <code>IMR</code>/<code>EMR</code>/<code>RTSR</code>/<code>FTSR</code>/<code>SWIER</code>/<code>PR</code> registers, the event-vs-interrupt distinction we did not cover</td>
+</tr>
+<tr class="even">
+<td><strong>SYSCFG routing</strong> — “a four-bit field selects the port”</td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=143">RM0368 Rev 6, <code>SYSCFG_EXTICR4</code> — p.&nbsp;143</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Pending bit and write-1-to-clear</strong></td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=211">RM0368 Rev 6, <code>EXTI_PR</code> — p.&nbsp;211</a>; the same rc_w1 convention appears in many STM32 peripherals</td>
+</tr>
+<tr class="even">
+<td><strong>NVIC</strong> — “enable, priority, deliver”</td>
+<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=208">PM0214 Rev 10, §4.2 <em>NVIC</em> — p.&nbsp;208</a>; Yiu 2014, ch.&nbsp;7 — including what we postponed: priority levels, preemption, sub-priority, nesting</td>
+</tr>
+<tr class="odd">
+<td><strong>Vector table and the startup file</strong></td>
+<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=40">PM0214 Rev 10, §2.3.4 <em>Vector table</em> — p.&nbsp;40</a>; Yiu 2014, §4.4 and §8.5; the generated <code>startup_stm32f401retx.s</code> in every CubeIDE project is the concrete instance</td>
+</tr>
+<tr class="even">
+<td><strong><code>EXTI15_10_IRQHandler</code> / HAL helper / callback chain</strong></td>
+<td><a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=447">UM1725 Rev 8, GPIO functions — p.&nbsp;447</a> (<code>HAL_GPIO_EXTI_IRQHandler</code>, <code>HAL_GPIO_EXTI_Callback</code>); the ~10-line <a href="https://github.com/STMicroelectronics/stm32f4xx-hal-driver/blob/master/Src/stm32f4xx_hal_gpio.c">source of the helper</a> in <code>stm32f4xx_hal_gpio.c</code> is worth reading in the lab</td>
+</tr>
+<tr class="odd">
+<td><strong><code>volatile</code></strong> — “read the stored value each time”</td>
+<td><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=140">C11 (N1570), §6.7.3 — p.&nbsp;140</a>; M. Barr, <a href="https://barrgroup.com/blog/how-use-cs-volatile-keyword"><em>How to Use C’s volatile Keyword</em></a>, Barr Group. Note what the lecture only hints at: <code>volatile</code> does <strong>not</strong> make read-modify-write atomic — see <a href="https://leeseshia.org">Lee &amp; Seshia</a>, ch.&nbsp;11 on shared-variable concurrency</td>
+</tr>
+<tr class="even">
+<td><strong>ISR ↔︎ main() shared-variable pattern</strong> (<code>button_event</code>)</td>
+<td><a href="https://leeseshia.org">Lee &amp; Seshia</a>, ch.&nbsp;11 (race conditions, atomicity); <a href="https://www.oreilly.com/library/view/making-embedded-systems/9781098151539/">White 2024</a>, interrupt chapter (keep-ISRs-short discipline and its reasons)</td>
+</tr>
+<tr class="odd">
+<td><strong>Switch bounce and the 80 ms guard</strong></td>
+<td>J. Ganssle, <a href="http://www.ganssle.com/debouncing.htm"><em>A Guide to Debouncing</em></a>, 2nd ed., The Ganssle Group, 2008: measured bounce data for real switches (the “settles within ~10 ms” claim comes from here), plus hardware and software debounce alternatives</td>
+</tr>
+<tr class="even">
+<td><strong>B1 circuit — external pull-up, active-low</strong></td>
+<td><a href="https://www.st.com/resource/en/schematic_pack/mb1136-default-c04_schematic.pdf">MB1136 schematic rev C-04</a>; <a href="https://www.st.com/resource/en/user_manual/um1724-stm32-nucleo64-boards-mb1136-stmicroelectronics.pdf#page=24">UM1724 Rev 17, push-buttons — p.&nbsp;24</a> — <strong>check the board revision</strong>: later MB1136 revisions changed the B1 circuit, which affects the pull configuration the lab assumes</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l07-timers" class="level2">
+<h2 class="anchored" data-anchor-id="l07-timers">L07 — Timers</h2>
+<p>The lecture builds one mental model — clock → <code>PSC</code> → <code>CNT</code> → <code>ARR</code> → update event — and consumes it by polling, by interrupt, and as a 1 ms tick.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Concept as taught</th>
+<th>Where the full story is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>The time base</strong> — prescaler, counter, auto-reload, update event</td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=316">RM0368 Rev 6, §13 <em>TIM2 to TIM5</em> — p.&nbsp;316</a>; registers (<a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=353">§13.4 — p.&nbsp;353</a>)</td>
+</tr>
+<tr class="even">
+<td><strong>Where the 16 MHz comes from</strong> — clock tree, APB timer-clock ×2 rule</td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=94">RM0368 Rev 6, §6.2 <em>Clocks</em> — p.&nbsp;94</a></td>
+</tr>
+<tr class="odd">
+<td><strong>HAL TIM base API</strong> — handle, <code>Base_Init</code>, <code>Base_Start_IT</code>, callback</td>
+<td><a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=1065">UM1725 Rev 8, TIM functions — p.&nbsp;1065</a></td>
+</tr>
+<tr class="even">
+<td><strong>The interrupt path</strong> — reused from L06</td>
+<td>The L06 rows above; the only new element is the request name <code>TIM2_IRQn</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Tick-based scheduling and why blocking delays hurt</strong></td>
+<td><a href="https://leeseshia.org">Lee &amp; Seshia</a>, ch.&nbsp;10–11; <a href="https://www.oreilly.com/library/view/making-embedded-systems/9781098151539/">White 2024</a>, timer and main-loop chapters</td>
+</tr>
+<tr class="even">
+<td><strong>SysTick</strong> — the Cortex-M core timer behind <code>HAL_Delay</code> (not covered)</td>
+<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=246">PM0214 Rev 10, §4.5 <em>SysTick timer</em> — p.&nbsp;246</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l08-pulse-width-modulation" class="level2">
+<h2 class="anchored" data-anchor-id="l08-pulse-width-modulation">L08 — Pulse-Width Modulation</h2>
+<p>The lecture adds the capture/compare channel to L07’s time base and uses it in the compare direction: <code>ARR</code> owns the frequency, <code>CCR</code> owns the duty.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Concept as taught</th>
+<th>Where the full story is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>PWM mode</strong> — pin high while <code>CNT &lt; CCR</code></td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=336">RM0368 Rev 6, §13.3.9 <em>PWM mode</em> — p.&nbsp;336</a>, including what the lecture skips: center-aligned mode, PWM mode 2</td>
+</tr>
+<tr class="even">
+<td><strong>Channel registers</strong></td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=362"><code>TIMx_CCMR1</code> — p.&nbsp;362</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=366"><code>TIMx_CCER</code> — p.&nbsp;366</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=367"><code>TIMx_CCR1</code> — p.&nbsp;367</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Handing the pin to the timer</strong> — alternate function</td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=162">RM0368 Rev 6, <code>GPIOx_AFRL</code> — p.&nbsp;162</a>; the pin-to-AF table is the STM32F401RE datasheet (DS10086), <em>Alternate function mapping</em> — search the DS number at st.com</td>
+</tr>
+<tr class="even">
+<td><strong>HAL PWM API</strong></td>
+<td><a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=1065">UM1725 Rev 8, TIM functions — p.&nbsp;1065</a></td>
+</tr>
+<tr class="odd">
+<td><strong>The servo pulse contract</strong> — 50 Hz frame, 1–2 ms pulse</td>
+<td>Hobby-servo convention, not an ST document: any RC-servo datasheet (e.g., SG90, S3003) states the same 20 ms / 1–2 ms numbers</td>
+</tr>
+<tr class="even">
+<td><strong>Why the average works</strong> — PWM into slow loads</td>
+<td><a href="https://www.oreilly.com/library/view/making-embedded-systems/9781098151539/">White 2024</a>, output/actuator chapters; the RC-filter demo linked from the deck shows it interactively</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l09-input-capture" class="level2">
+<h2 class="anchored" data-anchor-id="l09-input-capture">L09 — Input Capture</h2>
+<p>The same channel, reversed: an edge on the pin captures the free-running counter into <code>CCR</code> — a hardware timestamp.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Concept as taught</th>
+<th>Where the full story is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Input capture</strong> — edge copies <code>CNT</code> into <code>CCR</code></td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=333">RM0368 Rev 6, §13.3.5 <em>Input capture mode</em> — p.&nbsp;333</a></td>
+</tr>
+<tr class="even">
+<td><strong>Automated duty measurement</strong></td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=334">RM0368 Rev 6, §13.3.6 <em>PWM input mode</em> — p.&nbsp;334</a> — the hardware version of the paired-channel trick, at the cost of the whole timer</td>
+</tr>
+<tr class="odd">
+<td><strong>Direct vs indirect inputs, the filter, overcapture</strong></td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=362"><code>TIMx_CCMR1</code> — p.&nbsp;362</a> (<code>CCxS</code>, <code>ICF</code>), <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=366"><code>TIMx_CCER</code> — p.&nbsp;366</a>; overcapture flags in the <code>TIMx_SR</code> description</td>
+</tr>
+<tr class="even">
+<td><strong>HAL capture API</strong></td>
+<td><a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=1065">UM1725 Rev 8, TIM functions — p.&nbsp;1065</a>; <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=1097"><code>HAL_TIM_ReadCapturedValue</code> — p.&nbsp;1097</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Ultrasonic ranging</strong> — echo width → distance</td>
+<td>HC-SR04 datasheet (community-published; no ST equivalent): 10 µs trigger, echo width, the /58 cm constant</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l10-analog-to-digital-conversion" class="level2">
+<h2 class="anchored" data-anchor-id="l10-analog-to-digital-conversion">L10 — Analog-to-Digital Conversion</h2>
+<p>The lecture builds counts↔︎volts fluency on one convention (<code>mV = raw × 3300 / 4095</code>), one clock (PCLK2 ÷ 2 = 8 MHz), and one converter (the SAR core).</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Concept as taught</th>
+<th>Where the full story is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>The ADC itself</strong> — 12-bit SAR, one converter on the F401</td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=213">RM0368 Rev 6, §11 <em>ADC</em> — p.&nbsp;213</a></td>
+</tr>
+<tr class="even">
+<td><strong>The ADC clock</strong> — PCLK2 ÷ 2 = 8 MHz, 36 MHz ceiling</td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=215">§11.3.2 <em>ADC clock</em> — p.&nbsp;215</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Channels</strong> — 16 external doors + the internal sensors</td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=215">§11.3.3 <em>Channel selection</em> — p.&nbsp;215</a>; <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=226">§11.9 <em>Temperature sensor</em> — p.&nbsp;226</a></td>
+</tr>
+<tr class="even">
+<td><strong>Single vs continuous conversion</strong></td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=216">§11.3.4–11.3.5 — p.&nbsp;216</a>; what the lecture skips: injected channels, the analog watchdog, external triggers (<a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=222">§11.6 — p.&nbsp;222</a>)</td>
+</tr>
+<tr class="odd">
+<td><strong>Sampling time and source impedance</strong></td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=222">§11.5 <em>Channel-wise programmable sampling time</em> — p.&nbsp;222</a>; the hard electrical limits (max source resistance vs sampling time) are in the STM32F401RE datasheet (DS10086), <em>ADC characteristics</em></td>
+</tr>
+<tr class="even">
+<td><strong>ADC registers</strong></td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=229">§11.12 — p.&nbsp;229</a>: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=229"><code>ADC_SR</code> — p.&nbsp;229</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=230"><code>ADC_CR1</code> — p.&nbsp;230</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=232"><code>ADC_CR2</code> — p.&nbsp;232</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=234"><code>ADC_SMPR2</code> — p.&nbsp;234</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=237"><code>ADC_SQR3</code> — p.&nbsp;237</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=239"><code>ADC_DR</code> — p.&nbsp;239</a></td>
+</tr>
+<tr class="odd">
+<td><strong>The analog pin mode</strong> — <code>MODER = 11</code></td>
+<td><a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=158">RM0368 Rev 6, <code>GPIOx_MODER</code> — p.&nbsp;158</a></td>
+</tr>
+<tr class="even">
+<td><strong>HAL ADC API</strong></td>
+<td><a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=56">UM1725 Rev 8, ADC generic driver — p.&nbsp;56</a>: <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=65"><code>HAL_ADC_Start</code> — p.&nbsp;65</a>, <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=66"><code>HAL_ADC_PollForConversion</code> / <code>HAL_ADC_Start_IT</code> — p.&nbsp;66</a>, <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=68"><code>HAL_ADC_GetValue</code> / <code>HAL_ADC_ConvCpltCallback</code> — p.&nbsp;68</a>, <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=69"><code>HAL_ADC_ConfigChannel</code> — p.&nbsp;69</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Sampling theory and aliasing</strong> — stated, not proven</td>
+<td><a href="https://leeseshia.org">Lee &amp; Seshia</a>, sensors/actuators and sampling chapters; <a href="https://www.oreilly.com/library/view/making-embedded-systems/9781098151539/">White 2024</a>, analog-input chapters</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l11-the-bridge-to-assembly" class="level2">
+<h2 class="anchored" data-anchor-id="l11-the-bridge-to-assembly">L11 — The Bridge to Assembly</h2>
+<p>Every listing in the deck is real output of <code>arm-none-eabi-gcc</code> 14.3 — the toolchain inside STM32CubeIDE — compiled for Cortex-M4 at <code>-O0</code> and <code>-O2</code>.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Concept as taught</th>
+<th>Where the full story is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>The register file</strong> — <code>R0</code>–<code>R12</code>, <code>SP</code>, <code>LR</code>, <code>PC</code>, <code>xPSR</code></td>
+<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=18">PM0214 Rev 10, §2.1.3 <em>Core registers</em> — p.&nbsp;18</a></td>
+</tr>
+<tr class="even">
+<td><strong>Thumb-2</strong> — 16- and 32-bit encodings, the <code>.w</code> suffix</td>
+<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=50">PM0214 Rev 10, §3.1 <em>Instruction set summary</em> — p.&nbsp;50</a>; <a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=68">§3.3.8 <em>Instruction width selection</em> — p.&nbsp;68</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Memory access</strong> — <code>LDR</code>/<code>STR</code>, offsets, <code>PUSH</code>/<code>POP</code></td>
+<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=69">§3.4 — p.&nbsp;69</a>; <a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=71">§3.4.2 <em>immediate offset</em> — p.&nbsp;71</a>; <a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=78">§3.4.7 <em>PUSH and POP</em> — p.&nbsp;78</a></td>
+</tr>
+<tr class="even">
+<td><strong>Data processing</strong> — arithmetic, logic, shifts, <code>CMP</code>, <code>MOV</code></td>
+<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=81">§3.5 — p.&nbsp;81</a>: <a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=83"><code>ADD/SUB</code> — p.&nbsp;83</a>, <a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=85"><code>AND/ORR/EOR/BIC</code> — p.&nbsp;85</a>, <a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=62">shifts — p.&nbsp;62</a>, <a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=88"><code>CMP</code> — p.&nbsp;88</a>, <a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=89"><code>MOV/MVN</code> — p.&nbsp;89</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Branches and conditions</strong> — <code>B</code>/<code>BL</code>/<code>BX</code>, condition codes, <code>IT</code></td>
+<td><a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=142"><em>B, BL, BX, BLX</em> — p.&nbsp;142</a>; <a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=65">§3.3.7 <em>Conditional execution</em> — p.&nbsp;65</a>; the <code>-O2</code> <code>ITE</code> surprise: <a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=145"><em>IT</em> — p.&nbsp;145</a></td>
+</tr>
+<tr class="even">
+<td><strong>Calling convention</strong> — args in <code>r0</code>–<code>r3</code>, result in <code>r0</code>, <code>LR</code></td>
+<td>The Arm AAPCS32 (<em>Procedure Call Standard for the Arm Architecture</em>) — search “AAPCS32” at developer.arm.com; the lecture teaches only the subset visible in the debugger</td>
+</tr>
+<tr class="odd">
+<td><strong>Interrupt entry stacking</strong> — same stack, hardware-driven</td>
+<td>the L06 rows above (exception model); the deck only points back to them</td>
+</tr>
+<tr class="even">
+<td><strong>What the optimizer may do</strong> — folding, inlining, <code>volatile</code> limits</td>
+<td><a href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">GCC manual, <em>Optimize Options</em></a>; <a href="https://www.oreilly.com/library/view/making-embedded-systems/9781098151539/">White 2024</a>, debugging/optimization chapters</td>
+</tr>
+</tbody>
+</table>
+<p><em>Sections for other lectures are added as each lecture is revised to the 2026–2027 pattern.</em></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>course_structure – EE5203 Microprocessors</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="COURSE_STRUCTURE.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="ee5203-microprocessors---2026-2027-course-structure" class="level1">
+<h1>EE5203 Microprocessors - 2026-2027 Course Structure</h1>
+<p>Status: design baseline for iteration. Lecture 1 is the reference package; later lecture materials will be revised after that package is approved.</p>
+<section id="course-design-statement" class="level2">
+<h2 class="anchored" data-anchor-id="course-design-statement">Course Design Statement</h2>
+<p>EE5203 develops embedded-system competence through a C-first STM32 pathway. Students first build reliable Embedded C foundations, then learn enough register-level programming to understand the machine, and finally use STM32 HAL to implement increasingly complex peripherals and integrated systems.</p>
+<p>The course follows four principles:</p>
+<ol type="1">
+<li><strong>Embedded C receives four full lectures.</strong> Later material assumes demonstrated competence in functions, arrays, bitwise operations, pointers, structures, memory, and <code>volatile</code>.</li>
+<li><strong>Register literacy, HAL fluency.</strong> GPIO and simple register operations are implemented directly. Complex peripherals are implemented with HAL while students inspect and interpret the important registers.</li>
+<li><strong>Laboratories fade their scaffolding.</strong> Early labs teach the workflow; later labs provide specifications, references, tests, and individual checkoffs.</li>
+<li><strong>The project starts early and grows through milestones.</strong> Students see the destination in L01, form teams in L05, and demonstrate working subsystems throughout the term.</li>
+</ol>
+</section>
+<section id="learning-outcomes" class="level2">
+<h2 class="anchored" data-anchor-id="learning-outcomes">Learning Outcomes</h2>
+<p>By the end of the course, a successful student can:</p>
+<ol type="1">
+<li>Write, compile, debug, and test Embedded C programs.</li>
+<li>Explain the Cortex-M memory, register, and exception model.</li>
+<li>Configure GPIO, timers, PWM, ADC, UART, and a synchronous serial peripheral using an appropriate combination of CMSIS register access and STM32 HAL.</li>
+<li>Design interrupt-driven, non-blocking embedded applications.</li>
+<li>Interpret datasheets, reference manuals, timing diagrams, compiler messages, debugger state, and peripheral registers as engineering evidence.</li>
+<li>Integrate, test, document, demonstrate, and individually explain an STM32-based embedded system.</li>
+</ol>
+</section>
+<section id="stable-instructional-sequence" class="level2">
+<h2 class="anchored" data-anchor-id="stable-instructional-sequence">Stable Instructional Sequence</h2>
+<p>Lecture IDs describe reusable instructional order, not calendar weeks.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Topic</th>
+<th>Central student performance</th>
+<th>Abstraction policy</th>
+<th>Project connection</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>L01</td>
+<td>Embedded systems, C toolchain, and debugging</td>
+<td>Build, flash, debug, and modify Blinky</td>
+<td>HAL used as a working black box; inspect the workflow</td>
+<td>See example projects and identify possible inputs/outputs</td>
+</tr>
+<tr class="even">
+<td>L02</td>
+<td>Values, decisions, loops, and arrays</td>
+<td>Process a fixed sensor-data array in one C file</td>
+<td>Ordinary C plus debugger</td>
+<td>Identify project input and processing data</td>
+</tr>
+<tr class="odd">
+<td>L03</td>
+<td>Functions, arrays, strings, and modular C</td>
+<td>Decompose the sensor program into functions and files</td>
+<td>Ordinary C plus debugger</td>
+<td>Identify project processing functions</td>
+</tr>
+<tr class="even">
+<td>L04</td>
+<td>Pointers, structures, bits, registers, and GPIO</td>
+<td>Explain masks and control PA5 through CMSIS registers</td>
+<td>Carefully scaffolded direct register access</td>
+<td>Draft individual project idea canvas</td>
+</tr>
+<tr class="odd">
+<td>L05</td>
+<td>GPIO and hardware abstraction</td>
+<td>Rebuild GPIO with HAL and compare the two interfaces</td>
+<td>Register-versus-HAL comparison</td>
+<td>Teams form; project launched</td>
+</tr>
+<tr class="even">
+<td>L06</td>
+<td>HAL GPIO and systematic debugging</td>
+<td>Rebuild GPIO with HAL and compare abstractions</td>
+<td>Full register-versus-HAL comparison</td>
+<td>Proposal and block diagram</td>
+</tr>
+<tr class="odd">
+<td>L07</td>
+<td>Interrupts, NVIC, and state-based design</td>
+<td>Implement and explain an event-driven application</td>
+<td>HAL implementation with register inspection</td>
+<td>Technical design review</td>
+</tr>
+<tr class="even">
+<td>L08</td>
+<td>Timers and non-blocking time</td>
+<td>Generate periodic events without blocking delays</td>
+<td>One minimal register demonstration; HAL core work</td>
+<td>First peripheral milestone</td>
+</tr>
+<tr class="odd">
+<td>L09</td>
+<td>PWM, output compare, and input capture</td>
+<td>Generate and measure timed signals</td>
+<td>HAL plus timer-register inspection</td>
+<td>Actuator or measurement milestone</td>
+</tr>
+<tr class="even">
+<td>L10</td>
+<td>ADC and sensor acquisition</td>
+<td>Acquire, scale, and validate analog data</td>
+<td>HAL plus status/configuration inspection</td>
+<td>Data-acquisition milestone</td>
+</tr>
+<tr class="odd">
+<td>L11</td>
+<td>UART and PC communication</td>
+<td>Implement logging and command input</td>
+<td>HAL; interpret baud/frame settings and flags</td>
+<td>Communication milestone</td>
+</tr>
+<tr class="even">
+<td>L12</td>
+<td>I2C and SPI fundamentals</td>
+<td>Interface one synchronous serial device deeply</td>
+<td>HAL; read timing diagrams and status evidence</td>
+<td>Sensor/display integration</td>
+</tr>
+<tr class="odd">
+<td>L13</td>
+<td>System integration and project clinic</td>
+<td>Integrate peripherals, diagnose faults, and test requirements</td>
+<td>Student selects appropriate abstraction</td>
+<td>Working integrated prototype</td>
+</tr>
+<tr class="even">
+<td>L14</td>
+<td>Demonstration, oral defense, and reflection</td>
+<td>Demonstrate, test, and individually explain the system</td>
+<td>Full-system reasoning</td>
+<td>Final project assessment</td>
+</tr>
+</tbody>
+</table>
+<p>Assembly/disassembly is supporting architectural literacy, integrated into L01, L04, and L05. DMA, TFT displays, stepper motors, and similar advanced devices are optional project or extension tracks rather than simultaneous core requirements.</p>
+</section>
+<section id="assessment-baseline" class="level2">
+<h2 class="anchored" data-anchor-id="assessment-baseline">Assessment Baseline</h2>
+<p>This model preserves the 2025-2026 grade-workbook weights while improving what each category measures. It must be reconciled with Akademik Paket and CATS before publication.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 40%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Category</th>
+<th style="text-align: right;">Weight</th>
+<th>Internal structure</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Midterm</td>
+<td style="text-align: right;">25%</td>
+<td>15% written reasoning + 10% individual toolchain practical (VS Code)</td>
+</tr>
+<tr class="even">
+<td>Project</td>
+<td style="text-align: right;">20%</td>
+<td>Proposal, subsystem milestones, integration, final demo, report, and oral defense</td>
+</tr>
+<tr class="odd">
+<td>Laboratory</td>
+<td style="text-align: right;">25%</td>
+<td>15% individual lab checkoffs + 10% pre-lab quizzes/homework</td>
+</tr>
+<tr class="even">
+<td>Final</td>
+<td style="text-align: right;">30%</td>
+<td>Applied written assessment with an approved reference/datasheet policy</td>
+</tr>
+</tbody>
+</table>
+<p>The term <strong>Laboratory</strong> must refer to directly observed laboratory performance, not merely an average of quizzes and homework.</p>
+</section>
+<section id="laboratory-progression" class="level2">
+<h2 class="anchored" data-anchor-id="laboratory-progression">Laboratory Progression</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Stage</th>
+<th>Lectures</th>
+<th>Material supplied</th>
+<th>Student responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fully guided</td>
+<td>L01-L02</td>
+<td>Setup detail, screenshots where essential, starter code, frequent checkpoints</td>
+<td>Learn the workflow and make a small individual change</td>
+</tr>
+<tr class="even">
+<td>Guided completion</td>
+<td>L03-L05</td>
+<td>Circuit/configuration information and meaningful TODOs</td>
+<td>Complete core C/register expressions and demonstrate them</td>
+</tr>
+<tr class="odd">
+<td>Structured independence</td>
+<td>L06-L08</td>
+<td>Requirements, references, acceptance tests, minimal starter project</td>
+<td>Select configuration and program structure</td>
+</tr>
+<tr class="even">
+<td>Specification driven</td>
+<td>L09-L12</td>
+<td>Functional specification, constraints, test cases, documentation links</td>
+<td>Create, implement, debug, and verify the solution</td>
+</tr>
+<tr class="odd">
+<td>Integration</td>
+<td>L13-L14</td>
+<td>System requirements and milestone rubric</td>
+<td>Integrate, test, document, demonstrate, and defend</td>
+</tr>
+</tbody>
+</table>
+<p>Every lab uses the same cycle:</p>
+<p><code>Prepare -&gt; 15-minute concept brief -&gt; Foundation checkpoint -&gt; Independent core task -&gt; Individual modification -&gt; Oral check</code></p>
+</section>
+<section id="project-timeline" class="level2">
+<h2 class="anchored" data-anchor-id="project-timeline">Project Timeline</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Point</th>
+<th>Activity</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>L01</td>
+<td>Show achievable examples</td>
+<td>No graded submission</td>
+</tr>
+<tr class="even">
+<td>L03</td>
+<td>Explore hardware and possible functions</td>
+<td>Individual idea list</td>
+</tr>
+<tr class="odd">
+<td>L04</td>
+<td>Publish framework and scope model</td>
+<td>One-page idea canvas</td>
+</tr>
+<tr class="even">
+<td>L05</td>
+<td>Form teams and launch</td>
+<td>Team and preliminary topic</td>
+</tr>
+<tr class="odd">
+<td>L06</td>
+<td>Proposal checkpoint</td>
+<td>Problem, block diagram, components, minimum viable system</td>
+</tr>
+<tr class="even">
+<td>L07</td>
+<td>Design review</td>
+<td>Pins, peripherals, data flow, responsibilities, risks</td>
+</tr>
+<tr class="odd">
+<td>L08-L09</td>
+<td>First hardware milestone</td>
+<td>One input or output peripheral working</td>
+</tr>
+<tr class="even">
+<td>L10</td>
+<td>Data-acquisition milestone</td>
+<td>Acquired and validated sensor data</td>
+</tr>
+<tr class="odd">
+<td>L11</td>
+<td>Communication milestone</td>
+<td>UART logging or command interface</td>
+</tr>
+<tr class="even">
+<td>L12</td>
+<td>Integration milestone</td>
+<td>Input, processing, output, and communication connected</td>
+</tr>
+<tr class="odd">
+<td>L13</td>
+<td>Readiness review</td>
+<td>Working prototype and test evidence</td>
+</tr>
+<tr class="even">
+<td>L14</td>
+<td>Final assessment</td>
+<td>Demonstration, report, presentation, and individual oral defense</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="core-material-package" class="level2">
+<h2 class="anchored" data-anchor-id="core-material-package">Core Material Package</h2>
+<p>Each lecture has one landing-page section with:</p>
+<ol type="1">
+<li><strong>Prepare:</strong> objectives, short preparation task, and pre-lab quiz.</li>
+<li><strong>Learn:</strong> core theory deck and two-page study sheet.</li>
+<li><strong>Practise:</strong> 30-45 minute worksheet and delayed worked solutions.</li>
+<li><strong>Lab:</strong> two-page lab card, reference page, starter files when justified, checkoff requirements, and submission link.</li>
+<li><strong>Review:</strong> mastery checklist and 5-8 exam-style questions.</li>
+</ol>
+<p>Material limits:</p>
+<ul>
+<li>Core theory deck: target 28-32 slides; hard maximum 35.</li>
+<li>Laboratory opening deck/briefing: maximum 12-15 slides when slides are needed.</li>
+<li>Study sheet: maximum two pages.</li>
+<li>Student lab card: maximum two pages and normally 700-900 words.</li>
+<li>Practice worksheet: 30-45 minutes of work.</li>
+<li>Pre-lab quiz: five questions, two attempts, highest score recorded.</li>
+<li>Complete solutions remain under <code>private/solutions/</code> until their release time.</li>
+</ul>
+<p>Instructor-side, each lecture also carries an instructor guide and a <strong>one-page TA prep sheet</strong> (<code>private/instructor/L##/TA_Prep_L##.md</code>): prep checklist (the TA does the lab on hardware before the session), expected-evidence quick reference, a symptom-to-first-question triage table, rubric summary, oral spot-checks, and boundaries (what not to reveal). General TA policy — the evidence-first triage method, checkoff etiquette, solutions-access rules — lives once in <code>private/instructor/TA_HANDBOOK.md</code>; prep sheets stay lecture-specific.</p>
+</section>
+<section id="exit-tickets-and-in-lecture-pulse-checks-google-forms" class="level2">
+<h2 class="anchored" data-anchor-id="exit-tickets-and-in-lecture-pulse-checks-google-forms">Exit Tickets and In-Lecture Pulse Checks (Google Forms)</h2>
+<p>Every theory deck ends with an exit ticket delivered as a <strong>Google Forms quiz</strong> reached by a QR code on the closing slide (3 questions from the deck’s exit question, plus a required student-number field). Standard settings, proven with the L02 template form:</p>
+<ul>
+<li>Quiz mode; release grades immediately; show missed questions and points but <strong>hide correct answers</strong> (limits leakage from early finishers’ screens). The key is revealed in the next lecture’s retrieval segment.</li>
+<li>Collect <strong>verified</strong> email addresses (Google sign-in required) and limit to one response per account. Students sign in with personal Gmail, so the student number is the roster key; the verified email links one person’s tickets across weeks.</li>
+<li>Ungraded: the tickets inform teaching (which misconception is alive in the room) and feed the retrieval slides — they never enter the grade workbook.</li>
+<li>Production: copy the previous lecture’s form in Drive (settings and structure carry over), swap the questions, publish, regenerate the QR (<code>segno</code> one-liner into <code>lectures/L##_*/assets/exit_ticket_qr.svg</code>). Form URLs are logged per lecture in <code>MATERIALS_STATUS.md</code>.</li>
+<li>Graded pre-lab quizzes stay in CATS Tests &amp; Quizzes, not Google Forms — anything touching the Laboratory grade needs the official LMS record and the two-attempt policy.</li>
+</ul>
+</section>
+<section id="theory-deck-pattern" class="level2">
+<h2 class="anchored" data-anchor-id="theory-deck-pattern">Theory Deck Pattern</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Section</th>
+<th style="text-align: right;">Typical slides</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Opening problem and outcomes</td>
+<td style="text-align: right;">2-3</td>
+</tr>
+<tr class="even">
+<td>Retrieval from previous lecture</td>
+<td style="text-align: right;">3-4</td>
+</tr>
+<tr class="odd">
+<td>Concept block 1</td>
+<td style="text-align: right;">5-6</td>
+</tr>
+<tr class="even">
+<td>Guided example/live coding</td>
+<td style="text-align: right;">4-5</td>
+</tr>
+<tr class="odd">
+<td>Concept block 2</td>
+<td style="text-align: right;">5-6</td>
+</tr>
+<tr class="even">
+<td>Student practice/discussion</td>
+<td style="text-align: right;">4-5</td>
+</tr>
+<tr class="odd">
+<td>Common mistakes/debugging</td>
+<td style="text-align: right;">2-3</td>
+</tr>
+<tr class="even">
+<td>Summary, exit question, lab preview</td>
+<td style="text-align: right;">2-3</td>
+</tr>
+</tbody>
+</table>
+<p>One core slide normally serves one instructional purpose. Full programs, alternative implementations, long setup sequences, detailed peripheral tables, bonus topics, and complete solutions belong in references, source files, or appendices rather than the planned teaching sequence.</p>
+</section>
+<section id="registerhal-boundary" class="level2">
+<h2 class="anchored" data-anchor-id="registerhal-boundary">Register/HAL Boundary</h2>
+<ul>
+<li>Use CMSIS symbolic register structures, not repeated raw numeric addresses.</li>
+<li>Implement RCC enable and GPIO fundamentals directly at register level.</li>
+<li>Use HAL for interrupts, timers, PWM, input capture, ADC, UART, I2C/SPI, and advanced integration after explaining the hardware model.</li>
+<li>Inspect important registers after HAL configuration.</li>
+<li>Declare the ownership model of every exercise: bare metal, HAL, or one controlled post-HAL register modification.</li>
+<li>Keep LL as an optional industry reference rather than a third core dialect.</li>
+</ul>
+</section>
+<section id="iteration-rule" class="level2">
+<h2 class="anchored" data-anchor-id="iteration-rule">Iteration Rule</h2>
+<p>L01 is the reference implementation for navigation, document length, visual hierarchy, preparation, practice, lab checkoffs, and instructor support. Revise L01 until approved before mechanically applying its pattern to L02-L14.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

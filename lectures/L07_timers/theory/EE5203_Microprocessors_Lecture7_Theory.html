@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.42">
+
+  <meta name="author" content="Basri Erdogan">
+  <title>EE5203 Microprocessors</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
+  <link rel="stylesheet" href="../../L01_microprocessor-systems-toolchain/assets/styles.css">
+  <link rel="stylesheet" href="../../L02_c-for-embedded-systems/assets/week2.css">
+  <link href="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">EE5203 Microprocessors</h1>
+  <p class="subtitle">L07 - Timers</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Basri Erdogan 
+</div>
+</div>
+</div>
+
+</section>
+<section id="one-update-event-per-second" class="slide level2">
+<h2>One update event per second</h2>
+<div class="big-question">
+<p>These two numbers make the timer hardware raise one event every second—while your program does something else.</p>
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Prescaler <span class="op">=</span> <span class="dv">15999</span><span class="op">;</span>   <span class="co">// why 15999?</span></span>
+<span id="cb1-2"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Period    <span class="op">=</span> <span class="dv">999</span><span class="op">;</span>     <span class="co">// why 999?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>By the end, you will explain both numbers, replace <code>HAL_Delay()</code> with them, and prove the result in the register view.</p>
+<aside class="notes">
+<p>Ask for guesses about the two numbers before revealing anything. Someone will say 16000/1000 — perfect setup for the +1 rule later.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-story-so-far" class="slide level2">
+<h2>The story so far</h2>
+<div class="vertical-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>WEEK 4:</strong> write GPIO registers directly.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>WEEK 5:</strong> drive the same registers through HAL.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>WEEK 6:</strong> let a button interrupt the main loop.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <strong>TODAY:</strong> let hardware count time so the CPU does not have to.</p>
+</div>
+</div>
+</section>
+<section id="todays-objectives" class="slide level2">
+<h2>Today’s objectives</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Trace the timer pipeline: clock → prescaler → counter → auto-reload → update event.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Calculate <code>PSC</code> and <code>ARR</code> for a required period from the real clock frequency.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Use a timer update event by polling and by interrupt.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> Build a 1 ms tick that schedules several tasks without blocking.</p>
+</div>
+<div class="vertical-item">
+<p><span>05</span> Verify a timer’s configuration and counting in the SFR view.</p>
+</div>
+</div>
+</section>
+<section id="week-6-recap-the-blocking-delay" class="slide level2">
+<h2>Week 6 recap: the blocking delay</h2>
+<p>The Week 4 blink—and every version since—wastes the CPU while it waits:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-2"><a></a>    HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb2-3"><a></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span>           <span class="co">// CPU does nothing useful here</span></span>
+<span id="cb2-4"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="prompt-list compact-prompts">
+<div class="prompt-item">
+<p><span>1</span> What is the CPU doing during the 500 ms?</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> Could the Week 6 button event be <em>serviced</em> during the delay? Could the main loop <em>react</em> to it?</p>
+</div>
+</div>
+<div class="relationship-strip">
+<p>The interrupt still fires and the callback still runs—but the main loop cannot respond until <code>HAL_Delay</code> returns.</p>
+</div>
+</section>
+<section id="the-cost-of-waiting" class="slide level2">
+<h2>The cost of waiting</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../assets/images/blocking_vs_tick.svg" class="quarto-figure quarto-figure-center" alt="Two CPU timelines: with HAL_Delay the CPU is trapped between LED toggles; with a timer tick and scheduler the CPU stays free except for microsecond ISR ticks" height="400"></p>
+</figure>
+</div>
+<div class="relationship-strip">
+<p>Same LED behavior, opposite CPU budgets. Today builds the bottom row.</p>
+</div>
+</section>
+<section id="hal_delay-was-a-timer-all-along" class="slide level2">
+<h2><code>HAL_Delay</code> was a timer all along</h2>
+<div class="big-question">
+<p>SysTick—a timer inside the Cortex-M core—has been ticking every millisecond since Week 1. <code>HAL_Delay</code> merely <em>waits</em> on it.</p>
+</div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> HAL configures SysTick at startup; its interrupt increments HAL’s own millisecond counter.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <code>HAL_Delay(500)</code> reads that counter in a blocking loop—the counting was never the problem, the waiting was.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Today’s tick is the same idea on a timer <em>you</em> control, consumed without trapping the CPU.</p>
+</div>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=246">PM0214 Rev 10, §4.5 <em>SysTick timer</em> — p.&nbsp;246</a>.</p>
+</div>
+</section>
+<section id="the-timer-pipeline" class="slide level2">
+<h2>The timer pipeline</h2>
+<div class="big-question">
+<p>A timer is a hardware counter that increments at a fixed rate and raises an event when it reaches a chosen value.</p>
+</div>
+<svg class="story-visual" viewbox="0 0 1440 330" role="img" aria-labelledby="timpipe-title">
+<title id="timpipe-title">
+The timer pipeline: the 16 megahertz clock is divided by the prescaler, the counter counts the divided ticks, the auto-reload register defines the top value, and reaching it produces the update event
+</title>
+<defs> <marker id="tim-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> <filter id="tim-glow" x="-100%" y="-100%" width="300%" height="300%"><fegaussianblur stddeviation="6" result="blur"></fegaussianblur><femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter> </defs> <rect x="30" y="70" width="230" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="30" y="70" width="230" height="8" fill="#174f73"></rect> <text x="145" y="125" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">TIMER CLOCK</text> <text x="145" y="165" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700">16 MHz</text> <g class="fragment"> <line x1="264" y1="145" x2="296" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="305" y="70" width="230" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="305" y="70" width="230" height="8" fill="#2b789f"></rect> <text x="420" y="125" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">PRESCALER</text> <text x="420" y="165" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">PSC</text> <text x="420" y="196" text-anchor="middle" fill="#5a6b76" font-size="16">divide by PSC + 1</text> </g> <g class="fragment"> <line x1="539" y1="145" x2="571" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="580" y="70" width="230" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="580" y="70" width="230" height="8" fill="#2b789f"></rect> <text x="695" y="125" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">COUNTER</text> <text x="695" y="165" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">CNT</text> <text x="695" y="196" text-anchor="middle" fill="#5a6b76" font-size="16">counts 0, 1, 2, …</text> </g> <g class="fragment"> <line x1="814" y1="145" x2="846" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="855" y="70" width="230" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="855" y="70" width="230" height="8" fill="#2b789f"></rect> <text x="970" y="125" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">AUTO-RELOAD</text> <text x="970" y="165" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">ARR</text> <text x="970" y="196" text-anchor="middle" fill="#5a6b76" font-size="16">the top value</text> </g> <g class="fragment"> <line x1="1089" y1="145" x2="1121" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="1130" y="70" width="280" height="150" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect> <rect x="1130" y="70" width="280" height="8" fill="#d47b28"></rect> <text x="1270" y="125" text-anchor="middle" fill="#d47b28" font-size="17" font-weight="700" letter-spacing="1">UPDATE EVENT</text> <text x="1270" y="165" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700">CNT rolls to 0</text> <text x="1270" y="196" text-anchor="middle" fill="#5a6b76" font-size="16">flag UIF = 1 · can interrupt</text> <text x="145" y="268" text-anchor="middle" fill="#5a6b76" font-size="18">what the chip provides</text> <text x="1270" y="268" text-anchor="middle" fill="#5a6b76" font-size="18">what your program consumes</text> <circle class="story-pulse" r="12" fill="#d47b28" filter="url(#tim-glow)"> <animatemotion dur="4.5s" repeatcount="indefinite" calcmode="linear" path="M 145 145 H 1270"></animatemotion> <animate attributename="opacity" values="0;1;1;0" keytimes="0;0.08;0.9;1" dur="4.5s" repeatcount="indefinite"></animate> </circle> </g>
+</svg>
+<p>Every slide today configures or consumes one stage of this pipeline.</p>
+<aside class="notes">
+<p>Walk the fragments left to right. Emphasize: the first four boxes are configuration written once; the last box is what the program lives off.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-timer-clock" class="slide level2">
+<h2>The timer clock</h2>
+<p>On our lab configuration—the default 16 MHz HSI with all bus prescalers at 1—<strong>every timer counts 16 000 000 ticks per second</strong> before prescaling.</p>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> The timer clock comes from the APB bus that carries the timer (<code>TIM2</code> is on APB1).</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> If an APB prescaler is ever set above 1, the timer clock is <em>twice</em> that bus clock—check before calculating.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Every period calculation today starts from the real 16 MHz—not from a number found in an online example.</p>
+</div>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=94">RM0368 Rev 6, §6.2 clock tree — p.&nbsp;94</a>.</p>
+</div>
+</section>
+<section id="the-prescaler" class="slide level2">
+<h2>The prescaler</h2>
+<p>The prescaler divides the timer clock <strong>by <code>PSC + 1</code></strong> before it reaches the counter.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a></a>counting frequency = timer clock / (PSC + 1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../assets/images/prescaler_division.svg" class="quarto-figure quarto-figure-center" alt="A fast 16 megahertz square wave on top and the slower divided square wave below it, rising edges aligned; the counter increments on each rising edge of the divided clock, one output cycle for every PSC plus one input cycles" height="340"></p>
+</figure>
+</div>
+<p><code>PSC</code> is 16-bit (<code>0…65535</code>): <code>15</code> → 1 MHz (one tick per µs) · <code>1599</code> → 10 kHz · <code>15999</code> → 1 kHz (one tick per ms). The reference manual’s name for this is the <strong>counter clock</strong> (CK_CNT).</p>
+<aside class="notes">
+<p>Why not one big divider? Preview the two-knobs slide: 16-bit limits. 16,000,000 does not fit in 16 bits.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-counter" class="slide level2">
+<h2>The counter</h2>
+<p><code>CNT</code> increments once per prescaled tick—in hardware, in parallel with your program:</p>
+<svg id="cnt-anim" class="story-visual" viewbox="0 0 1440 500" style="max-height:455px" role="img" aria-labelledby="cntanim-title">
+<title id="cntanim-title">
+Animated plot of TIM2 CNT versus time: the counter value climbs to ARR equals 999 once per second, snaps back to zero, and the UIF flag flashes at each rollover; a marker on the vertical axis tracks the live counter value
+</title>
+<text x="150" y="42" fill="#5a6b76" font-size="19">counting frequency 1 kHz (PSC = 15999) → one update per second</text> <text x="1380" y="66" text-anchor="end" fill="#5a6b76" font-size="19" font-weight="700">ARR = 999</text> <line x1="150" y1="80" x2="1380" y2="80" stroke="#5a6b76" stroke-width="1.6" stroke-dasharray="7 6"></line> <line x1="150" y1="255" x2="1380" y2="255" stroke="#c8d8e2" stroke-width="1" opacity="0.7"></line> <line x1="150" y1="430" x2="1380" y2="430" stroke="#c8d8e2" stroke-width="2"></line> <line x1="150" y1="430" x2="150" y2="74" stroke="#c8d8e2" stroke-width="2"></line> <text x="136" y="436" text-anchor="end" fill="#5a6b76" font-size="17">0</text> <text x="136" y="261" text-anchor="end" fill="#5a6b76" font-size="17">500</text> <text x="136" y="86" text-anchor="end" fill="#5a6b76" font-size="17">999</text> <text x="60" y="66" fill="#5a6b76" font-size="17" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;CNT</text> <text x="150" y="462" text-anchor="middle" fill="#5a6b76" font-size="17">0</text> <text x="530" y="462" text-anchor="middle" fill="#5a6b76" font-size="17">1</text> <text x="910" y="462" text-anchor="middle" fill="#5a6b76" font-size="17">2</text> <text x="1290" y="462" text-anchor="middle" fill="#5a6b76" font-size="17">3</text> <text x="758.0" y="492" text-anchor="middle" fill="#5a6b76" font-size="18">time (s)</text> <path d="M 150 430 L 530 80 L 530 430 L 910 80 L 910 430 L 1290 80 L 1290 430 L 1366.0 360.0" fill="none" stroke="#c8d8e2" stroke-width="2" opacity="0.65"></path> <path d="M 150 430 L 530 80 L 530 430 L 910 80 L 910 430 L 1290 80 L 1290 430 L 1366.0 360.0" fill="none" stroke="#174f73" stroke-width="3.2" stroke-dasharray="2703.2" stroke-dashoffset="2703.2"> <animate attributename="stroke-dashoffset" values="2703.2;2186.6;1836.6;1320.0;969.9;453.3;103.3;0.0;0.0" keytimes="0;0.2833;0.3003;0.5836;0.6006;0.8839;0.9008;0.9575;1" dur="9s" calcmode="linear" repeatcount="indefinite"></animate> </path> <circle r="9" fill="#174f73"> <animatemotion dur="9s" repeatcount="indefinite" calcmode="linear" keypoints="0.0;0.1911;0.3206;0.5117;0.6412;0.8323;0.9618;1.0;1.0" keytimes="0;0.2833;0.3003;0.5836;0.6006;0.8839;0.9008;0.9575;1" path="M 150 430 L 530 80 L 530 430 L 910 80 L 910 430 L 1290 80 L 1290 430 L 1366.0 360.0"></animatemotion> </circle> <circle r="7" fill="#2b789f"> <animatemotion dur="9s" repeatcount="indefinite" calcmode="linear" keypoints="0.0;0.1613;0.3226;0.4839;0.6452;0.8065;0.9677;1.0;1.0" keytimes="0;0.2833;0.3003;0.5836;0.6006;0.8839;0.9008;0.9575;1" path="M 150 430 L 150 80 L 150 430 L 150 80 L 150 430 L 150 80 L 150 430 L 150 360.0"></animatemotion> </circle> <g opacity="0"> <circle cx="530" cy="80" r="11" fill="#d47b28"></circle> <animate attributename="opacity" values="0;0;1;0;0" keytimes="0;0.2833;0.2953;0.3833;1" dur="9s" repeatcount="indefinite"></animate> </g> <g opacity="0"> <circle cx="910" cy="80" r="11" fill="#d47b28"></circle> <animate attributename="opacity" values="0;0;1;0;0" keytimes="0;0.5836;0.5956;0.6836;1" dur="9s" repeatcount="indefinite"></animate> </g> <g opacity="0"> <circle cx="1290" cy="80" r="11" fill="#d47b28"></circle> <animate attributename="opacity" values="0;0;1;0;0" keytimes="0;0.8839;0.8959;0.9739;1" dur="9s" repeatcount="indefinite"></animate> </g> <text x="556" y="120" fill="#d47b28" font-size="20" font-weight="700" opacity="0">update event — CNT → 0, UIF = 1<animate attributename="opacity" values="0;0;1;0;0;1;0;0;1;0;0" keytimes="0;0.2833;0.2953;0.3833;0.5836;0.5956;0.6836;0.8839;0.8959;0.9739;1" dur="9s" repeatcount="indefinite"></animate></text> <g id="cnt-static-labels" style="transition: opacity 0.4s"> <circle cx="530" cy="80" r="9" fill="#d47b28"></circle> <circle cx="910" cy="80" r="9" fill="#d47b28"></circle> <circle cx="1290" cy="80" r="9" fill="#d47b28"></circle> <line x1="548" y1="94" x2="576" y2="114" stroke="#d47b28" stroke-width="2.5"></line> <rect x="576" y="108" width="342" height="30" fill="#ffffff" opacity="0.88" rx="4"></rect> <text x="584" y="130" fill="#d47b28" font-size="20" font-weight="700">update event — CNT → 0, UIF = 1</text> <circle cx="340" cy="255" r="8" fill="#2b789f"></circle> <text x="386" y="252" fill="#2b789f" font-size="19">CNT climbs 0 → 999 each second</text> </g>
+</svg>
+<p class="source-note fragment fade-out" id="cnt-anim-trigger">
+▸ advance to run the counter
+</p>
+<script>
+window.addEventListener("load", function () {
+  var svg = document.getElementById("cnt-anim");
+  if (!svg || !svg.pauseAnimations) return;
+  var FREEZE_T = 8.85;             // end of the drawing phase: full curve, no flash
+  var staticL = document.getElementById("cnt-static-labels");
+  function freeze() {
+    svg.pauseAnimations(); svg.setCurrentTime(FREEZE_T);
+    if (staticL) staticL.style.opacity = "1";
+  }
+  freeze();
+  function hook() {
+    if (typeof Reveal === "undefined" || !Reveal.on) { setTimeout(hook, 200); return; }
+    Reveal.on("fragmentshown", function (e) {
+      if (e.fragment && e.fragment.id === "cnt-anim-trigger") {
+        if (staticL) staticL.style.opacity = "0";
+        svg.setCurrentTime(0); svg.unpauseAnimations();
+      }
+    });
+    Reveal.on("fragmenthidden", function (e) {
+      if (e.fragment && e.fragment.id === "cnt-anim-trigger") { freeze(); }
+    });
+  }
+  hook();
+});
+</script>
+<div class="relationship-strip">
+<p><code>UIF</code> is a pending bit in <code>TIM2-&gt;SR</code>—the same idea as the EXTI pending bit in Week 6.</p>
+</div>
+<div class="source-note">
+<p>In-lecture demo: <a href="../assets/animations/counter_animation.html">interactive counter animation</a>.</p>
+</div>
+</section>
+<section id="the-auto-reload-register" class="slide level2">
+<h2>The auto-reload register</h2>
+<p><code>ARR</code> holds the top value, so the counter visits <code>ARR + 1</code> states (0 through ARR):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a></a>period = (ARR + 1) / counting frequency</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../assets/images/arr_comparison.svg" class="quarto-figure quarto-figure-center" alt="Three sawtooth plots at the same one kilohertz counting frequency: ARR 999 gives a one second period, ARR 499 gives 500 milliseconds, ARR 99 gives 100 milliseconds" height="330"></p>
+</figure>
+</div>
+</section>
+<section id="two-knobs-one-period" class="slide level2">
+<h2>Two knobs, one period</h2>
+<p>For one update per second from 16 MHz:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a></a>16 000 000 Hz  ÷ (15999 + 1)  =  1000 Hz        (prescaler)</span>
+<span id="cb5-2"><a></a>1000 Hz        ÷ (999 + 1)    =  1 Hz → 1 s     (auto-reload)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="relationship-strip">
+<p>Split the division so both values fit in 16 bits and the intermediate frequency is a round number you can reuse—1 kHz gives millisecond resolution for free.</p>
+</div>
+<p>The opener’s two numbers are exactly these: <code>Prescaler = 15999</code>, <code>Period = 999</code>.</p>
+</section>
+<section id="the-1-rule" class="slide level2">
+<h2>The +1 rule</h2>
+<p>Both divisions use <strong>the register value plus one</strong>:</p>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> A prescaler of <code>0</code> divides by 1—dividing by zero would be meaningless.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <code>ARR = 999</code> means the counter visits 1000 states: <code>0</code> through <code>999</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Forgetting a <code>+1</code> makes every period slightly wrong—a classic timer bug.</p>
+</div>
+</div>
+</section>
+<section id="the-timer-block-in-hardware" class="slide level2">
+<h2>The timer block, in hardware</h2>
+<svg class="story-visual" viewbox="0 0 1440 520" style="max-height:470px" role="img" aria-labelledby="timhw-title">
+<title id="timhw-title">
+Simplified hardware diagram of the TIM2 time base: the 16 megahertz timer clock enters the prescaler, which divides it using the PSC register; the divided clock advances the counter register CNT; a comparator matches CNT against the auto-reload register ARR, and a match produces the update event, setting UIF, reloading CNT to zero, and — if UIE is set — raising TIM2’s interrupt request to the NVIC
+</title>
+<defs> <marker id="hw2-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> <marker id="hw2-arrow-o" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d47b28"></path></marker> </defs> <rect x="170" y="50" width="1080" height="420" rx="16" fill="#fbfdfe" stroke="#c8d8e2" stroke-width="4"></rect> <text x="192" y="86" fill="#174f73" font-size="21" font-weight="700">TIM2 — the time base (simplified)</text> <text x="36" y="180" fill="#174f73" font-size="18" font-weight="700">timer clock</text> <text x="36" y="205" fill="#5a6b76" font-size="17">16 MHz (APB1)</text> <line x1="36" y1="230" x2="222" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <rect x="230" y="175" width="210" height="110" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect> <text x="335" y="220" text-anchor="middle" fill="#5a6b76" font-size="16" font-weight="700" letter-spacing="1">PRESCALER</text> <text x="335" y="255" text-anchor="middle" fill="#174f73" font-size="21" font-weight="700">÷ (PSC + 1)</text> <rect x="230" y="315" width="210" height="42" rx="6" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="335" y="342" text-anchor="middle" fill="#174f73" font-size="17" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;PSC = 15999</text> <line x1="335" y1="315" x2="335" y2="290" stroke="#c8d8e2" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#hw2-arrow)"></line> <line x1="440" y1="230" x2="497" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <text x="468" y="212" text-anchor="middle" fill="#5a6b76" font-size="16">1 kHz</text> <rect x="505" y="175" width="210" height="110" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect> <text x="610" y="220" text-anchor="middle" fill="#5a6b76" font-size="16" font-weight="700" letter-spacing="1">COUNTER</text> <text x="610" y="255" text-anchor="middle" fill="#174f73" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CNT ++</text> <rect x="505" y="315" width="210" height="42" rx="6" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="610" y="342" text-anchor="middle" fill="#174f73" font-size="17" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;CNT</text> <line x1="610" y1="315" x2="610" y2="290" stroke="#c8d8e2" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#hw2-arrow)"></line> <text x="610" y="382" text-anchor="middle" fill="#5a6b76" font-size="15">runs while CR1.CEN = 1</text> <line x1="715" y1="230" x2="746" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <circle cx="790" cy="230" r="37" fill="#ffffff" stroke="#174f73" stroke-width="3"></circle> <text x="790" y="240" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700">=?</text> <rect x="685" y="390" width="210" height="42" rx="6" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="790" y="417" text-anchor="middle" fill="#174f73" font-size="17" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;ARR = 999</text> <line x1="790" y1="390" x2="790" y2="272" stroke="#2b789f" stroke-width="3" marker-end="url(#hw2-arrow)"></line> <text x="806" y="330" fill="#5a6b76" font-size="15">top value</text> <path d="M 790 190 C 790 110, 650 110, 615 170" fill="none" stroke="#d47b28" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#hw2-arrow-o)"></path> <text x="712" y="122" text-anchor="middle" fill="#d47b28" font-size="16" font-weight="700">match → reload CNT to 0</text> <line x1="827" y1="230" x2="872" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <rect x="880" y="170" width="240" height="120" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect> <text x="1000" y="212" text-anchor="middle" fill="#d47b28" font-size="16" font-weight="700" letter-spacing="1">UPDATE EVENT</text> <text x="1000" y="245" text-anchor="middle" fill="#174f73" font-size="18" font-weight="700" font-family="ui-monospace, Menlo, monospace">UIF = 1 (SR)</text> <text x="1000" y="272" text-anchor="middle" fill="#5a6b76" font-size="15">pending until cleared</text> <line x1="1120" y1="230" x2="1147" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <rect x="1155" y="190" width="80" height="80" rx="8" fill="#ffffff" stroke="#c8d8e2" stroke-width="2.5"></rect> <text x="1195" y="224" text-anchor="middle" fill="#174f73" font-size="18" font-weight="700" font-family="ui-monospace, Menlo, monospace">UIE?</text> <text x="1195" y="250" text-anchor="middle" fill="#5a6b76" font-size="14">(DIER)</text> <line x1="1235" y1="230" x2="1310" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <text x="1320" y="212" fill="#174f73" font-size="17" font-weight="700" font-family="ui-monospace, Menlo, monospace">TIM2_IRQn</text> <text x="1320" y="238" fill="#5a6b76" font-size="16">→ NVIC</text> <text x="1320" y="262" fill="#5a6b76" font-size="15">(Week 6 path)</text>
+</svg>
+<p>Registers you write once (<code>PSC</code>, <code>ARR</code>), one that never stops (<code>CNT</code>), and one bit the hardware sets for you (<code>UIF</code>).</p>
+<div class="source-note">
+<p>The real thing: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=317">RM0368 Rev 6, Fig. 87 <em>General-purpose timer block diagram</em> — p.&nbsp;317</a> — find every block from this slide in it.</p>
+</div>
+</section>
+<section id="practice-pick-the-values" class="slide level2">
+<h2>Practice: pick the values</h2>
+<p>Required: one update event every <strong>200 ms</strong> from the 16 MHz timer clock.</p>
+<div class="prompt-list compact-prompts">
+<div class="prompt-item">
+<p><span>1</span> Keeping the 1 kHz counting frequency, what is <code>PSC</code>?</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> What is <code>ARR</code>?</p>
+</div>
+<div class="prompt-item">
+<p><span>3</span> Give a second <code>PSC</code>/<code>ARR</code> pair that produces the same period.</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p><code>PSC = 15999</code>, <code>ARR = 199</code>. Alternatives abound: <code>PSC = 1599</code> (10 kHz) with <code>ARR = 1999</code> also gives 200 ms.</p>
+</div>
+</section>
+<section id="configuring-the-time-base" class="slide level2">
+<h2>Configuring the time base</h2>
+<div class="sourceCode" id="cb6" data-code-line-numbers="1-7|4|6|7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a>TIM_HandleTypeDef htim2<span class="op">;</span></span>
+<span id="cb6-2"><a></a></span>
+<span id="cb6-3"><a></a>htim2<span class="op">.</span>Instance           <span class="op">=</span> TIM2<span class="op">;</span></span>
+<span id="cb6-4"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Prescaler     <span class="op">=</span> <span class="dv">15999</span><span class="op">;</span>              <span class="co">// 16 MHz -&gt; 1 kHz</span></span>
+<span id="cb6-5"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>CounterMode   <span class="op">=</span> TIM_COUNTERMODE_UP<span class="op">;</span></span>
+<span id="cb6-6"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Period        <span class="op">=</span> <span class="dv">999</span><span class="op">;</span>                <span class="co">// 1 kHz -&gt; 1 s</span></span>
+<span id="cb6-7"><a></a>HAL_TIM_Base_Init<span class="op">(&amp;</span>htim2<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> The handle structure collects the timer’s settings—<code>GPIO_InitTypeDef</code>’s pattern again.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <code>Period</code> is the HAL’s name for the <code>ARR</code> value.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> In a CubeMX project this code is generated as <code>MX_TIM2_Init()</code>.</p>
+</div>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=1065">UM1725 Rev 8, TIM base functions — p.&nbsp;1065</a>.</p>
+</div>
+</section>
+<section id="preload-and-egr" class="slide level2">
+<h2>Preload and <code>EGR</code></h2>
+<p>New <code>PSC</code> and <code>ARR</code> values do not necessarily act immediately:</p>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <code>PSC</code> is <em>always buffered</em>: the new value is copied into use at the next update event—up to one full period later.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <code>ARR</code> is buffered only when auto-reload preload (<code>ARPE</code>) is enabled—the HAL default writes it immediately.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Writing the <code>UG</code> bit in <code>TIM2-&gt;EGR</code> <em>forces an update event now</em>: the buffered prescaler loads and <code>CNT</code> resets. This is exactly why the lab’s bare-metal init writes <code>TIM2-&gt;EGR</code>.</p>
+</div>
+</div>
+<div class="relationship-strip">
+<p>Changing a running timer’s speed? First ask <em>when</em> the new values take effect.</p>
+</div>
+</section>
+<section id="polling-the-update-flag" class="slide level2">
+<h2>Polling the update flag</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a></a>HAL_TIM_Base_Start<span class="op">(&amp;</span>htim2<span class="op">);</span></span>
+<span id="cb7-2"><a></a></span>
+<span id="cb7-3"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-4"><a></a>    <span class="co">/* other work runs freely here */</span></span>
+<span id="cb7-5"><a></a></span>
+<span id="cb7-6"><a></a>    <span class="cf">if</span> <span class="op">(</span>__HAL_TIM_GET_FLAG<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_FLAG_UPDATE<span class="op">)</span> <span class="op">!=</span> RESET<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-7"><a></a>        __HAL_TIM_CLEAR_FLAG<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_FLAG_UPDATE<span class="op">);</span></span>
+<span id="cb7-8"><a></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span>   <span class="co">// once per second</span></span>
+<span id="cb7-9"><a></a>    <span class="op">}</span></span>
+<span id="cb7-10"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../assets/images/uif_polling_timeline.svg" class="quarto-figure quarto-figure-center" alt="The UIF flag as a signal set by each update event and cleared shortly after by the polling loop; below it, the loop's repeated checks, with the check that finds the flag highlighted" height="210"></p>
+</figure>
+</div>
+<p>Check the flag, act, <strong>clear the flag</strong>—an uncleared <code>UIF</code> reads as an instant new event.</p>
+</section>
+<section id="from-polling-to-the-week-6-path" class="slide level2">
+<h2>From polling to the Week 6 path</h2>
+<p>Polling still spends loop time asking. The update event can instead take the exact path B1’s press took:</p>
+<svg class="story-visual" viewbox="0 0 1440 275" role="img" aria-labelledby="timirq-title">
+<title id="timirq-title">
+The timer update event follows the same interrupt path as the Week 6 button: the update flag raises TIM2’s interrupt request, the NVIC accepts it, the vector table selects the handler, the HAL helper clears the flag and calls the period-elapsed callback
+</title>
+<defs> <marker id="ti-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> </defs> <rect x="7" y="45" width="215" height="155" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect> <text x="114" y="97" text-anchor="middle" fill="#d47b28" font-size="17" font-weight="700" letter-spacing="0.5">UPDATE EVENT</text> <text x="114" y="140" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">UIF = 1</text> <g class="fragment"> <line x1="225" y1="122" x2="242" y2="122" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="248" y="45" width="205" height="155" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="350" y="97" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="0.5">REQUEST</text> <text x="350" y="140" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">TIM2_IRQn</text> </g> <g class="fragment"> <line x1="456" y1="122" x2="473" y2="122" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="479" y="45" width="175" height="155" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="566" y="97" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="0.5">NVIC</text> <text x="566" y="140" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700">enable · priority</text> </g> <g class="fragment"> <line x1="657" y1="122" x2="674" y2="122" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="680" y="45" width="210" height="155" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="785" y="97" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="0.5">VECTOR TABLE</text> <text x="785" y="140" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700">finds the handler</text> </g> <g class="fragment"> <line x1="893" y1="122" x2="910" y2="122" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="916" y="45" width="265" height="155" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1048" y="97" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="0.5">HANDLER + HELPER</text> <text x="1048" y="140" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">TIM2_IRQHandler()</text> <text x="1048" y="173" text-anchor="middle" fill="#5a6b76" font-size="16">clears UIF</text> </g> <g class="fragment"> <line x1="1184" y1="122" x2="1201" y2="122" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="1207" y="45" width="225" height="155" rx="10" fill="#edf6f0" stroke="#3f7f58" stroke-width="3"></rect> <text x="1319" y="97" text-anchor="middle" fill="#3f7f58" font-size="17" font-weight="700" letter-spacing="0.5">YOUR CALLBACK</text> <text x="1319" y="140" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">PeriodElapsed…()</text> </g> <text x="720" y="252" text-anchor="middle" fill="#5a6b76" font-size="21">Week 6 taught this path with EXTI13. Today only the first box changes.</text>
+</svg>
+</section>
+<section id="interrupt-mode-setup-and-callback" class="slide level2">
+<h2>Interrupt mode: setup and callback</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a>HAL_NVIC_SetPriority<span class="op">(</span>TIM2_IRQn<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb8-2"><a></a>HAL_NVIC_EnableIRQ<span class="op">(</span>TIM2_IRQn<span class="op">);</span></span>
+<span id="cb8-3"><a></a>HAL_TIM_Base_Start_IT<span class="op">(&amp;</span>htim2<span class="op">);</span>     <span class="co">// start + enable update interrupt</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a><span class="dt">void</span> HAL_TIM_PeriodElapsedCallback<span class="op">(</span>TIM_HandleTypeDef <span class="op">*</span>htim<span class="op">)</span></span>
+<span id="cb9-2"><a></a><span class="op">{</span></span>
+<span id="cb9-3"><a></a>    <span class="cf">if</span> <span class="op">(</span>htim<span class="op">-&gt;</span>Instance <span class="op">==</span> TIM2<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-4"><a></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb9-5"><a></a>    <span class="op">}</span></span>
+<span id="cb9-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item fragment">
+<p><span>01</span> <code>Start_IT</code> sets <code>UIE</code> in <code>TIM2-&gt;DIER</code>; the NVIC lines are Week 6’s checklist with a new request name.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>02</span> HAL clears <code>UIF</code>, then calls the one shared callback—check <code>htim-&gt;Instance</code>.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>03</span> CubeMX generates <code>TIM2_IRQHandler()</code> in <code>stm32f4xx_it.c</code>—verify it exists; do not write your own.</p>
+</div>
+</div>
+</section>
+<section id="rules-for-the-callback" class="slide level2">
+<h2>Rules for the callback</h2>
+<p>Week 6’s rules apply unchanged:</p>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Check which instance caused the interrupt.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Record that the event happened—set a flag, count a tick.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Return quickly. No <code>HAL_Delay()</code>, no printing, no application logic.</p>
+</div>
+</div>
+<div class="relationship-strip">
+<p>A 1 ms timer callback that takes 2 ms to run is a program that falls behind forever.</p>
+</div>
+</section>
+<section id="the-1-ms-tick" class="slide level2">
+<h2>The 1 ms tick</h2>
+<p>The most useful timer configuration in embedded practice—one fast timer, one counter:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a></a><span class="dt">volatile</span> <span class="dt">uint32_t</span> ms <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb10-2"><a></a></span>
+<span id="cb10-3"><a></a><span class="co">/* PSC = 15  -&gt; 16 MHz / 16   = 1 MHz</span></span>
+<span id="cb10-4"><a></a><span class="co">   ARR = 999 -&gt; 1 MHz / 1000  = 1 kHz -&gt; update every 1 ms */</span></span>
+<span id="cb10-5"><a></a></span>
+<span id="cb10-6"><a></a><span class="dt">void</span> HAL_TIM_PeriodElapsedCallback<span class="op">(</span>TIM_HandleTypeDef <span class="op">*</span>htim<span class="op">)</span></span>
+<span id="cb10-7"><a></a><span class="op">{</span></span>
+<span id="cb10-8"><a></a>    <span class="cf">if</span> <span class="op">(</span>htim<span class="op">-&gt;</span>Instance <span class="op">==</span> TIM2<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-9"><a></a>        ms<span class="op">++;</span></span>
+<span id="cb10-10"><a></a>    <span class="op">}</span></span>
+<span id="cb10-11"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>ms</code> is the Week 6 <code>button_event</code> pattern generalized: the callback reports, <code>main()</code> consumes. <code>volatile</code> for the same reason.</p>
+<aside class="notes">
+<p>Live demo idea: comment out volatile with optimization on and show the loop freeze — or just promise it for the lab.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="many-intervals-one-timer" class="slide level2">
+<h2>Many intervals, one timer</h2>
+<div class="sourceCode" id="cb11" data-code-line-numbers="1-14|4-7|8-11"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a></a><span class="dt">uint32_t</span> t_led <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> t_sample <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb11-2"><a></a></span>
+<span id="cb11-3"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-4"><a></a>    <span class="cf">if</span> <span class="op">((</span>ms <span class="op">-</span> t_led<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">500</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span>          <span class="co">// every 500 ms</span></span>
+<span id="cb11-5"><a></a>        t_led <span class="op">=</span> ms<span class="op">;</span></span>
+<span id="cb11-6"><a></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb11-7"><a></a>    <span class="op">}</span></span>
+<span id="cb11-8"><a></a>    <span class="cf">if</span> <span class="op">((</span>ms <span class="op">-</span> t_sample<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">100</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span>       <span class="co">// every 100 ms</span></span>
+<span id="cb11-9"><a></a>        t_sample <span class="op">=</span> ms<span class="op">;</span></span>
+<span id="cb11-10"><a></a>        <span class="co">/* read a sensor */</span></span>
+<span id="cb11-11"><a></a>    <span class="op">}</span></span>
+<span id="cb11-12"><a></a>    <span class="co">/* other work continues */</span></span>
+<span id="cb11-13"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="relationship-strip">
+<p>Unsigned subtraction keeps every schedule correct when <code>ms</code> eventually wraps—the same arithmetic as Week 6’s debounce.</p>
+</div>
+</section>
+<section id="one-tick-two-schedules" class="slide level2">
+<h2>One tick, two schedules</h2>
+<svg class="story-visual" viewbox="0 0 1440 225" style="max-height:200px" role="img" aria-labelledby="looppass-title">
+<title id="looppass-title">
+One pass of the scheduler loop: check whether 500 milliseconds have elapsed and toggle the LED if so, check whether 100 milliseconds have elapsed and read the sensor if so, do other work, and repeat
+</title>
+<defs> <marker id="lp-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> </defs> <text x="66" y="72" text-anchor="middle" fill="#174f73" font-size="19" font-weight="700">each</text> <text x="66" y="96" text-anchor="middle" fill="#174f73" font-size="19" font-weight="700">pass</text> <line x1="112" y1="82" x2="152" y2="82" stroke="#2b789f" stroke-width="4" marker-end="url(#lp-arrow)"></line> <rect x="160" y="42" width="330" height="80" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect> <text x="325" y="90" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">ms − t_led ≥ 500 ?</text> <text x="510" y="70" fill="#5a6b76" font-size="16">no</text> <line x1="494" y1="82" x2="546" y2="82" stroke="#2b789f" stroke-width="4" marker-end="url(#lp-arrow)"></line> <line x1="325" y1="122" x2="325" y2="146" stroke="#3f7f58" stroke-width="3" marker-end="url(#lp-arrow)"></line> <text x="345" y="142" fill="#3f7f58" font-size="16" font-weight="700">yes</text> <rect x="170" y="152" width="310" height="52" rx="8" fill="#edf6f0" stroke="#3f7f58" stroke-width="2"></rect> <text x="325" y="185" text-anchor="middle" fill="#3f7f58" font-size="18" font-weight="700">toggle LD2 · t_led = ms</text> <rect x="554" y="42" width="360" height="80" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect> <text x="734" y="90" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">ms − t_sample ≥ 100 ?</text> <text x="934" y="70" fill="#5a6b76" font-size="16">no</text> <line x1="918" y1="82" x2="970" y2="82" stroke="#2b789f" stroke-width="4" marker-end="url(#lp-arrow)"></line> <line x1="734" y1="122" x2="734" y2="146" stroke="#3f7f58" stroke-width="3" marker-end="url(#lp-arrow)"></line> <text x="754" y="142" fill="#3f7f58" font-size="16" font-weight="700">yes</text> <rect x="580" y="152" width="308" height="52" rx="8" fill="#edf6f0" stroke="#3f7f58" stroke-width="2"></rect> <text x="734" y="185" text-anchor="middle" fill="#3f7f58" font-size="18" font-weight="700">read sensor · t_sample = ms</text> <rect x="978" y="42" width="250" height="80" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1103" y="90" text-anchor="middle" fill="#5a6b76" font-size="19">other work</text> <path d="M 1232 82 H 1300 C 1360 82, 1360 12, 1300 12 H 150 C 100 12, 90 45, 90 70" fill="none" stroke="#2b789f" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#lp-arrow)"></path> <text x="1330" y="42" text-anchor="middle" fill="#5a6b76" font-size="16">repeat</text>
+</svg>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../assets/images/tick_scheduler.svg" class="quarto-figure quarto-figure-center" alt="A millisecond timeline with LED toggles marked every 500 milliseconds and sensor reads every 100 milliseconds, both derived from the same g underscore ms counter" height="300"></p>
+</figure>
+</div>
+<div class="relationship-strip">
+<p>Add a third interval and the timer configuration does not change—only one more subtraction in the loop.</p>
+</div>
+</section>
+<section id="practice-does-it-drift" class="slide level2">
+<h2>Practice: does it drift?</h2>
+<p>The scheduler reschedules with <code>t_led = ms;</code>. Suppose one loop pass occasionally takes <strong>30 ms</strong> because of other work.</p>
+<div class="prompt-list compact-prompts">
+<div class="prompt-item">
+<p><span>1</span> Can a toggle be late? By how much, at worst?</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> Does the error stay bounded, or accumulate over the next toggles?</p>
+</div>
+<div class="prompt-item">
+<p><span>3</span> What changes if the reschedule line becomes <code>t_led += 500U;</code>?</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p>Both versions can be up to 30 ms late once. <code>t_led = ms</code> re-anchors to the late moment, so every delay pushes all later toggles—error accumulates. <code>t_led += 500U</code> keeps deadlines anchored: one late toggle, no long-term drift.</p>
+</div>
+</section>
+<section id="a-free-running-microsecond-timer" class="slide level2">
+<h2>A free-running microsecond timer</h2>
+<p>Leave <code>ARR</code> at its 32-bit maximum and the counter itself becomes a clock:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a></a><span class="co">/* PSC = 15 -&gt; 1 MHz: CNT increments once per microsecond */</span></span>
+<span id="cb12-2"><a></a><span class="dt">uint32_t</span> start <span class="op">=</span> TIM2<span class="op">-&gt;</span>CNT<span class="op">;</span></span>
+<span id="cb12-3"><a></a></span>
+<span id="cb12-4"><a></a>do_work<span class="op">();</span></span>
+<span id="cb12-5"><a></a></span>
+<span id="cb12-6"><a></a><span class="dt">uint32_t</span> elapsed_us <span class="op">=</span> TIM2<span class="op">-&gt;</span>CNT <span class="op">-</span> start<span class="op">;</span>   <span class="co">// wrap-safe</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> No interrupts at all—just read the counter twice and subtract.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <code>TIM2</code> and <code>TIM5</code> are the F401’s 32-bit timers: at 1 MHz they wrap after ~71 minutes.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> This is how you <em>measure</em> code instead of guessing.</p>
+</div>
+</div>
+</section>
+<section id="the-timer-family" class="slide level2">
+<h2>The timer family</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Family</th>
+<th>F401 instances</th>
+<th>Adds</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>General-purpose, <strong>32-bit</strong></td>
+<td><code>TIM2</code>, <code>TIM5</code></td>
+<td>long counts, all GP features</td>
+</tr>
+<tr class="even">
+<td>General-purpose, 16-bit</td>
+<td><code>TIM3</code>, <code>TIM4</code>, <code>TIM9</code>–<code>TIM11</code></td>
+<td>capture, compare, PWM</td>
+</tr>
+<tr class="odd">
+<td>Advanced-control</td>
+<td><code>TIM1</code></td>
+<td>complementary outputs, motor control</td>
+</tr>
+</tbody>
+</table>
+<div class="relationship-strip">
+<p>Every family shares today’s time base: clock → <code>PSC</code> → <code>CNT</code> → <code>ARR</code> → update. PWM and input capture (Week 9) are additions to it, not replacements.</p>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=316">RM0368 Rev 6, §13 <em>TIM2 to TIM5</em> — p.&nbsp;316</a>.</p>
+</div>
+</section>
+<section id="the-timer-registers" class="slide level2">
+<h2>The timer registers</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Register</th>
+<th>Holds</th>
+<th>Today’s use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>TIM2-&gt;PSC</code></td>
+<td>prescaler value</td>
+<td>set once</td>
+</tr>
+<tr class="even">
+<td><code>TIM2-&gt;ARR</code></td>
+<td>top value</td>
+<td>set once</td>
+</tr>
+<tr class="odd">
+<td><code>TIM2-&gt;CNT</code></td>
+<td>live count</td>
+<td>watch it move</td>
+</tr>
+<tr class="even">
+<td><code>TIM2-&gt;SR</code></td>
+<td>status flags — <code>UIF</code> is bit 0</td>
+<td>hardware sets, software clears</td>
+</tr>
+<tr class="odd">
+<td><code>TIM2-&gt;DIER</code></td>
+<td>interrupt enables — <code>UIE</code> is bit 0</td>
+<td>lets <code>UIF</code> raise the request</td>
+</tr>
+<tr class="even">
+<td><code>TIM2-&gt;CR1</code></td>
+<td>control — <code>CEN</code> is bit 0</td>
+<td>starts the counter</td>
+</tr>
+</tbody>
+</table>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=353">RM0368 Rev 6, §13.4 <em>TIM2 to TIM5 registers</em> — p.&nbsp;353</a>.</p>
+</div>
+</section>
+<section id="hal-vs-bare-metal" class="slide level2">
+<h2>HAL vs bare-metal</h2>
+<div class="columns">
+<div class="column" style="width:48%;">
+<p><strong>STM32 HAL</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb13-1"><a></a>htim2<span class="op">.</span>Instance       <span class="op">=</span> TIM2<span class="op">;</span></span>
+<span id="cb13-2"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Prescaler <span class="op">=</span> <span class="dv">15999</span><span class="op">;</span></span>
+<span id="cb13-3"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Period    <span class="op">=</span> <span class="dv">999</span><span class="op">;</span></span>
+<span id="cb13-4"><a></a>HAL_TIM_Base_Init<span class="op">(&amp;</span>htim2<span class="op">);</span></span>
+<span id="cb13-5"><a></a>HAL_TIM_Base_Start<span class="op">(&amp;</span>htim2<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:48%;">
+<p><strong>DIRECT CMSIS ACCESS</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a></a>RCC<span class="op">-&gt;</span>APB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span>  <span class="co">// TIM2EN</span></span>
+<span id="cb14-2"><a></a>TIM2<span class="op">-&gt;</span>PSC <span class="op">=</span> <span class="dv">15999</span><span class="op">;</span></span>
+<span id="cb14-3"><a></a>TIM2<span class="op">-&gt;</span>ARR <span class="op">=</span> <span class="dv">999</span><span class="op">;</span></span>
+<span id="cb14-4"><a></a>TIM2<span class="op">-&gt;</span>CR1 <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span>     <span class="co">// CEN</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+<div class="relationship-strip">
+<p>Week 5’s conclusion holds: same registers, different interface. The clock-enable-first rule from Week 4 also holds—<code>TIM2</code> is on <code>APB1</code>, not <code>AHB1</code>.</p>
+</div>
+</section>
+<section id="register-evidence" class="slide level2">
+<h2>Register evidence</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Pause after init: <code>TIM2-&gt;PSC</code> and <code>TIM2-&gt;ARR</code> hold your two numbers.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Resume, pause again: <code>TIM2-&gt;CNT</code> has <em>moved</em>—hardware counted while the CPU was halted-and-resumed.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Watch <code>TIM2-&gt;SR</code> bit 0: <code>UIF</code> sets on each rollover; your code (or HAL) clears it.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> In interrupt mode, a breakpoint in the callback proves the whole path.</p>
+</div>
+</div>
+<p>A successful build proves none of this. The SFR view does.</p>
+<!-- TODO: replace list with an annotated SFR (PERIPHERALS panel) screenshot from VS Code (instructor capture pending) -->
+</section>
+<section id="common-timer-mistakes" class="slide level2">
+<h2>Common timer mistakes</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>WRONG CLOCK ASSUMED:</strong> an online example’s 84 MHz math on our 16 MHz configuration—periods 5× too long.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>02</span> <strong>MISSING +1:</strong> <code>PSC = 16000</code> or <code>ARR = 1000</code> where 15999/999 was meant.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>03</span> <strong>CLOCK NOT ENABLED:</strong> <code>TIM2</code> needs its <code>APB1ENR</code> bit—AHB1 was the GPIO bus.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>04</span> <strong>NVIC FORGOTTEN:</strong> the update event fires, <code>UIF</code> sets, and nothing runs.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>05</span> <strong>FLAG NOT CLEARED:</strong> polling code without <code>CLEAR_FLAG</code> sees an eternal event.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>06</span> <strong>SLOW CALLBACK:</strong> work that belongs in <code>main()</code> running at interrupt priority.</p>
+</div>
+</div>
+</section>
+<section id="laboratory-mission" class="slide level2">
+<h2>Laboratory mission</h2>
+<div class="big-question">
+<p>Blink LD2 every 500 ms from a TIM2 update interrupt—no <code>HAL_Delay()</code> anywhere—then build the 1 ms tick and schedule two independent intervals.</p>
+</div>
+<p>You will show:</p>
+<ol type="1">
+<li><code>PSC</code>/<code>ARR</code> calculated from 16 MHz, with the +1s explained;</li>
+<li>a breakpoint proving <code>HAL_TIM_PeriodElapsedCallback</code> runs;</li>
+<li><code>TIM2-&gt;CNT</code> moving and <code>UIF</code> setting in the SFR view;</li>
+<li>two software intervals driven by one <code>ms</code> counter;</li>
+<li>one individual period change, predicted before flashing.</li>
+</ol>
+<aside class="notes">
+<p>Checkoff pacing: A and B before the break; C and the extension after. The SFR proof is the non-negotiable part.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="mastery-checklist" class="slide level2">
+<h2>Mastery checklist</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>✓</span> Trace the pipeline: clock → <code>PSC</code> → <code>CNT</code> → <code>ARR</code> → update event.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Calculate <code>PSC</code> and <code>ARR</code> for a required period, with the +1 rule.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Consume an update event by polling and by interrupt.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Build and use a 1 ms tick with wrap-safe scheduling.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Verify timer behavior in the register view.</p>
+</div>
+</div>
+<p>Next: PWM—the same counter, with an output pin attached to a compare value.</p>
+</section>
+<section id="exit-ticket" class="slide level2">
+<h2>Exit ticket</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Prescaler <span class="op">=</span> <span class="dv">1599</span><span class="op">;</span></span>
+<span id="cb15-2"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Period    <span class="op">=</span> <span class="dv">249</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list ticket-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>FREQUENCY:</strong> What is the counting frequency from the 16 MHz timer clock?</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>PERIOD:</strong> How often does the update event fire?</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>PATH:</strong> Name the register bit that records the event and the function that HAL finally calls.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <strong>POLLING:</strong> Which two operations must a polling loop perform on <code>UIF</code>?</p>
+</div>
+<div class="vertical-item">
+<p><span>05</span> <strong>EVIDENCE:</strong> Which SFR observation proves the counter is running?</p>
+</div>
+</div>
+<div class="source-note">
+<p>Every concept in this lecture, with page-linked sources: <a href="../../../resources/references/academic_references.html">academic references</a>.</p>
+</div>
+
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>EE5203 - L07</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../../../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../../../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+
+        height: 900,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

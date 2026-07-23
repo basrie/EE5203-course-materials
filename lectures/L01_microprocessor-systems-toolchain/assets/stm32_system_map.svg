@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="520" viewBox="0 0 1400 520" role="img" aria-labelledby="title desc">
+  <style>@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&amp;display=swap");</style>
+  <title id="title">STM32F401RE system map</title>
+  <desc id="desc">The microcontroller contains a Cortex-M4 CPU, flash, SRAM, buses, peripherals, clock, reset, interrupts, and debug hardware.</desc>
+  <defs><filter id="chip" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#14364b" flood-opacity="0.2"/></filter></defs>
+  <rect width="1400" height="520" rx="28" fill="#f8fafc"/>
+  <g filter="url(#chip)"><rect x="100" y="35" width="1200" height="450" rx="35" fill="#174f73"/></g>
+  <text x="700" y="88" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="38" font-weight="700" fill="white">STM32F401RE MICROCONTROLLER</text>
+  <g font-family="Quicksand,Arial,sans-serif" text-anchor="middle">
+    <rect x="160" y="125" width="360" height="120" rx="22" fill="#e5f1f7"/><text x="340" y="180" font-size="34" font-weight="700" fill="#174f73">Arm Cortex-M4</text><text x="340" y="218" font-size="23" fill="#526c7c">executes instructions</text>
+    <rect x="550" y="125" width="310" height="120" rx="22" fill="#e5f1f7"/><text x="705" y="180" font-size="34" font-weight="700" fill="#174f73">Flash</text><text x="705" y="218" font-size="23" fill="#526c7c">stores firmware</text>
+    <rect x="890" y="125" width="350" height="120" rx="22" fill="#e5f1f7"/><text x="1065" y="180" font-size="34" font-weight="700" fill="#174f73">SRAM</text><text x="1065" y="218" font-size="23" fill="#526c7c">working data</text>
+    <rect x="160" y="275" width="1080" height="58" rx="16" fill="#9bcce1"/><text x="700" y="314" font-size="27" font-weight="700" fill="#103e5b">MEMORY-MAPPED BUS: addresses connect software to hardware</text>
+    <g font-size="27" font-weight="700" fill="#174f73">
+      <rect x="160" y="360" width="155" height="75" rx="17" fill="#fff"/><text x="237" y="407">GPIO</text>
+      <rect x="335" y="360" width="155" height="75" rx="17" fill="#fff"/><text x="412" y="407">TIMERS</text>
+      <rect x="510" y="360" width="155" height="75" rx="17" fill="#fff"/><text x="587" y="407">ADC</text>
+      <rect x="685" y="360" width="155" height="75" rx="17" fill="#fff"/><text x="762" y="407">UART</text>
+      <rect x="860" y="360" width="155" height="75" rx="17" fill="#fff"/><text x="937" y="407">I2C</text>
+      <rect x="1035" y="360" width="205" height="75" rx="17" fill="#fff"/><text x="1137" y="407">SPI + DMA</text>
+    </g>
+  </g>
+</svg>

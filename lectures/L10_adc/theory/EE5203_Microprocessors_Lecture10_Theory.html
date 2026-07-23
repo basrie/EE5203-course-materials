@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.42">
+
+  <meta name="author" content="Basri Erdogan">
+  <title>EE5203 Microprocessors</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
+  <link rel="stylesheet" href="../../L01_microprocessor-systems-toolchain/assets/styles.css">
+  <link rel="stylesheet" href="../../L02_c-for-embedded-systems/assets/week2.css">
+  <link href="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">EE5203 Microprocessors</h1>
+  <p class="subtitle">L10 - Analog-to-Digital Conversion</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Basri Erdogan 
+</div>
+</div>
+</div>
+
+</section>
+<section id="one-number-from-a-knob" class="slide level2">
+<h2>One number from a knob</h2>
+<div class="big-question">
+<p>The pin was neither HIGH nor LOW. The hardware answered with a number anyway—while your program did something else.</p>
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a><span class="dt">uint16_t</span> raw <span class="op">=</span> HAL_ADC_GetValue<span class="op">(&amp;</span>hadc1<span class="op">);</span>   <span class="co">// 2867 ?!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>By the end, you will know what 2867 means, how the hardware found it in twelve guesses, and how to turn a knob, a light level, or a temperature into brightness and motion.</p>
+<aside class="notes">
+<p>Live demo if hardware is ready: pot on A0, raw value live in the Watch panel, turn the knob. 2867 × 3300 / 4095 ≈ 2311 mV — the same 2.31 V the SAR figure later converts.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-story-so-far" class="slide level2">
+<h2>The story so far</h2>
+<div class="vertical-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>WEEKS 4-5:</strong> pins wrote and read digital levels—high or low, nothing between.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>WEEKS 6-7:</strong> events interrupt the program; hardware counters keep time.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>L08-L09:</strong> timer channels generated PWM and timestamped edges—still all digital.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <strong>TODAY:</strong> the last face of the pin—voltages <em>between</em> the levels.</p>
+</div>
+</div>
+</section>
+<section id="todays-objectives" class="slide level2">
+<h2>Today’s objectives</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Explain sampling, quantization, and resolution—and read the 0–4095 scale fluently.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Trace the SAR conversion and its timing from the 16 MHz clock.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Configure ADC1: channel, sampling time, single vs continuous conversion.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> Convert counts to millivolts with integer math, and counts to control (PWM).</p>
+</div>
+<div class="vertical-item">
+<p><span>05</span> Verify conversions in the SFR view: <code>DR</code>, <code>EOC</code>, <code>CONT</code>.</p>
+</div>
+</div>
+</section>
+<section id="l08l09-recap-the-channel" class="slide level2">
+<h2>L08–L09 recap: the channel</h2>
+<p>Thirty-second check on the timer lectures:</p>
+<div class="prompt-list compact-prompts">
+<div class="prompt-item">
+<p><span>1</span> Which register turned a number into LED brightness?</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> How did we <em>measure</em> an unknown PWM signal?</p>
+</div>
+<div class="prompt-item">
+<p><span>3</span> What can none of that hardware tell us about a voltage?</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p><code>CCR</code> owned the duty; capture channels timestamped edges into <code>CCR</code>; and every input so far reported only <em>high or low</em>—never <em>how much</em>.</p>
+</div>
+</section>
+<section id="beyond-high-and-low" class="slide level2">
+<h2>Beyond high and low</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>THE KNOB:</strong> a potentiometer’s position <em>is</em> a voltage, 0 to 3.3 V.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>THE LIGHT:</strong> an LDR in a divider turns brightness into volts.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>THE HEAT:</strong> thermistors—and a sensor <em>inside the chip</em>—speak in millivolts.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <strong>THE BATTERY:</strong> monitoring a supply means reading its voltage.</p>
+</div>
+</div>
+<div class="relationship-strip">
+<p>All of these are voltages. One peripheral reads them all: the analog-to-digital converter.</p>
+</div>
+</section>
+<section id="the-bridge-sampling" class="slide level2">
+<h2>The bridge: sampling</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../assets/images/adc_bridge.svg" class="quarto-figure quarto-figure-center" alt="A smooth analog sine wave with sampling instants marked; each sample is frozen and mapped to one of sixteen 4-bit quantization levels, shown as a staircase" height="400"></p>
+</figure>
+</div>
+<p>Three verbs, every conversion: <em>sample</em> (freeze the voltage), <em>quantize</em> (pick the nearest level), <em>encode</em> (store the number).</p>
+</section>
+<section id="resolution-and-the-lsb" class="slide level2">
+<h2>Resolution and the LSB</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../assets/images/resolution_lsb.svg" class="quarto-figure quarto-figure-center" alt="The same sine wave quantized with 3 bits, showing large staircase steps of 0.41 volts, and with 12 bits, where the staircase is indistinguishable from the original curve; one LSB is about 0.8 millivolts" height="380"></p>
+</figure>
+</div>
+<p>Our ADC has <strong>12 bits</strong>: 4096 levels across 0–3.3 V. The staircase is finer than the noise—for us, effectively smooth.</p>
+</section>
+<section id="counts-to-millivolts" class="slide level2">
+<h2>Counts to millivolts</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a></a>mV = raw × 3300 / 4095</span>
+<span id="cb2-2"><a></a></span>
+<span id="cb2-3"><a></a>raw =    0  →     0 mV        raw = 2048  →  1650 mV</span>
+<span id="cb2-4"><a></a>raw = 4095  →  3300 mV        raw = 2867  →  2311 mV</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Integer math first: <code>(raw * 3300u) / 4095u</code> fits comfortably in <code>uint32_t</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Full scale (4095) maps to full voltage (3300 mV)—the endpoint convention.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Millivolts keep everything integer; convert to float only at the display edge.</p>
+</div>
+</div>
+</section>
+<section id="practice-read-the-counts" class="slide level2">
+<h2>Practice: read the counts</h2>
+<div class="prompt-list compact-prompts">
+<div class="prompt-item">
+<p><span>1</span> What raw value corresponds to 0.825 V?</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> Raw reads <code>3100</code>—how many millivolts?</p>
+</div>
+<div class="prompt-item">
+<p><span>3</span> Why compute in millivolts instead of volts-as-float?</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p>0.825 V is a quarter of full scale → ≈ <code>1024</code>. <code>3100 × 3300 / 4095</code> = 2498 mV. And integers are exact, fast, and safe anywhere—including inside interrupt callbacks.</p>
+</div>
+</section>
+<section id="sampling-rate-and-aliasing" class="slide level2">
+<h2>Sampling rate and aliasing</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../assets/images/aliasing_static.svg" class="quarto-figure quarto-figure-center" alt="A 5 hertz sine wave sampled at 6 hertz; the samples fall on a 1 hertz curve that does not exist in the real signal" height="350"></p>
+</figure>
+</div>
+<p>Sample slower than <em>twice</em> the fastest content and the samples lie—an alias. For knobs and light sensors we are safely slow; for audio and waveforms this rule bites.</p>
+<div class="source-note">
+<p>In-lecture demo: <a href="../assets/htmls/aliasing.html">aliasing, interactively</a>.</p>
+</div>
+</section>
+<section id="the-sar-guessing-game" class="slide level2">
+<h2>The SAR guessing game</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../assets/images/sar_search.svg" class="quarto-figure quarto-figure-center" alt="Successive approximation on a 4-bit ADC converting 2.31 volts: trial voltages 1.65, 2.47, 2.06 and 2.27 volts converge on the code 1011 in four comparator decisions" height="380"></p>
+</figure>
+</div>
+<p>Binary search in silicon: one comparator decision per bit, MSB first. Our 12-bit ADC: twelve decisions per conversion.</p>
+<div class="source-note">
+<p>In-lecture demo: <a href="../assets/htmls/sac.html">step through a conversion</a>.</p>
+</div>
+</section>
+<section id="the-adc-in-hardware" class="slide level2">
+<h2>The ADC in hardware</h2>
+<svg class="story-visual" viewbox="0 0 1440 500" style="max-height:460px" role="img" aria-labelledby="adchw-title">
+<title id="adchw-title">
+Simplified hardware diagram of the ADC: an analog pin feeds a sample-and-hold switch and capacitor, then the successive approximation core with comparator and internal DAC; the result lands in the data register and raises the end-of-conversion flag, which can be polled or raise an interrupt
+</title>
+<defs> <marker id="ad-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> <marker id="ad-arrow-g" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#3f7f58"></path></marker> </defs> <rect x="30" y="50" width="1180" height="420" rx="16" fill="#fbfdfe" stroke="#c8d8e2" stroke-width="4"></rect> <text x="52" y="86" fill="#174f73" font-size="21" font-weight="700">ADC1 — one conversion, start to finish</text> <rect x="60" y="140" width="200" height="130" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect> <text x="160" y="178" text-anchor="middle" fill="#d47b28" font-size="16" font-weight="700" letter-spacing="1">THE PIN</text> <text x="160" y="212" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700">PA0 · A0</text> <text x="160" y="242" text-anchor="middle" fill="#5a6b76" font-size="15">analog mode</text> <g class="fragment"> <line x1="260" y1="205" x2="318" y2="205" stroke="#2b789f" stroke-width="4" marker-end="url(#ad-arrow)"></line> <rect x="326" y="140" width="240" height="130" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2.5"></rect> <text x="446" y="178" text-anchor="middle" fill="#5a6b76" font-size="16" font-weight="700" letter-spacing="1">SAMPLE &amp; HOLD</text> <text x="446" y="212" text-anchor="middle" fill="#174f73" font-size="18" font-weight="700">switch + capacitor</text> <text x="446" y="242" text-anchor="middle" fill="#5a6b76" font-size="15">3…480 cycles to charge</text> </g> <g class="fragment"> <line x1="566" y1="205" x2="624" y2="205" stroke="#2b789f" stroke-width="4" marker-end="url(#ad-arrow)"></line> <rect x="632" y="120" width="290" height="170" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect> <text x="777" y="158" text-anchor="middle" fill="#5a6b76" font-size="16" font-weight="700" letter-spacing="1">SAR CORE</text> <text x="777" y="192" text-anchor="middle" fill="#174f73" font-size="18" font-weight="700">comparator vs.&nbsp;DAC</text> <text x="777" y="222" text-anchor="middle" fill="#174f73" font-size="18" font-weight="700">12 decisions, MSB first</text> <text x="777" y="252" text-anchor="middle" fill="#5a6b76" font-size="15">12.5 cycles</text> </g> <g class="fragment"> <line x1="922" y1="205" x2="980" y2="205" stroke="#2b789f" stroke-width="4" marker-end="url(#ad-arrow)"></line> <rect x="988" y="150" width="200" height="110" rx="10" fill="#edf6f0" stroke="#3f7f58" stroke-width="2.5"></rect> <text x="1088" y="188" text-anchor="middle" fill="#3f7f58" font-size="16" font-weight="700" letter-spacing="1">THE RESULT</text> <text x="1088" y="222" text-anchor="middle" fill="#174f73" font-size="17" font-family="ui-monospace, Menlo, monospace">ADC1-&gt;DR</text> <text x="1088" y="246" text-anchor="middle" fill="#5a6b76" font-size="15">0 … 4095</text> </g> <g class="fragment"> <line x1="1088" y1="260" x2="1088" y2="330" stroke="#3f7f58" stroke-width="3.5" marker-end="url(#ad-arrow-g)"></line> <rect x="920" y="338" width="268" height="60" rx="10" fill="#ffffff" stroke="#3f7f58" stroke-width="2.5"></rect> <text x="1054" y="376" text-anchor="middle" fill="#174f73" font-size="17" font-weight="700">EOC sets in SR — ready!</text> <path d="M 920 368 H 700" fill="none" stroke="#3f7f58" stroke-width="3.5" marker-end="url(#ad-arrow-g)"></path> <text x="760" y="352" text-anchor="middle" fill="#5a6b76" font-size="15">poll it, or interrupt (Week 6 path)</text> </g> <text x="620" y="448" text-anchor="middle" fill="#5a6b76" font-size="19">Sample, decide bit by bit, publish the number. <tspan fill="#2b789f" font-weight="700">Hardware does all three.</tspan></text> <text x="1240" y="180" fill="#174f73" font-size="18" font-weight="700">in: volts</text> <text x="1240" y="210" fill="#5a6b76" font-size="15">0 – 3.3 V</text> <text x="1240" y="355" fill="#3f7f58" font-size="18" font-weight="700">out: a number</text> <text x="1240" y="385" fill="#5a6b76" font-size="15">and a flag</text>
+</svg>
+</section>
+<section id="conversion-takes-time" class="slide level2">
+<h2>Conversion takes time</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../assets/images/conversion_time.svg" class="quarto-figure quarto-figure-center" alt="Horizontal bars comparing total conversion time for sampling choices of 3, 84 and 480 cycles at an 8 megahertz ADC clock: 1.9, 12.1 and 61.6 microseconds; every bar ends with the fixed 12.5 SAR cycles" height="310"></p>
+</figure>
+</div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> The ADC clock: PCLK2 16 MHz ÷ 2 = <em>8 MHz</em> (divider in <code>CCR</code>; max 36 MHz).</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> High source impedance → the hold capacitor charges slowly → choose longer sampling. Our default: <code>84 cycles</code> → ≈ 12 µs.</p>
+</div>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=215">RM0368 Rev 6, §11.3.2 <em>ADC clock</em> — p.&nbsp;215</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=222">§11.5 <em>Channel-wise programmable sampling time</em> — p.&nbsp;222</a>.</p>
+</div>
+</section>
+<section id="one-adc-sixteen-doors" class="slide level2">
+<h2>One ADC, sixteen doors</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> The STM32F401RE has <em>one</em> ADC (<code>ADC1</code>) with 16 external channels—one converter, many pins.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <code>PA0</code> is channel <code>IN0</code>—and the Arduino header’s <strong>A0</strong>. Our knob lives there.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Three internal channels need no wiring at all: a temperature sensor, <code>V_REFINT</code>, and <code>V_BAT</code>.</p>
+</div>
+</div>
+<div class="relationship-strip">
+<p>Channels share the one SAR core. Reading two sensors means choosing which door opens for each conversion.</p>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=215">RM0368 Rev 6, §11.3.3 <em>Channel selection</em> — p.&nbsp;215</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=226">§11.9 <em>Temperature sensor</em> — p.&nbsp;226</a>.</p>
+</div>
+</section>
+<section id="the-pin-goes-analog" class="slide level2">
+<h2>The pin goes analog</h2>
+<p>The pin’s <em>fourth</em> personality, after input, output, and alternate function:</p>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <code>MODER</code> bits = <code>11</code> — <em>analog mode</em>: the digital input path is disconnected entirely.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> No pull-ups, no <code>ReadPin</code>, no AF—the pin wires straight to the ADC’s multiplexer.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> The full GPIO story, complete: <code>00</code> input · <code>01</code> output · <code>10</code> alternate · <code>11</code> analog.</p>
+</div>
+</div>
+<div class="relationship-strip">
+<p>L04 promised the <code>MODER</code> table had four rows. Today the last row earns its keep.</p>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=158">RM0368 Rev 6, <code>GPIOx_MODER</code> — p.&nbsp;158</a>.</p>
+</div>
+</section>
+<section id="single-or-continuous" class="slide level2">
+<h2>Single or continuous</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>SINGLE:</strong> software says go (<code>SWSTART</code>), the ADC converts once and stops. One question, one answer.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>CONTINUOUS:</strong> the ADC restarts itself forever—<code>DR</code> always holds the freshest value.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>SCAN:</strong> convert a whole sequence of channels in turn (with DMA—a later lecture).</p>
+</div>
+</div>
+<div class="relationship-strip">
+<p>We use <em>single</em> mode and ask on our schedule—the Week 7 tick decides when. Continuous returns tonight as SFR-view evidence.</p>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=216">RM0368 Rev 6, §11.3.4–11.3.5 <em>Single / continuous conversion</em> — p.&nbsp;216</a>.</p>
+</div>
+</section>
+<section id="cubemx-configuration" class="slide level2">
+<h2>CubeMX configuration</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Click <code>PA0</code> → <code>ADC1_IN0</code> (the pin turns analog—check <code>MODER</code> later).</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> In <em>Analog → ADC1</em>: enable <code>IN0</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Parameters: Resolution <code>12 bits</code>, Continuous <code>Disabled</code>, End Of Conversion <code>single conversion</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> Rank 1 → Channel 0, Sampling Time <code>84 Cycles</code>. Generate; read the init before writing code.</p>
+</div>
+</div>
+</section>
+<section id="the-generated-init" class="slide level2">
+<h2>The generated init</h2>
+<div class="sourceCode" id="cb3" data-code-line-numbers="1-9|4|5|6|11-14|13"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a></a>hadc1<span class="op">.</span>Instance                <span class="op">=</span> ADC1<span class="op">;</span></span>
+<span id="cb3-2"><a></a>hadc1<span class="op">.</span>Init<span class="op">.</span>ClockPrescaler     <span class="op">=</span> ADC_CLOCK_SYNC_PCLK_DIV2<span class="op">;</span>  <span class="co">// 16 MHz -&gt; 8 MHz</span></span>
+<span id="cb3-3"><a></a>hadc1<span class="op">.</span>Init<span class="op">.</span>Resolution         <span class="op">=</span> ADC_RESOLUTION_12B<span class="op">;</span>        <span class="co">// 0..4095</span></span>
+<span id="cb3-4"><a></a>hadc1<span class="op">.</span>Init<span class="op">.</span>ContinuousConvMode <span class="op">=</span> DISABLE<span class="op">;</span>                   <span class="co">// one shot per start</span></span>
+<span id="cb3-5"><a></a>hadc1<span class="op">.</span>Init<span class="op">.</span>EOCSelection       <span class="op">=</span> ADC_EOC_SINGLE_CONV<span class="op">;</span>       <span class="co">// flag per conversion</span></span>
+<span id="cb3-6"><a></a>hadc1<span class="op">.</span>Init<span class="op">.</span>DataAlign          <span class="op">=</span> ADC_DATAALIGN_RIGHT<span class="op">;</span></span>
+<span id="cb3-7"><a></a>hadc1<span class="op">.</span>Init<span class="op">.</span>NbrOfConversion    <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb3-8"><a></a>HAL_ADC_Init<span class="op">(&amp;</span>hadc1<span class="op">);</span></span>
+<span id="cb3-9"><a></a></span>
+<span id="cb3-10"><a></a>ADC_ChannelConfTypeDef sConfig <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb3-11"><a></a>sConfig<span class="op">.</span>Channel      <span class="op">=</span> ADC_CHANNEL_0<span class="op">;</span>                      <span class="co">// PA0 = IN0 = A0</span></span>
+<span id="cb3-12"><a></a>sConfig<span class="op">.</span>Rank         <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb3-13"><a></a>sConfig<span class="op">.</span>SamplingTime <span class="op">=</span> ADC_SAMPLETIME_84CYCLES<span class="op">;</span>            <span class="co">// ~12 us total</span></span>
+<span id="cb3-14"><a></a>HAL_ADC_ConfigChannel<span class="op">(&amp;</span>hadc1<span class="op">,</span> <span class="op">&amp;</span>sConfig<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>Resolution</code> writes <code>RES</code> in <code>CR1</code>; <code>SamplingTime</code> writes <code>SMPR2</code>; the channel lands in <code>SQR3</code>.</p>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=56">UM1725 Rev 8, ADC generic driver — p.&nbsp;56</a>.</p>
+</div>
+</section>
+<section id="start-wait-read" class="slide level2">
+<h2>Start, wait, read</h2>
+<div class="sourceCode" id="cb4" data-code-line-numbers="1-5|1|2|3"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a></a>HAL_ADC_Start<span class="op">(&amp;</span>hadc1<span class="op">);</span>                          <span class="co">// SWSTART: go</span></span>
+<span id="cb4-2"><a></a>HAL_ADC_PollForConversion<span class="op">(&amp;</span>hadc1<span class="op">,</span> <span class="dv">2</span><span class="op">);</span>           <span class="co">// wait for EOC (~12 us)</span></span>
+<span id="cb4-3"><a></a><span class="dt">uint16_t</span> raw <span class="op">=</span> HAL_ADC_GetValue<span class="op">(&amp;</span>hadc1<span class="op">);</span>        <span class="co">// read DR (clears EOC)</span></span>
+<span id="cb4-4"><a></a></span>
+<span id="cb4-5"><a></a><span class="dt">uint16_t</span> mv  <span class="op">=</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)((</span>raw <span class="op">*</span> <span class="dv">3300</span><span class="bu">u</span><span class="op">)</span> <span class="op">/</span> <span class="dv">4095</span><span class="bu">u</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> The third flag family: <code>UIF</code> (L07), <code>CC1IF</code> (L09), now <code>EOC</code> in <code>ADC1-&gt;SR</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Reading <code>DR</code> clears <code>EOC</code>—the same read-to-acknowledge pattern.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> 12 µs is nothing on a human timescale—polling is honest here, not lazy.</p>
+</div>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=65">UM1725 Rev 8, <code>HAL_ADC_Start</code> — p.&nbsp;65</a>, <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=66"><code>HAL_ADC_PollForConversion</code> — p.&nbsp;66</a>, <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=68"><code>HAL_ADC_GetValue</code> — p.&nbsp;68</a>.</p>
+</div>
+</section>
+<section id="from-counts-to-control" class="slide level2">
+<h2>From counts to control</h2>
+<p>The whole course in four lines—analog in, analog out:</p>
+<div class="sourceCode" id="cb5" data-code-line-numbers="1-7|3|5|6"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a></a><span class="cf">if</span> <span class="op">(</span>tick_10ms_flag<span class="op">)</span> <span class="op">{</span>                 <span class="co">// Week 7 schedules the reads</span></span>
+<span id="cb5-2"><a></a>    tick_10ms_flag <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb5-3"><a></a>    <span class="dt">uint16_t</span> raw <span class="op">=</span> adc_read_in0<span class="op">();</span>    <span class="co">// today: 0..4095</span></span>
+<span id="cb5-4"><a></a></span>
+<span id="cb5-5"><a></a>    <span class="dt">uint32_t</span> duty <span class="op">=</span> <span class="op">(</span>raw <span class="op">*</span> <span class="dv">999</span><span class="bu">u</span><span class="op">)</span> <span class="op">/</span> <span class="dv">4095</span><span class="bu">u</span><span class="op">;</span>          <span class="co">// map to L08's ARR</span></span>
+<span id="cb5-6"><a></a>    __HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> duty<span class="op">);</span>  <span class="co">// LD2 brightness</span></span>
+<span id="cb5-7"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="relationship-strip">
+<p>Knob voltage → number → compare register → PWM duty → average voltage → brightness. Two converters facing each other, your code in between.</p>
+</div>
+</section>
+<section id="the-interrupt-option" class="slide level2">
+<h2>The interrupt option</h2>
+<div class="sourceCode" id="cb6" data-code-line-numbers="1-9|1|4-8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a>HAL_ADC_Start_IT<span class="op">(&amp;</span>hadc1<span class="op">);</span>             <span class="co">// one conversion, then interrupt</span></span>
+<span id="cb6-2"><a></a></span>
+<span id="cb6-3"><a></a><span class="dt">void</span> HAL_ADC_ConvCpltCallback<span class="op">(</span>ADC_HandleTypeDef <span class="op">*</span>hadc<span class="op">)</span></span>
+<span id="cb6-4"><a></a><span class="op">{</span></span>
+<span id="cb6-5"><a></a>    <span class="cf">if</span> <span class="op">(</span>hadc<span class="op">-&gt;</span>Instance <span class="op">==</span> ADC1<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-6"><a></a>        g_raw <span class="op">=</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)</span>HAL_ADC_GetValue<span class="op">(</span>hadc<span class="op">);</span>   <span class="co">// integer only here</span></span>
+<span id="cb6-7"><a></a>    <span class="op">}</span></span>
+<span id="cb6-8"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> The Week 6 path, one more source: enable <em>ADC global interrupt</em> in NVIC first.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Start one conversion per tick; the callback stores, the main loop consumes.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Continuous + interrupt would fire every 12 µs—83 000 interrupts per second. Pace it.</p>
+</div>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=66">UM1725 Rev 8, <code>HAL_ADC_Start_IT</code> — p.&nbsp;66</a>, <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=68"><code>HAL_ADC_ConvCpltCallback</code> — p.&nbsp;68</a>.</p>
+</div>
+</section>
+<section id="practice-the-knob-at-midpoint" class="slide level2">
+<h2>Practice: the knob at midpoint</h2>
+<p>The pot sits exactly at center. With the L08 numbers (<code>ARR = 999</code> LED, servo 1000–2000 µs):</p>
+<div class="prompt-list compact-prompts">
+<div class="prompt-item">
+<p><span>1</span> What does <code>raw</code> read, and how many millivolts is that?</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> What LED duty does <code>(raw * 999) / 4095</code> command?</p>
+</div>
+<div class="prompt-item">
+<p><span>3</span> What servo pulse does <code>1000 + (raw * 1000) / 4095</code> command—and what angle?</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p>≈ <code>2048</code> → 1650 mV. Duty ≈ <code>499</code> — half brightness. Pulse ≈ 1500 µs → 90°, dead center. The knob <em>is</em> the servo now.</p>
+</div>
+</section>
+<section id="reading-nature-the-ldr" class="slide level2">
+<h2>Reading nature: the LDR</h2>
+<svg class="story-visual" viewbox="0 0 1440 430" style="max-height:400px" role="img" aria-labelledby="ldrdiv-title">
+<title id="ldrdiv-title">
+A voltage divider: a fixed 10 kiloohm resistor from 3.3 volts to a middle node, and a light-dependent resistor from the node to ground; the node connects to analog pin PA1; in darkness the LDR resistance is large and the node voltage is high, in bright light it is small and the voltage is low
+</title>
+<rect x="30" y="30" width="1180" height="370" rx="16" fill="#fbfdfe" stroke="#c8d8e2" stroke-width="4"></rect> <text x="150" y="76" fill="#174f73" font-size="20" font-weight="700">3V3</text> <line x1="200" y1="70" x2="260" y2="70" stroke="#174f73" stroke-width="4"></line> <line x1="260" y1="70" x2="260" y2="110" stroke="#174f73" stroke-width="4"></line> <rect x="230" y="110" width="60" height="80" rx="6" fill="#ffffff" stroke="#2b789f" stroke-width="3"></rect> <text x="320" y="158" fill="#2b789f" font-size="18" font-weight="700">10 kΩ fixed</text> <line x1="260" y1="190" x2="260" y2="240" stroke="#174f73" stroke-width="4"></line> <circle cx="260" cy="240" r="8" fill="#d47b28"></circle> <line x1="268" y1="240" x2="440" y2="240" stroke="#d47b28" stroke-width="4"></line> <text x="455" y="248" fill="#d47b28" font-size="19" font-weight="700">→ PA1 · ADC1_IN1</text> <line x1="260" y1="248" x2="260" y2="290" stroke="#174f73" stroke-width="4"></line> <rect x="230" y="290" width="60" height="80" rx="6" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect> <text x="320" y="326" fill="#d47b28" font-size="18" font-weight="700">LDR</text> <text x="320" y="352" fill="#5a6b76" font-size="15">dark ≈ 300 kΩ · bright ≈ 5 kΩ</text> <line x1="260" y1="370" x2="260" y2="388" stroke="#174f73" stroke-width="4"></line> <line x1="235" y1="388" x2="285" y2="388" stroke="#174f73" stroke-width="4"></line> <text x="300" y="394" fill="#5a6b76" font-size="16">GND</text> <text x="920" y="120" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700">V(PA1) = 3.3 V × R_LDR / (R_LDR + 10 kΩ)</text> <g class="fragment"> <text x="920" y="200" text-anchor="middle" fill="#174f73" font-size="19"><tspan font-weight="700">DARK:</tspan> R_LDR huge → V ≈ 3.2 V → raw ≈ 3970</text> </g> <g class="fragment"> <text x="920" y="260" text-anchor="middle" fill="#174f73" font-size="19"><tspan font-weight="700">BRIGHT:</tspan> R_LDR small → V ≈ 1.1 V → raw ≈ 1365</text> </g> <g class="fragment"> <text x="920" y="340" text-anchor="middle" fill="#3f7f58" font-size="19" font-weight="700">dark → big number → bright LED: a night-light in one map()</text> </g>
+</svg>
+</section>
+<section id="the-adc-registers" class="slide level2">
+<h2>The ADC registers</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Register</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ADC1-&gt;SR</code></td>
+<td><code>EOC</code> — result ready · <code>OVR</code> — you read too slowly</td>
+</tr>
+<tr class="even">
+<td><code>ADC1-&gt;CR1</code></td>
+<td><code>RES</code> resolution · scan mode</td>
+</tr>
+<tr class="odd">
+<td><code>ADC1-&gt;CR2</code></td>
+<td><code>ADON</code> power · <code>CONT</code> continuous · <code>SWSTART</code> go · alignment</td>
+</tr>
+<tr class="even">
+<td><code>ADC1-&gt;SMPR2</code></td>
+<td>sampling time per channel, <code>IN0</code>–<code>IN9</code></td>
+</tr>
+<tr class="odd">
+<td><code>ADC1-&gt;SQR3</code></td>
+<td>which channel converts (rank 1)</td>
+</tr>
+<tr class="even">
+<td><code>ADC1-&gt;DR</code></td>
+<td>the result, 0…4095 — reading it clears <code>EOC</code></td>
+</tr>
+</tbody>
+</table>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=229">RM0368 Rev 6, §11.12 <em>ADC registers</em> — p.&nbsp;229</a>: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=232"><code>ADC_CR2</code> — p.&nbsp;232</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=234"><code>ADC_SMPR2</code> — p.&nbsp;234</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=239"><code>ADC_DR</code> — p.&nbsp;239</a>.</p>
+</div>
+</section>
+<section id="register-evidence" class="slide level2">
+<h2>Register evidence</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Pause after a read: <code>ADC1-&gt;DR</code> holds your raw value; turn the knob, step, read again.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Set <code>CONT</code> in <code>CR2</code> and <code>SWSTART</code> from the SFR view: <code>DR</code> now streams <em>by itself</em>—no code running.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <code>CR1</code> bits 25:24 read <code>00</code> — that is <code>RES</code> saying 12-bit.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <code>GPIOA-&gt;MODER</code> bits 1:0 read <code>11</code> — PA0 belongs to the analog world.</p>
+</div>
+</div>
+<p>A successful build proves none of this. The SFR view does.</p>
+</section>
+<section id="common-adc-mistakes" class="slide level2">
+<h2>Common ADC mistakes</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>PIN LEFT DIGITAL:</strong> <code>MODER</code> not <code>11</code>—you sample a pin the GPIO block still drives.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>02</span> <strong>THE 5 V HABIT:</strong> Arduino formulas assume 5 V and 1023. Here: 3.3 V, 4095—and 5 V on an analog pin is damage, not data.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>03</span> <strong>OFF-BY-ONE SCALE:</strong> divide by 4096 or 1023 and full scale never reads 100 %.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>04</span> <strong>IMPEDANCE IGNORED:</strong> big resistances with 3-cycle sampling—the hold capacitor never charges; readings sag.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>05</span> <strong>FLOAT IN THE CALLBACK:</strong> convert to millivolts with integers; pretty-print floats elsewhere.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>06</span> <strong>POLLING BLIND:</strong> <code>PollForConversion</code> with no conversion started, or <code>EOCSelection</code> left unset—waits forever or returns stale data.</p>
+</div>
+</div>
+</section>
+<section id="laboratory-mission" class="slide level2">
+<h2>Laboratory mission</h2>
+<div class="big-question">
+<p>Read the knob, command the servo. Read the light, dim LD2. One ADC, two sensors—driving the actuators you built in L08.</p>
+</div>
+<p>You will show:</p>
+<ol type="1">
+<li>the ADC configuration justified: 12-bit, 84-cycle sampling, single conversion;</li>
+<li><code>raw</code> and millivolts live in the debugger, matching your hand calculation;</li>
+<li>the knob commanding the servo through the 1000–2000 µs contract;</li>
+<li>a night-light: darkness raises LD2’s brightness through the divider math;</li>
+<li>one individual variation, predicted before flashing.</li>
+</ol>
+</section>
+<section id="mastery-checklist" class="slide level2">
+<h2>Mastery checklist</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>✓</span> Explain sample → quantize → encode with the bridge figure.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Convert counts ↔︎ millivolts, in your head, with integers.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Trace a SAR conversion and budget its time from 8 MHz.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Configure a channel and read it by polling—and by interrupt.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Verify <code>DR</code>, <code>EOC</code>, <code>CONT</code>, and the analog <code>MODER</code> in the SFR view.</p>
+</div>
+</div>
+<p>Next: the bridge to assembly—what the compiler made of everything you have written.</p>
+</section>
+<section id="exit-ticket" class="slide level2">
+<h2>Exit ticket</h2>
+<p>The knob reads <code>raw = 1241</code> on the 12-bit scale.</p>
+<div class="vertical-list ticket-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>VOLTAGE:</strong> How many millivolts is that?</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>CONTROL:</strong> What LED duty does the L08 map command?</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>REGISTER:</strong> Which register held 1241, and what cleared the ready flag?</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <strong>HARDWARE:</strong> How many comparator decisions produced this number?</p>
+</div>
+</div>
+<div class="source-note">
+<p>Every concept in this lecture, with page-linked sources: <a href="../../../resources/references/academic_references.html">academic references</a>.</p>
+</div>
+
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>EE5203 - L10</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../../../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../../../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+
+        height: 900,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

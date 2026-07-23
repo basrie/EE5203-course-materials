@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>8-bit SAR ADC Animation</title>
+  <style>
+    :root {
+      --bg: #f5f5f5;
+      --panel-bg: #ffffff;
+      --border: #cccccc;
+      --accent: #0066cc;
+      --accent-soft: #e0f0ff;
+      --text: #222222;
+      --danger: #cc0000;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 0 0 8px;
+      text-align: center;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: var(--panel-bg);
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      padding: 20px 24px 24px;
+      box-sizing: border-box;
+    }
+
+    .top-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .slider-group {
+      flex: 1 1 260px;
+      min-width: 260px;
+    }
+
+    .slider-group label {
+      font-size: 18px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .slider-group input[type="range"] {
+      width: 100%;
+    }
+
+    .slider-value {
+      font-size: 18px;
+      margin-top: 4px;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .controls button {
+      font-size: 16px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--accent-soft);
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: 600;
+      min-width: 90px;
+    }
+
+    .controls button.primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .controls button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .speed-group {
+      font-size: 14px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .speed-group input[type="range"] {
+      width: 140px;
+    }
+
+    .info-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin: 8px 0 10px;
+      font-size: 16px;
+    }
+
+    .info-block {
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: #f9fafb;
+      flex: 1 1 260px;
+      min-width: 260px;
+    }
+
+    .info-block strong {
+      font-weight: 700;
+    }
+
+    .bits-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .bit-box {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 2px solid #cccccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      background: #ffffff;
+      box-sizing: border-box;
+    }
+
+    .bit-box.bit-1 {
+      background: #e3f5ff;
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .bit-box.current {
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.4);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      margin: 8px auto 0;
+      height: 300px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      font-size: 15px;
+      margin-top: 6px;
+      justify-content: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-line {
+      width: 20px;
+      height: 0;
+      border-top: 3px solid #000;
+    }
+
+    .legend-line.dashed {
+      border-style: dashed;
+    }
+
+    .legend-line.vin {
+      border-color: var(--danger);
+    }
+
+    .legend-line.dac {
+      border-color: var(--accent);
+    }
+
+    .footer-note {
+      margin-top: 10px;
+      font-size: 14px;
+      text-align: center;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 700px) {
+      h1 { font-size: 22px; }
+      .subtitle { font-size: 16px; }
+      .slider-group label,
+      .slider-value,
+      .info-row { font-size: 15px; }
+      .controls button { font-size: 14px; }
+      .bit-box {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+      }
+      canvas { height: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>8-bit SAR ADC</h1>
+    <div class="subtitle">Successive Approximation – V_DAC vs Time</div>
+
+    <div class="top-row">
+      <div class="slider-group">
+        <label for="vinSlider">Input Voltage V_in (as fraction of V_ref)</label>
+        <input id="vinSlider" type="range" min="0" max="1000" step="1" value="600" />
+        <div class="slider-value" id="vinLabel"></div>
+      </div>
+
+      <div class="controls">
+        <div class="button-row">
+          <button id="playBtn" class="primary">Play</button>
+          <button id="stepBtn">Step</button>
+          <button id="resetBtn">Reset</button>
+        </div>
+        <div class="speed-group">
+          <span>Step duration:</span>
+          <input id="speedSlider" type="range" min="300" max="1500" step="100" value="700" />
+          <span id="speedLabel">700 ms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-block" id="numericInfo"></div>
+      <div class="info-block">
+        <div><strong>Bit Decisions (MSB → LSB)</strong></div>
+        <div class="bits-row" id="bitsRow"></div>
+      </div>
+    </div>
+
+    <canvas id="sarCanvas" width="1024" height="300"></canvas>
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-line vin dashed"></div>
+        <span>V_in (sample)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-line dac"></div>
+        <span>V_DAC (test value per step)</span>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      8-bit resolution → 256 levels (0–255).  
+      At each step: if V_DAC ≤ V_in, that bit is 1; otherwise it is 0.
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const BITS = 8;
+      const MAX_CODE = (1 << BITS) - 1; // 255
+
+      const vinSlider   = document.getElementById("vinSlider");
+      const vinLabel    = document.getElementById("vinLabel");
+      const playBtn     = document.getElementById("playBtn");
+      const stepBtn     = document.getElementById("stepBtn");
+      const resetBtn    = document.getElementById("resetBtn");
+      const numericInfo = document.getElementById("numericInfo");
+      const bitsRow     = document.getElementById("bitsRow");
+      const canvas      = document.getElementById("sarCanvas");
+      const ctx         = canvas.getContext("2d");
+
+      const speedSlider = document.getElementById("speedSlider");
+      const speedLabel  = document.getElementById("speedLabel");
+
+      let vin = 0.6;
+      let steps = [];
+      let finalCode = 0;
+      let currentStepIndex = -1;
+      let isPlaying = false;
+      let timerId = null;
+      let stepInterval = Number(speedSlider.value);
+
+      function formatPercent(x) {
+        return (x * 100).toFixed(1) + " %";
+      }
+
+      function computeSarSteps() {
+        steps = [];
+        let resultCode = 0;
+        for (let bit = BITS - 1; bit >= 0; bit--) {
+          const trial = resultCode | (1 << bit);
+          const dacVal = trial / MAX_CODE;
+          const keep = dacVal <= vin;
+          if (keep) resultCode = trial;
+          steps.push({ bit, trial, dacVal, keep, codeAfter: resultCode });
+        }
+        finalCode = steps.length ? steps[steps.length - 1].codeAfter : 0;
+      }
+
+      function updateVinFromSlider() {
+        vin = Number(vinSlider.value) / 1000.0;
+        vinLabel.textContent =
+          "V_in ≈ " +
+          formatPercent(vin) +
+          " of V_ref  (ideal code ≈ " +
+          Math.round(vin * MAX_CODE) +
+          ")";
+        computeSarSteps();
+        currentStepIndex = -1;
+        stopPlaying();
+        updateBitsRow();
+        draw();
+        updateNumericInfo();
+      }
+
+      function buildBitsRow() {
+        bitsRow.innerHTML = "";
+        for (let b = BITS - 1; b >= 0; b--) {
+          const box = document.createElement("div");
+          box.className = "bit-box";
+          box.dataset.bit = String(b);
+          box.textContent = "0";
+          bitsRow.appendChild(box);
+        }
+      }
+
+      function updateBitsRow() {
+        const boxes = bitsRow.querySelectorAll(".bit-box");
+        boxes.forEach(box => {
+          box.classList.remove("bit-1", "current");
+          box.textContent = "0";
+        });
+
+        if (currentStepIndex < 0) return;
+
+        const state = steps[currentStepIndex];
+        const codeAfter = state.codeAfter;
+
+        boxes.forEach(box => {
+          const bit = Number(box.dataset.bit);
+          const bitVal = (codeAfter >> bit) & 1;
+          if (bitVal) {
+            box.textContent = "1";
+            box.classList.add("bit-1");
+          }
+        });
+
+        const currentBit = state.bit;
+        boxes.forEach(box => {
+          const b = Number(box.dataset.bit);
+          if (b === currentBit) box.classList.add("current");
+        });
+      }
+
+      function updateNumericInfo() {
+        const stepNum = currentStepIndex + 1;
+        const totalSteps = steps.length;
+
+        if (currentStepIndex < 0) {
+          numericInfo.innerHTML =
+            "<strong>Status:</strong> Ready to start conversion<br>" +
+            "Resolution: " + BITS + " bits → " + (MAX_CODE + 1) + " levels" +
+            "<br>Press <strong>Play</strong> or <strong>Step</strong> to begin.";
+          return;
+        }
+
+        const s = steps[currentStepIndex];
+        const relation = s.keep
+          ? "V_DAC ≤ V_in → bit = 1"
+          : "V_DAC > V_in → bit = 0";
+        const codeAfter = s.codeAfter;
+
+        numericInfo.innerHTML =
+          "<strong>Step " + stepNum + " / " + totalSteps + "</strong><br>" +
+          "Current bit: b<sub>" + s.bit + "</sub><br>" +
+          "Trial code: " + s.trial +
+          "  (V_DAC ≈ " + formatPercent(s.dacVal) + " of V_ref)<br>" +
+          relation + "<br>" +
+          "Code after step: <strong>" + codeAfter + "</strong>";
+      }
+
+      function draw() {
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const left = 80;
+        const right = w - 30;
+        const top = 30;
+        const bottom = h - 50;
+
+        // axes
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = "#000";
+        ctx.beginPath();
+        ctx.moveTo(left, top);
+        ctx.lineTo(left, bottom);
+        ctx.lineTo(right, bottom);
+        ctx.stroke();
+
+        ctx.font = "16px system-ui";
+        ctx.fillStyle = "#000";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillText("Time / Steps", (left + right) / 2, bottom + 20);
+
+        ctx.save();
+        ctx.translate(20, (top + bottom) / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("V_DAC (code, 0…255)", 0, 0);
+        ctx.restore();
+
+        function yFromVal(val) {
+          return bottom - val * (bottom - top);
+        }
+
+        // Y ticks for 8-bit codes
+        const ticks = [
+          { code: 0 },
+          { code: 64 },
+          { code: 128 },
+          { code: 192 },
+          { code: 255 }
+        ];
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+        ticks.forEach(t => {
+          const v = t.code / MAX_CODE;
+          const y = yFromVal(v);
+          ctx.beginPath();
+          ctx.moveTo(left - 6, y);
+          ctx.lineTo(left, y);
+          ctx.stroke();
+          const label = t.code === 255 ? "255 (FS)" : String(t.code);
+          ctx.fillText(label, left - 8, y);
+        });
+
+        // Vin horizontal dashed line
+        const yVin = yFromVal(vin);
+        ctx.save();
+        ctx.setLineDash([8, 6]);
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = "#cc0000";
+        ctx.beginPath();
+        ctx.moveTo(left, yVin);
+        ctx.lineTo(right, yVin);
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.fillStyle = "#cc0000";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "bottom";
+        ctx.font = "16px system-ui";
+        ctx.fillText("V_in", left + 6, yVin - 4);
+
+        // Steps along time axis
+        const nSteps = steps.length;
+        if (nSteps === 0) return;
+
+        const usableWidth = right - left - 20;
+        const dx = usableWidth / (nSteps + 1);
+
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.font = "14px system-ui";
+
+        for (let i = 0; i < nSteps; i++) {
+          const s = steps[i];
+          const x = left + 10 + (i + 1) * dx;
+
+          if (i > currentStepIndex) {
+            // future step marker only
+            ctx.strokeStyle = "#dddddd";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(x, bottom);
+            ctx.lineTo(x, bottom - 8);
+            ctx.stroke();
+          } else {
+            // DAC bar for completed step
+            const yDac = yFromVal(s.dacVal);
+            const barWidth = dx * 0.4;
+
+            ctx.fillStyle = (i === currentStepIndex) ? "#0066cc" : "#66aaff";
+            ctx.strokeStyle = (i === currentStepIndex) ? "#004488" : "#225577";
+            ctx.lineWidth = (i === currentStepIndex) ? 3 : 2;
+
+            ctx.beginPath();
+            ctx.rect(x - barWidth / 2, yDac, barWidth, bottom - yDac);
+            ctx.fill();
+            ctx.stroke();
+
+            // Bit value label directly above bar (1 if keep, 0 otherwise)
+            const bitVal = s.keep ? 1 : 0;
+            const labelY = Math.min(yDac - 4, top + 18); // clamp near top
+            ctx.font = "18px system-ui";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "bottom";
+            ctx.fillStyle = bitVal ? "#008800" : "#cc0000";
+            ctx.fillText(String(bitVal), x, labelY);
+          }
+
+          // bit index along time axis
+          ctx.fillStyle = "#000000";
+          ctx.font = "14px system-ui";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "top";
+          ctx.fillText("b" + s.bit, x, bottom + 4);
+        }
+      }
+
+      function stopPlaying() {
+        isPlaying = false;
+        if (timerId !== null) {
+          clearInterval(timerId);
+          timerId = null;
+        }
+        playBtn.textContent = "Play";
+      }
+
+      function stepOnce() {
+        if (currentStepIndex < steps.length - 1) {
+          currentStepIndex++;
+          updateBitsRow();
+          draw();
+          updateNumericInfo();
+        } else {
+          stopPlaying();
+        }
+      }
+
+      function startPlaying() {
+        if (isPlaying) return;
+        isPlaying = true;
+        playBtn.textContent = "Pause";
+        timerId = setInterval(stepOnce, stepInterval);
+      }
+
+      // events
+      vinSlider.addEventListener("input", updateVinFromSlider);
+
+      playBtn.addEventListener("click", () => {
+        if (!isPlaying) {
+          if (currentStepIndex >= steps.length - 1) {
+            currentStepIndex = -1;
+            updateBitsRow();
+            draw();
+            updateNumericInfo();
+          }
+          startPlaying();
+        } else {
+          stopPlaying();
+        }
+      });
+
+      stepBtn.addEventListener("click", () => {
+        stopPlaying();
+        stepOnce();
+      });
+
+      resetBtn.addEventListener("click", () => {
+        stopPlaying();
+        currentStepIndex = -1;
+        updateBitsRow();
+        draw();
+        updateNumericInfo();
+      });
+
+      speedSlider.addEventListener("input", () => {
+        stepInterval = Number(speedSlider.value);
+        speedLabel.textContent = stepInterval + " ms";
+        if (isPlaying) {
+          clearInterval(timerId);
+          timerId = setInterval(stepOnce, stepInterval);
+        }
+      });
+
+      // init
+      buildBitsRow();
+      computeSarSteps();
+      updateVinFromSlider();
+      speedLabel.textContent = stepInterval + " ms";
+    })();
+  </script>
+</body>
+</html>

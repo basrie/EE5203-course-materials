@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STM32F401 PWM Visualizer</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #0b1220;
+    --muted: #6b7280;
+    --grid: #dbe2ef;
+    --accent: #1d4ed8;
+    --pwm1: #b91c1c;   /* red */
+    --pwm2: #6d28d9;   /* purple */
+    --counter: #0f766e;/* teal */
+  }
+  html, body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    margin: 0;
+  }
+  header { padding: 18px 20px 8px; }
+  h1 { font-size: 28px; margin: 0 0 8px 0; letter-spacing: 0.2px; }
+  .panel {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(120px,1fr));
+    gap: 14px;
+    padding: 12px 20px 14px;
+    border-top: 1px solid #eef2f7;
+    border-bottom: 1px solid #eef2f7;
+  }
+  label { font-size: 16px; display: block; margin-bottom: 6px; color: var(--muted); }
+  input[type="number"], select {
+    font-size: 18px; padding: 8px 10px; width: 100%; border: 1.5px solid #d1d5db; border-radius: 10px; background: #fff;
+  }
+  .controls { display: flex; align-items: center; gap: 10px; padding: 10px 20px 12px; }
+  button { font-size: 18px; padding: 10px 16px; border: none; border-radius: 12px; background: var(--accent); color: #fff; cursor: pointer; box-shadow: 0 2px 10px rgba(29,78,216,0.16); }
+  button.secondary { background: #0f766e; }
+  button.ghost { background: #eef2ff; color: #1e3a8a; }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  .stats { margin-left: 16px; font-size: 18px; color: var(--muted); }
+  .wrap { padding: 8px 16px 24px; }
+  canvas {
+    width: 100%;
+    height: 560px;        /* fit inside slide without scroll */
+    border-radius: 14px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    background: #fff;
+  }
+  .legend { display: flex; gap: 18px; align-items: center; padding: 6px 22px 0; font-size: 18px; }
+  .chip { display:inline-flex; align-items:center; gap:10px; padding: 6px 12px; border-radius: 999px; background:#f6f7fb; border:1px solid #edf0f6; }
+  .dot { width:14px; height:14px; border-radius:50%; }
+  .duty { font-size: 18px; color: var(--muted); padding: 6px 22px 14px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>STM32F401 PWM Visualizer</h1>
+</header>
+
+<div class="panel">
+  <div>
+    <label>Alignment</label>
+    <select id="alignment">
+      <option value="edge">Edge-aligned (upcount)</option>
+      <option value="center">Center-aligned (up/down)</option>
+    </select>
+  </div>
+
+  <div>
+    <label>PWM Mode</label>
+    <select id="mode">
+      <option value="1">Mode 1</option>
+      <option value="2">Mode 2</option>
+    </select>
+  </div>
+
+  <div>
+    <label>ARR</label>
+    <input id="arr" type="number" min="1" value="1000" step="1" />
+  </div>
+
+  <div>
+    <label>CCR1</label>
+    <input id="ccr1" type="number" min="0" value="500" step="1" />
+  </div>
+
+  <div>
+    <label>CCR2</label>
+    <input id="ccr2" type="number" min="0" value="750" step="1" />
+  </div>
+
+  <div>
+    <label>Speed (ticks / sec)</label>
+    <input id="speed" type="number" min="10" max="2000" value="400" step="10" />
+  </div>
+</div>
+
+<div class="controls">
+  <button id="play">▶ Play</button>
+  <button id="pause" class="ghost" disabled>⏸ Pause</button>
+  <button id="step" class="secondary">Step</button>
+  <button id="reset" class="ghost">Reset</button>
+  <div class="stats" id="stats">CNT: 0 ↑ • Period ticks: —</div>
+</div>
+
+<div class="legend">
+  <span class="chip"><span class="dot" style="background:var(--counter)"></span>Counter</span>
+  <span class="chip"><span class="dot" style="background:var(--pwm1)"></span>PWM1 (CCR1)</span>
+  <span class="chip"><span class="dot" style="background:var(--pwm2)"></span>PWM2 (CCR2)</span>
+</div>
+<div class="duty" id="duty"></div>
+
+<div class="wrap">
+  <canvas id="plot" width="1400" height="540"></canvas>
+</div>
+
+<script>
+(function () {
+  // DOM
+  const canvas = document.getElementById('plot');
+  const ctx = canvas.getContext('2d');
+
+  const alignmentEl = document.getElementById('alignment');
+  const modeEl = document.getElementById('mode');
+  const arrEl = document.getElementById('arr');
+  const ccr1El = document.getElementById('ccr1');
+  const ccr2El = document.getElementById('ccr2');
+  const speedEl = document.getElementById('speed');
+
+  const playBtn = document.getElementById('play');
+  const pauseBtn = document.getElementById('pause');
+  const stepBtn = document.getElementById('step');
+  const resetBtn = document.getElementById('reset');
+
+  const statsEl = document.getElementById('stats');
+  const dutyEl = document.getElementById('duty');
+
+  // Hi-DPI canvas scale for crisp lines
+  function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  // State
+  let CNT = 0;          // counter
+  let DIR = +1;         // +1 up, -1 down
+  let running = false;
+  let lastTime = 0;
+
+  // Wave buffers (store only Y; X derived from index so we can window correctly)
+  const maxPoints = 5000;     // total kept in memory
+  const periodsToShow = 4;    // desired full periods visible before sliding
+  function targetWindow() { return Math.max(Math.floor(periodsToShow * periodTicks()), 300); }
+  let counterY = [], pwm1Y = [], pwm2Y = [];
+
+  function clampCCR() {
+    const ARR = Math.max(1, parseInt(arrEl.value || 0, 10));
+    arrEl.value = ARR;
+    if (+ccr1El.value > ARR) ccr1El.value = ARR;
+    if (+ccr2El.value > ARR) ccr2El.value = ARR;
+    if (+ccr1El.value < 0) ccr1El.value = 0;
+    if (+ccr2El.value < 0) ccr2El.value = 0;
+  }
+
+  function periodTicks() {
+    const ARR = +arrEl.value;
+    return alignmentEl.value === 'edge' ? (ARR + 1) : (2 * ARR);
+  }
+
+  function dutyString() {
+    const ARR = +arrEl.value; const mode = +modeEl.value; const c1 = +ccr1El.value; const c2 = +ccr2El.value;
+    let d1, d2, formula;
+    if (alignmentEl.value === 'edge') {
+      if (mode === 1) { d1 = (c1 / (ARR + 1)); d2 = (c2 / (ARR + 1)); formula = 'Duty = CCR / (ARR + 1)'; }
+      else { d1 = 1 - (c1 / (ARR + 1)); d2 = 1 - (c2 / (ARR + 1)); formula = 'Duty = 1 − CCR / (ARR + 1)'; }
+    } else {
+      if (mode === 1) { d1 = (c1 / ARR); d2 = (c2 / ARR); formula = 'Duty = CCR / ARR'; }
+      else { d1 = 1 - (c1 / ARR); d2 = 1 - (c2 / ARR); formula = 'Duty = 1 − CCR / ARR'; }
+    }
+    d1 = Math.max(0, Math.min(1, d1)); d2 = Math.max(0, Math.min(1, d2));
+    return `PWM1: ${(d1 * 100).toFixed(1)}%\t•\tPWM2: ${(d2 * 100).toFixed(1)}%\t•\t${formula}`;
+  }
+
+  function ocRef(cnt, ccr, mode) { const base = cnt < ccr ? 1 : 0; return (mode === 1) ? base : 1 - base; }
+
+  function pushSample() {
+    const mode = +modeEl.value;
+    const o1 = ocRef(CNT, +ccr1El.value, mode);
+    const o2 = ocRef(CNT, +ccr2El.value, mode);
+
+    counterY.push(CNT); pwm1Y.push(o1); pwm2Y.push(o2);
+    if (counterY.length > maxPoints) { counterY.shift(); pwm1Y.shift(); pwm2Y.shift(); }
+
+    const ARR = +arrEl.value;
+    if (alignmentEl.value === 'edge') { CNT += 1; if (CNT > ARR) CNT = 0; DIR = +1; }
+    else { CNT += DIR; if (CNT >= ARR) { CNT = ARR; DIR = -1; } else if (CNT <= 0) { CNT = 0; DIR = +1; } }
+
+    statsEl.textContent = `CNT: ${CNT} ${DIR > 0 ? '↑' : '↓'} • Period ticks: ${periodTicks()}`;
+    dutyEl.textContent = dutyString();
+  }
+
+  // Drawing helpers
+  function drawSeriesY(ys, yMin, yMax, yOffset, color, thick) {
+    const n = ys.length; if (!n) return {lastX:0,lastY:0};
+    const W = canvas.clientWidth, H = canvas.clientHeight;
+    const rowGap = 26, topPad = 38, bottomPad = 28; const rowH = (H - topPad - bottomPad - 2*rowGap) / 3;
+
+    const tgt = targetWindow();                 // ~4 periods
+    const centerFrac = 0.60;                    // where the newest point sits once sliding
+    const xScale = (centerFrac * W) / Math.max(1, (tgt - 1)); // fixed so growth starts left
+
+    const sliding = n > tgt; const win = sliding ? tgt : n; const start = sliding ? (n - tgt) : 0;
+
+    ctx.lineWidth = thick ? 3.5 : 2.5; ctx.strokeStyle = color; ctx.beginPath();
+    let lastX=0, lastY=0;
+    for (let i = 0; i < win; i++) {
+      const px = i * xScale; const norm = (ys[start + i] - yMin) / (yMax - yMin || 1);
+      const py = yOffset + (1 - norm) * rowH; if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      lastX = px; lastY = py;
+    }
+    ctx.stroke(); if (sliding) lastX = centerFrac * W; return {lastX, lastY};
+  }
+
+  function draw() {
+    const W = canvas.clientWidth, H = canvas.clientHeight; ctx.clearRect(0,0,canvas.width,canvas.height);
+    const topPad = 38, bottomPad = 28, rowGap = 26; const rowH = (H - topPad - bottomPad - 2*rowGap) / 3;
+
+    // Grid
+    ctx.lineWidth = 1; ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid');
+    ctx.beginPath(); for (let gx = 0; gx < W; gx += 50) { ctx.moveTo(gx + 0.5, 0); ctx.lineTo(gx + 0.5, H); }
+    for (let gy = topPad; gy <= H-bottomPad; gy += 50) { ctx.moveTo(0, gy + 0.5); ctx.lineTo(W, gy + 0.5); } ctx.stroke();
+
+    // Labels
+    ctx.fillStyle = '#111827'; ctx.font = 'bold 22px system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+    ctx.fillText('Counter', 16, topPad - 10); ctx.fillText('PWM1 (CCR1)', 16, topPad + rowH + rowGap - 10); ctx.fillText('PWM2 (CCR2)', 16, topPad + 2*(rowH + rowGap) - 10);
+
+    const ARR = +arrEl.value; const cs = getComputedStyle(document.documentElement);
+
+    // Counter series
+    const m = drawSeriesY(counterY, 0, ARR, topPad, cs.getPropertyValue('--counter'), true);
+
+    // Reference lines on Counter (ARR, CCR1, CCR2)
+    const yFromCounter = (val) => topPad + (1 - ((val - 0) / (ARR - 0 || 1))) * rowH;
+    ctx.setLineDash([4,6]); ctx.lineWidth = 2; ctx.strokeStyle = '#64748b';
+    ctx.beginPath(); const yARR = yFromCounter(ARR); ctx.moveTo(0, yARR); ctx.lineTo(W, yARR); ctx.stroke();
+    ctx.fillStyle = '#64748b'; ctx.font = 'bold 16px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial'; ctx.fillText('ARR', Math.min(W-60, m.lastX+10), Math.max(24, yARR-6));
+
+    ctx.setLineDash([8,6]); ctx.lineWidth = 2; ctx.strokeStyle = cs.getPropertyValue('--pwm1');
+    const CCR1 = +ccr1El.value; const yC1 = yFromCounter(CCR1); ctx.beginPath(); ctx.moveTo(0, yC1); ctx.lineTo(W, yC1); ctx.stroke();
+    ctx.fillStyle = cs.getPropertyValue('--pwm1'); ctx.fillText('CCR1', Math.min(W-80, m.lastX+10), Math.max(24, yC1-6));
+
+    ctx.setLineDash([8,6]); ctx.lineWidth = 2; ctx.strokeStyle = cs.getPropertyValue('--pwm2');
+    const CCR2 = +ccr2El.value; const yC2 = yFromCounter(CCR2); ctx.beginPath(); ctx.moveTo(0, yC2); ctx.lineTo(W, yC2); ctx.stroke();
+    ctx.fillStyle = cs.getPropertyValue('--pwm2'); ctx.fillText('CCR2', Math.min(W-80, m.lastX+10), Math.max(24, yC2-6)); ctx.setLineDash([]);
+
+    // PWM rows
+    drawSeriesY(pwm1Y, 0, 1, topPad + rowH + rowGap, cs.getPropertyValue('--pwm1'), true);
+    drawSeriesY(pwm2Y, 0, 1, topPad + 2*(rowH + rowGap), cs.getPropertyValue('--pwm2'), true);
+
+    // Thin vertical tracker at current CNT X to visualize edge alignment
+    ctx.save();
+    ctx.strokeStyle = cs.getPropertyValue('--counter') || '#0f766e';
+    ctx.globalAlpha = 0.65;
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 6]);
+    ctx.beginPath();
+    ctx.moveTo(Math.round(m.lastX) + 0.5, 0); // crisp line
+    ctx.lineTo(Math.round(m.lastX) + 0.5, H);
+    ctx.stroke();
+    ctx.restore();
+
+    // Marker and current CNT label (avoid redeclaration conflicts)
+    ctx.fillStyle = cs.getPropertyValue('--counter'); ctx.beginPath(); ctx.arc(m.lastX, m.lastY, 5, 0, Math.PI*2); ctx.fill();
+    ctx.font = 'bold 18px system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+    const labelText = `CNT=${CNT}`; const labelWidth = ctx.measureText(labelText).width;
+    const tx = Math.min(Math.max(8, m.lastX + 8), W - labelWidth - 8); const ty = Math.max(24, m.lastY - 8);
+    ctx.fillText(labelText, tx, ty);
+
+    // Baselines for PWM rows
+    ctx.strokeStyle = '#94a3b8'; ctx.setLineDash([6,8]); ctx.beginPath();
+    const y1a = topPad + rowH + rowGap + rowH; const y2a = topPad + 2*(rowH + rowGap) + rowH;
+    ctx.moveTo(0, y1a); ctx.lineTo(W, y1a); ctx.moveTo(0, y2a); ctx.lineTo(W, y2a); ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  // Animation loop
+  function loop(ts) {
+    const spd = Math.max(1, parseInt(speedEl.value || 400, 10)); const dtNeeded = 1000 / spd; if (!lastTime) lastTime = ts;
+    if (running) { const elapsed = ts - lastTime; if (elapsed >= dtNeeded) { const steps = Math.max(1, Math.floor(elapsed / dtNeeded)); for (let i=0;i<steps;i++) pushSample(); lastTime = ts; } }
+    draw(); requestAnimationFrame(loop);
+  }
+
+  // Events
+  [alignmentEl, modeEl, arrEl, ccr1El, ccr2El, speedEl].forEach(el => {
+    el.addEventListener('input', () => { clampCCR(); counterY = []; pwm1Y = []; pwm2Y = []; dutyEl.textContent = dutyString(); });
+  });
+  playBtn.addEventListener('click', () => { running = true; playBtn.disabled = true; pauseBtn.disabled = false; playBtn.classList.add('ghost'); });
+  pauseBtn.addEventListener('click', () => { running = false; playBtn.disabled = false; pauseBtn.disabled = true; playBtn.classList.remove('ghost'); });
+  stepBtn.addEventListener('click', () => { running = false; playBtn.disabled = false; pauseBtn.disabled = true; pushSample(); draw(); });
+  resetBtn.addEventListener('click', () => { running = false; playBtn.disabled = false; pauseBtn.disabled = true; CNT = 0; DIR = +1; counterY = []; pwm1Y = []; pwm2Y = []; lastTime = 0; statsEl.textContent = `CNT: ${CNT} ${DIR > 0 ? '↑' : '↓'} • Period ticks: ${periodTicks()}`; dutyEl.textContent = dutyString(); draw(); });
+
+  // Init
+  clampCCR(); dutyEl.textContent = dutyString(); draw(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

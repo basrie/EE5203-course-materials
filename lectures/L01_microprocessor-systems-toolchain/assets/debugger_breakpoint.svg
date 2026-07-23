@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="520" viewBox="0 0 1300 520" role="img" aria-labelledby="title desc">
+  <title id="title">Breakpoint and variables in a debugger</title>
+  <desc id="desc">A simplified debugger window shows execution paused before a toggle call and variables available for inspection.</desc>
+  <defs><filter id="s" x="-10%" y="-20%" width="120%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#17384c" flood-opacity=".17"/></filter></defs>
+  <rect width="1300" height="520" rx="28" fill="#f8fafc"/>
+  <g filter="url(#s)">
+    <rect x="50" y="38" width="1200" height="442" rx="18" fill="#eef2f5" stroke="#9eafb9" stroke-width="3"/>
+    <rect x="50" y="38" width="1200" height="52" rx="18" fill="#174f73"/>
+    <circle cx="82" cy="64" r="8" fill="#ed6a5e"/><circle cx="108" cy="64" r="8" fill="#f4bf4f"/><circle cx="134" cy="64" r="8" fill="#61c454"/>
+    <text x="180" y="72" font-family="Quicksand,Arial,sans-serif" font-size="22" font-weight="700" fill="white">main.c — Debug</text>
+    <rect x="75" y="112" width="760" height="340" rx="10" fill="#202b33"/>
+    <rect x="862" y="112" width="360" height="340" rx="10" fill="white" stroke="#ccd9e0" stroke-width="2"/>
+    <rect x="862" y="112" width="360" height="49" rx="10" fill="#e2edf3"/>
+    <text x="888" y="144" font-family="Quicksand,Arial,sans-serif" font-size="22" font-weight="700" fill="#174f73">VARIABLES</text>
+    <g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="23" fill="#d8e4ea">
+      <text x="125" y="170">uint32_t toggle_count = 0;</text>
+      <text x="125" y="225">while (1)</text><text x="125" y="265">{</text>
+      <text x="160" y="310">HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);</text>
+      <text x="160" y="355">toggle_count++;</text>
+      <text x="160" y="400">HAL_Delay(500);</text><text x="125" y="438">}</text>
+    </g>
+    <circle cx="96" cy="310" r="12" fill="#e65353" stroke="#ffd7d7" stroke-width="3"/>
+    <path d="M115 295 L143 310 L115 325Z" fill="#f0c44c"/>
+    <rect x="150" y="280" width="650" height="42" rx="5" fill="#31566c" opacity=".7"/>
+    <g font-family="Quicksand,Arial,sans-serif" font-size="21" fill="#355262">
+      <text x="888" y="205" font-weight="700">toggle_count</text><text x="1160" y="205" text-anchor="end">0</text>
+      <path d="M885 224 H1197" stroke="#dce6eb" stroke-width="2"/>
+      <text x="888" y="264" font-weight="700">LD2_Pin</text><text x="1160" y="264" text-anchor="end">0x0020</text>
+      <path d="M885 283 H1197" stroke="#dce6eb" stroke-width="2"/>
+      <text x="888" y="323" font-weight="700">execution</text><text x="1160" y="323" text-anchor="end" fill="#b23f3f">paused</text>
+    </g>
+    <rect x="888" y="360" width="280" height="58" rx="12" fill="#eaf3f8"/>
+    <text x="1028" y="386" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="18" fill="#355262">Step once, then ask:</text>
+    <text x="1028" y="409" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="19" font-weight="700" fill="#174f73">what changed?</text>
+  </g>
+</svg>

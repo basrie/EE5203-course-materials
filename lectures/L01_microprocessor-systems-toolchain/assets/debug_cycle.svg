@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="390" viewBox="0 0 1400 390" role="img" aria-labelledby="title desc">
+  <style>@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&amp;display=swap");</style>
+  <title id="title">Evidence-based debugging cycle</title><desc id="desc">Predict, run, observe, compare, and change one thing before repeating.</desc>
+  <defs><marker id="a" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L14 7 L0 14 Z" fill="#3d7f9f"/></marker><filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-opacity="0.16"/></filter></defs>
+  <rect width="1400" height="390" rx="28" fill="#f8fafc"/>
+  <g stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#a)"><path d="M275 155 H325"/><path d="M545 155 H595"/><path d="M815 155 H865"/><path d="M1085 155 H1135"/></g>
+  <g filter="url(#s)" font-family="Quicksand,Arial,sans-serif" text-anchor="middle">
+    <rect x="50" y="95" width="220" height="120" rx="24" fill="#e4f1f7"/><text x="160" y="150" font-size="31" font-weight="700" fill="#174f73">PREDICT</text><text x="160" y="185" font-size="21" fill="#526c7c">expected state</text>
+    <rect x="330" y="95" width="210" height="120" rx="24" fill="#d9ebf4"/><text x="435" y="150" font-size="31" font-weight="700" fill="#174f73">RUN</text><text x="435" y="185" font-size="21" fill="#526c7c">controlled test</text>
+    <rect x="600" y="95" width="210" height="120" rx="24" fill="#174f73"/><text x="705" y="150" font-size="31" font-weight="700" fill="white">OBSERVE</text><text x="705" y="185" font-size="21" fill="#d9edf7">collect evidence</text>
+    <rect x="870" y="95" width="210" height="120" rx="24" fill="#fff0dc"/><text x="975" y="150" font-size="31" font-weight="700" fill="#95511d">COMPARE</text><text x="975" y="185" font-size="21" fill="#735a3d">expected vs actual</text>
+    <rect x="1140" y="80" width="220" height="150" rx="24" fill="#e8f4eb"/><text x="1250" y="140" font-size="27" font-weight="700" fill="#326747">CHANGE</text><text x="1250" y="175" font-size="27" font-weight="700" fill="#326747">ONE THING</text><text x="1250" y="207" font-size="20" fill="#456d54">smallest next test</text>
+  </g>
+  <path d="M1250 245 C1250 340 160 340 160 235" fill="none" stroke="#708d9d" stroke-width="4" stroke-dasharray="10 9" marker-end="url(#a)"/>
+  <text x="700" y="365" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="25" fill="#526c7c">Debugging is a measurement process, not random modification.</text>
+</svg>

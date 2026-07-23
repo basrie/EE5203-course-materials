@@ -1,0 +1,71 @@
+:root {
+  --ee-blue: #114b72;
+  --ee-teal: #1677a8;
+  --ee-pale: #eaf3f8;
+  --ee-ink: #182536;
+  --ee-muted: #526878;
+  --ee-line: #c9d7e1;
+}
+
+body {
+  color: var(--ee-ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.45;
+}
+
+h1, h2, h3 {
+  color: var(--ee-blue);
+}
+
+h2 {
+  border-bottom: 2px solid var(--ee-line);
+  padding-bottom: 0.2rem;
+}
+
+table {
+  font-size: 0.92rem;
+}
+
+thead {
+  background: var(--ee-pale);
+}
+
+.mission {
+  background: var(--ee-pale);
+  border-left: 6px solid var(--ee-teal);
+  padding: 0.8rem 1rem;
+  margin: 0.8rem 0 1rem;
+  font-size: 1.08rem;
+  font-weight: 650;
+}
+
+.compact li {
+  margin-bottom: 0.15rem;
+}
+
+.checklist li {
+  list-style: none;
+  margin-left: -1.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.small {
+  color: var(--ee-muted);
+  font-size: 0.88rem;
+}
+
+code {
+  color: #803b1f;
+}
+
+@media print {
+  body {
+    font-size: 10.5pt;
+    line-height: 1.28;
+  }
+  h1 { font-size: 20pt; }
+  h2 { font-size: 14pt; margin-top: 0.8rem; }
+  h3 { font-size: 11.5pt; margin-top: 0.55rem; }
+  table { font-size: 9.3pt; }
+  pre { font-size: 8.7pt; }
+}

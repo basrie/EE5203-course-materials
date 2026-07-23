@@ -100,11 +100,46 @@
   font-weight: 700;
 }
 
-.reveal .vertical-item p > strong:first-of-type {
+/* Label style applies ONLY to a bold that immediately follows the number
+   span — mid-sentence bold stays normal inline emphasis. */
+.reveal .vertical-item p > span:first-child + strong {
   display: inline-block;
   width: 330px;
   color: #233f51;
   letter-spacing: 0.025em;
+}
+
+/* Hanging indent: wrapped lines continue under the text column instead of
+   falling back to the left edge under the number. The padding equals the
+   column(s) the first line starts with; the negative text-indent pulls only
+   the first line back so nothing moves visually until a line wraps. */
+.reveal .vertical-item p {
+  padding-left: 76px;
+  text-indent: -76px;
+}
+
+.reveal .vertical-item p:has(> span:first-child + strong) {
+  padding-left: 406px;   /* number (76) + label (330) */
+  text-indent: -406px;
+}
+
+.reveal .prompt-item p {
+  padding-left: 54px;
+  text-indent: -54px;
+}
+
+.reveal .check-row p {
+  padding-left: 42px;
+  text-indent: -42px;
+}
+
+/* text-indent inherits into inline-block children and would shift their
+   content out of the box — reset it on the number spans and labels. */
+.reveal .vertical-item p > span:first-child,
+.reveal .vertical-item p > span:first-child + strong,
+.reveal .prompt-item p > span:first-child,
+.reveal .check-row p > span:first-child {
+  text-indent: 0;
 }
 
 .reveal .compact-list .vertical-item {
@@ -181,6 +216,12 @@
 .reveal .ticket-list .vertical-item {
   padding-top: 0.58em;
   padding-bottom: 0.58em;
+}
+
+/* Exit tickets that share the slide with a QR column need tighter rows. */
+.reveal .compact-tickets .vertical-item {
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
 }
 
 .reveal .interface-signature {

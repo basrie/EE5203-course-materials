@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="300" viewBox="0 0 1400 300" role="img" aria-labelledby="title desc">
+  <style>@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&amp;display=swap");</style>
+  <title id="title">Weekly learning cycle</title><desc id="desc">Prepare, learn, practise, lab, explain, and review form a repeated learning cycle.</desc>
+  <defs><marker id="a" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L14 7 L0 14 Z" fill="#477f9b"/></marker><filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-opacity="0.15"/></filter></defs>
+  <rect width="1400" height="300" rx="28" fill="#f8fafc"/>
+  <g stroke="#477f9b" stroke-width="4.5" marker-end="url(#a)"><path d="M230 145 H275"/><path d="M450 145 H495"/><path d="M670 145 H715"/><path d="M890 145 H935"/><path d="M1110 145 H1155"/></g>
+  <g filter="url(#s)" font-family="Quicksand,Arial,sans-serif" font-size="27" font-weight="700" text-anchor="middle">
+    <rect x="45" y="85" width="185" height="120" rx="22" fill="#e9eef2"/><text x="137" y="154" fill="#405a68">PREPARE</text>
+    <rect x="275" y="85" width="175" height="120" rx="22" fill="#e4f1f7"/><text x="362" y="154" fill="#174f73">LEARN</text>
+    <rect x="495" y="85" width="175" height="120" rx="22" fill="#d9ebf4"/><text x="582" y="154" fill="#174f73">PRACTISE</text>
+    <rect x="715" y="85" width="175" height="120" rx="22" fill="#174f73"/><text x="802" y="154" fill="white">LAB</text>
+    <rect x="935" y="85" width="175" height="120" rx="22" fill="#fff0dc"/><text x="1022" y="154" fill="#95511d">EXPLAIN</text>
+    <rect x="1155" y="85" width="200" height="120" rx="22" fill="#e8f4eb"/><text x="1255" y="154" fill="#326747">REVIEW</text>
+  </g>
+  <path d="M1255 218 C1255 275 137 275 137 218" fill="none" stroke="#94a9b4" stroke-width="4" stroke-dasharray="9 8" marker-end="url(#a)"/>
+</svg>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Timer Counter (CNT) → ARR Overflow Animation</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --panel: #f6f8fc;
+    --ink: #0f172a;
+    --muted: #475569;
+    --accent: #2563eb;
+    --ok: #16a34a;
+    --warn: #dc2626;
+    --shadow: 0 10px 30px rgba(2,6,23,0.08);
+  }
+  html, body {
+    height: 100%;
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  }
+  .wrap {
+    max-width: 1100px;
+    margin: 32px auto;
+    padding: 16px;
+  }
+  h1 {
+    margin: 0 0 8px 0;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .subtitle {
+    color: var(--muted);
+    margin-bottom: 18px;
+    font-size: 1.05rem;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 16px;
+  }
+  .display {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 22px;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 14px;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .lcd {
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    font-size: clamp(40px, 7vw, 92px);
+    letter-spacing: 0.02em;
+  }
+  .badge {
+    font-size: 0.95rem;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #3730a3;
+    border: 1px dashed #c7d2fe;
+  }
+  .progress-wrap {
+    position: relative;
+    height: 22px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress {
+    position: absolute;
+    inset: 0 0 0 0;
+    transform-origin: left center;
+    background: linear-gradient(90deg, var(--accent), #22c55e);
+    width: 0%;
+  }
+  .tickbar {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(to right, rgba(15,23,42,0.12) 1px, transparent 1px);
+    background-size: calc(100% / 16) 100%;
+    mask: linear-gradient(#000, #000);
+    opacity: .35;
+  }
+  .labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: .9rem;
+    color: var(--muted);
+  }
+  .event {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #fee2e2;
+    background: #fef2f2;
+    color: #991b1b;
+    font-weight: 700;
+    visibility: hidden;
+  }
+  .event.flash {
+    animation: flash 550ms ease-out;
+  }
+  @keyframes flash {
+    0% { background:#fee2e2; box-shadow: 0 0 0 0 rgba(220,38,38,0.6); }
+    60% { background:#ffe4e6; box-shadow: 0 0 0 16px rgba(220,38,38,0.0); }
+    100% { background:#fef2f2; }
+  }
+  .controls .row { gap: 10px; }
+  .controls label {
+    font-size: .95rem;
+    color: var(--muted);
+  }
+  .controls input[type="number"] {
+    width: 120px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    font-size: 1rem;
+    background: #fff;
+  }
+  .controls input[type="range"] {
+    width: 220px;
+  }
+  .btn {
+    appearance: none;
+    border: 0;
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+  }
+  .btn.secondary {
+    background: #0ea5e9;
+  }
+  .btn.ghost {
+    background: #e2e8f0;
+    color: #0f172a;
+  }
+  .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+  .legend {
+    font-size: .95rem;
+    color: var(--muted);
+  }
+  .kbd {
+    border: 1px solid #cbd5e1;
+    border-bottom-width: 3px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-weight: 700;
+    background: #fff;
+  }
+  .minirow { display:flex; gap:16px; align-items:center; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Counter (CNT) ➜ ARR ➜ Update Event</h1>
+    <div class="subtitle">Projector‑friendly demo of a timer counting and overflowing. Use controls to change <span class="mono">ARR</span>, direction, and tick rate (prescaler).</div>
+
+    <div class="grid">
+      <section class="display panel" aria-label="Counter display">
+        <div class="row">
+          <div class="lcd" id="lcd">0</div>
+          <div class="badge">CNT</div>
+          <div class="event" id="event">UPDATE EVENT (UIF)</div>
+        </div>
+
+        <div class="progress-wrap" aria-label="progress to ARR">
+          <div class="progress" id="progress"></div>
+          <div class="tickbar"></div>
+        </div>
+        <div class="labels">
+          <div>0</div>
+          <div>ARR=<span id="arrLabel" class="mono">100</span></div>
+        </div>
+
+        <div class="legend">
+          <div class="minirow">
+            <div><strong>Mode:</strong> <span id="modeLabel">Up‑counting</span></div>
+            <div><strong>Tick:</strong> every <span id="tickMs" class="mono">15</span> ms</div>
+          </div>
+          <div class="minirow">
+            <div><strong>Reset:</strong> CNT → 0 on overflow (up) or CNT → ARR on underflow (down)</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls panel" aria-label="controls">
+        <div class="row">
+          <label><strong>ARR</strong></label>
+          <input type="number" id="arr" min="1" max="10000" value="100" />
+          <button class="btn ghost" id="setArr">Apply</button>
+        </div>
+
+        <div class="row">
+          <label><strong>Prescaler (tick rate)</strong></label>
+          <input type="range" id="psc" min="0" max="9" value="4" />
+          <span id="pscLabel" class="mono">/16</span>
+        </div>
+
+        <div class="row">
+          <label><strong>Direction</strong></label>
+          <button class="btn secondary" id="dir">Up</button>
+        </div>
+
+        <div class="row">
+          <button class="btn" id="play">▶ Play</button>
+          <button class="btn ghost" id="step">Step</button>
+          <button class="btn ghost" id="reset">Reset</button>
+        </div>
+
+        <div class="row" style="margin-top:8px">
+          <div>Keys: <span class="kbd">Space</span> Play/Pause · <span class="kbd">S</span> Step · <span class="kbd">R</span> Reset</div>
+        </div>
+
+        <hr style="margin:16px 0; border:0; border-top:1px solid #e5e7eb">
+
+        <div>
+          <strong>Notes for class</strong>
+          <ul>
+            <li><span class="mono">CNT</span> increases toward <span class="mono">ARR</span> in up‑mode; on match it issues update and reloads.</li>
+            <li>Down‑mode mirrors this: when <span class="mono">CNT</span> hits 0, it updates and reloads from <span class="mono">ARR</span>.</li>
+            <li>This demo abstracts prescaler: the slider increases the tick period to simulate slower timer clocks.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+<script>
+(() => {
+  // State
+  let ARR = 100;
+  let CNT = 0;
+  let running = false;
+  let dir = +1; // +1 up, -1 down
+  let timer = null;
+  const pscSteps = [1,2,4,8,16,32,64,128,256,512]; // symbolic prescaler steps
+  const baseMs = 4; // base tick period in ms
+  const lcd = document.getElementById('lcd');
+  const progress = document.getElementById('progress');
+  const eventEl = document.getElementById('event');
+  const arrInput = document.getElementById('arr');
+  const arrLabel = document.getElementById('arrLabel');
+  const setArrBtn = document.getElementById('setArr');
+  const psc = document.getElementById('psc');
+  const pscLabel = document.getElementById('pscLabel');
+  const tickMs = document.getElementById('tickMs');
+  const dirBtn = document.getElementById('dir');
+  const playBtn = document.getElementById('play');
+  const stepBtn = document.getElementById('step');
+  const resetBtn = document.getElementById('reset');
+  const modeLabel = document.getElementById('modeLabel');
+
+  function updateTickLabel() {
+    const ms = baseMs * pscSteps[+psc.value];
+    pscLabel.textContent = '/' + pscSteps[+psc.value];
+    tickMs.textContent = ms;
+  }
+
+  function setARR(v) {
+    ARR = Math.max(1, Math.min(10000, Math.floor(v)));
+    arrInput.value = ARR;
+    arrLabel.textContent = ARR;
+    // clamp CNT inside [0, ARR]
+    CNT = Math.max(0, Math.min(ARR, CNT));
+    render();
+  }
+
+  function showEvent() {
+    eventEl.style.visibility = 'visible';
+    eventEl.classList.remove('flash'); // restart animation
+    void eventEl.offsetWidth;
+    eventEl.classList.add('flash');
+    // auto hide after a moment
+    setTimeout(() => eventEl.style.visibility = 'hidden', 650);
+  }
+
+  function render() {
+    lcd.textContent = CNT;
+    const pct = ARR === 0 ? 0 : (CNT / ARR) * 100;
+    progress.style.width = Math.max(0, Math.min(100, pct)) + '%';
+    modeLabel.textContent = dir > 0 ? 'Up‑counting' : 'Down‑counting';
+  }
+
+  function step() {
+    if (dir > 0) {
+      if (CNT < ARR) {
+        CNT += 1;
+      } else {
+        // overflow: generate update, reload to 0
+        showEvent();
+        CNT = 0;
+      }
+    } else {
+      if (CNT > 0) {
+        CNT -= 1;
+      } else {
+        // underflow: generate update, reload to ARR
+        showEvent();
+        CNT = ARR;
+      }
+    }
+    render();
+  }
+
+  function loop() {
+    if (!running) return;
+    step();
+    const ms = baseMs * pscSteps[+psc.value];
+    timer = setTimeout(loop, ms);
+  }
+
+  function playPause() {
+    running = !running;
+    playBtn.textContent = running ? '⏸ Pause' : '▶ Play';
+    if (running) loop(); else clearTimeout(timer);
+  }
+
+  // Wire controls
+  setArrBtn.addEventListener('click', () => setARR(+arrInput.value));
+  arrInput.addEventListener('keydown', e => { if (e.key === 'Enter') setARR(+arrInput.value) });
+  psc.addEventListener('input', updateTickLabel);
+  dirBtn.addEventListener('click', () => {
+    dir = dir > 0 ? -1 : +1;
+    dirBtn.textContent = dir > 0 ? 'Up' : 'Down';
+    render();
+  });
+  playBtn.addEventListener('click', playPause);
+  stepBtn.addEventListener('click', step);
+  resetBtn.addEventListener('click', () => {
+    CNT = dir > 0 ? 0 : ARR;
+    render();
+  });
+
+  // Keyboard shortcuts
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') { e.preventDefault(); playPause(); }
+    if (e.key.toLowerCase() === 's') { step(); }
+    if (e.key.toLowerCase() === 'r') { CNT = dir > 0 ? 0 : ARR; render(); }
+  });
+
+  // Init
+  updateTickLabel();
+  setARR(ARR);
+  CNT = 0;
+  render();
+})();
+</script>
+</body>
+</html>

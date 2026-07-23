@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clock → Counter (Minimal Animation)</title>
+<style>
+  :root{
+    --bg:#ffffff;       /* light theme */
+    --fg:#0f172a;       /* slate-900 */
+    --muted:#64748b;    /* slate-500 */
+    --accent:#2563eb;   /* blue-600 */
+    --card:#f8fafc;     /* slate-50 */
+    --border:#e2e8f0;   /* slate-200 */
+  }
+  html,body{height:100%;}
+  body{
+    margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Noto Sans, "Apple Color Emoji", "Segoe UI Emoji";
+    background:var(--bg); color:var(--fg);
+    display:flex; align-items:center; justify-content:center;
+  }
+  /* Fill the iframe's box (column) with minimal framing */
+  .stage{
+    width:100%;
+    height:100%;
+    box-sizing:border-box;
+    border:1px solid var(--border);
+    border-radius:14px;
+    background:var(--card);
+    padding:14px 16px;
+    display:grid;
+    grid-template-columns: 1.1fr 0.3fr 1.5fr;
+    grid-template-rows: auto 1fr auto;
+    gap:12px;
+  }
+  .title{ grid-column:1/-1; text-align:center; font-weight:700; letter-spacing:0.5px; font-size:clamp(20px, 2.8vh, 28px);}
+
+  .box{
+    border:2px solid var(--border);
+    border-radius:16px; padding:16px;
+    background:#fff;
+  }
+  .label{font-size:clamp(18px, 2.4vh, 24px); font-weight:600;}
+  .sub{font-size:clamp(14px, 2vh, 18px); color:var(--muted)}
+
+  /* CLOCK BOX */
+  .clock-face{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:center; margin-top:8px;}
+  .led{
+    width:28px; height:28px; border-radius:8px; border:2px solid var(--border);
+    background:#e5e7eb; transition: background 120ms linear, box-shadow 120ms linear;
+  }
+  .led.high{ background: #dbeafe; box-shadow:0 0 0 4px #eff6ff inset; }
+  .led.low{  background: #fee2e2; box-shadow:0 0 0 4px #fef2f2 inset; }
+
+  .wave{
+    width:100%; height:56px; border:2px solid var(--border); border-radius:12px; background:#f8fafc; position:relative; overflow:hidden;
+  }
+  canvas{ position:absolute; inset:0; width:100%; height:100%; }
+
+  /* ARROW */
+  .arrow-wrap{ display:flex; align-items:center; justify-content:center; }
+  .arrow{ width:100%; height:100%; }
+
+  /* COUNTER BOX */
+  .count-value{ font-weight:800; line-height:1; font-variant-numeric: tabular-nums; text-align:center;
+    font-size:clamp(44px, 10vh, 96px); margin:0.2em 0 0.1em; }
+  .bits{ display:flex; justify-content:center; gap:10px; }
+  .bit{
+    width:48px; height:56px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    border:2px solid var(--border); font-weight:700; font-size:clamp(20px, 4.4vh, 38px);
+    background:#f8fafc; color:#64748b;
+    transition: transform 120ms ease, background 120ms ease, color 120ms ease, border-color 120ms ease;
+  }
+  .bit.on{ background:#ecfdf5; color:#065f46; border-color:#a7f3d0; transform:translateY(-2px); }
+
+  /* CONTROLS */
+  .controls{ grid-column:1/-1; display:flex; align-items:center; gap:10px; justify-content:center; }
+  button, input[type="range"]{
+    font-size:clamp(14px, 2.1vh, 18px);
+  }
+  button{
+    padding:10px 16px; border-radius:12px; border:2px solid var(--border); background:#fff; cursor:pointer;
+    font-weight:650;
+  }
+  button:active{ transform: translateY(1px); }
+  .accent{ border-color:#bfdbfe; background:#eff6ff; }
+  .ghost{ background:#fff; }
+  .spacer{ flex: 0 0 12px; }
+  .range-wrap{ display:flex; align-items:center; gap:8px; }
+  .range-wrap label{ font-weight:600; font-size:clamp(14px, 2vh, 18px); }
+  .hz{ font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+  <div class="stage" role="application" aria-label="Clock to counter animation">
+    <div class="title">Clock → Counter (Rising Edge Increment)</div>
+
+    <!-- CLOCK BOX -->
+    <div class="box" aria-live="polite">
+      <div class="label">Clock</div>
+      <div class="sub">Rising edge triggers the counter</div>
+
+      <div class="clock-face">
+        <div id="led" class="led low" aria-label="clock level" title="Clock Level"></div>
+        <div class="wave">
+          <canvas id="wave"></canvas>
+        </div>
+      </div>
+
+      <div class="sub" id="levelText" style="margin-top:8px">Level: LOW</div>
+    </div>
+
+    <!-- ARROW (visual link) -->
+    <div class="arrow-wrap" aria-hidden="true">
+      <svg class="arrow" viewBox="0 0 400 200">
+        <defs>
+          <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+            <polygon points="0 0, 12 6, 0 12" fill="var(--accent)" />
+          </marker>
+        </defs>
+        <line x1="20" y1="100" x2="380" y2="100" stroke="var(--accent)" stroke-width="10" marker-end="url(#arrowhead)" />
+      </svg>
+    </div>
+
+    <!-- COUNTER BOX -->
+    <div class="box">
+      <div class="label">Counter</div>
+      <div class="sub">4‑bit up-counter</div>
+      <div id="count" class="count-value" aria-label="counter value">0</div>
+      <div class="bits" aria-hidden="true">
+        <div class="bit" id="b3">0</div>
+        <div class="bit" id="b2">0</div>
+        <div class="bit" id="b1">0</div>
+        <div class="bit" id="b0">0</div>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+      <button id="toggle" class="accent" title="Play/Pause (Space)">Play</button>
+      <button id="step" class="ghost" title="Single rising edge step">Step ↑</button>
+      <button id="reset" class="ghost" title="Reset counter to 0">Reset</button>
+      <span class="spacer"></span>
+      <div class="range-wrap" title="Clock frequency">
+        <label for="speed">Clock</label>
+        <input id="speed" type="range" min="1" max="10" step="0.1" value="2"/>
+        <span class="hz" id="hz">≈ 2.0 Hz</span>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const led = document.getElementById('led');
+  const levelText = document.getElementById('levelText');
+  const countEl = document.getElementById('count');
+  const bits = [
+    document.getElementById('b3'),
+    document.getElementById('b2'),
+    document.getElementById('b1'),
+    document.getElementById('b0'),
+  ];
+  const toggleBtn = document.getElementById('toggle');
+  const stepBtn = document.getElementById('step');
+  const resetBtn = document.getElementById('reset');
+  const speedSlider = document.getElementById('speed');
+  const hzLabel = document.getElementById('hz');
+
+  // Waveform canvas setup (simple scrolling square wave)
+  const wave = document.getElementById('wave');
+  const ctx = wave.getContext('2d');
+  let dpr = Math.max(1, window.devicePixelRatio || 1);
+  let W, H; const pad = 10;
+  function resizeCanvas(){
+    W = wave.clientWidth; H = wave.clientHeight;
+    wave.width = Math.floor(W * dpr); wave.height = Math.floor(H * dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    drawWave(true);
+  }
+  window.addEventListener('resize', resizeCanvas, {passive:true});
+
+  // Simulation state
+  let running = false;
+  let clk = 0; // 0 = LOW, 1 = HIGH
+  let counter = 0; // 0..15
+  let period = sliderToPeriod(speedSlider.value); // seconds per cycle
+  let phase = 0; // 0..1 inside a cycle (0..0.5 LOW, 0.5..1 HIGH)
+
+  function sliderToPeriod(v){
+    // Map slider value directly to frequency 1..10 Hz
+    const hz = Math.max(1, Math.min(10, parseFloat(v)));
+    return 1 / hz; // period in seconds
+  }
+  function updateHzLabel(){
+    const hz = (1/period).toFixed(1);
+    hzLabel.textContent = `≈ ${hz} Hz`;
+  }
+
+  function setClock(level){
+    clk = level ? 1 : 0;
+    led.classList.toggle('high', clk===1);
+    led.classList.toggle('low', clk===0);
+    levelText.textContent = `Level: ${clk===1 ? 'HIGH' : 'LOW'}`;
+  }
+
+  function inc(amount=1){
+    counter = (counter + (amount|0)) & 0xF; // 4-bit wrap
+    countEl.textContent = counter.toString();
+    for(let i=0;i<4;i++){
+      const bit = (counter >> (3-i)) & 1; // b3..b0 left→right
+      bits[i].textContent = bit;
+      bits[i].classList.toggle('on', !!bit);
+    }
+  }
+
+  function stepRisingEdge(){
+    // One deterministic rising edge step
+    if(clk===1){ setClock(0); }
+    inc(1);
+    setClock(1);
+    phase = 0.5; // we're at the midpoint (HIGH)
+  }
+
+  // Waveform drawing (simple scrolling square)
+  const history = [];
+  function drawWave(force){
+    // keep limited history of last ~W samples
+    if(force){ history.length = 0; }
+    history.push(clk);
+    const maxLen = Math.max(20, Math.floor(W/6));
+    if(history.length > maxLen) history.shift();
+
+    ctx.clearRect(0,0,W,H);
+    // baseline
+    ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 2; ctx.beginPath();
+    ctx.moveTo(pad, H-pad); ctx.lineTo(W-pad, H-pad); ctx.stroke();
+
+    // draw square wave (newest at left so motion flows to the right)
+    const hiY = pad + 6; const loY = H - pad - 6;
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2563eb';
+    ctx.lineWidth = 4; ctx.beginPath();
+    const stepX = (W - 2*pad) / Math.max(1, history.length-1);
+    for(let i=0;i<history.length;i++){
+      const x = pad + (history.length - 1 - i) * stepX; // newest at left
+      const y = history[i] ? hiY : loY;
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  }
+
+  // Timing loop
+  let lastTime = performance.now();
+  function advance(dt){
+    // Deterministic timing so label Hz matches actual rising-edge rate
+    const p0 = phase;
+    let p1 = p0 + dt / period; // may exceed 1
+    const rises = Math.floor(p1 + 0.5) - Math.floor(p0 + 0.5); // edges at 0.5
+    if(rises > 0){ inc(rises); }
+    phase = p1 % 1;
+    const newClk = (phase >= 0.5) ? 1 : 0;
+    if(newClk !== clk) setClock(newClk);
+  }
+
+  function tick(now){
+    const dt = (now - lastTime) / 1000; lastTime = now;
+    if(running){ advance(dt); }
+    drawWave(false);
+    requestAnimationFrame(tick);
+  }
+
+  // Controls
+  toggleBtn.addEventListener('click', () => {
+    running = !running;
+    toggleBtn.textContent = running ? 'Pause' : 'Play';
+  });
+
+  stepBtn.addEventListener('click', () => {
+    stepRisingEdge(); drawWave(false);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    counter = 0; countEl.textContent = '0';
+    bits.forEach(b=>{ b.textContent='0'; b.classList.remove('on'); });
+    clk = 0; setClock(0); phase = 0; drawWave(true);
+  });
+
+  speedSlider.addEventListener('input', e => {
+    period = sliderToPeriod(+e.target.value); updateHzLabel();
+  });
+
+  // Keyboard: Space = toggle, Enter = step, R = reset
+  window.addEventListener('keydown', (e)=>{
+    if(e.code==='Space'){ e.preventDefault(); toggleBtn.click(); }
+    else if(e.code==='Enter'){ e.preventDefault(); stepBtn.click(); }
+    else if(e.key==='r' || e.key==='R'){ e.preventDefault(); resetBtn.click(); }
+  });
+
+  // Init
+  resizeCanvas(); updateHzLabel(); setClock(0); drawWave(true);
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

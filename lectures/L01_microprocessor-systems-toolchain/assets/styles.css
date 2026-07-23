@@ -519,3 +519,10 @@
 @media (max-width: 1100px) {
   .reveal { font-size: 34px; }
 }
+
+/* Per-slide deep-dive reference line (shared by renovated decks; same rule as week6.css) */
+.reveal section p.source-note,
+.reveal section .source-note {
+  color: #5f7380;
+  font-size: 0.58em;
+}

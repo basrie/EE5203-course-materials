@@ -6,9 +6,8 @@
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <link rel="icon" href="../../../favicon.ico">
-  <meta name="generator" content="quarto-1.6.43">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.42">
 
   <meta name="author" content="Basri Erdogan">
   <title>EE5203 Microprocessors</title>
@@ -210,8 +209,8 @@ Basri Erdogan
 </div>
 
 </section>
-<section id="week-5-control-the-same-gpio-hardware-through-hal" class="slide level2">
-<h2>Week 5: control the same GPIO hardware through HAL</h2>
+<section id="two-ways-to-set-pa5" class="slide level2">
+<h2>Two ways to set PA5</h2>
 <div class="big-question">
 <p>Both statements turn PA5 on. The hardware result is the same; the interface is different.</p>
 </div>
@@ -220,8 +219,8 @@ Basri Erdogan
 <span id="cb1-3"><a></a>HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span> GPIO_PIN_SET<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Today we will connect every HAL name to the register behavior learned in Week 4.</p>
 </section>
-<section id="week-5-changes-the-interface-not-the-hardware" class="slide level2">
-<h2>Week 5 changes the interface, not the hardware</h2>
+<section id="interface-not-hardware" class="slide level2">
+<h2>Interface, not hardware</h2>
 <div class="vertical-list">
 <div class="vertical-item">
 <p><span>01</span> <strong>WEEK 4:</strong> calculate masks and write CMSIS registers directly.</p>
@@ -237,8 +236,8 @@ Basri Erdogan
 <p>HAL does not replace the hardware model. It gives the program another way to express it.</p>
 </div>
 </section>
-<section id="by-the-end-you-will-control-ld2-from-the-b1-button" class="slide level2">
-<h2>By the end, you will control LD2 from the B1 button</h2>
+<section id="todays-objectives" class="slide level2">
+<h2>Today’s objectives</h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
 <p><span>01</span> Read a <code>GPIO_InitTypeDef</code> configuration structure.</p>
@@ -257,14 +256,34 @@ Basri Erdogan
 </div>
 </div>
 </section>
-<section id="from-week-4-trace-the-direct-register-sequence" class="slide level2">
-<h2>From Week 4: trace the direct-register sequence</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a></a>RCC<span class="op">-&gt;</span>AHB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span></span>
-<span id="cb2-2"><a></a></span>
-<span id="cb2-3"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
-<span id="cb2-4"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
-<span id="cb2-5"><a></a></span>
-<span id="cb2-6"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="l04-exit-ticket---the-answers" class="slide level2">
+<h2>L04 exit ticket - the answers</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
+<span id="cb2-2"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>POINTER MEMBER</strong> — the <code>MODER</code> member of the register structure that the CMSIS pointer <code>GPIOA</code> points to.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>MASK</strong> — <code>3U &lt;&lt; 10</code> selects bits <strong>11 and 10</strong>, PA5’s mode field.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>RESULT</strong> — clear then set leaves <code>01</code>: general-purpose output.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <strong>HARDWARE</strong> — read <code>GPIOA-&gt;MODER</code> in the SFR view (bits 11:10 = <code>01</code>); <code>ODR</code>/LD2 confirm the output path.</p>
+</div>
+</div>
+<p>Today: the exact same bits — written by a function with names instead of masks.</p>
+</section>
+<section id="week-4-recap-registers" class="slide level2">
+<h2>Week 4 recap: registers</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a></a>RCC<span class="op">-&gt;</span>AHB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb3-2"><a></a></span>
+<span id="cb3-3"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
+<span id="cb3-4"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
+<span id="cb3-5"><a></a></span>
+<span id="cb3-6"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="prompt-list compact-prompts">
 <div class="prompt-item">
 <p><span>1</span> Which statement enables GPIOA?</p>
@@ -277,71 +296,53 @@ Basri Erdogan
 </div>
 </div>
 </section>
-<section id="hal-functions-still-reach-the-same-gpio-registers" class="slide level2">
-<h2>HAL functions still reach the same GPIO registers</h2>
-<div class="pipeline-grid wide-pipeline four-step-pipeline">
-<div class="pipeline-card">
-<p><span>A</span> <strong>APPLICATION</strong></p>
-<p><code>led_on()</code></p>
-</div>
-<div class="pipeline-arrow">
-<p>→</p>
-</div>
-<div class="pipeline-card">
-<p><span>B</span> <strong>STM32 HAL</strong></p>
-<p><code>HAL_GPIO_WritePin()</code></p>
-</div>
-<div class="pipeline-arrow">
-<p>→</p>
-</div>
-<div class="pipeline-card">
-<p><span>C</span> <strong>CMSIS REGISTER</strong></p>
-<p><code>GPIOA-&gt;BSRR</code></p>
-</div>
-<div class="pipeline-arrow">
-<p>→</p>
-</div>
-<div class="pipeline-card">
-<p><span>D</span> <strong>HARDWARE PIN</strong></p>
-<p>PA5 / LD2</p>
-</div>
-</div>
+<section id="the-abstraction-stack" class="slide level2">
+<h2>The abstraction stack</h2>
+<svg class="story-visual" viewbox="0 0 1440 300" role="img" aria-labelledby="stack-title">
+<title id="stack-title">
+The abstraction stack: your code calls the STM32 HAL, the HAL writes the CMSIS register, and the register drives the hardware pin
+</title>
+<defs> <marker id="stack-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> <filter id="stack-glow" x="-100%" y="-100%" width="300%" height="300%"><fegaussianblur stddeviation="6" result="blur"></fegaussianblur><femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter> </defs> <rect x="40" y="60" width="310" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="40" y="60" width="310" height="8" fill="#3f7f58"></rect> <text x="195" y="115" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">YOUR CODE</text> <text x="195" y="160" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">led_on()</text> <line x1="354" y1="135" x2="382" y2="135" stroke="#2b789f" stroke-width="4" marker-end="url(#stack-arrow)"></line> <rect x="390" y="60" width="310" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="390" y="60" width="310" height="8" fill="#d47b28"></rect> <text x="545" y="115" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">STM32 HAL</text> <text x="545" y="160" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">HAL_GPIO_WritePin()</text> <line x1="704" y1="135" x2="732" y2="135" stroke="#2b789f" stroke-width="4" marker-end="url(#stack-arrow)"></line> <rect x="740" y="60" width="310" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="740" y="60" width="310" height="8" fill="#2b789f"></rect> <text x="895" y="115" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">CMSIS REGISTER</text> <text x="895" y="160" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">GPIOA-&gt;BSRR</text> <line x1="1054" y1="135" x2="1082" y2="135" stroke="#2b789f" stroke-width="4" marker-end="url(#stack-arrow)"></line> <rect x="1090" y="60" width="310" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="1090" y="60" width="310" height="8" fill="#174f73"></rect> <text x="1245" y="115" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">HARDWARE PIN</text> <text x="1245" y="160" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">PA5 / LD2</text> <text x="195" y="250" text-anchor="middle" fill="#5a6b76" font-size="18">what you write</text> <text x="1245" y="250" text-anchor="middle" fill="#5a6b76" font-size="18">what the LED sees</text> <circle class="story-pulse" r="12" fill="#d47b28" filter="url(#stack-glow)"> <animatemotion dur="4s" repeatcount="indefinite" calcmode="linear" path="M 195 135 H 1245"></animatemotion> <animate attributename="opacity" values="0;1;1;0" keytimes="0;0.1;0.9;1" dur="4s" repeatcount="indefinite"></animate> </circle>
+</svg>
 <p>HAL changes how you write the command—not which hardware receives it.</p>
 </section>
-<section id="the-same-output-command-can-use-either-interface" class="slide level2">
-<h2>The same output command can use either interface</h2>
+<section id="cmsis-vs-hal-side-by-side" class="slide level2">
+<h2>CMSIS vs HAL, side by side</h2>
 <div class="columns">
 <div class="column" style="width:48%;">
 <p><strong>DIRECT CMSIS ACCESS</strong></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You choose the register and calculate the mask.</p>
 </div><div class="column" style="width:48%;">
 <p><strong>STM32 HAL</strong></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a></a>HAL_GPIO_WritePin<span class="op">(</span></span>
-<span id="cb4-2"><a></a>    GPIOA<span class="op">,</span></span>
-<span id="cb4-3"><a></a>    GPIO_PIN_5<span class="op">,</span></span>
-<span id="cb4-4"><a></a>    GPIO_PIN_SET<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a></a>HAL_GPIO_WritePin<span class="op">(</span></span>
+<span id="cb5-2"><a></a>    GPIOA<span class="op">,</span></span>
+<span id="cb5-3"><a></a>    GPIO_PIN_5<span class="op">,</span></span>
+<span id="cb5-4"><a></a>    GPIO_PIN_SET<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You provide named arguments to a function.</p>
 </div></div>
 <div class="relationship-strip">
 <p>The HAL call is longer, but each argument states its job directly.</p>
 </div>
 </section>
-<section id="a-hal-structure-groups-one-pins-settings" class="slide level2">
-<h2>A HAL structure groups one pin’s settings</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a></a>GPIO_InitTypeDef output <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
-<span id="cb5-2"><a></a></span>
-<span id="cb5-3"><a></a>output<span class="op">.</span>Pin   <span class="op">=</span> GPIO_PIN_5<span class="op">;</span></span>
-<span id="cb5-4"><a></a>output<span class="op">.</span>Mode  <span class="op">=</span> GPIO_MODE_OUTPUT_PP<span class="op">;</span></span>
-<span id="cb5-5"><a></a>output<span class="op">.</span>Pull  <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
-<span id="cb5-6"><a></a>output<span class="op">.</span>Speed <span class="op">=</span> GPIO_SPEED_FREQ_LOW<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="gpio_inittypedef" class="slide level2">
+<h2><code>GPIO_InitTypeDef</code></h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a>GPIO_InitTypeDef output <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb6-2"><a></a></span>
+<span id="cb6-3"><a></a>output<span class="op">.</span>Pin   <span class="op">=</span> GPIO_PIN_5<span class="op">;</span></span>
+<span id="cb6-4"><a></a>output<span class="op">.</span>Mode  <span class="op">=</span> GPIO_MODE_OUTPUT_PP<span class="op">;</span></span>
+<span id="cb6-5"><a></a>output<span class="op">.</span>Pull  <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
+<span id="cb6-6"><a></a>output<span class="op">.</span>Speed <span class="op">=</span> GPIO_SPEED_FREQ_LOW<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>GPIO_InitTypeDef</code> is a structure type supplied by the STM32 HAL headers. <code>output</code> is our variable name, and the dot selects one setting inside it.</p>
 <div class="relationship-strip">
 <p>The <code>{0}</code> initializes every member to zero before individual settings are assigned.</p>
 </div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=447">UM1725 Rev 8, GPIO functions — p.&nbsp;447</a>.</p>
+</div>
 </section>
-<section id="the-dot-selects-one-setting-inside-the-structure" class="slide level2">
-<h2>The dot selects one setting inside the structure</h2>
+<section id="the-four-settings" class="slide level2">
+<h2>The four settings</h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
 <p><span>01</span> <strong><code>Pin</code></strong> selects PA5 using the mask <code>GPIO_PIN_5</code>.</p>
@@ -356,11 +357,11 @@ Basri Erdogan
 <p><span>04</span> <strong><code>Speed</code></strong> requests the low output transition-speed setting.</p>
 </div>
 </div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>output<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>output<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>&amp;output</code> passes the structure’s address so the function can read its members.</p>
 </section>
-<section id="each-hal-setting-maps-to-register-bits" class="slide level2">
-<h2>Each HAL setting maps to register bits</h2>
+<section id="hal-names-register-bits" class="slide level2">
+<h2>HAL names → register bits</h2>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -387,25 +388,29 @@ Basri Erdogan
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>output<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>output<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The HAL function converts the named settings into register operations.</p>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=146">RM0368 Rev 6, §8 <em>GPIO</em> — p.&nbsp;146</a>.</p>
+</div>
 </section>
-<section id="gpio-speed-does-not-set-the-blink-frequency" class="slide level2">
-<h2>GPIO speed does not set the blink frequency</h2>
+<section id="output-speed-vs-delay" class="slide level2">
+<h2>Output speed vs delay</h2>
+<p>GPIO speed does not set the blink frequency:</p>
 <div class="columns">
 <div class="column" style="width:48%;">
 <p><strong>OUTPUT TRANSITION SPEED</strong></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a>output<span class="op">.</span>Speed <span class="op">=</span> GPIO_SPEED_FREQ_LOW<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a>output<span class="op">.</span>Speed <span class="op">=</span> GPIO_SPEED_FREQ_LOW<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Controls how strongly and quickly the pin voltage changes.</p>
 </div><div class="column" style="width:48%;">
 <p><strong>VISIBLE BLINK TIMING</strong></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a>HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a></a>HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Controls how long the program waits between output changes.</p>
 </div></div>
 <p>Use the lowest GPIO speed that satisfies the electrical requirement.</p>
 </section>
-<section id="cubemx-generates-the-initialization-function" class="slide level2">
-<h2>CubeMX generates the initialization function</h2>
+<section id="the-cubemx-pipeline" class="slide level2">
+<h2>The CubeMX pipeline</h2>
 <div class="pipeline-grid wide-pipeline four-step-pipeline">
 <div class="pipeline-card">
 <p><span>1</span> <strong>CONFIGURE <code>.ioc</code></strong></p>
@@ -435,25 +440,25 @@ Basri Erdogan
 </div>
 <p>CubeMX removes repetitive typing; you must still check the generated settings.</p>
 </section>
-<section id="read-the-generated-output-initialization-as-ordinary-c" class="slide level2">
-<h2>Read the generated output initialization as ordinary C</h2>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a></a><span class="dt">static</span> <span class="dt">void</span> MX_GPIO_Init<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
-<span id="cb10-2"><a></a><span class="op">{</span></span>
-<span id="cb10-3"><a></a>    GPIO_InitTypeDef config <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
-<span id="cb10-4"><a></a>    __HAL_RCC_GPIOA_CLK_ENABLE<span class="op">();</span></span>
-<span id="cb10-5"><a></a>    HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span></span>
-<span id="cb10-6"><a></a>                      GPIO_PIN_RESET<span class="op">);</span></span>
-<span id="cb10-7"><a></a>    config<span class="op">.</span>Pin   <span class="op">=</span> GPIO_PIN_5<span class="op">;</span></span>
-<span id="cb10-8"><a></a>    config<span class="op">.</span>Mode  <span class="op">=</span> GPIO_MODE_OUTPUT_PP<span class="op">;</span></span>
-<span id="cb10-9"><a></a>    config<span class="op">.</span>Pull  <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
-<span id="cb10-10"><a></a>    config<span class="op">.</span>Speed <span class="op">=</span> GPIO_SPEED_FREQ_LOW<span class="op">;</span></span>
-<span id="cb10-11"><a></a>    HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span>
-<span id="cb10-12"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="the-generated-init-code" class="slide level2">
+<h2>The generated init code</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a></a><span class="dt">static</span> <span class="dt">void</span> MX_GPIO_Init<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb11-2"><a></a><span class="op">{</span></span>
+<span id="cb11-3"><a></a>    GPIO_InitTypeDef config <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb11-4"><a></a>    __HAL_RCC_GPIOA_CLK_ENABLE<span class="op">();</span></span>
+<span id="cb11-5"><a></a>    HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span></span>
+<span id="cb11-6"><a></a>                      GPIO_PIN_RESET<span class="op">);</span></span>
+<span id="cb11-7"><a></a>    config<span class="op">.</span>Pin   <span class="op">=</span> GPIO_PIN_5<span class="op">;</span></span>
+<span id="cb11-8"><a></a>    config<span class="op">.</span>Mode  <span class="op">=</span> GPIO_MODE_OUTPUT_PP<span class="op">;</span></span>
+<span id="cb11-9"><a></a>    config<span class="op">.</span>Pull  <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
+<span id="cb11-10"><a></a>    config<span class="op">.</span>Speed <span class="op">=</span> GPIO_SPEED_FREQ_LOW<span class="op">;</span></span>
+<span id="cb11-11"><a></a>    HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span>
+<span id="cb11-12"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Read top to bottom: clock → safe starting level → settings → initialization. Here, generated <code>static</code> means this helper is used only inside this source file.</p>
 </section>
-<section id="read-hal_gpio_writepin-as-a-three-input-function" class="slide level2">
-<h2>Read <code>HAL_GPIO_WritePin</code> as a three-input function</h2>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a></a>HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span> GPIO_PIN_SET<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="hal_gpio_writepin" class="slide level2">
+<h2><code>HAL_GPIO_WritePin</code></h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a></a>HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span> GPIO_PIN_SET<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
 <p><span>01</span> <strong><code>GPIOA</code></strong> chooses the peripheral port.</p>
@@ -467,8 +472,8 @@ Basri Erdogan
 </div>
 <p>Use <code>GPIO_PIN_RESET</code> for a low output level.</p>
 </section>
-<section id="only-the-read-function-returns-a-pin-value" class="slide level2">
-<h2>Only the read function returns a pin value</h2>
+<section id="the-three-runtime-functions" class="slide level2">
+<h2>The three runtime functions</h2>
 <table class="caption-top">
 <colgroup>
 <col style="width: 33%">
@@ -501,10 +506,13 @@ Basri Erdogan
 </tbody>
 </table>
 <p>Configuration happens once. These functions are used while the program is running.</p>
+<div class="source-note">
+<p>Each function is a few lines of C: <a href="https://github.com/STMicroelectronics/stm32f4xx-hal-driver/blob/master/Src/stm32f4xx_hal_gpio.c"><code>stm32f4xx_hal_gpio.c</code></a> — read <code>HAL_GPIO_WritePin</code> and find the <code>BSRR</code> write.</p>
+</div>
 </section>
-<section id="an-unconnected-input-does-not-have-a-reliable-value" class="slide level2">
-<h2>An unconnected input does not have a reliable value</h2>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a></a>GPIO_PinState input <span class="op">=</span> HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="floating-inputs" class="slide level2">
+<h2>Floating inputs</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb13-1"><a></a>GPIO_PinState input <span class="op">=</span> HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If nothing drives the pin high or low, electrical noise can change the value that the program reads.</p>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
@@ -518,11 +526,12 @@ Basri Erdogan
 </div>
 </div>
 </section>
-<section id="the-resistor-sets-the-value-while-the-button-is-open" class="slide level2">
-<h2>The resistor sets the value while the button is open</h2>
+<section id="pull-up-and-pull-down" class="slide level2">
+<h2>Pull-up and pull-down</h2>
+<p>While the switch is open, only the resistor defines the level.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../assets/images/pullup-pulldown-circuits.png" style="width:45.0%"></p>
+<p><img data-src="../assets/images/pullup-pulldown-circuits.png" style="width:38.0%"></p>
 <figcaption>Pull-up circuit on the left and pull-down circuit on the right</figcaption>
 </figure>
 </div>
@@ -549,19 +558,47 @@ Basri Erdogan
 </tbody>
 </table>
 </section>
-<section id="pupdr-stores-two-pull-bits-for-every-gpio-pin" class="slide level2">
-<h2><code>PUPDR</code> stores two pull bits for every GPIO pin</h2>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="../assets/images/pc13-pupdr-field.png" style="width:52.0%"></p>
-<figcaption>PC13 uses bits 27 and 26 of GPIOC PUPDR; value 10 selects pull-down</figcaption>
-</figure>
-</div>
-<p><code>00</code> = no pull · <code>01</code> = pull-up · <code>10</code> = pull-down</p>
+<section id="the-pupdr-register" class="slide level2">
+<h2>The <code>PUPDR</code> register</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Two-bit field</th>
+<th>Internal connection</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>00</code></td>
+<td>no internal pull</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>01</code></td>
+<td>internal pull-up</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>10</code></td>
+<td>internal pull-down</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>11</code></td>
+<td>reserved</td>
+</tr>
+</tbody>
+</table>
 <p>PC13 starts at bit <code>13 × 2 = 26</code>, so its two-bit field is bits <code>27:26</code>.</p>
+<svg class="story-visual" viewbox="0 0 1440 195" role="img" aria-labelledby="pupdr-title">
+<title id="pupdr-title">
+PUPDR bits 31 down to 16 drawn as eight two-bit fields for pins 15 to 8; the pin 13 field at bits 27 and 26 is highlighted and contains 00, no internal pull
+</title>
+<rect x="312" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="334" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">31</text> <rect x="356" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="378" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">30</text> <text x="356" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 15</text> <rect x="416" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="438" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">29</text> <rect x="460" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="482" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">28</text> <text x="460" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 14</text> <rect x="520" y="60" width="44" height="52" fill="#f8e2c8" stroke="#d47b28" stroke-width="3"></rect> <text x="542" y="51" text-anchor="middle" fill="#d47b28" font-size="14" font-weight="700">27</text> <text x="542" y="96" text-anchor="middle" fill="#d47b28" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="564" y="60" width="44" height="52" fill="#f8e2c8" stroke="#d47b28" stroke-width="3"></rect> <text x="586" y="51" text-anchor="middle" fill="#d47b28" font-size="14" font-weight="700">26</text> <text x="586" y="96" text-anchor="middle" fill="#d47b28" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <text x="564" y="140" text-anchor="middle" fill="#d47b28" font-size="17" font-weight="700">pin 13</text> <rect x="624" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="646" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">25</text> <rect x="668" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="690" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">24</text> <text x="668" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 12</text> <rect x="728" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="750" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">23</text> <rect x="772" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="794" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">22</text> <text x="772" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 11</text> <rect x="832" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="854" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">21</text> <rect x="876" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="898" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">20</text> <text x="876" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 10</text> <rect x="936" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="958" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">19</text> <rect x="980" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1002" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">18</text> <text x="980" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 9</text> <rect x="1040" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1062" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">17</text> <rect x="1084" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1106" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">16</text> <text x="1084" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 8</text> <text x="720" y="188" text-anchor="middle" fill="#5a6b76" font-size="19">PC13 → bits 27:26 = <tspan fill="#d47b28" font-weight="700" font-family="ui-monospace, Menlo, monospace">00</tspan> (no internal pull — the external R30 does the job). Pins 7–0 use bits 15:0.</text>
+</svg>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=159">RM0368 Rev 6, <code>GPIOx_PUPDR</code> — p.&nbsp;159</a>.</p>
+</div>
 </section>
-<section id="choose-the-circuit-first-then-select-the-hal-value" class="slide level2">
-<h2>Choose the circuit first, then select the HAL value</h2>
+<section id="choosing-the-pull-setting" class="slide level2">
+<h2>Choosing the pull setting</h2>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -592,78 +629,80 @@ Basri Erdogan
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb13-1"><a></a>config<span class="op">.</span>Pull <span class="op">=</span> GPIO_PULLDOWN<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The hardware connection decides the required default. The HAL name then selects the matching register bits.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a></a>config<span class="op">.</span>Pull <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The Nucleo button already has an external pull-up, so it does not need an internal one.</p>
 </section>
-<section id="on-this-board-b1-completes-the-pull-down-circuit" class="slide level2">
-<h2>On this board, B1 completes the pull-down circuit</h2>
+<section id="b1-on-the-nucleo-board" class="slide level2">
+<h2>B1 on the Nucleo board</h2>
 <div class="columns">
-<div class="column" style="width:48%;">
+<div class="column" style="width:55%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../assets/images/nucleo_board.jpg" style="width:55.0%"></p>
-<figcaption>Nucleo-F401RE user button and LD2</figcaption>
+<p><img data-src="../assets/images/nucleo-b1-external-pullup.png" style="width:82.0%"></p>
+<figcaption>Nucleo B1 circuit: PC13 is pulled up and the button connects it to ground</figcaption>
 </figure>
 </div>
-</div><div class="column" style="width:48%;">
+</div><div class="column" style="width:41%;">
 <p><strong>B1 USER ON PC13</strong></p>
 <ul>
-<li>Internal resistor holds PC13 low while B1 is released.</li>
-<li>Pressing B1 connects the input to 3.3 V.</li>
-<li>Released → <code>GPIO_PIN_RESET</code></li>
-<li>Pressed → <code>GPIO_PIN_SET</code></li>
+<li>R30 holds PC13 high while B1 is released.</li>
+<li>Pressing B1 connects PC13 to ground.</li>
+<li>Released → <code>GPIO_PIN_SET</code></li>
+<li>Pressed → <code>GPIO_PIN_RESET</code></li>
 </ul>
-<p>The pressed state is logic high for this board configuration.</p>
+<p>The button is active-low: pressed means logic <code>0</code>.</p>
 </div></div>
-<p>Source check: <a href="https://www.st.com/resource/en/user_manual/dm00105823-nucleo-f401re-user-manual-stmicroelectronics.pdf">UM1724</a> + <a href="https://github.com/STMicroelectronics/stm32f4xx-nucleo-bsp/blob/84b99c762908ef56f711acf970ab13d4ec278df6/stm32f4xx_nucleo.c#L250-L265">ST Nucleo BSP</a>.</p>
+<div class="source-note">
+<p>Source: <a href="https://www.st.com/resource/en/schematic_pack/mb1136-default-c04_schematic.pdf">official MB1136 C04 schematic</a> · <a href="https://www.st.com/resource/en/user_manual/um1724-stm32-nucleo64-boards-mb1136-stmicroelectronics.pdf#page=24">UM1724 Rev 17, p.&nbsp;24</a> · <a href="https://github.com/STMicroelectronics/stm32f4xx-nucleo-bsp/blob/84b99c762908ef56f711acf970ab13d4ec278df6/stm32f4xx_nucleo.c#L250-L265">ST Nucleo BSP</a>.</p>
+</div>
 </section>
-<section id="configure-pc13-as-a-pulled-down-input" class="slide level2">
-<h2>Configure PC13 as a pulled-down input</h2>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a></a>GPIO_InitTypeDef config <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
-<span id="cb14-2"><a></a></span>
-<span id="cb14-3"><a></a>__HAL_RCC_GPIOC_CLK_ENABLE<span class="op">();</span></span>
-<span id="cb14-4"><a></a></span>
-<span id="cb14-5"><a></a>config<span class="op">.</span>Pin  <span class="op">=</span> GPIO_PIN_13<span class="op">;</span></span>
-<span id="cb14-6"><a></a>config<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_INPUT<span class="op">;</span></span>
-<span id="cb14-7"><a></a>config<span class="op">.</span>Pull <span class="op">=</span> GPIO_PULLDOWN<span class="op">;</span></span>
-<span id="cb14-8"><a></a></span>
-<span id="cb14-9"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOC<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="pc13-as-input" class="slide level2">
+<h2>PC13 as input</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a></a>GPIO_InitTypeDef config <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb15-2"><a></a></span>
+<span id="cb15-3"><a></a>__HAL_RCC_GPIOC_CLK_ENABLE<span class="op">();</span></span>
+<span id="cb15-4"><a></a></span>
+<span id="cb15-5"><a></a>config<span class="op">.</span>Pin  <span class="op">=</span> GPIO_PIN_13<span class="op">;</span></span>
+<span id="cb15-6"><a></a>config<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_INPUT<span class="op">;</span></span>
+<span id="cb15-7"><a></a>config<span class="op">.</span>Pull <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
+<span id="cb15-8"><a></a></span>
+<span id="cb15-9"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOC<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>No output speed is required for a plain input.</p>
 </section>
-<section id="hal_gpio_readpin-returns-a-named-pin-state" class="slide level2">
-<h2><code>HAL_GPIO_ReadPin</code> returns a named pin state</h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a></a>GPIO_PinState button <span class="op">=</span></span>
-<span id="cb15-2"><a></a>    HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="hal_gpio_readpin" class="slide level2">
+<h2><code>HAL_GPIO_ReadPin</code></h2>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a></a>GPIO_PinState button <span class="op">=</span></span>
+<span id="cb16-2"><a></a>    HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="compare-grid">
 <div class="compare-card c-card">
 <p><strong><code>GPIO_PIN_SET</code></strong></p>
-<p>PC13 is high → B1 pressed</p>
+<p>PC13 is high → B1 released</p>
 </div>
 <div class="compare-card">
 <p><strong><code>GPIO_PIN_RESET</code></strong></p>
-<p>PC13 is low → B1 released</p>
+<p>PC13 is low → B1 pressed</p>
 </div>
 </div>
 <p><code>GPIO_PinState</code> is the HAL’s name for this two-value result: <code>GPIO_PIN_RESET</code> or <code>GPIO_PIN_SET</code>.</p>
 </section>
-<section id="poll-the-button-and-drive-the-led" class="slide level2">
-<h2>Poll the button and drive the LED</h2>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb16-2"><a></a>    GPIO_PinState button <span class="op">=</span></span>
-<span id="cb16-3"><a></a>        HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">);</span></span>
-<span id="cb16-4"><a></a></span>
-<span id="cb16-5"><a></a>    <span class="cf">if</span> <span class="op">(</span>button <span class="op">==</span> GPIO_PIN_SET<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb16-6"><a></a>        HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span></span>
-<span id="cb16-7"><a></a>                          GPIO_PIN_SET<span class="op">);</span></span>
-<span id="cb16-8"><a></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
-<span id="cb16-9"><a></a>        HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span></span>
-<span id="cb16-10"><a></a>                          GPIO_PIN_RESET<span class="op">);</span></span>
-<span id="cb16-11"><a></a>    <span class="op">}</span></span>
-<span id="cb16-12"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="the-polling-loop" class="slide level2">
+<h2>The polling loop</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb17-2"><a></a>    GPIO_PinState button <span class="op">=</span></span>
+<span id="cb17-3"><a></a>        HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">);</span></span>
+<span id="cb17-4"><a></a></span>
+<span id="cb17-5"><a></a>    <span class="cf">if</span> <span class="op">(</span>button <span class="op">==</span> GPIO_PIN_RESET<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb17-6"><a></a>        HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span></span>
+<span id="cb17-7"><a></a>                          GPIO_PIN_SET<span class="op">);</span></span>
+<span id="cb17-8"><a></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb17-9"><a></a>        HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span></span>
+<span id="cb17-10"><a></a>                          GPIO_PIN_RESET<span class="op">);</span></span>
+<span id="cb17-11"><a></a>    <span class="op">}</span></span>
+<span id="cb17-12"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>B1 pressed → LD2 on. B1 released → LD2 off.</p>
 </section>
-<section id="practice-predict-before-touching-the-board" class="slide level2">
-<h2>Practice: predict before touching the board</h2>
+<section id="practice-predict-the-read" class="slide level2">
+<h2>Practice: predict the read</h2>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -700,8 +739,8 @@ Basri Erdogan
 </div>
 </div>
 </section>
-<section id="register-inspection-proves-what-hal-configured" class="slide level2">
-<h2>Register inspection proves what HAL configured</h2>
+<section id="register-evidence" class="slide level2">
+<h2>Register evidence</h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
 <p><span>01</span> After <code>MX_GPIO_Init()</code>, inspect <code>GPIOA-&gt;MODER</code> bits 11:10 for <code>01</code>.</p>
@@ -710,7 +749,7 @@ Basri Erdogan
 <p><span>02</span> Inspect <code>GPIOC-&gt;MODER</code> bits 27:26 for <code>00</code>.</p>
 </div>
 <div class="vertical-item">
-<p><span>03</span> Inspect <code>GPIOC-&gt;PUPDR</code> bits 27:26 for <code>10</code>.</p>
+<p><span>03</span> Inspect <code>GPIOC-&gt;PUPDR</code> bits 27:26 for <code>00</code>.</p>
 </div>
 <div class="vertical-item">
 <p><span>04</span> Watch <code>GPIOC-&gt;IDR</code> bit 13 while pressing and releasing B1.</p>
@@ -721,8 +760,8 @@ Basri Erdogan
 </div>
 <p>A successful build proves valid translation and linking—not correct pin behavior.</p>
 </section>
-<section id="direct-access-and-hal-have-different-strengths" class="slide level2">
-<h2>Direct access and HAL have different strengths</h2>
+<section id="cmsis-vs-hal-trade-offs" class="slide level2">
+<h2>CMSIS vs HAL trade-offs</h2>
 <table class="caption-top">
 <colgroup>
 <col style="width: 33%">
@@ -761,8 +800,8 @@ Basri Erdogan
 </table>
 <p>Neither interface removes the need to understand the circuit and verify the result.</p>
 </section>
-<section id="give-one-layer-ownership-of-each-configuration" class="slide level2">
-<h2>Give one layer ownership of each configuration</h2>
+<section id="configuration-ownership" class="slide level2">
+<h2>Configuration ownership</h2>
 <div class="vertical-list">
 <div class="vertical-item">
 <p><span>01</span> <strong>CUBEMX</strong> owns the generated peripheral initialization.</p>
@@ -779,8 +818,8 @@ Basri Erdogan
 </div>
 <p>Do not let CubeMX and hand-written register code silently fight over the same pin configuration.</p>
 </section>
-<section id="five-mistakes-that-make-hal-gpio-appear-broken" class="slide level2">
-<h2>Five mistakes that make HAL GPIO appear broken</h2>
+<section id="common-hal-gpio-mistakes" class="slide level2">
+<h2>Common HAL GPIO mistakes</h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
 <p><span>01</span> <strong>INIT NOT CALLED:</strong> <code>MX_GPIO_Init()</code> never runs before the loop.</p>
@@ -807,14 +846,14 @@ Basri Erdogan
 <p>You will demonstrate:</p>
 <ol type="1">
 <li>generated output and input configuration;</li>
-<li>correct pull-down and button logic;</li>
+<li>correct external pull-up and active-low button logic;</li>
 <li>HAL read and write calls in the loop;</li>
 <li>matching register, software, and physical evidence;</li>
 <li>one individual behavior change without direct GPIO register writes.</li>
 </ol>
 </section>
-<section id="lecture-5-mastery-checklist" class="slide level2">
-<h2>Lecture 5 mastery checklist</h2>
+<section id="mastery-checklist" class="slide level2">
+<h2>Mastery checklist</h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
 <p><span>✓</span> Read the members of <code>GPIO_InitTypeDef</code>.</p>
@@ -837,22 +876,31 @@ Basri Erdogan
 </section>
 <section id="exit-ticket" class="slide level2">
 <h2>Exit ticket</h2>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a></a>config<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_INPUT<span class="op">;</span></span>
-<span id="cb17-2"><a></a>config<span class="op">.</span>Pull <span class="op">=</span> GPIO_PULLDOWN<span class="op">;</span></span>
-<span id="cb17-3"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOC<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="vertical-list ticket-list">
+<div class="columns">
+<div class="column" style="width:62%;">
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a></a>config<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_INPUT<span class="op">;</span></span>
+<span id="cb18-2"><a></a>config<span class="op">.</span>Pull <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
+<span id="cb18-3"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOC<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list ticket-list compact-tickets">
 <div class="vertical-item">
-<p><span>01</span> <strong>REGISTER:</strong> What values should appear in PC13’s <code>MODER</code> and <code>PUPDR</code> fields?</p>
+<p><span>01</span> <strong>REGISTER:</strong> PC13’s <code>MODER</code> and <code>PUPDR</code> fields — what values?</p>
 </div>
 <div class="vertical-item">
 <p><span>02</span> <strong>POINTER:</strong> Why does <code>HAL_GPIO_Init</code> receive <code>&amp;config</code>?</p>
 </div>
 <div class="vertical-item">
-<p><span>03</span> <strong>LOGIC:</strong> What value means B1 is pressed in this board configuration?</p>
+<p><span>03</span> <strong>LOGIC:</strong> Which read value means B1 is pressed?</p>
 </div>
 <div class="vertical-item">
 <p><span>04</span> <strong>EVIDENCE:</strong> What would you inspect after the HAL call?</p>
 </div>
+</div>
+</div><div class="column" style="width:38%;">
+<p><img data-src="../assets/exit_ticket_qr.svg" width="290"></p>
+<p>Scan before you leave — ungraded; your answers open the next lecture.</p>
+</div></div>
+<div class="source-note">
+<p>Every concept in this lecture, with page-linked sources: <a href="../../../resources/references/academic_references.html">academic references</a>.</p>
 </div>
 
 

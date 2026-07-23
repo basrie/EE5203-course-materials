@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="460" viewBox="0 0 1400 460" role="img" aria-labelledby="title desc">
+  <style>@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&amp;display=swap");</style>
+  <title id="title">Embedded system signal flow</title>
+  <desc id="desc">Inputs enter an STM32 microcontroller, which processes them and drives outputs.</desc>
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#14364b" flood-opacity="0.16"/></filter>
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L14 7 L0 14 Z" fill="#2b789f"/></marker>
+  </defs>
+  <rect width="1400" height="460" rx="28" fill="#f7fafc"/>
+  <g filter="url(#shadow)">
+    <rect x="55" y="105" width="275" height="250" rx="26" fill="#e4f1f7" stroke="#2b789f" stroke-width="4"/>
+    <rect x="485" y="55" width="430" height="350" rx="30" fill="#174f73"/>
+    <rect x="1070" y="105" width="275" height="250" rx="26" fill="#fff0dc" stroke="#d47b28" stroke-width="4"/>
+  </g>
+  <path d="M350 230 H455" stroke="#2b789f" stroke-width="5" marker-end="url(#arrow)"/>
+  <path d="M935 230 H1040" stroke="#2b789f" stroke-width="5" marker-end="url(#arrow)"/>
+  <text x="192" y="155" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="38" font-weight="700" fill="#174f73">INPUTS</text>
+  <text x="192" y="220" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="30" fill="#284858">button</text>
+  <text x="192" y="270" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="30" fill="#284858">sensor</text>
+  <text x="192" y="320" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="30" fill="#284858">command</text>
+  <text x="700" y="125" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="40" font-weight="700" fill="white">STM32F401RE</text>
+  <text x="700" y="168" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="27" fill="#d9edf7">microcontroller</text>
+  <g font-family="Quicksand,Arial,sans-serif" font-size="26" text-anchor="middle">
+    <rect x="535" y="215" width="145" height="95" rx="18" fill="#e8f2f7"/><text x="607" y="272" fill="#174f73" font-weight="700">CPU</text>
+    <rect x="700" y="215" width="145" height="95" rx="18" fill="#e8f2f7"/><text x="772" y="272" fill="#174f73" font-weight="700">Memory</text>
+    <rect x="617" y="325" width="165" height="52" rx="16" fill="#9fd0e5"/><text x="700" y="360" fill="#103e5b" font-weight="700">Peripherals</text>
+  </g>
+  <text x="1207" y="155" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="38" font-weight="700" fill="#9a551b">OUTPUTS</text>
+  <text x="1207" y="220" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="30" fill="#5e482f">LED</text>
+  <text x="1207" y="270" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="30" fill="#5e482f">motor</text>
+  <text x="1207" y="320" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="30" fill="#5e482f">display</text>
+</svg>
