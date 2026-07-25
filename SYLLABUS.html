@@ -206,17 +206,19 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="course-sequence" class="level2">
 <h2 class="anchored" data-anchor-id="course-sequence">Course sequence</h2>
-<p>Lecture numbers describe instructional order, not calendar weeks.</p>
+<p>Thirteen lectures across a fourteen-week term. Week 8 is the midterm and introduces no new material.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>ID</th>
+<th>Week</th>
 <th>Topic</th>
 <th>Central performance</th>
 <th>Project step</th>
@@ -225,90 +227,105 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td>L01</td>
+<td>1</td>
 <td>Embedded systems, C toolchain, and debugging</td>
 <td>Build, flash, debug, and modify Blinky</td>
 <td>See example projects</td>
 </tr>
 <tr class="even">
 <td>L02</td>
+<td>2</td>
 <td>Values, decisions, loops, and arrays</td>
 <td>Process a sensor-data array in one C file</td>
 <td>Identify project inputs</td>
 </tr>
 <tr class="odd">
 <td>L03</td>
+<td>3</td>
 <td>Functions, arrays, strings, and modular C</td>
 <td>Decompose the sensor program into functions and files</td>
 <td>Identify processing functions</td>
 </tr>
 <tr class="even">
 <td>L04</td>
+<td>4</td>
 <td>Pointers, structures, bits, registers, and GPIO</td>
 <td>Control PA5 through CMSIS registers</td>
 <td>Individual idea canvas</td>
 </tr>
 <tr class="odd">
 <td>L05</td>
+<td>5</td>
 <td>GPIO and hardware abstraction</td>
 <td>Rebuild GPIO with HAL and compare the two interfaces</td>
 <td>Teams form; project launch</td>
 </tr>
 <tr class="even">
 <td>L06</td>
+<td>6</td>
 <td>Interrupts and the NVIC</td>
 <td>Implement and explain an event-driven application</td>
 <td>Proposal and block diagram</td>
 </tr>
 <tr class="odd">
 <td>L07</td>
+<td>7</td>
 <td>Timers and non-blocking time</td>
 <td>Generate periodic events without blocking delays</td>
 <td>Design review</td>
 </tr>
 <tr class="even">
-<td>L08</td>
-<td>PWM and motor control</td>
-<td>Generate and control timed output signals</td>
-<td>First peripheral milestone</td>
+<td></td>
+<td><strong>8</strong></td>
+<td><strong>Midterm examination</strong></td>
+<td></td>
+<td></td>
 </tr>
 <tr class="odd">
-<td>L09</td>
-<td>Input capture</td>
-<td>Measure signals you generate</td>
-<td>Measurement milestone</td>
+<td>L08</td>
+<td>9</td>
+<td>PWM, output compare, and input capture</td>
+<td>Generate timed signals — and measure them</td>
+<td>First hardware milestone</td>
 </tr>
 <tr class="even">
-<td>L10</td>
+<td>L09</td>
+<td>10</td>
 <td>ADC and sensor acquisition</td>
 <td>Acquire, scale, and validate analog data</td>
 <td>Data-acquisition milestone</td>
 </tr>
 <tr class="odd">
-<td>L11</td>
+<td>L10</td>
+<td>11</td>
 <td>UART and PC communication</td>
 <td>Stream acquired data to a PC and accept commands</td>
 <td>Communication milestone</td>
 </tr>
 <tr class="even">
-<td>L12</td>
+<td>L11</td>
+<td>12</td>
 <td>I2C and SPI</td>
 <td>Interface a synchronous serial device</td>
 <td>Sensor/display integration</td>
 </tr>
 <tr class="odd">
-<td>L13</td>
+<td>L12</td>
+<td>13</td>
 <td>System integration and project clinic</td>
 <td>Integrate peripherals and diagnose faults</td>
 <td>Working prototype</td>
 </tr>
 <tr class="even">
-<td>L14</td>
+<td>L13</td>
+<td>14</td>
 <td>Demonstration and defense</td>
 <td>Demonstrate, test, and individually explain the system</td>
 <td>Final assessment</td>
 </tr>
 </tbody>
 </table>
+<p>Week numbers are the planned sequence; the authoritative weekly calendar, including any holiday shifts, is always the one announced in CATS.</p>
 </section>
 <section id="assessment" class="level2">
 <h2 class="anchored" data-anchor-id="assessment">Assessment</h2>
@@ -319,54 +336,71 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="project-timeline">Project timeline</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Point</th>
+<th>Week</th>
 <th>Milestone</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>L04</td>
+<td>4</td>
 <td>One-page individual idea canvas</td>
 </tr>
 <tr class="even">
 <td>L05</td>
+<td>5</td>
 <td>Teams form; preliminary topic</td>
 </tr>
 <tr class="odd">
 <td>L06</td>
+<td>6</td>
 <td>Proposal: problem, block diagram, components, minimum viable system</td>
 </tr>
 <tr class="even">
 <td>L07</td>
+<td>7</td>
 <td>Design review: pins, peripherals, data flow, responsibilities, risks</td>
 </tr>
 <tr class="odd">
-<td>L08-L09</td>
+<td>L08</td>
+<td>9</td>
 <td>First hardware milestone — one input or output peripheral working</td>
 </tr>
 <tr class="even">
-<td>L10</td>
+<td>L09</td>
+<td>10</td>
 <td>Acquired and validated sensor data</td>
 </tr>
 <tr class="odd">
-<td>L11-L12</td>
-<td>Communication / integration milestone</td>
+<td>L10</td>
+<td>11</td>
+<td>Communication milestone — UART logging or command interface</td>
+</tr>
+<tr class="even">
+<td>L11</td>
+<td>12</td>
+<td>Integration milestone — input, processing, output, communication connected</td>
+</tr>
+<tr class="odd">
+<td>L12</td>
+<td>13</td>
+<td>Readiness review: working prototype and test evidence</td>
 </tr>
 <tr class="even">
 <td>L13</td>
-<td>Readiness review: working prototype and test evidence</td>
-</tr>
-<tr class="odd">
-<td>L14</td>
+<td>14</td>
 <td>Demonstration, report, presentation, and individual oral defense</td>
 </tr>
 </tbody>
 </table>
+<p>There is no milestone in week 8. That week is yours for the midterm.</p>
 
 
 </section>

@@ -4963,7 +4963,7 @@ pre { font-size: 8.7pt; }
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* the loop stays free for other work */</span></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The unsigned subtraction stays correct when <code>g_ms</code> wraps — Week 6’s debounce arithmetic again.</p>
+<p>The unsigned subtraction stays correct when <code>g_ms</code> wraps — L06’s debounce arithmetic again.</p>
 <p><strong>Evidence for Checkpoint B:</strong> the 100/900 pattern is visible and <code>main.c</code> contains no <code>HAL_Delay()</code> call.</p>
 </section>
 <section id="checkpoint-c---bare-metal-microsecond-timer" class="level2">
@@ -4984,7 +4984,7 @@ pre { font-size: 8.7pt; }
 </section>
 <section id="individual-extension---button-selected-speed" class="level2">
 <h2 class="anchored" data-anchor-id="individual-extension---button-selected-speed">Individual extension - Button-selected speed</h2>
-<p>Using the Checkpoint B loop: B1 (PC13, input, <strong>no pull</strong> — the external resistor is on the board) cycles the blink period through 500 → 200 → 50 ms. Debounce with 50 ms of <code>g_ms</code>, exactly as in Week 6. Optional: add <code>__WFI();</code> at the loop end and confirm timing still holds.</p>
+<p>Using the Checkpoint B loop: B1 (PC13, input, <strong>no pull</strong> — the external resistor is on the board) cycles the blink period through 500 → 200 → 50 ms. Debounce with 50 ms of <code>g_ms</code>, exactly as in L06. Optional: add <code>__WFI();</code> at the loop end and confirm timing still holds.</p>
 </section>
 <section id="acceptance-checklist" class="level2">
 <h2 class="anchored" data-anchor-id="acceptance-checklist">Acceptance checklist</h2>

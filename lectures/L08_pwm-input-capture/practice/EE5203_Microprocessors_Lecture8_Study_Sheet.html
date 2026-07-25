@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>EE5203 L08 Study Sheet – EE5203 Microprocessors</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+</head><body class="nav-fixed">\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{6pt}{2pt}
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../assets/materials.css">
+
+
+
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">EE5203 Microprocessors</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../SYLLABUS.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../resources/companions/EE5203_Toolchain_Boot_Companion.html"> 
+<span class="menu-text">From C to Silicon</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../resources/references/academic_references.html"> 
+<span class="menu-text">References</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="EE5203_Microprocessors_Lecture8_Study_Sheet.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="ee5203-l08-study-sheet" class="level1">
+<h1>EE5203 L08 Study Sheet</h1>
+<p><em>PWM, output compare, and input capture - Basri Erdogan</em></p>
+<div class="mission">
+<p><strong>Essential question:</strong> One register is called <em>capture/compare</em>. When you write it, the pin makes a waveform; when the pin makes a waveform, the hardware writes it. What decides which direction it runs?</p>
+</div>
+<section id="what-you-should-be-able-to-do" class="level2">
+<h2 class="anchored" data-anchor-id="what-you-should-be-able-to-do">What you should be able to do</h2>
+<ul>
+<li>Explain PWM: frequency from <code>ARR</code>, duty from <code>CCR</code>.</li>
+<li>Choose <code>PSC</code>/<code>ARR</code>/<code>CCR</code> for a required frequency and duty from 16 MHz.</li>
+<li>Hand a pin to a timer and prove the handover in <code>MODER</code>.</li>
+<li>Configure direct and indirect capture channels and read the timestamps.</li>
+<li>Recover period, frequency, and duty from captures — wrap-safe.</li>
+</ul>
+</section>
+<section id="one-channel-two-directions" class="level2">
+<h2 class="anchored" data-anchor-id="one-channel-two-directions">One channel, two directions</h2>
+<pre class="text"><code>GENERATING (output compare)          MEASURING (input capture)
+  you write CCR                        the pin's edge triggers a snapshot
+  CNT counts up                        CNT counts up
+  CNT &lt; CCR   -&gt; output high           edge arrives -&gt; CNT copied into CCR
+  CNT &gt;= CCR  -&gt; output low            CC1IF set; you read CCR
+  CNT reaches ARR -&gt; wrap              CNT free-runs to 0xFFFF and wraps</code></pre>
+<p>The direction bit is <code>CC1S</code> in <code>CCMR1</code>: <code>00</code> = output, non-zero = input. Same register file, same counter, opposite arrow.</p>
+</section>
+<section id="vocabulary-table" class="level2">
+<h2 class="anchored" data-anchor-id="vocabulary-table">Vocabulary table</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Job</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>CCR1</code>…<code>CCR4</code></td>
+<td>compare value (you write) <strong>or</strong> captured timestamp (hardware writes)</td>
+</tr>
+<tr class="even">
+<td><code>CCMR1/2</code></td>
+<td><code>CC1S</code> direction, PWM mode, preload, input filter <code>ICF</code></td>
+</tr>
+<tr class="odd">
+<td><code>CCER</code></td>
+<td><code>CC1E</code> channel enable; <code>CC1P</code> output polarity / capture edge</td>
+</tr>
+<tr class="even">
+<td><code>CC1IF</code> (<code>SR</code>)</td>
+<td>a capture has landed</td>
+</tr>
+<tr class="odd">
+<td><code>CC1OF</code> (<code>SR</code>)</td>
+<td>overcapture — a timestamp was overwritten before you read it</td>
+</tr>
+<tr class="even">
+<td>Direct mode</td>
+<td>the channel listens to its own pin</td>
+</tr>
+<tr class="odd">
+<td>Indirect mode</td>
+<td>the channel listens to the <em>other</em> pin of the pair</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="pwm-the-arithmetic" class="level2">
+<h2 class="anchored" data-anchor-id="pwm-the-arithmetic">PWM: the arithmetic</h2>
+<p><span class="math display">\[f_{\text{PWM}} = \frac{f_{\text{timer clock}}}{(\text{PSC}+1)(\text{ARR}+1)}
+\qquad
+\text{duty} = \frac{\text{CCR}}{\text{ARR}+1}\]</span></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Requirement (16 MHz)</th>
+<th style="text-align: right;"><code>PSC</code></th>
+<th style="text-align: right;"><code>ARR</code></th>
+<th style="text-align: right;"><code>CCR</code></th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 kHz LED, 35 %</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">999</td>
+<td style="text-align: right;">350</td>
+<td>1 µs tick, duty in tenths of a %</td>
+</tr>
+<tr class="even">
+<td>50 Hz servo, 1.5 ms</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">19999</td>
+<td style="text-align: right;">1500</td>
+<td>1 µs tick — <code>CCR</code> <strong>is</strong> the pulse width in µs</td>
+</tr>
+<tr class="odd">
+<td>200 Hz, 25 %</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">4999</td>
+<td style="text-align: right;">1250</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>The 100 % subtlety.</strong> The counter visits <code>ARR+1</code> states, so <code>CCR = ARR</code> gives <code>ARR/(ARR+1)</code> = 99.9 %, not full-on. True 100 % needs <code>CCR &gt; ARR</code>.</p>
+<p><strong>One timer, one frequency.</strong> All four channels share <code>PSC</code> and <code>ARR</code>. A 1 kHz LED and a 50 Hz servo need two different timers.</p>
+</section>
+<section id="the-pin-handover" class="level2">
+<h2 class="anchored" data-anchor-id="the-pin-handover">The pin handover</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HAL_TIM_PWM_Start<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span>            <span class="co">/* enables CC1E   */</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="dv">350</span><span class="op">);</span>   <span class="co">/* writes CCR1    */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>CubeMX sets <code>MODER</code> bits for PA5 to <code>10</code> (alternate function) and selects AF1 for TIM2. Until that happens the pin still belongs to <code>HAL_GPIO_WritePin</code> and PWM does nothing visible — the classic silent failure.</p>
+</section>
+<section id="servo-contract" class="level2">
+<h2 class="anchored" data-anchor-id="servo-contract">Servo contract</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Pulse width</th>
+<th>Angle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1000 µs</td>
+<td>0°</td>
+</tr>
+<tr class="even">
+<td>1500 µs</td>
+<td>90°</td>
+</tr>
+<tr class="odd">
+<td>2000 µs</td>
+<td>180°</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> servo_us<span class="op">(</span><span class="dt">uint8_t</span> deg<span class="op">)</span> <span class="op">{</span>        <span class="co">/* 0-180 deg -&gt; 1000-2000 us */</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>deg <span class="op">&gt;</span> <span class="dv">180</span><span class="op">)</span> deg <span class="op">=</span> <span class="dv">180</span><span class="op">;</span>           <span class="co">/* clamp: the contract is mechanical */</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1000</span> <span class="op">+</span> <span class="op">(</span><span class="dv">1000</span><span class="bu">u</span> <span class="op">*</span> deg<span class="op">)</span> <span class="op">/</span> <span class="dv">180</span><span class="bu">u</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Repeat every 20 ms. Pulses outside the contract strain the mechanism.</p>
+</section>
+<section id="capture-the-arithmetic" class="level2">
+<h2 class="anchored" data-anchor-id="capture-the-arithmetic">Capture: the arithmetic</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* rising edges, channel 1 direct */</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> now <span class="op">=</span> HAL_TIM_ReadCapturedValue<span class="op">(</span>htim<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>period_us <span class="op">=</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>now <span class="op">-</span> last<span class="op">);</span>     <span class="co">/* cast: wrap-safe on 16 bits */</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>last <span class="op">=</span> now<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">/* falling edge, channel 2 indirect - high time since the last rising edge */</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>high_us <span class="op">=</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>HAL_TIM_ReadCapturedValue<span class="op">(</span>htim<span class="op">,</span> TIM_CHANNEL_2<span class="op">)</span> <span class="op">-</span> last<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><span class="math display">\[f_{\text{signal}} = \frac{1}{\text{period}} \qquad
+\text{duty} = \frac{\text{high\_us}}{\text{period\_us}}\]</span></p>
+<ul>
+<li><strong>The cast is not decoration.</strong> On a 16-bit timer the subtraction must be done in 16 bits: captures 64000 then 1500 give <code>(uint16_t)(1500 - 64000)</code> = <strong>3036</strong>, the true elapsed count. Without the cast you get a large negative number.</li>
+<li><strong>Direct vs indirect.</strong> CH1 direct listens to its own pin (TI1); CH2 indirect listens to TI1 as well, so both channels watch one signal on opposite edges. CH2 configured <em>direct</em> would listen to PB7 instead — and capture nothing.</li>
+<li><strong>Range.</strong> A 16-bit timer at a 1 µs tick measures honestly up to 65 536 µs ≈ 65.5 ms, i.e.&nbsp;signals down to about <strong>15.3 Hz</strong>. Slower than that, the counter wraps more than once between edges and the number lies silently.</li>
+</ul>
+</section>
+<section id="sfr-evidence" class="level2">
+<h2 class="anchored" data-anchor-id="sfr-evidence">SFR evidence</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Claim</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>the duty is what you set</td>
+<td><code>TIM2-&gt;CCR1</code> = 350; write 700 and the brightness steps</td>
+</tr>
+<tr class="even">
+<td>the pin belongs to the timer</td>
+<td><code>MODER</code> bits 11:10 = <code>10</code></td>
+</tr>
+<tr class="odd">
+<td>the channel output is live</td>
+<td><code>CCER</code> bit 0 (<code>CC1E</code>) = 1; clearing it kills the output</td>
+</tr>
+<tr class="even">
+<td>hardware is timestamping</td>
+<td><code>TIM4-&gt;CCR1</code> changes between pauses with no code running</td>
+</tr>
+<tr class="odd">
+<td>the edge selection</td>
+<td><code>CC1P</code> in <code>CCER</code>; flip it and the captures move</td>
+</tr>
+<tr class="even">
+<td>a capture was lost</td>
+<td><code>CC1OF</code> in <code>TIM4-&gt;SR</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="common-mistakes" class="level2">
+<h2 class="anchored" data-anchor-id="common-mistakes">Common mistakes</h2>
+<ul>
+<li>Assuming 84 MHz from an online example — our board runs 16 MHz.</li>
+<li>Pin never handed over: <code>MODER</code> still <code>01</code>.</li>
+<li>Confusing <code>CCR</code> and <code>ARR</code>: “changing the frequency” by writing <code>CCR</code>.</li>
+<li>Expecting <code>CCR = ARR</code> to be 100 %.</li>
+<li>One timer for two different frequencies.</li>
+<li>Subtraction not cast to <code>uint16_t</code>.</li>
+<li>CH2 left in direct mode, so duty comes out nonsense.</li>
+<li><code>Start_IT</code> never called — configured, armed, but <code>CCR1</code> frozen.</li>
+<li>No input filter on a noisy line: every ring counts as an edge.</li>
+</ul>
+</section>
+<section id="mastery-self-check" class="level2">
+<h2 class="anchored" data-anchor-id="mastery-self-check">Mastery self-check</h2>
+<ul class="task-list">
+<li><label><input type="checkbox">I can derive <code>PSC</code>/<code>ARR</code>/<code>CCR</code> for a stated frequency and duty.</label></li>
+<li><label><input type="checkbox">I can explain why <code>CCR = ARR</code> is 99.9 %.</label></li>
+<li><label><input type="checkbox">I can state what <code>MODER</code> reads once a pin is handed to a timer.</label></li>
+<li><label><input type="checkbox">I can say who writes <code>CCR</code> in each direction, and when exactly.</label></li>
+<li><label><input type="checkbox">I can explain direct vs indirect and what each channel listens to.</label></li>
+<li><label><input type="checkbox">I can compute period and duty from two or three captures, wrap-safe.</label></li>
+<li><label><input type="checkbox">I can state the slowest signal a 16-bit timer measures at a 1 µs tick.</label></li>
+<li><label><input type="checkbox">I can name the flag that tells me a capture was lost.</label></li>
+</ul>
+</section>
+<section id="five-review-questions" class="level2">
+<h2 class="anchored" data-anchor-id="five-review-questions">Five review questions</h2>
+<ol type="1">
+<li>From 16 MHz, give <code>PSC</code>/<code>ARR</code>/<code>CCR</code> for a 2 kHz PWM at 60 %. Then say what changes if the requirement becomes 2 kHz at 60 % <strong>on a servo timer already running at 50 Hz</strong> — and why.</li>
+<li>A student sets <code>CCR = 1000</code> with <code>ARR = 999</code> expecting 100 %, and reports the LED is full-on. Are they right? Explain what the comparison does.</li>
+<li>Your PWM code is correct and the LED does not dim, but <code>HAL_GPIO_WritePin</code> still controls it. Name the register and the exact value you would check.</li>
+<li>Captures on a 16-bit, 1 µs timer arrive at <code>64000</code> then <code>1500</code>. Compute the period two ways — with and without the <code>uint16_t</code> cast — and explain the difference in terms of modular arithmetic.</li>
+<li>You measure a 10 Hz signal with a 16-bit timer at a 1 µs tick and get a plausible-looking but wrong period. Explain the failure and give two different fixes.</li>
+</ol>
+<p>See the L08 worksheet for extended practice. Worked solutions are released after the practice window.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

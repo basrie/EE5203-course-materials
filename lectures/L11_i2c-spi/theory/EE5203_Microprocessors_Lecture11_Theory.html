@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.42">
+
+  <meta name="author" content="Basri Erdogan">
+  <title>EE5203 Microprocessors</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../../../site_libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
+  <link rel="stylesheet" href="../../L01_microprocessor-systems-toolchain/assets/styles.css">
+  <link rel="stylesheet" href="../../L02_c-for-embedded-systems/assets/week2.css">
+  <link href="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="../../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">EE5203 Microprocessors</h1>
+  <p class="subtitle">L11 - I2C and SPI</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Basri Erdogan 
+</div>
+</div>
+</div>
+
+</section>
+<section id="two-wires-eight-devices" class="slide level2">
+<h2>Two wires, eight devices</h2>
+<div class="big-question">
+<p>A display, a temperature sensor, a real-time clock, an accelerometer. Four chips that have never met, sharing <strong>two wires</strong> — and every one of them knows when it is being spoken to.</p>
+</div>
+<p>Last lecture’s UART connected exactly two ends and needed no clock. Today we add a clock line, and in exchange we get addressing, acknowledgement, and a bus.</p>
+<aside class="notes">
+<p>Hold up the LCD module. Point out it has four pins: power, ground, and two signal wires. Ask how a chip knows a message is meant for it.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-story-so-far" class="slide level2">
+<h2>The story so far</h2>
+<div class="vertical-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>L07-L08:</strong> timers schedule work and shape signals.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>L09:</strong> the ADC reads the analog world.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>L10:</strong> UART carries bytes to a PC — two ends, no clock, pure agreement.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <strong>TODAY:</strong> synchronous buses — a clock wire, many devices, and a device that can answer back.</p>
+</div>
+</div>
+</section>
+<section id="todays-objectives" class="slide level2">
+<h2>Today’s objectives</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Explain what a clock line buys, and what it costs.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Read an I2C transaction: START, address, R/W, ACK, data, STOP.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Explain open-drain signalling and why pull-ups are mandatory.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> Explain SPI’s four wires, full-duplex exchange, and the four modes.</p>
+</div>
+<div class="vertical-item">
+<p><span>05</span> Choose between I2C and SPI for a given device, with reasons.</p>
+</div>
+</div>
+</section>
+<section id="l10-recap-agreement-without-evidence" class="slide level2">
+<h2>L10 recap: agreement without evidence</h2>
+<p>A UART transmits into the dark. If the other end is absent, misconfigured, or asleep, the sender learns nothing.</p>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> No clock line — both ends <em>assume</em> a rate.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> No addressing — the wire goes to exactly one place.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> No acknowledgement — nothing ever confirms receipt.</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p>Today all three change. The clock removes the assumption, the address removes the one-to-one restriction, and the ACK removes the silence.</p>
+</div>
+</section>
+<section id="adding-a-clock-wire" class="slide level2">
+<h2>Adding a clock wire</h2>
+<p>In a <strong>synchronous</strong> bus, one device drives a clock line. Every bit is valid at a defined edge of that clock.</p>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>No baud agreement needed</strong> — the receiver is <em>told</em> when to look.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>The master sets the pace</strong>, and may pause between bytes with no penalty.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>Cost:</strong> one more wire, and one clear master.</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p>A UART frame must be delivered at a fixed rate once started. A synchronous transfer can stop mid-byte and resume a second later — the clock simply waits.</p>
+</div>
+</section>
+<section id="i2c-two-wires-many-devices" class="slide level2">
+<h2>I2C: two wires, many devices</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Wire</th>
+<th>Name</th>
+<th>Driven by</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>SCL</code></td>
+<td>serial clock</td>
+<td>the master</td>
+</tr>
+<tr class="even">
+<td><code>SDA</code></td>
+<td>serial data</td>
+<td>master <strong>and</strong> slave, at different times</td>
+</tr>
+</tbody>
+</table>
+<p>Every device on the bus has a <strong>7-bit address</strong>. All of them see every transaction; only the addressed one responds.</p>
+<div class="relationship-strip">
+<p>Two wires, up to 127 addresses, one master in this course. That is the trade I2C makes: fewer wires, more protocol.</p>
+</div>
+</section>
+<section id="open-drain-and-why-pull-ups" class="slide level2">
+<h2>Open drain, and why pull-ups</h2>
+<p>Both I2C lines are <strong>open drain</strong>: a device can only pull a line <em>low</em>. Nothing drives it high.</p>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> External <strong>pull-up resistors</strong> (typically 4.7 kΩ) return each line to <code>VDD</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Any device may pull low at any time — so two devices talking at once <strong>cannot</strong> short each other.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> This is what makes a shared bidirectional wire safe.</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p><strong>No pull-ups, no bus.</strong> The lines sit low, no START is ever seen, and every transfer times out. Most breakout boards include them — which is why forgetting them fails only sometimes.</p>
+</div>
+</section>
+<section id="the-i2c-transaction" class="slide level2">
+<h2>The I2C transaction</h2>
+<svg viewbox="0 0 1400 300" width="100%" role="img" aria-label="An I2C write transaction: a START condition, a seven-bit address plus a write bit, an acknowledge from the slave, one data byte, another acknowledge, and a STOP condition.">
+  <text x="60" y="40" font-size="17" fill="#1f4fa8" font-weight="700">Master writes one byte to device 0x27</text>
+  <g font-size="15" fill="#5b6577">
+    <text x="18" y="128">SDA</text>
+    <text x="18" y="223">SCL</text>
+  </g>
+  <polyline fill="none" stroke="#2d6cdf" stroke-width="3" points="70,108 130,108 130,158 300,158 300,108 470,108 470,158 640,158 640,108 810,108 810,158 1050,158 1050,108 1250,108 1250,158 1310,158 1310,108 1380,108"></polyline>
+  <polyline fill="none" stroke="#8b94a3" stroke-width="2.5" points="70,203 130,203 130,253 1250,253 1250,203 1380,203"></polyline>
+  <g stroke="#cf3b3b" stroke-width="2" stroke-dasharray="4,4">
+    <line x1="130" y1="88" x2="130" y2="268"></line>
+    <line x1="1250" y1="88" x2="1250" y2="268"></line>
+  </g>
+  <g font-size="14" fill="#cf3b3b" font-weight="700" text-anchor="middle">
+    <text x="130" y="80">START</text><text x="1250" y="80">STOP</text>
+  </g>
+  <g font-size="14" fill="#5b6577" text-anchor="middle">
+    <text x="215" y="288">7-bit address</text>
+    <text x="385" y="288">R/W = 0</text>
+    <text x="555" y="288">ACK (slave)</text>
+    <text x="725" y="288">data bits</text>
+    <text x="930" y="288">…</text>
+    <text x="1150" y="288">ACK (slave)</text>
+  </g>
+  <g stroke="#e2e6ee" stroke-width="1" stroke-dasharray="3,3">
+    <line x1="300" y1="98" x2="300" y2="272"></line><line x1="470" y1="98" x2="470" y2="272"></line>
+    <line x1="640" y1="98" x2="640" y2="272"></line><line x1="810" y1="98" x2="810" y2="272"></line>
+    <line x1="1050" y1="98" x2="1050" y2="272"></line>
+  </g>
+</svg>
+</section>
+<section id="addressing-and-hals-shift" class="slide level2">
+<h2>Addressing, and HAL’s shift</h2>
+<p>The address is <strong>7 bits</strong>, followed by one <strong>R/W</strong> bit — together they fill one byte on the wire.</p>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> Datasheets quote the <strong>7-bit</strong> address: the LCD backpack is <code>0x27</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> STM32 HAL wants the <strong>8-bit</strong> form, already shifted: <code>0x27 &lt;&lt; 1</code> = <code>0x4E</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Pass <code>0x27</code> to HAL and you address device <code>0x13</code> — which is not there.</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p>This single off-by-one-shift costs more lab hours than any other I2C detail. If a device will not answer, check the shift <em>before</em> the wiring.</p>
+</div>
+</section>
+<section id="ack-the-device-answers" class="slide level2">
+<h2>ACK: the device answers</h2>
+<p>After every byte, the receiver pulls <code>SDA</code> low for one clock — an <strong>acknowledge</strong>.</p>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>ACK</span> line pulled low → “I am here, and I took that byte.”</p>
+</div>
+<div class="vertical-item">
+<p><span>NACK</span> line left high → nobody at that address, or no more data wanted.</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p>This is what a UART cannot do. <code>HAL_I2C_Master_Transmit</code> returning <code>HAL_ERROR</code> on a NACK is the bus telling you the truth: nothing answered.</p>
+</div>
+</section>
+<section id="practice-what-is-on-the-bus" class="slide level2">
+<h2>Practice: what is on the bus?</h2>
+<p>You send address byte <code>0x4E</code>, then <code>0x00</code>, and the analyser shows the slave pulling <code>SDA</code> low after each.</p>
+<div class="prompt-list compact-prompts">
+<div class="prompt-item">
+<p><span>1</span> What 7-bit address did you actually address, and was it a read or a write?</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> What do the two low pulses mean?</p>
+</div>
+<div class="prompt-item">
+<p><span>3</span> The same code with <code>0x27</code> instead of <code>0x4E</code> returns <code>HAL_ERROR</code>. Why?</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p><code>0x4E</code> = <code>0100 1110</code>: address <code>0x27</code>, R/W = 0 → <strong>write</strong>. Two ACKs: the device exists and accepted both bytes. With <code>0x27</code> you address <code>0x13</code>, nobody answers, NACK → <code>HAL_ERROR</code>.</p>
+</div>
+</section>
+<section id="speed-and-what-it-costs" class="slide level2">
+<h2>Speed, and what it costs</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th style="text-align: right;">Clock</th>
+<th style="text-align: right;">One byte + ACK</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Standard</td>
+<td style="text-align: right;">100 kHz</td>
+<td style="text-align: right;">90 µs</td>
+</tr>
+<tr class="even">
+<td>Fast</td>
+<td style="text-align: right;">400 kHz</td>
+<td style="text-align: right;">22.5 µs</td>
+</tr>
+</tbody>
+</table>
+<p>The LCD backpack is a <strong>port expander</strong>: each character needs <strong>four</strong> I2C bytes (two nibbles, each with the enable line strobed high then low).</p>
+<div class="fragment relationship-strip">
+<p>One character ≈ 45 bits ≈ <strong>450 µs</strong> at 100 kHz. A full 16-character line ≈ <strong>7.2 ms</strong> — more than seven L07 tick periods. Refresh the whole display at 10 Hz and you have spent 7 % of your CPU on a screen nobody reads that fast.</p>
+</div>
+</section>
+<section id="i2c-in-cubemx" class="slide level2">
+<h2>I2C in CubeMX</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>Connectivity → I2C1</strong>: Mode <code>I2C</code>; PB8 = <code>SCL</code>, PB9 = <code>SDA</code> (AF4).</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> Speed <code>100 kHz</code> to start — raise it only once it works.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> The pins become <strong>open drain</strong> automatically. Check <code>OTYPER</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> Pull-ups: on the breakout board. Internal pull-ups are too weak for a real bus.</p>
+</div>
+</div>
+</section>
+<section id="hal-i2c-and-finding-what-is-there" class="slide level2">
+<h2>HAL I2C, and finding what is there</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a><span class="co">/* Is anybody home? Sweep every address and report the ACKs. */</span></span>
+<span id="cb1-2"><a></a><span class="cf">for</span> <span class="op">(</span><span class="dt">uint8_t</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> a <span class="op">&lt;</span> <span class="dv">128</span><span class="op">;</span> a<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb1-3"><a></a>    <span class="cf">if</span> <span class="op">(</span>HAL_I2C_IsDeviceReady<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>a <span class="op">&lt;&lt;</span> <span class="dv">1</span><span class="op">),</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">5</span><span class="op">)</span> <span class="op">==</span> HAL_OK<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-4"><a></a>        <span class="co">/* report the 7-bit address 'a' over UART - L10's stream, reused */</span></span>
+<span id="cb1-5"><a></a>    <span class="op">}</span></span>
+<span id="cb1-6"><a></a><span class="op">}</span></span>
+<span id="cb1-7"><a></a></span>
+<span id="cb1-8"><a></a>HAL_I2C_Master_Transmit<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="bn">0x4E</span><span class="op">,</span> data<span class="op">,</span> len<span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span>
+<span id="cb1-9"><a></a>HAL_I2C_Mem_Read<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="bn">0xD0</span><span class="op">,</span> reg<span class="op">,</span> I2C_MEMADD_SIZE_8BIT<span class="op">,</span> buf<span class="op">,</span> n<span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="relationship-strip">
+<p>A bus scan is the first thing to run and the last thing students think of. It answers “is it wired, powered, and at the address I believe?” in one step.</p>
+</div>
+</section>
+<section id="spi-four-wires-one-master" class="slide level2">
+<h2>SPI: four wires, one master</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Wire</th>
+<th>Name</th>
+<th>Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>SCK</code></td>
+<td>serial clock</td>
+<td>master → slave</td>
+</tr>
+<tr class="even">
+<td><code>MOSI</code></td>
+<td>master out, slave in</td>
+<td>master → slave</td>
+</tr>
+<tr class="odd">
+<td><code>MISO</code></td>
+<td>master in, slave out</td>
+<td>slave → master</td>
+</tr>
+<tr class="even">
+<td><code>CS</code>/<code>NSS</code></td>
+<td>chip select, active low</td>
+<td>master → <strong>one</strong> slave</td>
+</tr>
+</tbody>
+</table>
+<p>No addresses. Selection is <strong>physical</strong>: one dedicated <code>CS</code> line per device.</p>
+<div class="fragment relationship-strip">
+<p>Three shared wires plus one select line per device. Two devices: five wires. Eight devices: eleven. That is SPI’s real cost, and it is the reason I2C exists.</p>
+</div>
+</section>
+<section id="full-duplex-an-exchange-not-a-send" class="slide level2">
+<h2>Full duplex: an exchange, not a send</h2>
+<p>Every SPI transfer is a <strong>swap</strong>. The master and slave shift registers are wired into one ring: for every bit clocked out on <code>MOSI</code>, a bit arrives on <code>MISO</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a></a><span class="dt">uint8_t</span> tx <span class="op">=</span> <span class="bn">0xA5</span><span class="op">,</span> rx <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-2"><a></a>HAL_SPI_TransmitReceive<span class="op">(&amp;</span>hspi2<span class="op">,</span> <span class="op">&amp;</span>tx<span class="op">,</span> <span class="op">&amp;</span>rx<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> To <em>read</em>, you must still <em>write</em> something — usually a dummy byte.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> There is no ACK and no addressing. The wire is trusted.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Nothing tells you a slave is absent: reads come back <code>0x00</code> or <code>0xFF</code>.</p>
+</div>
+</div>
+</section>
+<section id="cpol-and-cpha" class="slide level2">
+<h2>CPOL and CPHA</h2>
+<p>Two bits decide when data is valid, and both ends must agree.</p>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>CPOL</span> the <strong>idle level</strong> of the clock: 0 = idles low, 1 = idles high.</p>
+</div>
+<div class="vertical-item">
+<p><span>CPHA</span> which clock edge <strong>samples</strong> the data: 0 = the leading edge, 1 = the trailing edge.</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p>Get these wrong and you do not get silence — you get <em>plausible garbage</em>, often shifted by one bit position. That is far harder to spot than nothing at all.</p>
+</div>
+</section>
+<section id="the-four-spi-modes" class="slide level2">
+<h2>The four SPI modes</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Mode</th>
+<th style="text-align: right;">CPOL</th>
+<th style="text-align: right;">CPHA</th>
+<th>Clock idles</th>
+<th>Data sampled on</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>low</td>
+<td>leading (rising) edge</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td>low</td>
+<td>trailing (falling) edge</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td>high</td>
+<td>leading (falling) edge</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td>high</td>
+<td>trailing (rising) edge</td>
+</tr>
+</tbody>
+</table>
+<div class="relationship-strip">
+<p>Mode 0 is by far the most common. The datasheet of the <em>slave</em> decides; the master obeys.</p>
+</div>
+</section>
+<section id="practice-read-the-timing-diagram" class="slide level2">
+<h2>Practice: read the timing diagram</h2>
+<p>A datasheet shows the clock idling <strong>high</strong>, with each data bit becoming valid on the <strong>falling</strong> edge and sampled on the <strong>rising</strong> edge.</p>
+<div class="prompt-list compact-prompts">
+<div class="prompt-item">
+<p><span>1</span> What are CPOL and CPHA?</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> Which mode number is that?</p>
+</div>
+<div class="prompt-item">
+<p><span>3</span> You configure mode 0 instead. What do you observe?</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p>Idles high → CPOL = 1. Sampled on the trailing (rising) edge → CPHA = 1. That is <strong>mode 3</strong>. With mode 0 the master samples on the wrong edge and reads each bit half a period early — consistent, shifted nonsense rather than silence.</p>
+</div>
+</section>
+<section id="chip-select-is-yours-to-drive" class="slide level2">
+<h2>Chip select is yours to drive</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a></a>HAL_GPIO_WritePin<span class="op">(</span>CS_PORT<span class="op">,</span> CS_PIN<span class="op">,</span> GPIO_PIN_RESET<span class="op">);</span>   <span class="co">/* select   */</span></span>
+<span id="cb3-2"><a></a>HAL_SPI_TransmitReceive<span class="op">(&amp;</span>hspi2<span class="op">,</span> tx<span class="op">,</span> rx<span class="op">,</span> n<span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span>
+<span id="cb3-3"><a></a>HAL_GPIO_WritePin<span class="op">(</span>CS_PORT<span class="op">,</span> CS_PIN<span class="op">,</span> GPIO_PIN_SET<span class="op">);</span>     <span class="co">/* deselect */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <code>CS</code> is an ordinary GPIO output — HAL will not toggle it for you.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> It must stay low for the <strong>whole</strong> multi-byte transaction.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Releasing it between bytes resets most slaves’ internal state machines.</p>
+</div>
+</div>
+</section>
+<section id="loopback-proving-the-shift-register" class="slide level2">
+<h2>Loopback: proving the shift register</h2>
+<p>Connect <code>MOSI</code> to <code>MISO</code> with one jumper. The bus now talks to itself.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a></a><span class="dt">uint8_t</span> tx <span class="op">=</span> <span class="bn">0xA5</span><span class="op">,</span> rx <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-2"><a></a>HAL_SPI_TransmitReceive<span class="op">(&amp;</span>hspi2<span class="op">,</span> <span class="op">&amp;</span>tx<span class="op">,</span> <span class="op">&amp;</span>rx<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span>
+<span id="cb4-3"><a></a><span class="co">/* rx == 0xA5  -&gt;  clock, pins and shift register all work */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment relationship-strip">
+<p>The cheapest diagnostic in the course: it separates “my SPI is misconfigured” from “the slave is not answering,” and needs no slave at all.</p>
+</div>
+</section>
+<section id="choosing-between-them" class="slide level2">
+<h2>Choosing between them</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th></th>
+<th>I2C</th>
+<th>SPI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Wires</td>
+<td>2 + pull-ups</td>
+<td>3 + one CS per device</td>
+</tr>
+<tr class="even">
+<td>Addressing</td>
+<td>7-bit, in protocol</td>
+<td>physical, one line each</td>
+</tr>
+<tr class="odd">
+<td>Acknowledgement</td>
+<td>yes — the device confirms</td>
+<td>none</td>
+</tr>
+<tr class="even">
+<td>Typical speed</td>
+<td>100–400 kHz</td>
+<td>1–50 MHz</td>
+</tr>
+<tr class="odd">
+<td>Many devices</td>
+<td>cheap</td>
+<td>expensive in pins</td>
+</tr>
+<tr class="even">
+<td>Detects a missing device</td>
+<td>yes, NACK</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<div class="relationship-strip">
+<p>Many slow devices, few pins → <strong>I2C</strong>. One fast device, pins to spare → <strong>SPI</strong>. Sensors and character displays tend to I2C; SD cards, flash and pixel displays tend to SPI.</p>
+</div>
+</section>
+<section id="the-registers" class="slide level2">
+<h2>The registers</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Register</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>I2C1-&gt;CR1</code></td>
+<td><code>PE</code> enable, <code>START</code>, <code>STOP</code>, <code>ACK</code></td>
+</tr>
+<tr class="even">
+<td><code>I2C1-&gt;SR1/SR2</code></td>
+<td><code>SB</code> start sent, <code>ADDR</code> matched, <code>TXE</code>, <code>RXNE</code>, <code>AF</code> acknowledge failure</td>
+</tr>
+<tr class="odd">
+<td><code>I2C1-&gt;CCR</code></td>
+<td>clock control — sets 100 or 400 kHz</td>
+</tr>
+<tr class="even">
+<td><code>SPI2-&gt;CR1</code></td>
+<td><code>SPE</code> enable, <code>MSTR</code> master, <code>CPOL</code>, <code>CPHA</code>, <code>BR</code> baud divider</td>
+</tr>
+<tr class="odd">
+<td><code>SPI2-&gt;SR</code></td>
+<td><code>TXE</code>, <code>RXNE</code>, <code>BSY</code>, <code>OVR</code></td>
+</tr>
+<tr class="even">
+<td><code>SPI2-&gt;DR</code></td>
+<td>data — one register, both directions</td>
+</tr>
+</tbody>
+</table>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=476">RM0368 Rev 6, I2C — p.&nbsp;476</a>, <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=550">SPI — p.&nbsp;550</a>.</p>
+</div>
+</section>
+<section id="register-evidence" class="slide level2">
+<h2>Register evidence</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <code>GPIOB-&gt;OTYPER</code> bits 8 and 9 read <code>1</code> — open drain, as I2C requires.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> A NACK sets <code>AF</code> in <code>I2C1-&gt;SR1</code>. Address a device that is not there and watch it appear.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <code>SPI2-&gt;CR1</code> shows your <code>CPOL</code>/<code>CPHA</code> — compare against the slave’s datasheet, not against what you meant to set.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> In loopback, <code>SPI2-&gt;DR</code> returns exactly what you wrote.</p>
+</div>
+</div>
+<p>A successful build proves none of this. The SFR view does.</p>
+</section>
+<section id="common-mistakes" class="slide level2">
+<h2>Common mistakes</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>THE 7-BIT/8-BIT SHIFT:</strong> passing <code>0x27</code> where HAL wants <code>0x4E</code>.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>02</span> <strong>NO PULL-UPS:</strong> lines stuck low, every transfer times out.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>03</span> <strong>SDA AND SCL SWAPPED:</strong> nothing answers; a bus scan finds nothing at all.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>04</span> <strong>IGNORING THE RETURN VALUE:</strong> <code>HAL_ERROR</code> on a NACK is the bus telling you the truth.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>05</span> <strong>WRONG SPI MODE:</strong> plausible, bit-shifted garbage rather than silence.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>06</span> <strong>CS RELEASED MID-TRANSACTION:</strong> the slave’s state machine resets between bytes.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>07</span> <strong>EXPECTING SPI TO REPORT A MISSING SLAVE:</strong> it cannot. Reads return <code>0x00</code> or <code>0xFF</code>.</p>
+</div>
+<div class="vertical-item fragment">
+<p><span>08</span> <strong>REFRESHING THE WHOLE LCD EVERY TICK:</strong> 7.2 ms per line, spent on a display nobody reads that fast.</p>
+</div>
+</div>
+</section>
+<section id="laboratory-mission" class="slide level2">
+<h2>Laboratory mission</h2>
+<div class="big-question">
+<p>Put a real device on a real bus. Scan I2C to discover the LCD’s address, drive it to show live ADC readings, and prove an SPI link works with a single loopback jumper — then read both buses’ registers as evidence.</p>
+</div>
+<p>You will show:</p>
+<ol type="1">
+<li>a bus scan that finds the LCD and reports its 7-bit address;</li>
+<li>the display showing live millivolts, refreshed at a <em>justified</em> rate;</li>
+<li><code>AF</code> set deliberately by addressing a device that is not there;</li>
+<li>SPI loopback returning the byte you sent, with <code>CPOL</code>/<code>CPHA</code> read from <code>CR1</code>;</li>
+<li>one individual variation, predicted before flashing.</li>
+</ol>
+</section>
+<section id="mastery-checklist" class="slide level2">
+<h2>Mastery checklist</h2>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>✓</span> Explain what a clock line buys over a UART’s assumed rate.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Read an I2C transaction and identify START, address, R/W, ACK, STOP.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Convert between 7-bit and HAL’s 8-bit address form, in both directions.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Explain open drain and why pull-ups are mandatory.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> State CPOL/CPHA for a given timing diagram and name the mode.</p>
+</div>
+<div class="vertical-item">
+<p><span>✓</span> Justify I2C or SPI for a stated device and pin budget.</p>
+</div>
+</div>
+<p>Next: integration — putting the whole term on one board, and making it survive a demo.</p>
+</section>
+<section id="exit-ticket" class="slide level2">
+<h2>Exit ticket</h2>
+<p>A datasheet gives a sensor’s address as <code>0x68</code>, and shows its clock idling <strong>low</strong> with data sampled on the <strong>rising</strong> edge. Your I2C bus runs at 100 kHz.</p>
+<div class="vertical-list ticket-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>ADDRESS:</strong> What value do you pass to <code>HAL_I2C_Mem_Read</code>?</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>MODE:</strong> If the same part were used over SPI, what are CPOL, CPHA, and the mode number?</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>TIME:</strong> How long does one I2C byte plus its ACK take at 100 kHz?</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <strong>EVIDENCE:</strong> Which flag tells you nothing answered, and where does it live?</p>
+</div>
+<div class="vertical-item">
+<p><span>05</span> <strong>CHOICE:</strong> You must add six identical temperature sensors. Which bus, and why?</p>
+</div>
+</div>
+<div class="source-note">
+<p>Every concept in this lecture, with page-linked sources: <a href="../../../resources/references/academic_references.html">academic references</a>.</p>
+</div>
+
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>EE5203 - L11</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../../../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../../../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../../../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+
+        height: 900,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

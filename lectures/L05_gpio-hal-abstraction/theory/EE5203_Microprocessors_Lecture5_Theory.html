@@ -217,13 +217,13 @@ Basri Erdogan
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span>
 <span id="cb1-2"><a></a></span>
 <span id="cb1-3"><a></a>HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span> GPIO_PIN_SET<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Today we will connect every HAL name to the register behavior learned in Week 4.</p>
+<p>Today we will connect every HAL name to the register behavior learned in L04.</p>
 </section>
 <section id="interface-not-hardware" class="slide level2">
 <h2>Interface, not hardware</h2>
 <div class="vertical-list">
 <div class="vertical-item">
-<p><span>01</span> <strong>WEEK 4:</strong> calculate masks and write CMSIS registers directly.</p>
+<p><span>01</span> <strong>L04:</strong> calculate masks and write CMSIS registers directly.</p>
 </div>
 <div class="vertical-item">
 <p><span>02</span> <strong>TODAY:</strong> describe the same configuration with a HAL structure and functions.</p>
@@ -276,8 +276,8 @@ Basri Erdogan
 </div>
 <p>Today: the exact same bits — written by a function with names instead of masks.</p>
 </section>
-<section id="week-4-recap-registers" class="slide level2">
-<h2>Week 4 recap: registers</h2>
+<section id="l04-recap-registers" class="slide level2">
+<h2>L04 recap: registers</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a></a>RCC<span class="op">-&gt;</span>AHB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span></span>
 <span id="cb3-2"><a></a></span>
 <span id="cb3-3"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
@@ -841,7 +841,7 @@ PUPDR bits 31 down to 16 drawn as eight two-bit fields for pins 15 to 8; the pin
 <section id="laboratory-mission" class="slide level2">
 <h2>Laboratory mission</h2>
 <div class="big-question">
-<p>Rebuild the Week 4 LED behavior with HAL, then use B1 to control LD2 and prove the HAL configuration in the register view.</p>
+<p>Rebuild the L04 LED behavior with HAL, then use B1 to control LD2 and prove the HAL configuration in the register view.</p>
 </div>
 <p>You will demonstrate:</p>
 <ol type="1">

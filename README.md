@@ -7,9 +7,8 @@ Rendered, student-facing materials for EE5203 Microprocessors
 
 Contents: syllabus, lecture decks, study sheets, practice worksheets, lab
 guides, starter files, and the "From C to Silicon" toolchain companion
-(HTML + PDF). Lectures L01–L06 are the completed 2026-27 packages; later
-lectures are last year's versions, published as a preview while each package
-is rebuilt in sequence.
+(HTML + PDF). The course runs as 13 lecture packages (L01–L13), with the
+midterm in week 8. All 13 packages are the rebuilt 2026-27 versions.
 
 Graded work (pre-lab quizzes, homework), solutions, answer keys, instructor
 materials, grading, and administrative records are never published here —
