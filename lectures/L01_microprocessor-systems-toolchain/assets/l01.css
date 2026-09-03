@@ -1,0 +1,213 @@
+/* L01-only rules, layered over the shared styles.css (2026-09-02 rebuild).
+   Kept separate so later decks that import styles.css are unaffected. */
+
+/* --- hero figures: one figure per slide, filling the frame ---------------- */
+.reveal img.hero,
+.reveal img.hero-tall,
+.reveal img.hero-mid,
+.reveal img.hero-small,
+.reveal img.hero-xs,
+.reveal img.hero-fill {
+  display: block;
+  width: auto;
+  max-width: 96%;
+  margin: 0.1em auto 0.25em;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.reveal img.hero      { max-height: 600px; }
+.reveal img.hero-tall { max-height: 660px; }
+.reveal img.hero-mid  { max-height: 520px; }
+.reveal img.hero-small { max-height: 440px; }
+.reveal img.hero-xs { max-height: 400px; }
+.reveal img.hero-fill { height: 580px; max-height: 580px; width: auto; max-width: 96%; }  /* matplotlib SVGs carry small intrinsic sizes */
+
+/* inline SVG scenes (pipeline, board callouts) */
+.reveal svg.scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 640px;
+  margin: 0.05em auto 0.2em;
+  font-family: "Quicksand", Arial, sans-serif;
+}
+.reveal svg.scene-tall { max-height: 640px; }
+
+/* --- progress strip: the pipeline as a map, current stage lit ------------- */
+.reveal .stage-strip {
+  position: absolute;
+  top: 54px;
+  right: 44px;
+  display: flex;
+  gap: 7px;
+  font-size: 0.50em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.reveal .stage-strip span {
+  padding: 0.38em 0.8em;
+  border-radius: 999px;
+  background: #e6edf1;
+  color: #8ea0ab;
+}
+.reveal .stage-strip span.on { background: var(--c); color: #fff; }
+.reveal .stage-strip .s1 { --c: #8194a0; }
+.reveal .stage-strip .s2 { --c: #4383a5; }
+.reveal .stage-strip .s3 { --c: #2b789f; }
+.reveal .stage-strip .s4 { --c: #174f73; }
+.reveal .stage-strip .s5 { --c: #d47b28; }
+.reveal .stage-strip .s6 { --c: #4a8b62; }
+
+/* --- code heroes ---------------------------------------------------------- */
+.reveal section.code-hero div.sourceCode pre code { font-size: 36px !important; line-height: 1.4 !important; padding: 0.8em 1em !important; }
+.reveal section.code-big div.sourceCode pre code { font-size: 29px !important; line-height: 1.32 !important; padding: 0.7em 0.9em !important; }
+.reveal section.code-tight div.sourceCode pre code { font-size: 27px !important; line-height: 1.27 !important; padding: 0.6em 0.9em !important; }
+.reveal section.code-hero div.sourceCode pre code,
+.reveal section.code-big div.sourceCode pre code,
+.reveal section.code-tight div.sourceCode pre code { max-height: none !important; overflow: visible !important; }
+.reveal .big-question { font-size: 1.0em; margin: 0.35em auto 0.45em; }
+
+/* numbered explanation rows under a code block (same rules as L02's week2.css) */
+.reveal .vertical-list {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin: 0.38em auto;
+}
+.reveal .vertical-item {
+  box-sizing: border-box;
+  padding: 0.34em 0.28em;
+  border-bottom: 2px solid #d9e5eb;
+  color: #355262;
+  font-size: 0.82em;
+  line-height: 1.25;
+}
+.reveal .vertical-item:first-child { border-top: 2px solid #d9e5eb; }
+.reveal .vertical-item p { margin: 0; padding-left: 76px; text-indent: -76px; }
+.reveal .vertical-item p > span:first-child {
+  display: inline-block;
+  width: 76px;
+  color: #1682bd;
+  font-size: 0.92em;
+  font-weight: 700;
+}
+
+/* --- poll tiles (2 x 2, fill the frame) ----------------------------------- */
+.reveal .poll-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5em;
+  width: 94%;
+  margin: 0.4em auto 0.3em;
+}
+.reveal .poll-tile {
+  box-sizing: border-box;
+  min-height: 235px;
+  padding: 0.65em 0.85em;
+  border: 2px solid #d8e5ec;
+  border-left: 9px solid var(--ee-blue-mid);
+  border-radius: 18px;
+  background: #f8fbfd;
+  color: #355262;
+  font-size: 0.86em;
+  line-height: 1.3;
+}
+.reveal .poll-tile p { margin: 0.18em 0; }
+.reveal .poll-tile p:first-child { color: #174f73; font-size: 1.05em; font-weight: 700; }
+.reveal .poll-tile em { color: #718792; }
+
+/* --- two code panels: register vs HAL, baseline vs modified --------------- */
+.reveal .duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6em;
+  width: 96%;
+  margin: 0.35em auto;
+  align-items: stretch;
+}
+.reveal .duo-card {
+  box-sizing: border-box;
+  min-height: 330px;
+  padding: 0.55em 0.7em 0.65em;
+  border: 2px solid #d8e5ec;
+  border-top: 9px solid var(--ee-blue-mid);
+  border-radius: 16px;
+  background: #f8fbfd;
+  color: #355262;
+  font-size: 0.84em;
+  line-height: 1.3;
+}
+.reveal .duo-card.reg { border-top-color: #d47b28; }
+.reveal .duo-card.hal { border-top-color: #4a8b62; }
+.reveal .duo-card.changed { border-color: #1682bd; background: #eef7fb; }
+.reveal .duo-card p:first-child { margin: 0 0 0.2em; color: #174f73; font-weight: 700; font-size: 1.05em; }
+.reveal .duo-card p { margin: 0.25em 0; }
+.reveal .duo-card pre { width: 100%; margin: 0.3em auto; }
+.reveal .duo-card div.sourceCode pre code { font-size: 24px !important; line-height: 1.3 !important; }
+
+/* --- debugging dialogue: the useless sentence vs the four useful ones ------ */
+.reveal .dialogue {
+  display: grid;
+  grid-template-columns: 1fr 1.55fr;
+  gap: 0.7em;
+  width: 96%;
+  margin: 0.45em auto;
+  align-items: stretch;
+}
+.reveal .say-bad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7em 0.9em;
+  border-left: 9px solid #c34f4f;
+  border-radius: 0 18px 18px 0;
+  background: #f8eaea;
+  color: #733737;
+  font-size: 1.15em;
+  font-weight: 700;
+  text-align: center;
+}
+.reveal .say-good { display: flex; flex-direction: column; gap: 0.32em; }
+.reveal .say-good p {
+  margin: 0;
+  padding: 0.42em 0.7em;
+  border-left: 7px solid #4a8b62;
+  border-radius: 0 12px 12px 0;
+  background: #eef6f0;
+  color: #355262;
+  font-size: 0.86em;
+  line-height: 1.3;
+}
+.reveal .say-good strong { display: inline-block; width: 5.4em; color: #326747; }
+
+/* --- larger tables on table-only slides ----------------------------------- */
+.reveal section.big-table table { font-size: 0.86em; margin-top: 0.4em; }
+.reveal section.big-table table th { padding: 0.42em 0.6em; }
+.reveal section.big-table table td { padding: 0.42em 0.6em; }
+.reveal section.big-table td.no { background: #fbf0e6 !important; color: #7a4a1c; }
+
+/* --- misc ------------------------------------------------------------------ */
+.reveal .caption {
+  width: 94%;
+  margin: 0.25em auto 0;
+  color: #355262;
+  font-size: 0.82em;
+  text-align: center;
+}
+.reveal .caption strong { color: #174f73; }
+.reveal .lab-track { margin-top: 0.8em; }
+.reveal .lab-step { min-height: 290px; font-size: 0.84em; padding-top: 1em; }
+.reveal .ticket-grid { margin-top: 0.7em; }
+.reveal .ticket-card { min-height: 300px; font-size: 0.84em; padding-top: 1.1em; }
+.reveal .outcome-line {
+  width: 94%;
+  margin: 0.4em auto 0;
+  padding: 0.45em 0.8em;
+  border-radius: 12px;
+  background: #eaf3f8;
+  color: #355262;
+  font-size: 0.74em;
+  text-align: center;
+}

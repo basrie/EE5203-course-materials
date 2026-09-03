@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="600" viewBox="0 0 1400 600" role="img" aria-labelledby="nest-title nest-desc">
+  <title id="nest-title">Processor inside microcontroller inside embedded system</title>
+  <desc id="nest-desc">Three nested frames: the Arm Cortex-M4 core sits inside the STM32F401RE microcontroller, which sits inside the complete embedded system.</desc>
+  <g font-family="Quicksand,Arial,sans-serif">
+    <!-- outer: embedded system -->
+    <rect x="30" y="24" width="1340" height="552" rx="30" fill="#f4f9f5" stroke="#4a8b62" stroke-width="4"/>
+    <text x="64" y="80" font-size="34" font-weight="700" fill="#326747">EMBEDDED SYSTEM</text>
+    <text x="64" y="120" font-size="25" fill="#456d54">hardware + software + a dedicated purpose · the complete product</text>
+    <g font-size="23" fill="#456d54">
+      <text x="64" y="380">also inside the system:</text>
+      <text x="64" y="420">sensors and switches</text>
+      <text x="64" y="456">actuators: LED, relay, motor</text>
+      <text x="64" y="492">power, wiring, enclosure</text>
+      <text x="64" y="528">and the program you write</text>
+    </g>
+    <!-- middle: microcontroller -->
+    <rect x="420" y="150" width="920" height="400" rx="26" fill="#e4f1f7" stroke="#4383a5" stroke-width="4"/>
+    <text x="452" y="204" font-size="32" font-weight="700" fill="#174f73">MICROCONTROLLER · STM32F401RE</text>
+    <text x="452" y="242" font-size="24" fill="#526c7c">processor + memory + peripherals on one chip</text>
+    <g font-size="22" fill="#526c7c">
+      <text x="452" y="420">flash · SRAM</text>
+      <text x="452" y="456">GPIO · timers · ADC</text>
+      <text x="452" y="492">UART · I2C · SPI</text>
+      <text x="452" y="528">clocks · interrupt controller</text>
+    </g>
+    <!-- inner: processor -->
+    <rect x="800" y="290" width="500" height="220" rx="22" fill="#174f73"/>
+    <text x="832" y="346" font-size="30" font-weight="700" fill="#ffffff">PROCESSOR · Arm Cortex-M4</text>
+    <text x="832" y="386" font-size="23" fill="#d9edf7">executes instructions, one after another</text>
+    <text x="832" y="422" font-size="23" fill="#d9edf7">reads and writes memory addresses</text>
+    <text x="832" y="458" font-size="23" fill="#d9edf7">everything else is a device at an address</text>
+    <!-- board tag -->
+    <rect x="1040" y="70" width="300" height="52" rx="14" fill="#ffffff" stroke="#4a8b62" stroke-width="2.5"/>
+    <text x="1190" y="105" text-anchor="middle" font-size="23" font-weight="700" fill="#326747">our board: Nucleo-F401RE</text>
+  </g>
+</svg>

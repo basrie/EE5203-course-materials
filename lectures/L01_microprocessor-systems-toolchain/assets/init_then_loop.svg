@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="560" viewBox="0 0 640 560" role="img" aria-labelledby="loop-title loop-desc">
+  <title id="loop-title">Firmware shape: initialise once, then loop forever</title>
+  <desc id="loop-desc">Reset leads to a one-time initialisation block, then into a loop that repeats toggle, wait, repeat without ever returning.</desc>
+  <defs>
+    <marker id="loop-ar" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L14 7 L0 14 Z" fill="#2b789f"/></marker>
+  </defs>
+  <g font-family="Quicksand,Arial,sans-serif" text-anchor="middle">
+    <!-- reset -->
+    <rect x="200" y="20" width="240" height="64" rx="32" fill="#eef2f5" stroke="#8194a0" stroke-width="3"/>
+    <text x="320" y="62" font-size="27" font-weight="700" fill="#324c5b">power on / reset</text>
+    <path d="M320 86 V128" stroke="#2b789f" stroke-width="4" marker-end="url(#loop-ar)"/>
+    <!-- init once -->
+    <rect x="110" y="132" width="420" height="120" rx="22" fill="#e4f1f7" stroke="#4383a5" stroke-width="3"/>
+    <text x="320" y="180" font-size="29" font-weight="700" fill="#174f73">initialise once</text>
+    <text x="320" y="222" font-size="22" fill="#526c7c">HAL_Init · clocks · GPIO pins</text>
+    <path d="M320 254 V296" stroke="#2b789f" stroke-width="4" marker-end="url(#loop-ar)"/>
+    <!-- loop forever -->
+    <rect x="110" y="300" width="420" height="200" rx="22" fill="#fff0dc" stroke="#d47b28" stroke-width="3"/>
+    <text x="320" y="350" font-size="29" font-weight="700" fill="#95511d">while (1)</text>
+    <text x="320" y="396" font-size="24" fill="#735a3d">toggle · wait · repeat</text>
+    <text x="320" y="436" font-size="22" fill="#735a3d">never returns</text>
+    <!-- loop-back arrow on the right -->
+    <path d="M530 400 H590 Q612 400 612 378 V330 Q612 308 590 308 H540" fill="none" stroke="#d47b28" stroke-width="4" marker-end="url(#loop-ar)"/>
+    <text x="612" y="470" font-size="20" fill="#95511d">again</text>
+    <!-- no exit -->
+    <text x="320" y="540" font-size="22" fill="#5a6b76">there is no operating system to return to</text>
+  </g>
+</svg>

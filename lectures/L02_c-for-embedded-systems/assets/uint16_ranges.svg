@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 400" font-family="Quicksand,Arial,sans-serif">
+<defs><marker id="ar" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L12 6 L0 12 Z" fill="#3d7f9f"/></marker><marker id="arr" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L12 6 L0 12 Z" fill="#c0392b"/></marker></defs>
+<text x="200" y="62" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">uint16_t</text>
+<text x="370" y="62" font-size="24" fill="#5a6b76">16 bits · 65 536 values · none of them negative</text>
+<rect x="200" y="104" width="70.6" height="32" fill="#fff0dc" stroke="#d47b28" stroke-width="2"/>
+<path d="M200 120 H1330" stroke="#174f73" stroke-width="5"/>
+<path d="M200.0 106 V134" stroke="#174f73" stroke-width="4"/>
+<text x="200.0" y="168" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">0</text>
+<path d="M1330.0 106 V134" stroke="#174f73" stroke-width="4"/>
+<text x="1330.0" y="168" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">65535</text>
+<path d="M270.6 80 V134" stroke="#d47b28" stroke-width="3"/>
+<text x="280.6" y="94" font-size="24" font-weight="700" fill="#95511d">4095 — the 12-bit sensor range (L09) fits in the first 6 %</text>
+<text x="186" y="130" text-anchor="end" font-size="34" font-weight="700" fill="#c0392b">✗</text>
+<text x="186" y="162" text-anchor="end" font-size="20" fill="#c0392b">no negative side</text>
+<text x="200" y="232" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">int</text>
+<text x="290" y="232" font-size="24" fill="#5a6b76">32 bits on this processor · negative and positive · counters, sums, results</text>
+<path d="M200 290 H1330" stroke="#174f73" stroke-width="5"/>
+<path d="M200.0 276 V304" stroke="#174f73" stroke-width="4"/>
+<text x="200.0" y="338" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">−2 147 483 648</text>
+<path d="M765.0 276 V304" stroke="#174f73" stroke-width="4"/>
+<text x="765.0" y="338" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">0</text>
+<path d="M1330.0 276 V304" stroke="#174f73" stroke-width="4"/>
+<text x="1330.0" y="338" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">2 147 483 647</text>
+<text x="700" y="382" text-anchor="middle" font-size="24" fill="#5a6b76">both come from <tspan font-family="ui-monospace,Menlo,Consolas,monospace" font-weight="700" fill="#174f73">#include &lt;stdint.h&gt;</tspan> — the <tspan font-family="ui-monospace,Menlo,Consolas,monospace">_t</tspan> marks a standard type name</text>
+</svg>

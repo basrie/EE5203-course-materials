@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 320" font-family="Quicksand,Arial,sans-serif">
+<text x="100" y="60" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">25990 / 8</text>
+<text x="300" y="60" font-size="26" fill="#5a6b76">— how many whole 3248s fit? eight.</text>
+<rect x="100.0" y="120" width="124.8" height="90" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="3"/>
+<text x="162.4" y="176.0" text-anchor="middle" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">3248</text>
+<rect x="228.8" y="120" width="124.8" height="90" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="3"/>
+<text x="291.1" y="176.0" text-anchor="middle" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">3248</text>
+<rect x="357.5" y="120" width="124.8" height="90" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="3"/>
+<text x="419.9" y="176.0" text-anchor="middle" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">3248</text>
+<rect x="486.2" y="120" width="124.8" height="90" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="3"/>
+<text x="548.6" y="176.0" text-anchor="middle" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">3248</text>
+<rect x="615.0" y="120" width="124.8" height="90" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="3"/>
+<text x="677.4" y="176.0" text-anchor="middle" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">3248</text>
+<rect x="743.8" y="120" width="124.8" height="90" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="3"/>
+<text x="806.1" y="176.0" text-anchor="middle" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">3248</text>
+<rect x="872.5" y="120" width="124.8" height="90" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="3"/>
+<text x="934.9" y="176.0" text-anchor="middle" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">3248</text>
+<rect x="1001.2" y="120" width="124.8" height="90" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="3"/>
+<text x="1063.6" y="176.0" text-anchor="middle" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">3248</text>
+<rect x="1132" y="120" width="34" height="90" rx="6" fill="#fff0dc" stroke="#d47b28" stroke-width="3"/>
+<text x="1149" y="175.0" text-anchor="middle" font-size="26" font-weight="700" fill="#95511d" font-family="ui-monospace,Menlo,Consolas,monospace">6</text>
+<text x="1180" y="150" font-size="24" font-weight="700" fill="#95511d">remainder</text>
+<text x="1180" y="182" font-size="22" fill="#5a6b76">dropped by /</text>
+<text x="1180" y="210" font-size="22" fill="#5a6b76">(sliver not to scale)</text>
+<text x="100" y="272" font-size="28" fill="#5a6b76"><tspan font-family="ui-monospace,Menlo,Consolas,monospace" font-weight="700" fill="#174f73">average = 25990 / 8</tspan> is <tspan font-family="ui-monospace,Menlo,Consolas,monospace" font-weight="700" fill="#174f73">3248</tspan>, not 3248.75 and not 3249 &#160;·&#160; <tspan font-family="ui-monospace,Menlo,Consolas,monospace" font-weight="700" fill="#95511d">25990 % 8</tspan> is <tspan font-family="ui-monospace,Menlo,Consolas,monospace" font-weight="700" fill="#95511d">6</tspan></text>
+</svg>

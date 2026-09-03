@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" font-family="Quicksand,Arial,sans-serif">
+<defs><marker id="ar" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L12 6 L0 12 Z" fill="#3d7f9f"/></marker><marker id="arr" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L12 6 L0 12 Z" fill="#c0392b"/></marker></defs>
+<rect x="40" y="40" width="260" height="104" rx="18" fill="#eef2f5" stroke="#8194a0" stroke-width="3"/><text x="170.0" y="78" text-anchor="middle" font-size="24" font-weight="700" fill="#8194a0">START · once</text><text x="170.0" y="118" text-anchor="middle" font-size="30" font-weight="700" fill="#324c5b" font-family="ui-monospace,Menlo,Consolas,monospace">int i = 0</text>
+<rect x="370" y="40" width="260" height="104" rx="18" fill="#fff0dc" stroke="#d47b28" stroke-width="3"/><text x="500.0" y="78" text-anchor="middle" font-size="24" font-weight="700" fill="#d47b28">TEST · every time</text><text x="500.0" y="118" text-anchor="middle" font-size="30" font-weight="700" fill="#95511d" font-family="ui-monospace,Menlo,Consolas,monospace">i &lt; 8 ?</text>
+<rect x="700" y="40" width="260" height="104" rx="18" fill="#f3f3f3" stroke="#9aa7ae" stroke-width="3"/><text x="830.0" y="78" text-anchor="middle" font-size="24" font-weight="700" fill="#9aa7ae">false → leave</text><text x="830.0" y="118" text-anchor="middle" font-size="30" font-weight="700" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">after the loop</text>
+<rect x="370" y="300" width="260" height="104" rx="18" fill="#d8ebf4" stroke="#2b789f" stroke-width="3"/><text x="500.0" y="338" text-anchor="middle" font-size="24" font-weight="700" fill="#2b789f">BODY</text><text x="500.0" y="378" text-anchor="middle" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">{ … samples[i] … }</text>
+<rect x="40" y="300" width="260" height="104" rx="18" fill="#edf6f0" stroke="#3f7f58" stroke-width="3"/><text x="170.0" y="338" text-anchor="middle" font-size="24" font-weight="700" fill="#3f7f58">UPDATE</text><text x="170.0" y="378" text-anchor="middle" font-size="30" font-weight="700" fill="#3f7f58" font-family="ui-monospace,Menlo,Consolas,monospace">i++</text>
+<path d="M302 92 H364" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#ar)"/>
+<path d="M632 92 H694" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#ar)"/>
+<text x="663" y="76" text-anchor="middle" font-size="22" font-weight="700" fill="#5a6b76">no</text>
+<path d="M500 146 V294" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#ar)"/>
+<text x="524" y="226" font-size="22" font-weight="700" fill="#3f7f58">yes</text>
+<path d="M368 352 H306" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#ar)"/>
+<path d="M170 298 V226 Q170 200 196 200 H474 Q500 200 500 174 V150" stroke="#3d7f9f" stroke-width="4.5" fill="none" marker-end="url(#ar)"/>
+<text x="335" y="190" text-anchor="middle" font-size="22" font-weight="700" fill="#5a6b76">test again</text>
+<text x="500" y="470" text-anchor="middle" font-size="24" fill="#5a6b76">start · test · body · update · test · … · test fails · leave — the body ran once per true test</text>
+</svg>

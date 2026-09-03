@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.43">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -292,8 +292,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="arrays">Arrays</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdint.h&gt;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> samples<span class="op">[</span><span class="dv">8</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="dv">850</span><span class="op">,</span> <span class="dv">1250</span><span class="op">,</span> <span class="dv">4095</span><span class="op">,</span> <span class="dv">4200</span><span class="op">,</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">2050</span><span class="op">,</span> <span class="dv">900</span><span class="op">,</span> <span class="dv">3100</span><span class="op">,</span> <span class="dv">2800</span> <span class="op">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> samples<span class="op">[</span><span class="dv">8</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="dv">3000</span><span class="op">,</span> <span class="dv">4095</span><span class="op">,</span> <span class="dv">4200</span><span class="op">,</span> <span class="dv">2500</span><span class="op">,</span>     <span class="co">// the lecture's data set;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">3500</span><span class="op">,</span> <span class="dv">1000</span><span class="op">,</span> <span class="dv">3800</span><span class="op">,</span> <span class="dv">4000</span> <span class="op">};</span>   <span class="co">// the lab uses its own</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li><code>uint16_t</code>: unsigned, 16-bit, fixed-width integer — no negative values.</li>
 <li>Valid indices are <code>0</code> through <code>7</code>. <code>samples[8]</code> is <strong>outside</strong> the array.</li>
@@ -316,6 +316,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> average <span class="op">=</span> sum <span class="op">/</span> <span class="dv">8</span><span class="op">;</span>            <span class="co">// integer division</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>One loop can clamp, sum, and count in a single pass. Every result variable needs a correct starting value <strong>before</strong> the loop.</p>
+<p><strong>Worked example (lecture data set).</strong> Trace it yourself before reading the right column; the lab set is different, so its prediction table is still yours to fill.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 40%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Result</th>
+<th style="text-align: right;">Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>samples[2]</code> after the loop</td>
+<td style="text-align: right;"><code>4095</code></td>
+<td><code>4200 &gt; 4095</code> was true once</td>
+</tr>
+<tr class="even">
+<td><code>invalid_count</code></td>
+<td style="text-align: right;"><code>1</code></td>
+<td>counted inside that same <code>if</code></td>
+</tr>
+<tr class="odd">
+<td><code>high_count</code></td>
+<td style="text-align: right;"><code>6</code></td>
+<td><code>2500 &gt; 2500</code> is false — <code>&gt;</code> is strict</td>
+</tr>
+<tr class="even">
+<td><code>sum</code></td>
+<td style="text-align: right;"><code>25990</code></td>
+<td>running: 3000 · 7095 · 11190 · 13690 · 17190 · 18190 · 21990 · 25990</td>
+</tr>
+<tr class="odd">
+<td><code>average</code></td>
+<td style="text-align: right;"><code>3248</code></td>
+<td><code>25990 / 8</code>; the remainder <code>6</code> is discarded</td>
+</tr>
+<tr class="even">
+<td><code>status_code</code></td>
+<td style="text-align: right;"><code>1</code></td>
+<td><code>3248 &gt; 3000</code> → HIGH</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="decision-chains" class="level2">
 <h2 class="anchored" data-anchor-id="decision-chains">Decision chains</h2>
@@ -331,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Forgetting to initialize an accumulator (<code>sum</code> starts with garbage).</li>
 <li><code>i &lt;= 8</code> on an eight-element array — reads/writes outside the array.</li>
 <li>Forgetting the update in a <code>while</code> loop — the loop never ends.</li>
-<li>Expecting <code>19140 / 8</code> to have a fraction — integer division discards it.</li>
+<li>Expecting <code>25990 / 8</code> to have a fraction — integer division gives <code>3248</code> and discards the remainder <code>6</code>.</li>
 <li>Trusting a clean build as proof the computed values are correct.</li>
 </ul>
 </section>
@@ -343,7 +390,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><label><input type="checkbox">I can state how many times <code>for (int i = 0; i &lt; 8; i++)</code> runs its body.</label></li>
 <li><label><input type="checkbox">I can list the valid indices of <code>uint16_t samples[8]</code>.</label></li>
 <li><label><input type="checkbox">I can explain why <code>sum</code> must start at zero.</label></li>
-<li><label><input type="checkbox">I can predict <code>sum / 8</code> when <code>sum</code> is <code>19140</code>.</label></li>
+<li><label><input type="checkbox">I can predict <code>sum / 8</code> when <code>sum</code> is <code>25990</code>.</label></li>
 <li><label><input type="checkbox">I can place a breakpoint inside a loop and read <code>i</code> and <code>samples[i]</code>.</label></li>
 </ul>
 </section>

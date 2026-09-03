@@ -3339,235 +3339,186 @@
     "text": "uint16_t average_samples(uint16_t values[], int count); — what does the caller receive, and what two things does the caller have to supply?\nThe build fails with undefined reference to make_status. Which file is missing what, and why did compilation succeed?\nAfter int x = 7; scale(x, 4); the student expects x == 28. What actually happened, and what one-line change fixes the caller?\nHow many bytes does \"HIGH\" occupy as a C string, and what is stored in the final byte?\nmake_status(text, 4, 3500U) must select \"HIGH\". What should the function do, and what should it return?\n\nSee the L03 worksheet for extended practice. Worked solutions are released after the practice window."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#decisions-and-repetition",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#decisions-and-repetition",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#opening-challenge",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#opening-challenge",
     "title": "EE5203 Microprocessors",
-    "section": "Decisions and repetition",
-    "text": "Decisions and repetition\n\nLast week, you built, flashed, and debugged a small C program. Today you will learn the C statements that make the program calculate, decide, and repeat.\n\nint temperature = 24;\nint fan_on = 0;\n\nif (temperature &gt; 22) {\n    fan_on = 1;\n}\nStart by reading the code. Then predict the result before running it."
+    "section": "Opening challenge",
+    "text": "Opening challenge\n\nEight numbers arrive from a sensor. How does one C program turn them into a decision?\n\n\n  [0] 3000  [1] 4095  [2] 4200  [3] 2500  [4] 3500  [5] 1000  [6] 3800  [7] 4000 SENSOR   one main.c about thirty lines of C — no functions, no peripherals, no strings   status_code = ?\n\n\nToday you learn to read every line of that program and predict its result before the debugger shows it."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#todays-objectives",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#todays-objectives",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#l01-exit-ticket-the-answers",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#l01-exit-ticket-the-answers",
     "title": "EE5203 Microprocessors",
-    "section": "Today’s objectives",
-    "text": "Today’s objectives\n\n\n01 Store and change sensor values with variables.\n\n\n02 Calculate with arithmetic operators.\n\n\n03 Choose a result with if, else if, and else.\n\n\n04 Repeat code with for and while.\n\n\n05 Process all eight values in one array.\n\n\nThe laboratory keeps everything in one main.c file."
+    "section": "L01 exit ticket — the answers",
+    "text": "L01 exit ticket — the answers\n\n\nEVIDENCE\nWhat observation proves new firmware reached the board?\nA successful download report and behaviour that matches the changed code. A blinking LED alone proves nothing: the old firmware blinked too.\n\n\nPREDICTION\nWhat changes when 500 becomes 100?\nThe LED toggles every 100 ms — five times faster — and toggle_count climbs five times faster. Everything else stays the same.\n\n\nQUESTION\nWhich part of the workflow was least clear?\nTop answer from your forms goes here before class — we open the lab brief with it."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#statement-order",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#statement-order",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#todays-route",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#todays-route",
     "title": "EE5203 Microprocessors",
-    "section": "Statement order",
-    "text": "Statement order\nint count = 0;\ncount = count + 1;\ncount = count + 1;\n\n\n01 Create count and give it the value 0.\n\n\n02 Read the current value, add 1, and store the result.\n\n\n03 Do the same operation again.\n\n\n\nAfter the third statement, count is 2."
+    "section": "Today’s route",
+    "text": "Today’s route\n\n 1DATAeight values, five counters  2LOOPvisit every element  3BODYclamp · add · count  4VERDICTaverage, then status  5PROOFpredict, then debug uint16_t samples[8]int sum = 0; … for (int i = 0; i &lt; 8; i++) clamp above 4095sum += samples[i];count above 2500 average = sum / 8;if / else if / else break after statusread VARIABLES\n\n\nDeclare the data · visit it with a loop · clamp, add, count in the body · average and status after the loop · prove every number in the debugger. One main.c, no functions yet."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#anatomy-of-a-variable",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#anatomy-of-a-variable",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#eight-values-one-name",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#eight-values-one-name",
     "title": "EE5203 Microprocessors",
-    "section": "Anatomy of a variable",
-    "text": "Anatomy of a variable\nint temperature = 24;\n\n\n01 int stores a whole number.\n\n\n02 temperature is the name used by later statements.\n\n\n03 24 is the first value stored in the variable.\n\n\n04 ; ends the statement."
+    "section": "Eight values, one name",
+    "text": "Eight values, one name\n\nDataLoopBodyVerdictProof\n\nuint16_t samples[8] = {\n    3000, 4095, 4200, 2500,\n    3500, 1000, 3800, 4000\n};\n\n\n01 uint16_t — the type of every element · samples — one name for all eight · [8] — eight places.\n\n\n02 The braces list the initial values first to last; the eighth value fills samples[7].\n\n\n\n\n samples — eight uint16_t values in one row of memory [0]3000 [1]4095 [2]4200 [3]2500 [4]3500 [5]1000 [6]3800 [7]4000  indices 0 … 7 — eight elements, one name"
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#assignment",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#assignment",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#why-uint16_t",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#why-uint16_t",
     "title": "EE5203 Microprocessors",
-    "section": "Assignment",
-    "text": "Assignment\nint temperature = 24;\n\ntemperature = 18;\nThe second statement does not ask a question. It stores 18 in temperature.\n\n\nBEFORE\ntemperature is 24\n\nAFTER\ntemperature is 18"
+    "section": "Why uint16_t",
+    "text": "Why uint16_t\n\nDataLoopBodyVerdictProof\n\n\n\nuint unsigned: no negative side · 16 sixteen bits: 0 to 65535 · _t a standard type name. The sensor band 0…4095 fits with room to spare; use plain int for counters and results.\n\n\nDeep dive: C11 draft N1570, §7.20 Integer types &lt;stdint.h&gt; — p. 307."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#arithmetic-operators",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#arithmetic-operators",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#selecting-one-element",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#selecting-one-element",
     "title": "EE5203 Microprocessors",
-    "section": "Arithmetic operators",
-    "text": "Arithmetic operators\nint a = 10;\nint b = 3;\n\nint sum        = a + b;   // 13\nint difference = a - b;   // 7\nint product    = a * b;   // 30\nint quotient   = a / b;   // 3\nint remainder  = a % b;   // 1\n\nBoth operands of a / b are integers, so the result is the whole-number quotient."
+    "section": "Selecting one element",
+    "text": "Selecting one element\n\nDataLoopBodyVerdictProof\n\nsamples[2]          /* the third value: 4200 */\n\n [0]3000 [1]4095 [2]4200 [3]2500 [4]3500 [5]1000 [6]3800 [7]4000 samples[2]  the third value valid indices 0 … 7 [8]✗outside\n\n\nIndices start at 0, so eight elements are samples[0] … samples[7]. samples[8] is outside the array — and C will not stop you from reading it."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#and",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#and",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#counters-start-at-zero",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#counters-start-at-zero",
     "title": "EE5203 Microprocessors",
-    "section": "++ and +=",
-    "text": "++ and +=\nint count = 0;\nint sum = 10;\n\ncount++;     // same result as count = count + 1\nsum += 5;    // same result as sum = sum + 5\nUse the longer form first when it makes the operation easier to understand.\n\n\n\n\n\n\nNote\n\n\nAfter these statements, count is 1 and sum is 15."
+    "section": "Counters start at zero",
+    "text": "Counters start at zero\n\nDataLoopBodyVerdictProof\n\n\n\nint sum = 0;\nint average = 0;\nint high_count = 0;\nint invalid_count = 0;\nint status_code = 0;\n\nint count = 0;\ncount = count + 1;\ncount = count + 1;\n\n\n count0after line 7 count1after line 8+1 count2after line 9+1\n\n\n\nA declaration creates the variable and gives it a first value. An assignment stores a new value — it asks no question. Statements run in order: read count, add 1, store the result; then do it again. After line 9, count is 2."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#practice-predict-the-values",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#practice-predict-the-values",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#arithmetic-on-values",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#arithmetic-on-values",
     "title": "EE5203 Microprocessors",
-    "section": "Practice: predict the values",
-    "text": "Practice: predict the values\nint x = 4;\nint y = 2;\n\nx = x + 3;\ny *= 5;\nx++;\n\n\n1 What is the final value of x?\n\n\n2 What is the final value of y?\n\n\n3 Which line would you execute first in the debugger?"
+    "section": "Arithmetic on values",
+    "text": "Arithmetic on values\n\nDataLoopBodyVerdictProof\n\n\n\nint a = 10;\nint b = 3;\n\nint total      = a + b;   // 13\nint difference = a - b;   // 7\nint product    = a * b;   // 30\nint quotient   = a / b;   // 3\nint remainder  = a % b;   // 1\n\na++;        // a = a + 1  -&gt; 11\nb += 5;     // b = b + 5  -&gt; 8\n\n\n\n\nOperator\nOn two int values\n\n\n\n\n+ - *\nthe exact result\n\n\n/\nthe whole part only: 10 / 3 is 3\n\n\n%\nthe remainder: 10 % 3 is 1\n\n\nx++\nadd one to x\n\n\nx += n\nadd n to x\n\n\n\n\n\nNothing is rounded: / drops the fraction. Predict now — what is 25990 / 8? We check it on the verdict slide."
+  },
+  {
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#visiting-all-eight",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#visiting-all-eight",
+    "title": "EE5203 Microprocessors",
+    "section": "Visiting all eight",
+    "text": "Visiting all eight\n\nDataLoopBodyVerdictProof\n\n\n\nfor (int i = 0; i &lt; 8; i++) {\n    /* use samples[i] */\n}\n\n\n01 START: int i = 0 — once, before anything else.\n\n\n02 TEST: i &lt; 8 — before every repetition; false ends the loop.\n\n\n03 UPDATE: i++ — after each run of the body, then test again.\n\n\n\n\n\n\nEight copies of the same statement would work — once. The loop works for eight, eighty, or eight thousand values by changing one number."
+  },
+  {
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#trace-it",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#trace-it",
+    "title": "EE5203 Microprocessors",
+    "section": "Trace it",
+    "text": "Trace it\n\nDataLoopBodyVerdictProof\n\n\n\nint total = 0;\n\nfor (int i = 0; i &lt; 3; i++) {\n    total += i;\n}\n\n\n\n\nStep\ni\ni &lt; 3?\nbody\ntotal after\n\n\n\n\n1\n0\nyes\ntotal += 0\n0\n\n\n2\n1\nyes\ntotal += 1\n1\n\n\n3\n2\nyes\ntotal += 2\n3\n\n\nstop\n3\nno\n—\n3\n\n\n\n\n\nThe body runs three times, not four; i ends at 3 and is never used inside. This is the warm-up loop of your lab — trace it again there without looking.\n\n\nDeep dive: C11 draft N1570, §6.8.5 Iteration statements — p. 168."
+  },
+  {
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#off-by-one",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#off-by-one",
+    "title": "EE5203 Microprocessors",
+    "section": "Off by one",
+    "text": "Off by one\n\nDataLoopBodyVerdictProof\n\nfor (int i = 0; i &lt; 8; i++) {      /* visits 0 … 7 */\n    /* samples[i] */\n}\n\n [0]3000 [1]4095 [2]4200 [3]2500 [4]3500 [5]1000 [6]3800 [7]4000 i = 00 &lt; 8 ✓ i = 11 &lt; 8 ✓ i = 22 &lt; 8 ✓ i = 3, 4, 5, 6 i = 77 &lt; 8 ✓ — last visit [8]?i = 88 &lt; 8 ✗ — stopwith i &lt;= 8 the loop would read this cell: not yours, no warning\n\n\ni &lt; 8 stops after samples[7]. i &lt;= 8 makes a ninth visit to samples[8] — memory that belongs to something else. No error, no warning, wrong numbers."
+  },
+  {
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#while-and-the-forever-loop",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#while-and-the-forever-loop",
+    "title": "EE5203 Microprocessors",
+    "section": "while and the forever loop",
+    "text": "while and the forever loop\n\nDataLoopBodyVerdictProof\n\n\n\nRepeat while a condition holds\nint count = 0;\n\nwhile (count &lt; 3) {\n    count++;\n}\nThe test comes first, every time. The body runs with count = 0, 1, 2; the loop ends when count becomes 3. Forget count++ and it never ends.\n\n\nRepeat forever — L01’s main loop\nint main(void)\n{\n    /* initialise once */\n    while (1) {\n        /* repeated work */\n    }\n}\n1 is always true. Firmware initialises once, then stays in this loop until the power goes.\n\n\n\nWhich statement when? for visits a known range · while repeats while a condition holds · while (1) keeps firmware alive · next: if, which runs a block once or skips it."
+  },
+  {
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-first-decision-clamp",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-first-decision-clamp",
+    "title": "EE5203 Microprocessors",
+    "section": "The first decision: clamp",
+    "text": "The first decision: clamp\n\nDataLoopBodyVerdictProof\n\nif (samples[i] &gt; 4095) {\n    samples[i] = 4095;\n    invalid_count++;\n}\n\n [0]3000 [1]4095 [2]4200 [3]2500 [4]3500 [5]1000 [6]3800 [7]4000 4200 &gt; 4095 valid range 0 … 4095 — one value is out of range [2]4095was 4200 invalid_count0 → 1\n\n\nTest samples[i] &gt; 4095. True → run the block: replace the value, count the fault. False → skip it. For i = 2 the test is true; for every other index it is false.\n\n\nDeep dive: C11 draft N1570, §6.8.4 Selection statements — p. 166."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#comparison-operators",
     "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#comparison-operators",
     "title": "EE5203 Microprocessors",
     "section": "Comparison operators",
-    "text": "Comparison operators\n\n\n\nExpression\nQuestion\n\n\n\n\na == b\nAre the values equal?\n\n\na != b\nAre the values different?\n\n\na &lt; b\nIs a smaller?\n\n\na &lt;= b\nIs a smaller or equal?\n\n\na &gt; b\nIs a larger?\n\n\na &gt;= b\nIs a larger or equal?\n\n\n\nA comparison does not change either variable.\n\nDeep dive: C11 draft N1570, §6.8.4 Selection statements — p. 166 covers if; comparisons are §6.5.8–6.5.9."
+    "text": "Comparison operators\n\nDataLoopBodyVerdictProof\n\n\n\n\nExpression\nThe question it asks\nIn this program\n\n\n\n\na == b\nequal?\nstatus_code == 0\n\n\na != b\ndifferent?\ni != 8\n\n\na &lt; b\nsmaller?\ni &lt; 8\n\n\na &lt;= b\nsmaller or equal?\naverage &lt;= 3000\n\n\na &gt; b\nlarger?\nsamples[i] &gt; 4095\n\n\na &gt;= b\nlarger or equal?\naverage &gt;= 1500\n\n\n\n\nA comparison asks; it changes neither side. The answer is 1 (true) or 0 (false), and if, while, and for act on that answer."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#vs",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#vs",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#versus",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#versus",
     "title": "EE5203 Microprocessors",
-    "section": "= vs ==",
-    "text": "= vs ==\n\n\nASSIGNMENT\nstatus = 1;\nStore 1 in status.\n\nCOMPARISON\nstatus == 1\nAsk whether status contains 1.\n\n\nUsing = when you mean == is a common beginner error."
+    "section": "= versus ==",
+    "text": "= versus ==\n\nDataLoopBodyVerdictProof\n\n\n\nAssignment stores\nstatus_code = 0;\nAfter this statement status_code holds 0. Whatever it held before is gone.\n\n\nComparison asks\nstatus_code == 0\nIs the value 0? Nothing changes; the answer is true or false.\n\n\n\nif (status_code = 1) compiles, runs, and is always true: it stores 1, and 1 counts as true. The compiler warns — read the warning."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-if-statement",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-if-statement",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#accumulate",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#accumulate",
     "title": "EE5203 Microprocessors",
-    "section": "The if statement",
-    "text": "The if statement\nint temperature = 24;\nint fan_on = 0;\n\nif (temperature &gt; 22) {\n    fan_on = 1;\n}\n\n\n01 Test temperature &gt; 22.\n\n\n02 If it is true, execute the statement inside the braces.\n\n\n03 If it is false, skip that statement."
+    "section": "Accumulate",
+    "text": "Accumulate\n\nDataLoopBodyVerdictProof\n\nint sum = 0;                       /* before the loop */\n\nfor (int i = 0; i &lt; 8; i++) {\n    sum += samples[i];             /* add this element */\n}\n\n [0]3000 [1]4095 [2]4095 [3]2500 [4]3500 [5]1000 [6]3800 [7]4000 sum after this element start valuesum = 0 3000 7095 11190 1369017190181902199025990\n\n\nsum collects one element per repetition. It must start at 0 before the loop: a leftover start value would sit inside every later total."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-ifelse-decision",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-ifelse-decision",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#count-with-a-condition",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#count-with-a-condition",
     "title": "EE5203 Microprocessors",
-    "section": "The if/else decision",
-    "text": "The if/else decision\nif (temperature &gt; 22) {\n    fan_on = 1;\n} else {\n    fan_on = 0;\n}\nExactly one block runs.\n\nFor temperature = 24, the program stores 1. For temperature = 18, it stores 0."
+    "section": "Count with a condition",
+    "text": "Count with a condition\n\nDataLoopBodyVerdictProof\n\nfor (int i = 0; i &lt; 8; i++) {\n    if (samples[i] &gt; 4095) {\n        samples[i] = 4095;\n        invalid_count++;\n    }\n    sum += samples[i];\n    if (samples[i] &gt; 2500) {\n        high_count++;\n    }\n}\n\n\n high means samples[i] &gt; 2500 — strictly greater [0]3000 [1]4095 [2]4095 [3]2500 [4]3500 [5]1000 [6]3800 [7]4000 [0]3000[1]4095[2]4095[4]3500[6]3800[7]4000 2500 &gt; 2500 is false high_count6\n\n\n\nOne loop, three jobs per element — clamp, add, count — read as one element’s story, repeated eight times."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#else-if-chains",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#else-if-chains",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#average-after-the-loop",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#average-after-the-loop",
     "title": "EE5203 Microprocessors",
-    "section": "else if chains",
-    "text": "else if chains\nif (sample &lt; 1500) {\n    status_code = -1;       // LOW\n} else if (sample &gt; 3000) {\n    status_code = 1;        // HIGH\n} else {\n    status_code = 0;        // OK\n}\nThe program tests from top to bottom and stops at the first true condition."
+    "section": "Average after the loop",
+    "text": "Average after the loop\n\nDataLoopBodyVerdictProof\n\naverage = sum / 8;                 /* after the closing brace of the loop */\n\n\nBoth operands are integers, so / keeps the whole part: average is 3248; the remainder 6 is dropped. Inside the loop this line would run eight times on a partial sum — it belongs after the loop."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#logical-operators",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#logical-operators",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-status-chain",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-status-chain",
     "title": "EE5203 Microprocessors",
-    "section": "Logical operators",
-    "text": "Logical operators\n\n\n\n\n\n\n\n\nOperator\nMeaning\nExample\n\n\n\n\n&&\nboth conditions must be true\nsample &gt;= 0 && sample &lt;= 4095\n\n\n||\nat least one condition is true\nmode == 1 || mode == 2\n\n\n!\nreverse true and false\n!ready\n\n\n\nUse parentheses when they make the intended grouping clearer."
+    "section": "The status chain",
+    "text": "The status chain\n\nDataLoopBodyVerdictProof\n\nif (average &lt; 1500) {\n    status_code = -1;        /* LOW  */\n} else if (average &gt; 3000) {\n    status_code = 1;         /* HIGH */\n} else {\n    status_code = 0;         /* OK   */\n}\n\n  LOW · status −1  OK · status 0  HIGH · status 1  0  1500  3000  4095 average = 3248 average &lt; 1500 ? no → next test average &gt; 3000 ? yes → status_code = 1, done\n\n\nTests run top to bottom, stop at the first true one, exactly one block runs — on the average, not on any single sample."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#practice-classify-one-sample",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#practice-classify-one-sample",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#combining-conditions",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#combining-conditions",
     "title": "EE5203 Microprocessors",
-    "section": "Practice: classify one sample",
-    "text": "Practice: classify one sample\nint sample = 2800;\nint status_code = 0;\n\nif (sample &lt; 1500) {\n    status_code = -1;\n} else if (sample &gt; 3000) {\n    status_code = 1;\n} else {\n    status_code = 0;\n}\n\n\n1 Which condition is tested first?\n\n\n2 What is the final value of status_code?\n\n\n3 What changes when sample is 3500?"
+    "section": "Combining conditions",
+    "text": "Combining conditions\n\nDataLoopBodyVerdictProof\n\n\n  LOW · status −1  OK · status 0  HIGH · status 1  0  1500  3000  4095 average = 3248\n\n\n\n\n\n\n\n\n\nOperator\nMeaning\nExample\n\n\n\n\n&&\nboth true — inside the OK band\naverage &gt;= 1500 && average &lt;= 3000\n\n\n||\nat least one true — out of band\nstatus_code == -1 || status_code == 1\n\n\n!\nreversed — not HIGH\n!(average &gt; 3000)\n\n\n\n\nAdd parentheses whenever the grouping is not obvious — the reader is usually you, three weeks later."
   },
   {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-while-loop",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-while-loop",
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-complete-program",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-complete-program",
     "title": "EE5203 Microprocessors",
-    "section": "The while loop",
-    "text": "The while loop\nint count = 0;\n\nwhile (count &lt; 3) {\n    count++;\n}\nThe loop tests count &lt; 3 before every repetition.\n\nThe body runs with count equal to 0, 1, and 2. The loop stops when count becomes 3."
-  },
-  {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-for-loop",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-for-loop",
-    "title": "EE5203 Microprocessors",
-    "section": "The for loop",
-    "text": "The for loop\nfor (int i = 0; i &lt; 4; i++) {\n    /* use i */\n}\n\n\n01 START: create i with value 0.\n\n\n02 TEST: continue while i &lt; 4.\n\n\n03 UPDATE: increase i after each repetition."
-  },
-  {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#loop-trace-table",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#loop-trace-table",
-    "title": "EE5203 Microprocessors",
-    "section": "Loop trace table",
-    "text": "Loop trace table\n\n\n\nRepetition\ni before body\nIs i &lt; 4 true?\n\n\n\n\n1\n0\nyes\n\n\n2\n1\nyes\n\n\n3\n2\nyes\n\n\n4\n3\nyes\n\n\nstop\n4\nno\n\n\n\nThe loop body runs four times, not five.\n\nDeep dive: C11 draft N1570, §6.8.5 Iteration statements — p. 168."
-  },
-  {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#which-statement-when",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#which-statement-when",
-    "title": "EE5203 Microprocessors",
-    "section": "Which statement when?",
-    "text": "Which statement when?\n\n\n01 Use if when code may run once or may be skipped.\n\n\n02 Use while when repetition depends on a condition.\n\n\n03 Use for when a counter visits a known range.\n\n\n04 Use while (1) for the main loop of firmware that must keep running."
-  },
-  {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-forever-loop",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-forever-loop",
-    "title": "EE5203 Microprocessors",
-    "section": "The forever loop",
-    "text": "The forever loop\nint main(void)\n{\n    /* initialization runs once */\n\n    while (1) {\n        /* repeated work */\n    }\n}\nThe startup code calls main(). Initialization runs first; the infinite loop then keeps the firmware alive."
-  },
-  {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-uint16_t-type",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-uint16_t-type",
-    "title": "EE5203 Microprocessors",
-    "section": "The uint16_t type",
-    "text": "The uint16_t type\n#include &lt;stdint.h&gt;\n\nuint16_t sample = 4095;\n\n\n01 uint means unsigned integer: no negative values.\n\n\n02 16 means the storage has 16 bits.\n\n\n03 _t is part of the standard type name.\n\n\nUse ordinary int for small counters and calculations in this week’s program.\n\nDeep dive: C11 draft N1570, §7.20 Integer types &lt;stdint.h&gt; — p. 307."
-  },
-  {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#arrays",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#arrays",
-    "title": "EE5203 Microprocessors",
-    "section": "Arrays",
-    "text": "Arrays\nuint16_t samples[8] = {\n    850, 1250, 4095, 4200,\n    2050, 900, 3100, 2800\n};\n\nuint16_t is the type of every element.\nsamples is the array name.\n[8] reserves space for eight elements."
-  },
-  {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#array-indexing",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#array-indexing",
-    "title": "EE5203 Microprocessors",
-    "section": "Array indexing",
-    "text": "Array indexing\n\n\n\nExpression\nSelected element\n\n\n\n\nsamples[0]\nfirst\n\n\nsamples[1]\nsecond\n\n\nsamples[7]\neighth\n\n\nsamples[8]\ninvalid\n\n\n\n\n\nAn eight-element array drawn as cells with indices 0 through 7; a ninth dashed cell labeled index 8 is crossed out because it is outside the array\n\n [0] 850  [1] 1250  [2] 4095  [3] 4200  [4] 2050  [5] 900  [6] 3100  [7] 2800  [8] ✗ valid indices 0…7 — samples[8] is outside the array"
-  },
-  {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#looping-over-an-array",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#looping-over-an-array",
-    "title": "EE5203 Microprocessors",
-    "section": "Looping over an array",
-    "text": "Looping over an array\nfor (int i = 0; i &lt; 8; i++) {\n    samples[i] = samples[i] + 1;\n}\nDuring each repetition, i selects one element.\n\nThe condition is i &lt; 8, not i &lt;= 8, because index 8 is invalid."
-  },
-  {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-accumulator-pattern",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-accumulator-pattern",
-    "title": "EE5203 Microprocessors",
-    "section": "The accumulator pattern",
-    "text": "The accumulator pattern\nint sum = 0;\n\nfor (int i = 0; i &lt; 8; i++) {\n    sum += samples[i];\n}\n\nint average = sum / 8;\nsum must start at zero. Each repetition adds one element."
-  },
-  {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#one-loop-several-results",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#one-loop-several-results",
-    "title": "EE5203 Microprocessors",
-    "section": "One loop, several results",
-    "text": "One loop, several results\nint sum = 0;\nint high_count = 0;\n\nfor (int i = 0; i &lt; 8; i++) {\n    if (samples[i] &gt; 4095) {\n        samples[i] = 4095;\n    }\n\n    sum += samples[i];\n\n    if (samples[i] &gt; 2500) {\n        high_count++;\n    }\n}\nThis loop clamps invalid values, calculates a sum, and counts high samples."
-  },
-  {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-complete-l02-program",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-complete-l02-program",
-    "title": "EE5203 Microprocessors",
-    "section": "The complete L02 program",
-    "text": "The complete L02 program\nuint16_t samples[8] = {\n    850, 1250, 4095, 4200,\n    2050, 900, 3100, 2800\n};\n\nint sum = 0;\nint high_count = 0;\n\nfor (int i = 0; i &lt; 8; i++) {\n    if (samples[i] &gt; 4095) {\n        samples[i] = 4095;\n    }\n    sum += samples[i];\n    if (samples[i] &gt; 2500) {\n        high_count++;\n    }\n}\n\nint average = sum / 8;"
+    "section": "The complete program",
+    "text": "The complete program\n\nDataLoopBodyVerdictProof\n\n\n\n\n1 · data\n\nuint16_t samples[8] = {\n    3000, 4095, 4200, 2500,\n    3500, 1000, 3800, 4000\n};\nint sum = 0;\nint average = 0;\nint high_count = 0;\nint invalid_count = 0;\nint status_code = 0;\n\n\n2 · loop   3 · body\n\nfor (int i = 0; i &lt; 8; i++) {\n    if (samples[i] &gt; 4095) {\n        samples[i] = 4095;\n        invalid_count++;\n    }\n    sum += samples[i];\n    if (samples[i] &gt; 2500) {\n        high_count++;\n    }\n}\n\n\n4 · verdict\n\naverage = sum / 8;\n\nif (average &lt; 1500) {\n    status_code = -1;\n} else if (average &gt; 3000) {\n    status_code = 1;\n} else {\n    status_code = 0;\n}\n\n\nTwenty-eight lines, four blocks, nothing hidden. Read it top to bottom once more — then predict the six results before the next slide."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#predict-then-verify",
     "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#predict-then-verify",
     "title": "EE5203 Microprocessors",
     "section": "Predict, then verify",
-    "text": "Predict, then verify\n\n\n01 Calculate the expected final array, sum, average, and high count.\n\n\n02 Build with zero errors and read the first warning, if any.\n\n\n03 Break after the loop and inspect the variables.\n\n\n04 Change one input value, predict again, and repeat the test."
+    "text": "Predict, then verify\n\nDataLoopBodyVerdictProof\n\n\n\n\n\n\nResult\nPrediction\n\n\n\n\nsamples[2] after the loop\n4095\n\n\ninvalid_count\n1\n\n\nhigh_count\n6\n\n\nsum\n25990\n\n\naverage\n3248\n\n\nstatus_code\n1\n\n\n\n\n\n\n\nWrite the prediction first, break after the status chain, then compare — the debugger is the output device this term. Your lab set has different numbers; the method is the same."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#common-l02-mistakes",
     "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#common-l02-mistakes",
     "title": "EE5203 Microprocessors",
     "section": "Common L02 mistakes",
-    "text": "Common L02 mistakes\n\n\n01 Using = instead of == in a condition.\n\n\n02 Forgetting to give an accumulator its starting value.\n\n\n03 Writing i &lt;= 8 and accessing samples[8].\n\n\n04 Forgetting to update the counter in a while loop."
+    "text": "Common L02 mistakes\n\nDataLoopBodyVerdictProof\n\n\n\n\n\n\n\n\nSymptom\nFirst check\n\n\n\n\nCondition is always true\n= where == was meant — read the compiler warning\n\n\nHuge or garbage sum\ndoes sum start at 0 before the loop?\n\n\nWrong numbers, no error\ni &lt;= 8 reads samples[8] — the test must be i &lt; 8\n\n\nLoop never ends\nis i++ there? watch i in the debugger\n\n\naverage wrong or changing\nit belongs after the loop, not inside it\n\n\nUnknown type uint16_t\n#include &lt;stdint.h&gt; at the top of the file"
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#laboratory-mission",
     "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#laboratory-mission",
     "title": "EE5203 Microprocessors",
     "section": "Laboratory mission",
-    "text": "Laboratory mission\n\nProcess eight simulated sensor values in one main.c file.\n\nYou will:\n\nclamp values above 4095;\ncalculate the sum and average;\ncount values above 2500;\nselect a numeric LOW, OK, or HIGH status;\nprove the result in the debugger."
-  },
-  {
-    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#mastery-checklist",
-    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#mastery-checklist",
-    "title": "EE5203 Microprocessors",
-    "section": "Mastery checklist",
-    "text": "Mastery checklist\n\n\n✓ Trace assignment and arithmetic statements in order.\n\n\n✓ Explain the difference between = and ==.\n\n\n✓ Write an if/else decision.\n\n\n✓ Trace while and for loops.\n\n\n✓ Process indices 0 through 7 without leaving the array."
+    "text": "Laboratory mission\n\n\nA COPY\nL01 project → EE5203_L02_&lt;no&gt;, builds clean\n\n\nB DECLARE\neight uint16_t values, five int results\n\n\nC LOOP\nclamp · add · count, single-stepped\n\n\nD VERDICT\naverage, status, prediction table\n\n\nE CHANGE\none input, predict, prove, explain\n\n\n\nRules: values above 4095 become 4095 · high means above 2500 · status -1 below 1500, 1 above 3000, else 0. Prediction table before debugging. Project track: write down what your project’s input data will be and what processing it needs."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#exit-ticket",
     "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#exit-ticket",
     "title": "EE5203 Microprocessors",
     "section": "Exit ticket",
-    "text": "Exit ticket\n\n\nint values[4] = {3, 7, 2, 8};\nint total = 0;\n\nfor (int i = 0; i &lt; 4; i++) {\n    if (values[i] &gt; 4) {\n        total += values[i];\n    }\n}\n\nWhich elements are added?\nWhat is the final value of total?\nWhat invalid access would occur if the condition were i &lt;= 4?\n\n\n\nScan and answer before you leave — sign in with your Google account. Ungraded; your answers shape the start of the next lecture.\n\n\nEvery concept in this lecture, with page-linked sources: academic references."
+    "text": "Exit ticket\n\n\nint values[4] = {3, 7, 2, 8};\nint total = 0;\n\nfor (int i = 0; i &lt; 4; i++) {\n    if (values[i] &gt; 4) {\n        total += values[i];\n    }\n}\n\nWhich elements are added?\nWhat is the final value of total?\nWhat invalid access would occur if the condition were i &lt;= 4?\n\n\n\nScan and answer before you leave — sign in with your Google account. Ungraded; your answers open the next lecture.\n\n\nNext: functions, arrays, strings, and modular C.  ·  Every concept in this lecture, with page-linked sources: academic references."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html",
     "href": "lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html",
     "title": "EE5203 L02 Study Sheet",
     "section": "",
-    "text": "Values, Decisions, Loops, and Arrays - Basri Erdogan\n\nEssential question: How does one C loop turn eight raw sensor values into a validated average, a count, and a status decision — and how do you prove each intermediate value in the debugger?\n\n\n\n\nTrace assignment and arithmetic statements in execution order.\nPredict the result of integer division and remainder.\nDistinguish = (store) from == (compare).\nWrite and trace if, else if, else decision chains.\nTrace while and for loops, including first and last counter values.\nIndex an array safely and explain why samples[8] is invalid for [8].\nUse the accumulator pattern to compute a sum and average.\n\n\n\n\n\n\n\n\n\n\n\nStatement\nQuestion it answers\n\n\n\n\nx = 5;\nNothing — it stores 5 in x\n\n\nx == 5\nDoes x currently contain 5?\n\n\nif (c) { ... }\nRun the block once if c is true\n\n\nwhile (c) { ... }\nRepeat while c stays true (test first)\n\n\nfor (init; test; update)\nRepeat with a counter over a known range\n\n\nwhile (1) { ... }\nFirmware main loop — repeat forever\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGroup\nOperators\nWatch out\n\n\n\n\nArithmetic\n+ - * / %\n10 / 3 is 3 (integer); 10 % 3 is 1\n\n\nShorthand\nx++, x += 5\nSame as x = x + 1, x = x + 5\n\n\nComparison\n== != &lt; &lt;= &gt; &gt;=\nComparing changes neither operand\n\n\nLogical\n&& || !\n&& both true; || at least one true\n\n\n\n\n\n\nfor (int i = 0; i &lt; 4; i++) { /* body */ }\n\n\n\nRepetition\ni before body\ni &lt; 4?\n\n\n\n\n1\n0\nyes\n\n\n4\n3\nyes\n\n\nstop\n4\nno\n\n\n\nSTART creates i = 0, TEST runs before every repetition, UPDATE runs after every body. The body runs four times — i never reaches 4 inside the body.\n\n\n\n#include &lt;stdint.h&gt;\n\nuint16_t samples[8] = { 850, 1250, 4095, 4200,\n                        2050, 900, 3100, 2800 };\n\nuint16_t: unsigned, 16-bit, fixed-width integer — no negative values.\nValid indices are 0 through 7. samples[8] is outside the array.\nLoop condition is i &lt; 8, never i &lt;= 8.\n\n\n\n\nint sum = 0;                      // must start at zero\n\nfor (int i = 0; i &lt; 8; i++) {\n    if (samples[i] &gt; 4095) {      // clamp invalid input\n        samples[i] = 4095;\n    }\n    sum += samples[i];            // accumulate\n    if (samples[i] &gt; 2500) {\n        high_count++;             // count while visiting\n    }\n}\n\nint average = sum / 8;            // integer division\nOne loop can clamp, sum, and count in a single pass. Every result variable needs a correct starting value before the loop.\n\n\n\nif (average &lt; 1500)       status_code = -1;   // LOW\nelse if (average &gt; 3000)  status_code = 1;    // HIGH\nelse                      status_code = 0;    // OK\nConditions are tested top to bottom; exactly one branch runs; testing stops at the first true condition.\n\n\n\n\nWriting = where == is meant — the condition becomes an assignment.\nForgetting to initialize an accumulator (sum starts with garbage).\ni &lt;= 8 on an eight-element array — reads/writes outside the array.\nForgetting the update in a while loop — the loop never ends.\nExpecting 19140 / 8 to have a fraction — integer division discards it.\nTrusting a clean build as proof the computed values are correct.\n\n\n\n\n\nI can trace x = x + 3; y *= 5; x++; and give both final values.\nI can explain why if (status = 1) is a bug, not a comparison.\nI can state how many times for (int i = 0; i &lt; 8; i++) runs its body.\nI can list the valid indices of uint16_t samples[8].\nI can explain why sum must start at zero.\nI can predict sum / 8 when sum is 19140.\nI can place a breakpoint inside a loop and read i and samples[i].\n\n\n\n\n\nWhat are the final values of a and b after int a = 6, b = 4; a = a - b; b++; a *= 2;?\nint x = 7; — what is the value of the expression x % 3, and what is x afterwards?\nA while loop’s body never executes. What must be true of its condition, and when was it tested?\nIn one pass over an array, which of these need a starting value before the loop: the loop counter, an accumulator, a count of high samples?\nThe lab program clamps 4200 to 4095 before adding it to sum. What would the average be wrong by if it clamped after summing?\n\nSee the L02 worksheet for extended practice. Worked solutions are released after the practice window."
+    "text": "Values, Decisions, Loops, and Arrays - Basri Erdogan\n\nEssential question: How does one C loop turn eight raw sensor values into a validated average, a count, and a status decision — and how do you prove each intermediate value in the debugger?\n\n\n\n\nTrace assignment and arithmetic statements in execution order.\nPredict the result of integer division and remainder.\nDistinguish = (store) from == (compare).\nWrite and trace if, else if, else decision chains.\nTrace while and for loops, including first and last counter values.\nIndex an array safely and explain why samples[8] is invalid for [8].\nUse the accumulator pattern to compute a sum and average.\n\n\n\n\n\n\n\n\n\n\n\nStatement\nQuestion it answers\n\n\n\n\nx = 5;\nNothing — it stores 5 in x\n\n\nx == 5\nDoes x currently contain 5?\n\n\nif (c) { ... }\nRun the block once if c is true\n\n\nwhile (c) { ... }\nRepeat while c stays true (test first)\n\n\nfor (init; test; update)\nRepeat with a counter over a known range\n\n\nwhile (1) { ... }\nFirmware main loop — repeat forever\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGroup\nOperators\nWatch out\n\n\n\n\nArithmetic\n+ - * / %\n10 / 3 is 3 (integer); 10 % 3 is 1\n\n\nShorthand\nx++, x += 5\nSame as x = x + 1, x = x + 5\n\n\nComparison\n== != &lt; &lt;= &gt; &gt;=\nComparing changes neither operand\n\n\nLogical\n&& || !\n&& both true; || at least one true\n\n\n\n\n\n\nfor (int i = 0; i &lt; 4; i++) { /* body */ }\n\n\n\nRepetition\ni before body\ni &lt; 4?\n\n\n\n\n1\n0\nyes\n\n\n4\n3\nyes\n\n\nstop\n4\nno\n\n\n\nSTART creates i = 0, TEST runs before every repetition, UPDATE runs after every body. The body runs four times — i never reaches 4 inside the body.\n\n\n\n#include &lt;stdint.h&gt;\n\nuint16_t samples[8] = { 3000, 4095, 4200, 2500,     // the lecture's data set;\n                        3500, 1000, 3800, 4000 };   // the lab uses its own\n\nuint16_t: unsigned, 16-bit, fixed-width integer — no negative values.\nValid indices are 0 through 7. samples[8] is outside the array.\nLoop condition is i &lt; 8, never i &lt;= 8.\n\n\n\n\nint sum = 0;                      // must start at zero\n\nfor (int i = 0; i &lt; 8; i++) {\n    if (samples[i] &gt; 4095) {      // clamp invalid input\n        samples[i] = 4095;\n    }\n    sum += samples[i];            // accumulate\n    if (samples[i] &gt; 2500) {\n        high_count++;             // count while visiting\n    }\n}\n\nint average = sum / 8;            // integer division\nOne loop can clamp, sum, and count in a single pass. Every result variable needs a correct starting value before the loop.\nWorked example (lecture data set). Trace it yourself before reading the right column; the lab set is different, so its prediction table is still yours to fill.\n\n\n\n\n\n\n\n\nResult\nValue\nWhy\n\n\n\n\nsamples[2] after the loop\n4095\n4200 &gt; 4095 was true once\n\n\ninvalid_count\n1\ncounted inside that same if\n\n\nhigh_count\n6\n2500 &gt; 2500 is false — &gt; is strict\n\n\nsum\n25990\nrunning: 3000 · 7095 · 11190 · 13690 · 17190 · 18190 · 21990 · 25990\n\n\naverage\n3248\n25990 / 8; the remainder 6 is discarded\n\n\nstatus_code\n1\n3248 &gt; 3000 → HIGH\n\n\n\n\n\n\nif (average &lt; 1500)       status_code = -1;   // LOW\nelse if (average &gt; 3000)  status_code = 1;    // HIGH\nelse                      status_code = 0;    // OK\nConditions are tested top to bottom; exactly one branch runs; testing stops at the first true condition.\n\n\n\n\nWriting = where == is meant — the condition becomes an assignment.\nForgetting to initialize an accumulator (sum starts with garbage).\ni &lt;= 8 on an eight-element array — reads/writes outside the array.\nForgetting the update in a while loop — the loop never ends.\nExpecting 25990 / 8 to have a fraction — integer division gives 3248 and discards the remainder 6.\nTrusting a clean build as proof the computed values are correct.\n\n\n\n\n\nI can trace x = x + 3; y *= 5; x++; and give both final values.\nI can explain why if (status = 1) is a bug, not a comparison.\nI can state how many times for (int i = 0; i &lt; 8; i++) runs its body.\nI can list the valid indices of uint16_t samples[8].\nI can explain why sum must start at zero.\nI can predict sum / 8 when sum is 25990.\nI can place a breakpoint inside a loop and read i and samples[i].\n\n\n\n\n\nWhat are the final values of a and b after int a = 6, b = 4; a = a - b; b++; a *= 2;?\nint x = 7; — what is the value of the expression x % 3, and what is x afterwards?\nA while loop’s body never executes. What must be true of its condition, and when was it tested?\nIn one pass over an array, which of these need a starting value before the loop: the loop counter, an accumulator, a count of high samples?\nThe lab program clamps 4200 to 4095 before adding it to sum. What would the average be wrong by if it clamped after summing?\n\nSee the L02 worksheet for extended practice. Worked solutions are released after the practice window."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html#what-you-should-be-able-to-do",
@@ -3602,14 +3553,14 @@
     "href": "lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html#arrays",
     "title": "EE5203 L02 Study Sheet",
     "section": "",
-    "text": "#include &lt;stdint.h&gt;\n\nuint16_t samples[8] = { 850, 1250, 4095, 4200,\n                        2050, 900, 3100, 2800 };\n\nuint16_t: unsigned, 16-bit, fixed-width integer — no negative values.\nValid indices are 0 through 7. samples[8] is outside the array.\nLoop condition is i &lt; 8, never i &lt;= 8."
+    "text": "#include &lt;stdint.h&gt;\n\nuint16_t samples[8] = { 3000, 4095, 4200, 2500,     // the lecture's data set;\n                        3500, 1000, 3800, 4000 };   // the lab uses its own\n\nuint16_t: unsigned, 16-bit, fixed-width integer — no negative values.\nValid indices are 0 through 7. samples[8] is outside the array.\nLoop condition is i &lt; 8, never i &lt;= 8."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html#the-accumulator-pattern",
     "href": "lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html#the-accumulator-pattern",
     "title": "EE5203 L02 Study Sheet",
     "section": "",
-    "text": "int sum = 0;                      // must start at zero\n\nfor (int i = 0; i &lt; 8; i++) {\n    if (samples[i] &gt; 4095) {      // clamp invalid input\n        samples[i] = 4095;\n    }\n    sum += samples[i];            // accumulate\n    if (samples[i] &gt; 2500) {\n        high_count++;             // count while visiting\n    }\n}\n\nint average = sum / 8;            // integer division\nOne loop can clamp, sum, and count in a single pass. Every result variable needs a correct starting value before the loop."
+    "text": "int sum = 0;                      // must start at zero\n\nfor (int i = 0; i &lt; 8; i++) {\n    if (samples[i] &gt; 4095) {      // clamp invalid input\n        samples[i] = 4095;\n    }\n    sum += samples[i];            // accumulate\n    if (samples[i] &gt; 2500) {\n        high_count++;             // count while visiting\n    }\n}\n\nint average = sum / 8;            // integer division\nOne loop can clamp, sum, and count in a single pass. Every result variable needs a correct starting value before the loop.\nWorked example (lecture data set). Trace it yourself before reading the right column; the lab set is different, so its prediction table is still yours to fill.\n\n\n\n\n\n\n\n\nResult\nValue\nWhy\n\n\n\n\nsamples[2] after the loop\n4095\n4200 &gt; 4095 was true once\n\n\ninvalid_count\n1\ncounted inside that same if\n\n\nhigh_count\n6\n2500 &gt; 2500 is false — &gt; is strict\n\n\nsum\n25990\nrunning: 3000 · 7095 · 11190 · 13690 · 17190 · 18190 · 21990 · 25990\n\n\naverage\n3248\n25990 / 8; the remainder 6 is discarded\n\n\nstatus_code\n1\n3248 &gt; 3000 → HIGH"
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html#decision-chains",
@@ -3623,14 +3574,14 @@
     "href": "lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html#common-mistakes",
     "title": "EE5203 L02 Study Sheet",
     "section": "",
-    "text": "Writing = where == is meant — the condition becomes an assignment.\nForgetting to initialize an accumulator (sum starts with garbage).\ni &lt;= 8 on an eight-element array — reads/writes outside the array.\nForgetting the update in a while loop — the loop never ends.\nExpecting 19140 / 8 to have a fraction — integer division discards it.\nTrusting a clean build as proof the computed values are correct."
+    "text": "Writing = where == is meant — the condition becomes an assignment.\nForgetting to initialize an accumulator (sum starts with garbage).\ni &lt;= 8 on an eight-element array — reads/writes outside the array.\nForgetting the update in a while loop — the loop never ends.\nExpecting 25990 / 8 to have a fraction — integer division gives 3248 and discards the remainder 6.\nTrusting a clean build as proof the computed values are correct."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html#mastery-self-check",
     "href": "lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html#mastery-self-check",
     "title": "EE5203 L02 Study Sheet",
     "section": "",
-    "text": "I can trace x = x + 3; y *= 5; x++; and give both final values.\nI can explain why if (status = 1) is a bug, not a comparison.\nI can state how many times for (int i = 0; i &lt; 8; i++) runs its body.\nI can list the valid indices of uint16_t samples[8].\nI can explain why sum must start at zero.\nI can predict sum / 8 when sum is 19140.\nI can place a breakpoint inside a loop and read i and samples[i]."
+    "text": "I can trace x = x + 3; y *= 5; x++; and give both final values.\nI can explain why if (status = 1) is a bug, not a comparison.\nI can state how many times for (int i = 0; i &lt; 8; i++) runs its body.\nI can list the valid indices of uint16_t samples[8].\nI can explain why sum must start at zero.\nI can predict sum / 8 when sum is 25990.\nI can place a breakpoint inside a loop and read i and samples[i]."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html#five-review-questions",
@@ -3644,266 +3595,196 @@
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#opening-challenge",
     "title": "EE5203 Microprocessors",
     "section": "Opening challenge",
-    "text": "Opening challenge\n\nHow does a line of C code become a physical change on a circuit board?\n\nBy the end of today, you will be able to trace the complete path from source code to physical evidence."
+    "text": "Opening challenge\n\n\nHow does a line of C code become a physical change on a circuit board?\n\n\n\nBy the end of today you will trace this path and prove each stage with evidence."
+  },
+  {
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#where-this-course-goes",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#where-this-course-goes",
+    "title": "EE5203 Microprocessors",
+    "section": "Where this course goes",
+    "text": "Where this course goes\n\n\nWrite and debug embedded C · model the Cortex-M · control peripherals · design responsive systems · integrate and defend a project · and treat compiler output, debugger state and registers as evidence\n\n\nEnvironmental monitor · Reaction-time game · Smart controller · Motion alarm · Sensor logger"
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#a-system-is-more-than-its-processor",
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#a-system-is-more-than-its-processor",
     "title": "EE5203 Microprocessors",
     "section": "A system is more than its processor",
-    "text": "A system is more than its processor\n\n\n\n\nAn embedded system combines:\n\nsoftware;\nelectronic hardware;\na dedicated function;\nconstraints such as time, memory, energy, or safety."
+    "text": "A system is more than its processor\n\n\nAn embedded system combines software, electronic hardware, a dedicated function, and constraints — time, memory, energy, safety."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#which-systems-are-embedded",
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#which-systems-are-embedded",
     "title": "EE5203 Microprocessors",
     "section": "Which systems are embedded?",
-    "text": "Which systems are embedded?\n\n\nWashing-machine controller\nDedicated function? Constraints?\n\n\nLaptop\nDedicated function? Constraints?\n\n\nDigital thermostat\nDedicated function? Constraints?\n\n\nCar braking controller\nDedicated function? Constraints?\n\n\n\n\n\n\n\n\n\nNote\n\n\nThe boundary is not always absolute. Your justification matters more than the label."
+    "text": "Which systems are embedded?\n\n\nWashing-machine controller\nDedicated function? Constraints?\n\n\nLaptop\nDedicated function? Constraints?\n\n\nDigital thermostat\nDedicated function? Constraints?\n\n\nCar braking controller\nDedicated function? Constraints?\n\n\n\nThe boundary is not always absolute. Your justification matters more than the label."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#processor-mcu-embedded-system",
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#processor-mcu-embedded-system",
     "title": "EE5203 Microprocessors",
     "section": "Processor, MCU, embedded system",
-    "text": "Processor, MCU, embedded system\n\n\nPROCESSOR\nExecutes instructions\na computing core\n\n\nMICROCONTROLLER\nProcessor + memory + peripherals\nintegrated on one chip\n\n\nEMBEDDED SYSTEM\nHardware + software + purpose\nthe complete product\n\n\n\nOur Nucleo board carries an STM32F401RE microcontroller, whose processor is an Arm Cortex-M4 core."
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-course-mission",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-course-mission",
-    "title": "EE5203 Microprocessors",
-    "section": "The course mission",
-    "text": "The course mission\n\n\n01 Write & debug Embedded C\n\n\n02 Model Cortex-M hardware\n\n\n03 Control peripherals\n\n\n04 Design responsive applications\n\n\n05 Integrate & defend a system\n\n\nThe goal is not register-name memorization. The goal is evidence-based engineering."
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#your-destination-a-complete-project",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#your-destination-a-complete-project",
-    "title": "EE5203 Microprocessors",
-    "section": "Your destination: a complete project",
-    "text": "Your destination: a complete project\nA successful project has a testable chain:\n\n\nEnvironmental monitor · Reaction-time game · Smart controller · Motion alarm · Sensor logger"
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#think-early-commit-later",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#think-early-commit-later",
-    "title": "EE5203 Microprocessors",
-    "section": "Think early; commit later",
-    "text": "Think early; commit later\n\n\nL01\nNotice possibilities\n\n\nL03–04\nGenerate + scope\n\n\nL05\nTeam + launch\n\n\nL06–12\nProve subsystems\n\n\nL13–14\nIntegrate + defend\n\n\nToday, simply notice possible inputs, processing, and outputs."
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-13-lecture-journey",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-13-lecture-journey",
-    "title": "EE5203 Microprocessors",
-    "section": "The 13-lecture journey",
-    "text": "The 13-lecture journey\n\n\nEmbedded C Foundation\n\nL01 First C program, toolchain, debugging\nL02 Values, decisions, loops, arrays\nL03 Functions, strings, multiple C files\nL04 Pointers, bits, registers, GPIO\n\nHardware foundations\n\nL05 GPIO with HAL and abstraction\nL06 Interrupts and state\nL07 Timers and non-blocking time\n\nWeek 8 — midterm\n\nPeripherals and integration\n\nL08 PWM, output compare, input capture\nL09 ADC and sensor acquisition\nL10 UART and PC communication\nL11 I2C and SPI\nL12 System integration and project clinic\nL13 Demonstration and oral defence"
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-learning-will-work",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-learning-will-work",
-    "title": "EE5203 Microprocessors",
-    "section": "How learning will work",
-    "text": "How learning will work\nEvery lecture follows the same cycle:\n\n\nShort preparation creates a starting point.\nClass time is used for explanation, prediction, coding, and feedback.\nLaboratories end with an individual modification and oral check.\nSolutions are released after the practice window."
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-the-laboratory-changes",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-the-laboratory-changes",
-    "title": "EE5203 Microprocessors",
-    "section": "How the laboratory changes",
-    "text": "How the laboratory changes\n\n\n\nStage\nSupport level\n\n\n\n\nL01-L02\nDetailed workflow and frequent checkpoints\n\n\nL03-L05\nPartial code and meaningful TODOs\n\n\nL06-L08\nRequirements, references, and acceptance tests\n\n\nL09-L11\nSpecification-driven implementation\n\n\nL12-L13\nIntegration, testing, and defense\n\n\n\nThe instructions fade; your engineering responsibility grows."
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#assessment-what-will-count",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#assessment-what-will-count",
-    "title": "EE5203 Microprocessors",
-    "section": "Assessment: what will count",
-    "text": "Assessment: what will count\nFour things carry your grade:\n\n\n\nCategory\nMain evidence\n\n\n\n\nMidterm\nWritten reasoning + an individual toolchain practical\n\n\nLaboratory\nDirectly observed checkoffs + preparation and homework\n\n\nProject\nMilestones, working system, and individual defence\n\n\nFinal\nApplied written assessment\n\n\n\nLaboratory credit is individual: every lab ends with a checkoff and a short oral check where you explain your own work.\n\n\n\n\n\n\nNote\n\n\nThe official weights are the ones in the ECTS course record; anything specific to this term is announced in CATS. Check there, not your notes from today."
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#why-c-for-embedded",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#why-c-for-embedded",
-    "title": "EE5203 Microprocessors",
-    "section": "Why C for embedded",
-    "text": "Why C for embedded\nint led_on = 0;\nled_on = 1;\n\n\n01 C requires us to state what kind of value a variable stores.\n\n\n02 C statements end with a semicolon.\n\n\n03 The compiler translates these statements into machine instructions.\n\n\nWe will build these foundations during the first four lectures."
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#starting-at-main",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#starting-at-main",
-    "title": "EE5203 Microprocessors",
-    "section": "Starting at main()",
-    "text": "Starting at main()\nint main(void)\n{\n    int led_on = 0;\n\n    led_on = 1;\n\n    return 0;\n}\n\n\n01 Execution enters the program at main().\n\n\n02 The braces contain the statements that belong to main().\n\n\n03 The statements execute from top to bottom."
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#declaring-a-variable",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#declaring-a-variable",
-    "title": "EE5203 Microprocessors",
-    "section": "Declaring a variable",
-    "text": "Declaring a variable\nint temperature = 24;\n\n\n01 int means the variable stores a whole number.\n\n\n02 temperature is the name used by later statements.\n\n\n03 24 is the first stored value.\n\n\n04 ; ends the declaration."
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#assignment",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#assignment",
-    "title": "EE5203 Microprocessors",
-    "section": "Assignment",
-    "text": "Assignment\nint count = 0;\n\ncount = count + 1;\nRead the second statement from right to left:\n\nread the current value of count;\nadd one;\nstore the result back in count.\n\nAfter both statements, count is 1."
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-if-statement",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-if-statement",
-    "title": "EE5203 Microprocessors",
-    "section": "The if statement",
-    "text": "The if statement\nint temperature = 24;\nint fan_on = 0;\n\nif (temperature &gt; 22) {\n    fan_on = 1;\n}\nThe program asks whether temperature &gt; 22. If the answer is true, it stores 1 in fan_on. Otherwise, it skips the statement inside the braces."
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-forever-loop",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-forever-loop",
-    "title": "EE5203 Microprocessors",
-    "section": "The forever loop",
-    "text": "The forever loop\nint main(void)\n{\n    int toggle_count = 0;\n\n    while (1) {\n        toggle_count = toggle_count + 1;\n    }\n}\nwhile (1) means repeat forever. Firmware normally initializes the hardware once and then stays inside an infinite main loop."
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#predict-before-running",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#predict-before-running",
-    "title": "EE5203 Microprocessors",
-    "section": "Predict before running",
-    "text": "Predict before running\nint temperature = 24;\nint fan_on = 0;\n\nif (temperature &gt; 22) {\n    fan_on = 1;\n}\n\nWhat is fan_on after execution?\nWhat changes if temperature is 18?\nWhere would you place a breakpoint to verify the prediction?"
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#source-code-is-not-firmware",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#source-code-is-not-firmware",
-    "title": "EE5203 Microprocessors",
-    "section": "Source code is not firmware",
-    "text": "Source code is not firmware\n\nEach stage produces different kinds of errors and evidence."
-  },
-  {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-embedded-toolchain",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-embedded-toolchain",
-    "title": "EE5203 Microprocessors",
-    "section": "The embedded toolchain",
-    "text": "The embedded toolchain\n\n\n\n\n\n\n\n\nTool\nJob\nEvidence\n\n\n\n\nEditor\nCreate source files\nReadable C source\n\n\nCompiler\nTranslate C to object code\nErrors, warnings, .o files\n\n\nLinker\nCombine objects and libraries\nMemory map, .elf file\n\n\nProgrammer\nWrite firmware to flash\nSuccessful download\n\n\nDebugger\nControl and inspect execution\nBreakpoints, variables, registers\n\n\n\nOur toolchain packages these tools: STM32CubeMX configures and generates, VS Code edits and debugs, and the STM32CubeCLT toolbox supplies the compiler, linker, and programmer underneath.\n\nThe full story behind this table—what each tool consumes and produces, from keypress to blinking LED: From C to Silicon, the toolchain companion."
+    "text": "Processor, MCU, embedded system\n\n\nOur Nucleo board carries an STM32F401RE microcontroller, whose processor is an Arm Cortex-M4 core."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#our-hardware-platform",
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#our-hardware-platform",
     "title": "EE5203 Microprocessors",
     "section": "Our hardware platform",
-    "text": "Our hardware platform\n\n\n\n\n\n\nUSB\npower + data\n\n\nST-LINK\nprogram + debug\n\n\nB1 · PC13\nuser button\n\n\nLD2 · PA5\nuser LED\n\n\nSTM32F401RE\ntarget MCU\n\n\nHEADERS\nArduino + Morpho\n\n\n\n\nIn the lab, locate each physical item before writing code.\n\n\nDeep dive: UM1724 Rev 17, §6 Hardware layout — p. 13 · MB1136 C-04 schematic."
+    "text": "Our hardware platform\n\n                  USBpower + data · to the PC  ST-LINKprograms + debugs the target  LD2 · PA5the user LED we toggle  STM32F401REtarget MCU · Cortex-M4   B1 · PC13the user button (L06)  HEADERSArduino + Morpho pins          \n\n\nDeep dive: UM1724 Rev 17, §6 Hardware layout — p. 13 · MB1136 C-04 schematic."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#a-first-mental-model-of-the-mcu",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#a-first-mental-model-of-the-mcu",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#inside-the-stm32f401re",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#inside-the-stm32f401re",
     "title": "EE5203 Microprocessors",
-    "section": "A first mental model of the MCU",
-    "text": "A first mental model of the MCU\n\nPeripherals are hardware blocks controlled by configuration and data registers.\n\nDeep dive: PM0214 Rev 10, §2.1 Programmers model — p. 17."
+    "section": "Inside the STM32F401RE",
+    "text": "Inside the STM32F401RE\n\n\nPeripherals are hardware blocks controlled through configuration and data registers. Today’s code touches one of them: GPIO, for the LED.\n\n\nDeep dive: PM0214 Rev 10, §2.1 Programmers model — p. 17."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#register-level-and-hal-our-policy",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#register-level-and-hal-our-policy",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-smallest-control-loop",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-smallest-control-loop",
     "title": "EE5203 Microprocessors",
-    "section": "Register level and HAL: our policy",
-    "text": "Register level and HAL: our policy\n\n\nRegisters explain the machine\nClocks · bit fields · flags · cause and effect\n\n\nHAL helps build systems\nReadable operations · generated setup · manageable complexity\n\n\n\nOur sequence: working HAL → C foundations → direct GPIO → informed abstraction choices"
+    "section": "The smallest control loop",
+    "text": "The smallest control loop\n\nSourceCompileLinkFlashRunDebug\n\nwhile (1)\n{\n    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n    HAL_Delay(500);\n}\n\nToggle a physical output · wait about 500 ms · repeat forever. This is the statement we follow for the rest of the lecture — and every later lecture replaces one part of this loop."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-smallest-embedded-control-loop",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-smallest-embedded-control-loop",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#reading-main",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#reading-main",
     "title": "EE5203 Microprocessors",
-    "section": "The smallest embedded control loop",
-    "text": "The smallest embedded control loop\nwhile (1)\n{\n    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n    HAL_Delay(500);\n}\nInterpretation:\n\nToggle the state of a physical output.\nWait approximately 500 ms.\nRepeat forever.\n\nLater, timers and interrupts will replace this blocking delay."
+    "section": "Reading main()",
+    "text": "Reading main()\n\nSourceCompileLinkFlashRunDebug\n\nint main(void)\n{\n    /* initialise once: clocks, pins */\n\n    while (1)\n    {\n        HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n        HAL_Delay(500);\n    }\n}\n\n\n01 After reset, the startup code calls main(). Execution enters here.\n\n\n02 The braces group the statements that belong to main().\n\n\n03 Statements run top to bottom — and the loop never lets execution reach the end."
+  },
+  {
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#declaring-a-variable",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#declaring-a-variable",
+    "title": "EE5203 Microprocessors",
+    "section": "Declaring a variable",
+    "text": "Declaring a variable\n\nSourceCompileLinkFlashRunDebug\n\nint toggle_count = 0;\n\n\n01 int — the variable stores a whole number.\n\n\n02 toggle_count — the name later statements use.\n\n\n03 0 — the first stored value.\n\n\n04 ; — ends the declaration.\n\n\n\nIn the lab you add exactly this line, then watch the value change in the debugger."
+  },
+  {
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-forever-loop",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-forever-loop",
+    "title": "EE5203 Microprocessors",
+    "section": "The forever loop",
+    "text": "The forever loop\n\nSourceCompileLinkFlashRunDebug\n\n\n\nint main(void)\n{\n    int toggle_count = 0;\n\n    while (1)\n    {\n        HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n        toggle_count = toggle_count + 1;\n        HAL_Delay(500);\n    }\n}\nwhile (1) means repeat forever. Firmware initialises the hardware once, then stays in its main loop."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#generated-code-and-your-code",
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#generated-code-and-your-code",
     "title": "EE5203 Microprocessors",
     "section": "Generated code and your code",
-    "text": "Generated code and your code\nThe generator protects marked regions:\n/* USER CODE BEGIN 2 */\n/* Your initialization additions */\n/* USER CODE END 2 */\n\nwhile (1)\n{\n  /* USER CODE BEGIN 3 */\n  /* Your repeated application code */\n  /* USER CODE END 3 */\n}\nCode outside user regions may be regenerated from the .ioc configuration."
+    "text": "Generated code and your code\n\nSourceCompileLinkFlashRunDebug\n\n/* USER CODE BEGIN 2 */\nint toggle_count = 0;\n/* USER CODE END 2 */\n\n/* USER CODE BEGIN WHILE */\nwhile (1)\n{\n    /* USER CODE END WHILE */\n\n    /* USER CODE BEGIN 3 */\n    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n    toggle_count = toggle_count + 1;\n    HAL_Delay(500);\n}\n/* USER CODE END 3 */\n\nThis is the layout CubeMX generates. Your statements live inside a USER CODE region; everything outside can be regenerated from the .ioc configuration."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#build-flash-run-three-different-claims",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#build-flash-run-three-different-claims",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#registers-explain-hal-builds",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#registers-explain-hal-builds",
     "title": "EE5203 Microprocessors",
-    "section": "Build, flash, run: three different claims",
-    "text": "Build, flash, run: three different claims\n\n\n\n\n\n\n\n\nClaim\nWhat it proves\nWhat it does not prove\n\n\n\n\nBuild succeeds\nSource compiles and links\nHardware behaves correctly\n\n\nFlash succeeds\nFirmware reached the MCU\nThe logic is correct\n\n\nLED blinks\nOne observable requirement works\nEvery requirement works\n\n\n\nEngineering conclusions must match the evidence available."
+    "section": "Registers explain, HAL builds",
+    "text": "Registers explain, HAL builds\n\nSourceCompileLinkFlashRunDebug\n\n\n\nRegisters explain the machine\nGPIOA-&gt;ODR ^= (1U &lt;&lt; 5);   /* L04 */\nClocks · bit fields · flags · cause and effect. One line, but every symbol needs explaining — that is L04’s job.\n\n\nHAL helps build systems\nHAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\nReadable operations · generated setup · manageable complexity. The same toggle, named by what it does.\n\n\n\nOur sequence: working HAL today → C foundations → direct GPIO registers → informed abstraction choices"
+  },
+  {
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#source-code-is-not-firmware",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#source-code-is-not-firmware",
+    "title": "EE5203 Microprocessors",
+    "section": "Source code is not firmware",
+    "text": "Source code is not firmware\n\nSourceCompileLinkFlashRunDebug\n\n\n 1SOURCE  2COMPILE  3LINK  4FLASH  5RUN  6DEBUG what you wrotemain.c — text you can read; the compiler reads the same file what it becomesmain.o, stm32f4xx_hal_gpio.o, … — machine code, one object file per source file one programEE5203_L01.elf — every function and variable now has an address in the chipflash memory from 0x0800 0000, written through the ST-LINK what you seeLD2 toggles every 500 ms — behaviour, not code what you measurepaused at the breakpoint, toggle_count = 2 — state as evidence Every stage produces something different — and can fail in a different way."
+  },
+  {
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#tools-and-their-evidence",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#tools-and-their-evidence",
+    "title": "EE5203 Microprocessors",
+    "section": "Tools and their evidence",
+    "text": "Tools and their evidence\n\nSourceCompileLinkFlashRunDebug\n\n\n\n\n\n\n\n\n\nTool\nJob\nEvidence\n\n\n\n\nCompiler\nTranslate each C file to object code\nErrors, warnings, .o files\n\n\nLinker\nCombine objects and libraries into one program\nMemory map, .elf file\n\n\nProgrammer\nWrite the firmware into flash\nSuccessful download\n\n\nDebugger\nControl and inspect execution\nBreakpoints, variables, registers\n\n\n\n\nIn our lab: STM32CubeMX configures and generates, VS Code edits and debugs, and the STM32CubeCLT toolbox underneath supplies the compiler, linker, and programmer.\n\n\nThe full story behind this table — what each tool consumes and produces, from keypress to blinking LED: From C to Silicon, the toolchain companion."
+  },
+  {
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#build-flash-run-three-claims",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#build-flash-run-three-claims",
+    "title": "EE5203 Microprocessors",
+    "section": "Build, flash, run: three claims",
+    "text": "Build, flash, run: three claims\n\nSourceCompileLinkFlashRunDebug\n\n\n\n\n\n\n\n\n\nClaim\nWhat it proves\nWhat it does not prove\n\n\n\n\nBuild succeeds\nSource compiles and links\nHardware behaves correctly\n\n\nFlash succeeds\nFirmware reached the MCU\nThe logic is correct\n\n\nLED blinks\nOne observable requirement works\nEvery requirement works\n\n\n\n\nEngineering conclusions must match the evidence available."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#three-error-families",
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#three-error-families",
     "title": "EE5203 Microprocessors",
     "section": "Three error families",
-    "text": "Three error families\n\n\n1 · COMPILE\nCan each source file be translated?\nSyntax · types · names · warnings\n\n\n2 · LINK\nCan all pieces form one program?\nMissing symbols · duplicates · memory\n\n\n3 · RUN / HARDWARE\nDoes the real system behave correctly?\nLogic · clocks · pins · wiring · power"
+    "text": "Three error families\n\nSourceCompileLinkFlashRunDebug\n\n\n 1SOURCEmain.c  2COMPILEobject files  3LINKfirmware .elf  4FLASHMCU memory  5RUNphysical behavior  6DEBUGstate + evidence COMPILE ERRORSsyntax · types · nameswarnings LINK ERRORSmissing symbolsduplicates · memory RUN / HARDWARElogic · clocks · pinswiring · power Read the stage first; it tells you which family the error belongs to."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#debugging-is-controlled-observation",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#debugging-is-controlled-observation",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#controlled-observation",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#controlled-observation",
     "title": "EE5203 Microprocessors",
-    "section": "Debugging is controlled observation",
-    "text": "Debugging is controlled observation\n\n\nChange one thing, then repeat the cycle with new evidence."
+    "section": "Controlled observation",
+    "text": "Controlled observation\n\nSourceCompileLinkFlashRunDebug\n\n\n\nChange one thing, then repeat the cycle with new evidence."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#useful-debugging-statements",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#useful-debugging-statements",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#four-statements-that-help",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#four-statements-that-help",
     "title": "EE5203 Microprocessors",
-    "section": "Useful debugging statements",
-    "text": "Useful debugging statements\n\n\n1 EXPECTED\nWhat should happen?\n\n\n2 OBSERVED\nWhat actually happened?\n\n\n3 EVIDENCE\nWhat did you measure?\n\n\n4 NEXT TEST\nWhat is the smallest check?\n\n\n\n“It does not work” contains none of these."
+    "section": "Four statements that help",
+    "text": "Four statements that help\n\nSourceCompileLinkFlashRunDebug\n\n\n\n“It does not work.”\n\n\nExpected LD2 blinks once a second.\nObserved LD2 stays on; no blinking.\nEvidence a breakpoint inside the loop is never hit.\nNext test does execution reach main() at all?\n\n\n\nThe sentence on the left contains none of the four. Before asking for help, write the four lines on the right."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#breakpoints-and-variables",
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#breakpoints-and-variables",
     "title": "EE5203 Microprocessors",
     "section": "Breakpoints and variables",
-    "text": "Breakpoints and variables\n\n\nPause → inspect state → compare with prediction → step → observe again"
+    "text": "Breakpoints and variables\n\nSourceCompileLinkFlashRunDebug\n\n\n\n\nPause → inspect state → compare with prediction → step → observe again"
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#a-controlled-experiment",
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#a-controlled-experiment",
     "title": "EE5203 Microprocessors",
     "section": "A controlled experiment",
-    "text": "A controlled experiment\n\n\nBASELINE\nHAL_Delay(500);\nObserve the blink period.\n\n\n→\none change\n\n\nMODIFIED\nHAL_Delay(100);\nPredict before flashing.\n\n\n\nWhat stays fixed? What changes? Which physical observation would confirm it?"
+    "text": "A controlled experiment\n\nSourceCompileLinkFlashRunDebug\n\n\n\nBaseline\nHAL_Delay(500);\nObserve the blink period.\n\n\nModified — one change\nHAL_Delay(100);\nPredict before flashing.\n\n\n\nWhat stays fixed? What changes? Which physical observation would confirm it?\n\n\npredict → flash → observe → compare"
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#common-first-day-problems",
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#common-first-day-problems",
     "title": "EE5203 Microprocessors",
     "section": "Common first-day problems",
-    "text": "Common first-day problems\n\n\n\n\n\n\n\nSymptom\nFirst checks\n\n\n\n\nBoard is not detected\nUSB data cable, ST-LINK connector, driver, power LED\n\n\nBuild fails\nFirst error, not the last; file saved; braces and semicolons\n\n\nFlash fails\nST-LINK connected; no other debug session holding it\n\n\nLED does not blink\nCorrect board, PA5/LD2 configuration, code in user region\n\n\nChange has no effect\nRebuild and flash the new binary; confirm the edited project\n\n\n\nCollect evidence before changing multiple settings."
+    "text": "Common first-day problems\n\nSourceCompileLinkFlashRunDebug\n\n\n\n\n\n\n\n\nSymptom\nFirst checks\n\n\n\n\nBoard is not detected\nUSB data cable, ST-LINK connector, driver, power LED\n\n\nBuild fails\nFirst error, not the last; file saved; braces and semicolons\n\n\nFlash fails\nST-LINK connected; no other debug session holding it\n\n\nLED does not blink\nCorrect board, PA5/LD2 configuration, code in a user region\n\n\nChange has no effect\nRebuild and flash the new binary; confirm the edited project\n\n\n\n\nCollect evidence before changing several settings at once."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#readiness-diagnostic",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#readiness-diagnostic",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-twelve-week-journey",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-twelve-week-journey",
     "title": "EE5203 Microprocessors",
-    "section": "Readiness diagnostic",
-    "text": "Readiness diagnostic\n\n\nPROGRAM FLOW\nVariables · if · loops · functions\n\n\nREPRESENTATION\nTracing · binary · hexadecimal\n\n\nTOOL CONFIDENCE\nEdit · build · interpret feedback\n\n\nIt is an early-warning tool, not a punishment. Results route students to the Embedded C recovery track."
+    "section": "The twelve-week journey",
+    "text": "The twelve-week journey\n\n\nEleven lecture weeks, the midterm in week 7, one project. Today, simply notice possible inputs, processing, and outputs; teams launch in L05. Topics per week: see the syllabus."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#retrieval-check",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#retrieval-check",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-learning-will-work",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-learning-will-work",
     "title": "EE5203 Microprocessors",
-    "section": "Retrieval check",
-    "text": "Retrieval check\n\n\n1 Microcontroller vs processor?\n\n\n2 Compiler output used by linker?\n\n\n3 What does a successful build prove?\n\n\n4 Why debug a working program?\n\n\n5 What programs and debugs the MCU?\n\n\nDiscuss, then revise one answer."
+    "section": "How learning will work",
+    "text": "How learning will work\n\n\nShort preparation creates a starting point; class time goes to explanation, prediction, coding, and feedback. Every laboratory ends with an individual modification and oral check; solutions follow the practice window."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#mastery-checklist",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#mastery-checklist",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#assessment-what-will-count",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#assessment-what-will-count",
     "title": "EE5203 Microprocessors",
-    "section": "Mastery checklist",
-    "text": "Mastery checklist\n\n\n✓ Distinguish processor, MCU, and embedded system\n\n\n✓ Trace source → build → flash → execution\n\n\n✓ Identify the four toolchain roles\n\n\n✓ Read main(), a variable declaration, and an assignment\n\n\n✓ Trace a simple if and while (1)\n\n\n✓ State useful debugging evidence"
+    "section": "Assessment: what will count",
+    "text": "Assessment: what will count\n\n\n\nCategory\nMain evidence\n\n\n\n\nMidterm\nWritten reasoning + an individual toolchain practical\n\n\nLaboratory\nDirectly observed checkoffs + preparation and homework\n\n\nProject\nMilestones, working system, and individual defence\n\n\nFinal\nApplied written assessment\n\n\n\n\nLaboratory credit is individual: every lab ends with a checkoff and a short oral check where you explain your own work.\n\n\n\n\n\n\n\nNote\n\n\nThe official weights are the ones in the ECTS course record; anything specific to this term is announced in CATS. Check there, not your notes from today."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#laboratory-mission",
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#laboratory-mission",
     "title": "EE5203 Microprocessors",
     "section": "Laboratory mission",
-    "text": "Laboratory mission\n\n\nA ORIENT\nBoard + tools\n\n\nB PROVE\nBuild + flash\n\n\nC OBSERVE\nBreakpoint + variable\n\n\nD OWN\nModify + justify\n\n\nBring the completed pre-lab entry ticket."
+    "text": "Laboratory mission\n\n\nA ORIENT\nBoard + tools\n\n\nB PROVE\nBuild + flash\n\n\nC OBSERVE\nBreakpoint + variable\n\n\nD OWN\nModify + justify\n\n\n\nThe lab opens with a 15-minute readiness diagnostic — not a grade, a routing tool for the C practice track. Bring the completed pre-lab entry ticket."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#exit-ticket",
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#exit-ticket",
     "title": "EE5203 Microprocessors",
     "section": "Exit ticket",
-    "text": "Exit ticket\n\n\nEVIDENCE\nWhat observation proves new firmware reached the board?\n\n\nPREDICTION\nWhat changes when 500 becomes 100?\n\n\nQUESTION\nWhich part of today’s workflow remains least clear?\n\n\nNext: arithmetic, comparisons, decisions, loops, and arrays.\n\nEvery concept in this lecture, with page-linked sources: academic references."
+    "text": "Exit ticket\n\n\nEVIDENCE\nWhat observation proves new firmware reached the board?\n\n\nPREDICTION\nWhat changes when 500 becomes 100?\n\n\nQUESTION\nWhich part of today’s workflow remains least clear?\n\n\n\nNext: values, decisions, loops, and arrays.\n\n\nEvery concept in this lecture, with page-linked sources: academic references."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/practice/EE5203_Microprocessors_Lecture1_Study_Sheet.html",
     "href": "lectures/L01_microprocessor-systems-toolchain/practice/EE5203_Microprocessors_Lecture1_Study_Sheet.html",
     "title": "EE5203 L01 Study Sheet",
     "section": "",
-    "text": "Embedded Systems, the C Toolchain, and Debugging - Basri Erdogan\n\nEssential question: How does a line of C code become an observable change on an STM32 board, and what evidence verifies each step?\n\n\n\n\nDistinguish a processor, microcontroller, and embedded system.\nTrace source code through compile, link, flash, and execution.\nIdentify the compiler, linker, programmer, and debugger roles.\nExplain why a successful build, successful flash, and correct behavior are different claims.\nUse a breakpoint and variable inspection as engineering evidence.\nDescribe the course policy: register literacy, HAL fluency.\n\n\n\n\nInput -&gt; STM32 microcontroller -&gt; Output\n              |\n       software + memory\n       + peripherals + timing\n\n\n\n\n\n\n\nTerm\nMeaning in this course\n\n\n\n\nProcessor\nThe CPU core that executes instructions\n\n\nMicrocontroller\nProcessor, memory, and peripherals on one chip\n\n\nEmbedded system\nPurpose-built hardware and software performing a dedicated function\n\n\nPeripheral\nHardware block such as GPIO, timer, ADC, UART, I2C, or SPI\n\n\n\n\n\n\nC source -&gt; compiler -&gt; object files -&gt; linker -&gt; .elf firmware\n                                                |\n                                         flash/program\n                                                v\n                                          STM32 memory\n\n\n\n\n\n\n\n\nStage\nEvidence\nTypical failure\n\n\n\n\nCompile\nSource translated; errors/warnings reported\nSyntax, type, or undeclared name\n\n\nLink\nObjects/libraries combined into .elf\nMissing definition or memory problem\n\n\nFlash\nFirmware written to the board\nBoard/debug connection problem\n\n\nRun/test\nObservable requirement checked\nLogic, configuration, or hardware problem\n\n\n\n\n\n\nwhile (1)\n{\n    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n    HAL_Delay(500);\n}\n\nwhile (1) repeats indefinitely.\nHAL_GPIO_TogglePin(...) changes the physical LD2 state.\nHAL_Delay(500) blocks for approximately 500 ms.\nWe use HAL here to learn the toolchain. Direct GPIO registers follow after the four-lecture Embedded C Foundation.\n\n\n\n\n\n\n\n\n\n\n\nItem\nNucleo-F401RE fact\n\n\n\n\nMCU\nSTM32F401RE\n\n\nProcessor core\nArm Cortex-M4\n\n\nProgrammer/debugger\nOn-board ST-LINK\n\n\nUser LED\nLD2 on PA5\n\n\nUser button\nB1 on PC13\n\n\nDevelopment environment\nVS Code + STM32CubeMX (STM32CubeCLT toolchain)\n\n\n\n\n\n\nPredict -&gt; Run -&gt; Observe -&gt; Compare -&gt; Change one thing -&gt; Repeat\nBefore asking for implementation help, state:\n\nexpected behavior;\nobserved behavior;\nevidence collected;\nnext smallest test.\n\n\n\n\n\nTreating “build succeeded” as proof that the hardware works.\nReading the last compiler error instead of the first relevant error.\nEditing one project but building/flashing a different project.\nWriting application code outside protected USER CODE regions.\nChanging several settings at once and losing the cause-effect relationship.\nUsing a power-only USB cable rather than a data cable.\n\n\n\n\n\nI can explain compiler versus linker.\nI can identify the .elf file’s role.\nI can distinguish build, flash, and behavior evidence.\nI can create a breakpoint and predict where execution pauses.\nI can explain why HAL_Delay(100) blinks faster than HAL_Delay(500).\nI can name the board, MCU, core, programmer, LED pin, and button pin.\nI can describe when this course uses registers and when it uses HAL.\n\n\n\n\n\nWhat does a microcontroller contain that a processor alone may not?\nWhat is the linker’s job?\nWhat does a successful flash prove?\nWhy is a breakpoint useful in a working program?\nWhat single observation would confirm that a delay modification reached the board?\n\nSee the L01 worksheet for extended practice. Worked solutions are released after the practice window."
+    "text": "Embedded Systems, the C Toolchain, and Debugging - Basri Erdogan\n\nEssential question: How does a line of C code become an observable change on an STM32 board, and what evidence verifies each step?\n\n\n\n\nDistinguish a processor, microcontroller, and embedded system.\nTrace source code through compile, link, flash, and execution.\nIdentify the compiler, linker, programmer, and debugger roles.\nExplain why a successful build, successful flash, and correct behavior are different claims.\nUse a breakpoint and variable inspection as engineering evidence.\nDescribe the course policy: register literacy, HAL fluency.\n\n\n\n\nInput -&gt; STM32 microcontroller -&gt; Output\n              |\n       software + memory\n       + peripherals + timing\n\n\n\n\n\n\n\nTerm\nMeaning in this course\n\n\n\n\nProcessor\nThe CPU core that executes instructions\n\n\nMicrocontroller\nProcessor, memory, and peripherals on one chip\n\n\nEmbedded system\nPurpose-built hardware and software performing a dedicated function\n\n\nPeripheral\nHardware block such as GPIO, timer, ADC, UART, I2C, or SPI\n\n\n\n\n\n\nC source -&gt; compiler -&gt; object files -&gt; linker -&gt; .elf firmware\n                                                |\n                                         flash/program\n                                                v\n                                          STM32 memory\n\n\n\n\n\n\n\n\nStage\nEvidence\nTypical failure\n\n\n\n\nCompile\nSource translated; errors/warnings reported\nSyntax, type, or undeclared name\n\n\nLink\nObjects/libraries combined into .elf\nMissing definition or memory problem\n\n\nFlash\nFirmware written to the board\nBoard/debug connection problem\n\n\nRun/test\nObservable requirement checked\nLogic, configuration, or hardware problem\n\n\n\n\n\n\nwhile (1)\n{\n    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n    HAL_Delay(500);\n}\n\nwhile (1) repeats indefinitely.\nHAL_GPIO_TogglePin(...) changes the physical LD2 state.\nHAL_Delay(500) blocks for approximately 500 ms.\nWe use HAL here to learn the toolchain. Direct GPIO registers follow after the four-lecture Embedded C Foundation.\n\n\n\n\n\n\n\n\n\n\n\nItem\nNucleo-F401RE fact\n\n\n\n\nMCU\nSTM32F401RE\n\n\nProcessor core\nArm Cortex-M4\n\n\nProgrammer/debugger\nOn-board ST-LINK\n\n\nUser LED\nLD2 on PA5\n\n\nUser button\nB1 on PC13\n\n\nDevelopment environment\nVS Code + STM32CubeMX (STM32CubeCLT toolchain)\n\n\n\n\n\n\nPredict -&gt; Run -&gt; Observe -&gt; Compare -&gt; Change one thing -&gt; Repeat\nBefore asking for implementation help, state:\n\nexpected behavior;\nobserved behavior;\nevidence collected;\nnext smallest test.\n\n\n\n\n\n\n\nStage\nSupport level\n\n\n\n\nL01-L02\nDetailed workflow and frequent checkpoints\n\n\nL03-L05\nPartial code and meaningful TODOs\n\n\nL06-L08\nRequirements, references, and acceptance tests\n\n\nL09-L11\nSpecification-driven implementation\n\n\nL12-L13\nIntegration, testing, and defense\n\n\n\nThe instructions fade; your engineering responsibility grows.\n\n\n\n\nTreating “build succeeded” as proof that the hardware works.\nReading the last compiler error instead of the first relevant error.\nEditing one project but building/flashing a different project.\nWriting application code outside protected USER CODE regions.\nChanging several settings at once and losing the cause-effect relationship.\nUsing a power-only USB cable rather than a data cable.\n\n\n\n\n\nI can explain compiler versus linker.\nI can identify the .elf file’s role.\nI can distinguish build, flash, and behavior evidence.\nI can create a breakpoint and predict where execution pauses.\nI can explain why HAL_Delay(100) blinks faster than HAL_Delay(500).\nI can name the board, MCU, core, programmer, LED pin, and button pin.\nI can describe when this course uses registers and when it uses HAL.\n\n\n\n\n\nWhat does a microcontroller contain that a processor alone may not?\nWhat is the linker’s job?\nWhat does a successful flash prove?\nWhy is a breakpoint useful in a working program?\nWhat single observation would confirm that a delay modification reached the board?\n\nSee the L01 worksheet for extended practice. Worked solutions are released after the practice window."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/practice/EE5203_Microprocessors_Lecture1_Study_Sheet.html#what-you-should-be-able-to-do",
@@ -3946,6 +3827,13 @@
     "title": "EE5203 L01 Study Sheet",
     "section": "",
     "text": "Predict -&gt; Run -&gt; Observe -&gt; Compare -&gt; Change one thing -&gt; Repeat\nBefore asking for implementation help, state:\n\nexpected behavior;\nobserved behavior;\nevidence collected;\nnext smallest test."
+  },
+  {
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/practice/EE5203_Microprocessors_Lecture1_Study_Sheet.html#how-the-laboratory-changes",
+    "href": "lectures/L01_microprocessor-systems-toolchain/practice/EE5203_Microprocessors_Lecture1_Study_Sheet.html#how-the-laboratory-changes",
+    "title": "EE5203 L01 Study Sheet",
+    "section": "",
+    "text": "Stage\nSupport level\n\n\n\n\nL01-L02\nDetailed workflow and frequent checkpoints\n\n\nL03-L05\nPartial code and meaningful TODOs\n\n\nL06-L08\nRequirements, references, and acceptance tests\n\n\nL09-L11\nSpecification-driven implementation\n\n\nL12-L13\nIntegration, testing, and defense\n\n\n\nThe instructions fade; your engineering responsibility grows."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/practice/EE5203_Microprocessors_Lecture1_Study_Sheet.html#common-mistakes",
@@ -4008,7 +3896,7 @@
     "href": "lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Reference.html#minimal-application-pattern",
     "title": "EE5203 L01 Lab Reference",
     "section": "Minimal application pattern",
-    "text": "Minimal application pattern\n/* USER CODE BEGIN 2 */\nuint32_t toggle_count = 0;\n/* USER CODE END 2 */\n\n/* Infinite loop */\n/* USER CODE BEGIN WHILE */\nwhile (1)\n{\n    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n    toggle_count++;\n    HAL_Delay(500);\n\n    /* USER CODE BEGIN 3 */\n}\n/* USER CODE END 3 */\nPreserve the intended USER CODE boundaries — regeneration from the .ioc keeps only what is inside them."
+    "text": "Minimal application pattern\nThis is the layout CubeMX generates, with the lab’s statements in place:\n  /* USER CODE BEGIN 2 */\n  int toggle_count = 0;\n  /* USER CODE END 2 */\n\n  /* Infinite loop */\n  /* USER CODE BEGIN WHILE */\n  while (1)\n  {\n    /* USER CODE END WHILE */\n\n    /* USER CODE BEGIN 3 */\n    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n    toggle_count = toggle_count + 1;\n    HAL_Delay(500);\n  }\n  /* USER CODE END 3 */\nTwo user regions touch the loop: BEGIN WHILE … END WHILE holds the loop opening, BEGIN 3 … END 3 holds its body and closing brace. Put statements inside one of them — anything between END WHILE and BEGIN 3 is outside both and disappears on regeneration from the .ioc."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Reference.html#first-day-troubleshooting",
@@ -4036,7 +3924,7 @@
     "href": "index.html",
     "title": "EE5203 Microprocessors",
     "section": "",
-    "text": "Slides, study sheets, worksheets and lab guides. Graded work and the weekly calendar are in CATS.\n\nEmbedded C\n\n  \n    L01\n    \n      Embedded Systems, the C Toolchain, and Debugging\n      \n        C diagnostic\n        Lab reference\n      \n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L02\n    \n      Values, Decisions, Loops, and Arrays\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L03\n    \n      Functions, Arrays, Strings, and Multiple C Files\n      \n        Starter files\n      \n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nRegisters and GPIO\n\n  \n    L04\n    \n      Pointers, Structures, Bits, Registers, and GPIO\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L05\n    \n      GPIO and Hardware Abstraction\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nEvents and Time\n\n  \n    L06\n    \n      Interrupts and the NVIC\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L07\n    \n      Timers and Non-Blocking Time\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nWeek 8 · Midterm examination\n\nPeripherals\n\n  \n    L08\n    \n      PWM, Output Compare, and Input Capture\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L09\n    \n      ADC and Sensor Acquisition\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L10\n    \n      UART and PC Communication\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L11\n    \n      I2C and SPI\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nIntegration and Project\n\n  \n    L12\n    \n      System Integration and Project Clinic\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Clinic\n    \n  \n  \n    L13\n    \n      Demonstration, Oral Defence, and Reflection\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Demo"
+    "text": "Slides, study sheets, worksheets and lab guides. Graded work and the weekly calendar are in CATS.\n\nEmbedded C\n\n  \n    L01\n    \n      Embedded Systems, the C Toolchain, and Debugging\n      \n        C diagnostic\n        Lab reference\n      \n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L02\n    \n      Values, Decisions, Loops, and Arrays\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L03\n    \n      Functions, Arrays, Strings, and Multiple C Files\n      \n        Starter files\n      \n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nRegisters and GPIO\n\n  \n    L04\n    \n      Pointers, Structures, Bits, Registers, and GPIO\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L05\n    \n      GPIO and Hardware Abstraction\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nEvents and Time\n\n  \n    L06\n    \n      Interrupts and the NVIC\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  Week 7 · Midterm examination\n\n    L07\n    \n      Timers and Non-Blocking Time\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\n\nPeripherals\n\n  \n    L08\n    \n      PWM, Output Compare, and Input Capture\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L09\n    \n      ADC and Sensor Acquisition\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L10\n    \n      UART and PC Communication\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L11\n    \n      I2C and SPI\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nIntegration and Project\n\n  \n    L12\n    \n      System Integration and Project Clinic\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Clinic\n    \n  \n  \n    L13\n    \n      Demonstration, Oral Defence, and Reflection\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Demo"
   },
   {
     "objectID": "SYLLABUS.html",
@@ -4078,7 +3966,7 @@
     "href": "SYLLABUS.html#course-sequence",
     "title": "EE5203 Microprocessors — Syllabus",
     "section": "Course sequence",
-    "text": "Course sequence\nThirteen lectures across a fourteen-week term. Week 8 is the midterm and introduces no new material.\n\n\n\n\n\n\n\n\n\n\nID\nWeek\nTopic\nCentral performance\nProject step\n\n\n\n\nL01\n1\nEmbedded systems, C toolchain, and debugging\nBuild, flash, debug, and modify Blinky\nSee example projects\n\n\nL02\n2\nValues, decisions, loops, and arrays\nProcess a sensor-data array in one C file\nIdentify project inputs\n\n\nL03\n3\nFunctions, arrays, strings, and modular C\nDecompose the sensor program into functions and files\nIdentify processing functions\n\n\nL04\n4\nPointers, structures, bits, registers, and GPIO\nControl PA5 through CMSIS registers\nIndividual idea canvas\n\n\nL05\n5\nGPIO and hardware abstraction\nRebuild GPIO with HAL and compare the two interfaces\nTeams form; project launch\n\n\nL06\n6\nInterrupts and the NVIC\nImplement and explain an event-driven application\nProposal and block diagram\n\n\nL07\n7\nTimers and non-blocking time\nGenerate periodic events without blocking delays\nDesign review\n\n\n\n8\nMidterm examination\n\n\n\n\nL08\n9\nPWM, output compare, and input capture\nGenerate timed signals — and measure them\nFirst hardware milestone\n\n\nL09\n10\nADC and sensor acquisition\nAcquire, scale, and validate analog data\nData-acquisition milestone\n\n\nL10\n11\nUART and PC communication\nStream acquired data to a PC and accept commands\nCommunication milestone\n\n\nL11\n12\nI2C and SPI\nInterface a synchronous serial device\nSensor/display integration\n\n\nL12\n13\nSystem integration and project clinic\nIntegrate peripherals and diagnose faults\nWorking prototype\n\n\nL13\n14\nDemonstration and defense\nDemonstrate, test, and individually explain the system\nFinal assessment\n\n\n\nWeek numbers are the planned sequence; the authoritative weekly calendar, including any holiday shifts, is always the one announced in CATS."
+    "text": "Course sequence\nTwelve teaching weeks: eleven lecture weeks and a midterm week. Week 7 is the midterm and introduces no new material. UART and I2C are taught together in week 11 (SPI is summarised there and continues in the project track), and the integration clinic runs in the laboratory hours of weeks 11 and 12.\n\n\n\n\n\n\n\n\n\n\nID\nWeek\nTopic\nCentral performance\nProject step\n\n\n\n\nL01\n1\nEmbedded systems, C toolchain, and debugging\nBuild, flash, debug, and modify Blinky\nSee example projects\n\n\nL02\n2\nValues, decisions, loops, and arrays\nProcess a sensor-data array in one C file\nIdentify project inputs\n\n\nL03\n3\nFunctions, arrays, strings, and modular C\nDecompose the sensor program into functions and files\nIdentify processing functions\n\n\nL04\n4\nPointers, structures, bits, registers, and GPIO\nControl PA5 through CMSIS registers\nIndividual idea canvas\n\n\nL05\n5\nGPIO and hardware abstraction\nRebuild GPIO with HAL and compare the two interfaces\nTeams form; project launch\n\n\nL06\n6\nInterrupts and the NVIC\nImplement and explain an event-driven application\nProposal and block diagram\n\n\n\n7\nMidterm examination\n\n\n\n\nL07\n8\nTimers and non-blocking time\nGenerate periodic events without blocking delays\nDesign review\n\n\nL08\n9\nPWM, output compare, and input capture\nGenerate timed signals — and measure them\nFirst hardware milestone\n\n\nL09\n10\nADC and sensor acquisition\nAcquire, scale, and validate analog data\nData-acquisition milestone\n\n\nL10\n11\nSerial communication: UART and I2C (SPI summary)\nStream data to a PC, accept commands, read one I2C device\nCommunication milestone\n\n\nL11\n11\nI2C and SPI — taught with L10\nInterface a synchronous serial device\nSensor/display integration\n\n\nL12\n11–12 (lab)\nIntegration clinic in laboratory hours\nIntegrate peripherals and diagnose faults\nWorking prototype\n\n\nL13\n12\nDemonstration and defense\nDemonstrate, test, and individually explain the system\nFinal assessment\n\n\n\nWeek numbers are the planned sequence; the authoritative weekly calendar, including any holiday shifts, is always the one announced in CATS."
   },
   {
     "objectID": "SYLLABUS.html#assessment",
@@ -4092,14 +3980,14 @@
     "href": "SYLLABUS.html#project-timeline",
     "title": "EE5203 Microprocessors — Syllabus",
     "section": "Project timeline",
-    "text": "Project timeline\n\n\n\n\n\n\n\n\nPoint\nWeek\nMilestone\n\n\n\n\nL04\n4\nOne-page individual idea canvas\n\n\nL05\n5\nTeams form; preliminary topic\n\n\nL06\n6\nProposal: problem, block diagram, components, minimum viable system\n\n\nL07\n7\nDesign review: pins, peripherals, data flow, responsibilities, risks\n\n\nL08\n9\nFirst hardware milestone — one input or output peripheral working\n\n\nL09\n10\nAcquired and validated sensor data\n\n\nL10\n11\nCommunication milestone — UART logging or command interface\n\n\nL11\n12\nIntegration milestone — input, processing, output, communication connected\n\n\nL12\n13\nReadiness review: working prototype and test evidence\n\n\nL13\n14\nDemonstration, report, presentation, and individual oral defense\n\n\n\nThere is no milestone in week 8. That week is yours for the midterm."
+    "text": "Project timeline\n\n\n\n\n\n\n\n\nPoint\nWeek\nMilestone\n\n\n\n\nL04\n4\nOne-page individual idea canvas\n\n\nL05\n5\nTeams form; preliminary topic\n\n\nL06\n6\nProposal: problem, block diagram, components, minimum viable system\n\n\nL07\n8\nDesign review: pins, peripherals, data flow, responsibilities, risks\n\n\nL08\n9\nFirst hardware milestone — one input or output peripheral working\n\n\nL09\n10\nAcquired and validated sensor data\n\n\nL10\n11\nCommunication milestone — UART logging or command interface\n\n\nL11\n11\nIntegration milestone — input, processing, output, communication connected\n\n\nL12\n11–12 (lab)\nReadiness review: working prototype and test evidence\n\n\nL13\n12\nDemonstration, report, presentation, and individual oral defense\n\n\n\nThere is no milestone in week 7. That week is yours for the midterm."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Lab.html",
     "href": "lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Lab.html",
     "title": "EE5203 L01 Lab Guide",
     "section": "",
-    "text": "Build, flash, debug, and modify Blinky - Basri Erdogan\n\nMission: Create a Nucleo-F401RE project, make LD2 blink, prove that the program executes in the debugger, and independently change its timing.\n\n\n\n\nComplete the five-question pre-lab quiz.\nBring the Question 5 entry ticket.\nConfirm VS Code + STM32CubeMX are installed (see the Reference page’s toolchain table) or identify that you need a laboratory PC.\nBring a USB data cable if using your own equipment.\n\n\n\n\nBy checkoff time, you can:\n\nbuild, flash, run, and debug a Nucleo-F401RE project;\ndistinguish build evidence from hardware evidence;\nset a breakpoint and inspect a variable;\nmake and explain one controlled code modification.\n\n\n\n\n\n\n\n\n\n\n\nItem\nRequired value\n\n\n\n\nBoard\nNucleo-F401RE\n\n\nProgrammer/debugger\nOn-board ST-LINK USB connection\n\n\nOutput\nLD2, connected to PA5\n\n\nTools\nSTM32CubeMX (configure/generate) + VS Code (edit/build/debug)\n\n\nProject name\nEE5203_L01_&lt;studentnumber&gt;\n\n\n\n\n\n\nThe session begins with one live demonstration of the complete workflow:\ncreate -&gt; configure -&gt; generate -&gt; edit -&gt; build -&gt; flash -&gt; debug -&gt; verify\nObserve which tool owns each stage: the .ioc configuration lives in STM32CubeMX; main.c, the build terminal, debug controls, and the variable panels live in VS Code. Record questions; do not copy menu clicks without understanding the stage they belong to.\n\n\n\n\nConnect the board through the ST-LINK USB connector.\nIn STM32CubeMX: create a project for NUCLEO-F401RE (Board Selector) and accept the board’s default peripheral initialization.\nConfirm that PA5/LD2 is configured as a GPIO output.\nIn Project Manager set the name, the location, and Toolchain/IDE = CMake; generate code.\nOpen the generated folder in VS Code and locate the protected USER CODE regions in main.c.\nBuild the unchanged project with zero errors.\n\nEvidence for Checkpoint A: Show the selected board, PA5 configuration, and a successful build message.\n\n\n\nInside the existing generated while (1) user-code region, add these statements. Do not create a second infinite loop.\nHAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\nHAL_Delay(500);\nBuild, flash, and verify a stable blink. Explain why the physical observation is stronger evidence than the build message alone.\n\n\n\nAdd before the loop:\nint toggle_count = 0;\nIncrement it after every toggle:\ntoggle_count = toggle_count + 1;\n\nPlace a breakpoint on or immediately after the increment.\nStart a debug session.\nPredict the value before pressing Resume.\nResume twice and record the observed values.\n\n\n\n\nObservation\nPredicted\nObserved\n\n\n\n\nFirst pause\n\n\n\n\nSecond pause\n\n\n\n\nThird pause\n\n\n\n\n\nEvidence for Checkpoint C: Show the breakpoint, execution marker, and changing toggle_count value.\n\n\n\nEach student must make one assigned change and demonstrate it individually.\n\n\n\nVariant\nRequirement\n\n\n\n\nA\nChange the delay to 100 ms\n\n\nB\nChange the delay to 250 ms\n\n\nC\nChange the delay to 750 ms\n\n\nD\nBlink three times quickly, then pause for 1 s\n\n\n\nBefore flashing, state the predicted behavior. Change only what is necessary, then collect physical or debugger evidence.\n\n\n\n\nCorrect Nucleo-F401RE project selected.\nProject builds without errors.\nLD2 exhibits the required core behavior.\nBreakpoint is reached and toggle_count changes as predicted.\nIndividual timing variant is demonstrated.\nStudent explains build versus flash versus run evidence.\nCode remains inside protected user-code regions.\n\n\n\n\nBe prepared for one question and one live change:\n\nWhat does a successful build prove?\nWhat does ST-LINK do?\nWhy does the breakpoint pause before or after a particular statement?\nWhere should application code be placed, and why?\nWhat evidence proves your modified firmware is running?\n\n\n\n\nSubmit the requested source/project, one debugger screenshot, the completed prediction table, and a two-sentence debugging report if a failure occurred.\n\n\n\nReport expected and observed behavior; read the first relevant error; confirm the project, board, ST-LINK, build, and flash; test whether a breakpoint reaches the loop; then show the TA your evidence and smallest next test."
+    "text": "Build, flash, debug, and modify Blinky - Basri Erdogan\n\nMission: Create a Nucleo-F401RE project, make LD2 blink, prove that the program executes in the debugger, and independently change its timing.\n\n\n\n\nComplete the five-question pre-lab quiz.\nBring the Question 5 entry ticket.\nConfirm VS Code + STM32CubeMX are installed (see the Reference page’s toolchain table) or identify that you need a laboratory PC.\nBring a USB data cable if using your own equipment.\n\n\n\n\nBy checkoff time, you can:\n\nbuild, flash, run, and debug a Nucleo-F401RE project;\ndistinguish build evidence from hardware evidence;\nset a breakpoint and inspect a variable;\nmake and explain one controlled code modification.\n\n\n\n\n\n\n\n\n\n\n\nItem\nRequired value\n\n\n\n\nBoard\nNucleo-F401RE\n\n\nProgrammer/debugger\nOn-board ST-LINK USB connection\n\n\nOutput\nLD2, connected to PA5\n\n\nTools\nSTM32CubeMX (configure/generate) + VS Code (edit/build/debug)\n\n\nProject name\nEE5203_L01_&lt;studentnumber&gt;\n\n\n\n\n\n\nThe session begins with one live demonstration of the complete workflow:\ncreate -&gt; configure -&gt; generate -&gt; edit -&gt; build -&gt; flash -&gt; debug -&gt; verify\nObserve which tool owns each stage: the .ioc configuration lives in STM32CubeMX; main.c, the build terminal, debug controls, and the variable panels live in VS Code. Record questions; do not copy menu clicks without understanding the stage they belong to.\n\n\n\n\nConnect the board through the ST-LINK USB connector.\nIn STM32CubeMX: create a project for NUCLEO-F401RE (Board Selector) and accept the board’s default peripheral initialization.\nConfirm that PA5/LD2 is configured as a GPIO output.\nIn Project Manager set the name, the location, and Toolchain/IDE = CMake; generate code.\nOpen the generated folder in VS Code and locate the protected USER CODE regions in main.c.\nBuild the unchanged project with zero errors.\n\nEvidence for Checkpoint A: Show the selected board, PA5 configuration, and a successful build message.\n\n\n\nInside the existing generated while (1), between /* USER CODE BEGIN 3 */ and /* USER CODE END 3 */, add these statements. Do not create a second infinite loop.\nHAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\nHAL_Delay(500);\nBuild, flash, and verify a stable blink. Explain why the physical observation is stronger evidence than the build message alone.\n\n\n\nAdd before the loop, between /* USER CODE BEGIN 2 */ and /* USER CODE END 2 */:\nint toggle_count = 0;\nIncrement it after every toggle:\ntoggle_count = toggle_count + 1;\n\nPlace a breakpoint on or immediately after the increment.\nStart a debug session.\nPredict the value before pressing Resume.\nResume twice and record the observed values.\n\n\n\n\nObservation\nPredicted\nObserved\n\n\n\n\nFirst pause\n\n\n\n\nSecond pause\n\n\n\n\nThird pause\n\n\n\n\n\nEvidence for Checkpoint C: Show the breakpoint, execution marker, and changing toggle_count value.\n\n\n\nEach student must make one assigned change and demonstrate it individually.\n\n\n\nVariant\nRequirement\n\n\n\n\nA\nChange the delay to 100 ms\n\n\nB\nChange the delay to 250 ms\n\n\nC\nChange the delay to 750 ms\n\n\nD\nBlink three times quickly, then pause for 1 s\n\n\n\nBefore flashing, state the predicted behavior. Change only what is necessary, then collect physical or debugger evidence.\n\n\n\n\nCorrect Nucleo-F401RE project selected.\nProject builds without errors.\nLD2 exhibits the required core behavior.\nBreakpoint is reached and toggle_count changes as predicted.\nIndividual timing variant is demonstrated.\nStudent explains build versus flash versus run evidence.\nCode remains inside protected user-code regions.\n\n\n\n\nBe prepared for one question and one live change:\n\nWhat does a successful build prove?\nWhat does ST-LINK do?\nWhy does the breakpoint pause before or after a particular statement?\nWhere should application code be placed, and why?\nWhat evidence proves your modified firmware is running?\n\n\n\n\nSubmit the requested source/project, one debugger screenshot, the completed prediction table, and a two-sentence debugging report if a failure occurred.\n\n\n\nReport expected and observed behavior; read the first relevant error; confirm the project, board, ST-LINK, build, and flash; test whether a breakpoint reaches the loop; then show the TA your evidence and smallest next test."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Lab.html#prepare-before-class",
@@ -4141,14 +4029,14 @@
     "href": "lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Lab.html#checkpoint-b---core-behavior",
     "title": "EE5203 L01 Lab Guide",
     "section": "",
-    "text": "Inside the existing generated while (1) user-code region, add these statements. Do not create a second infinite loop.\nHAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\nHAL_Delay(500);\nBuild, flash, and verify a stable blink. Explain why the physical observation is stronger evidence than the build message alone."
+    "text": "Inside the existing generated while (1), between /* USER CODE BEGIN 3 */ and /* USER CODE END 3 */, add these statements. Do not create a second infinite loop.\nHAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\nHAL_Delay(500);\nBuild, flash, and verify a stable blink. Explain why the physical observation is stronger evidence than the build message alone."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Lab.html#checkpoint-c---debugger-evidence",
     "href": "lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Lab.html#checkpoint-c---debugger-evidence",
     "title": "EE5203 L01 Lab Guide",
     "section": "",
-    "text": "Add before the loop:\nint toggle_count = 0;\nIncrement it after every toggle:\ntoggle_count = toggle_count + 1;\n\nPlace a breakpoint on or immediately after the increment.\nStart a debug session.\nPredict the value before pressing Resume.\nResume twice and record the observed values.\n\n\n\n\nObservation\nPredicted\nObserved\n\n\n\n\nFirst pause\n\n\n\n\nSecond pause\n\n\n\n\nThird pause\n\n\n\n\n\nEvidence for Checkpoint C: Show the breakpoint, execution marker, and changing toggle_count value."
+    "text": "Add before the loop, between /* USER CODE BEGIN 2 */ and /* USER CODE END 2 */:\nint toggle_count = 0;\nIncrement it after every toggle:\ntoggle_count = toggle_count + 1;\n\nPlace a breakpoint on or immediately after the increment.\nStart a debug session.\nPredict the value before pressing Resume.\nResume twice and record the observed values.\n\n\n\n\nObservation\nPredicted\nObserved\n\n\n\n\nFirst pause\n\n\n\n\nSecond pause\n\n\n\n\nThird pause\n\n\n\n\n\nEvidence for Checkpoint C: Show the breakpoint, execution marker, and changing toggle_count value."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Lab.html#checkpoint-d---individual-modification",
