@@ -1,12 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="460" viewBox="0 0 1400 460" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="530" viewBox="0 0 1400 530" role="img" aria-labelledby="title desc">
   <style>@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&amp;display=swap");</style>
   <title id="title">Embedded system signal flow</title>
-  <desc id="desc">Inputs enter an STM32 microcontroller, which processes them and drives outputs.</desc>
+  <desc id="desc">Inputs enter an STM32 microcontroller, which processes them and drives outputs; four tags name the parts of an embedded system: software, hardware, a dedicated function, and constraints.</desc>
   <defs>
     <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#14364b" flood-opacity="0.16"/></filter>
     <marker id="arrow" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L14 7 L0 14 Z" fill="#2b789f"/></marker>
   </defs>
-  <rect width="1400" height="460" rx="28" fill="#f7fafc"/>
+  <rect width="1400" height="530" rx="28" fill="#f7fafc"/>
   <g filter="url(#shadow)">
     <rect x="55" y="105" width="275" height="250" rx="26" fill="#e4f1f7" stroke="#2b789f" stroke-width="4"/>
     <rect x="485" y="55" width="430" height="350" rx="30" fill="#174f73"/>
@@ -29,4 +29,14 @@
   <text x="1207" y="220" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="30" fill="#5e482f">LED</text>
   <text x="1207" y="270" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="30" fill="#5e482f">motor</text>
   <text x="1207" y="320" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="30" fill="#5e482f">display</text>
+  <g font-family="Quicksand,Arial,sans-serif" text-anchor="middle">
+    <rect x="55" y="438" width="300" height="72" rx="16" fill="#eef2f5" stroke="#9eafb9" stroke-width="2"/>
+    <text x="205" y="466" font-size="21" font-weight="700" fill="#174f73">SOFTWARE</text><text x="205" y="494" font-size="19" fill="#4a5c66">the program, stored in flash</text>
+    <rect x="385" y="438" width="300" height="72" rx="16" fill="#eef2f5" stroke="#9eafb9" stroke-width="2"/>
+    <text x="535" y="466" font-size="21" font-weight="700" fill="#174f73">ELECTRONIC HARDWARE</text><text x="535" y="494" font-size="19" fill="#4a5c66">chip · board · wiring</text>
+    <rect x="715" y="438" width="300" height="72" rx="16" fill="#eef2f5" stroke="#9eafb9" stroke-width="2"/>
+    <text x="865" y="466" font-size="21" font-weight="700" fill="#174f73">DEDICATED FUNCTION</text><text x="865" y="494" font-size="19" fill="#4a5c66">one job — today: blink an LED</text>
+    <rect x="1045" y="438" width="300" height="72" rx="16" fill="#eef2f5" stroke="#9eafb9" stroke-width="2"/>
+    <text x="1195" y="466" font-size="21" font-weight="700" fill="#174f73">CONSTRAINTS</text><text x="1195" y="494" font-size="19" fill="#4a5c66">time · memory · energy · safety</text>
+  </g>
 </svg>

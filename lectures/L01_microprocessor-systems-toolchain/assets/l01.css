@@ -211,3 +211,29 @@
   font-size: 0.74em;
   text-align: center;
 }
+
+/* --- 2026-09-04 review pass ------------------------------------------------- */
+/* small stage pill inside a table cell (slide "Build, flash, run: three claims") */
+.reveal .stage-tag {
+  display: inline-block;
+  margin-right: 0.45em;
+  padding: 0.12em 0.6em;
+  border-radius: 999px;
+  background: var(--c, #8194a0);
+  color: #fff;
+  font-size: 0.55em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.reveal .stage-tag.s3 { --c: #2b789f; }
+.reveal .stage-tag.s4 { --c: #174f73; }
+.reveal .stage-tag.s5 { --c: #d47b28; }
+
+/* exit-ticket QR row: small QR left, instruction right, vertically centred */
+.reveal .qr-row { align-items: center; margin-top: 0.4em; }
+.reveal .qr-row img { margin: 0; border: 0; box-shadow: none; }
+.reveal .qr-row .column:last-child { font-size: 0.82em; color: #355262; text-align: left; padding-left: 0.6em; }
+.reveal .qr-row .column:last-child p { margin: 0.2em 0; }
+.reveal .qr-row strong { color: #174f73; }

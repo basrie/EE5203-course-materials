@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -166,11 +166,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="prepare-before-class" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-before-class">Prepare before class</h2>
 <ul class="task-list">
-<li><label><input type="checkbox">Complete the five-question pre-lab quiz.</label></li>
+<li><label><input type="checkbox">Complete the five-question <strong>pre-lab quiz</strong> — scan the code or use the link in CATS (<code>forms.gle/bRXxwYdDha8J6KN16</code>); sign in with your Google account. You see your score at once and may revise; the final submission counts.</label></li>
 <li><label><input type="checkbox">Bring the Question 5 entry ticket.</label></li>
 <li><label><input type="checkbox">Confirm VS Code + STM32CubeMX are installed (see the Reference page’s toolchain table) or identify that you need a laboratory PC.</label></li>
 <li><label><input type="checkbox">Bring a USB <strong>data</strong> cable if using your own equipment.</label></li>
 </ul>
+<p><img src="../assets/l01_quiz_qr.svg" class="img-fluid" alt="QR code for the L01 pre-lab quiz form" width="150"></p>
 </section>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
@@ -219,14 +220,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
-<section id="the-opening-demonstration" class="level2">
-<h2 class="anchored" data-anchor-id="the-opening-demonstration">The opening demonstration</h2>
-<p>The session begins with one live demonstration of the complete workflow:</p>
+<section id="session-plan" class="level2">
+<h2 class="anchored" data-anchor-id="session-plan">Session plan</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Time</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0:00 – 0:15</td>
+<td><strong>C readiness diagnostic</strong> — on paper, no resources. Not a grade: it routes you to a C practice track.</td>
+</tr>
+<tr class="even">
+<td>0:15 – 0:30</td>
+<td><strong>Opening demonstration</strong> — one live pass through the complete workflow.</td>
+</tr>
+<tr class="odd">
+<td>0:30 →</td>
+<td><strong>Checkpoints A–D</strong> below at your own pace; the oral check happens when you reach D.</td>
+</tr>
+</tbody>
+</table>
+<p>The demonstration follows this path once:</p>
 <pre class="text"><code>create -&gt; configure -&gt; generate -&gt; edit -&gt; build -&gt; flash -&gt; debug -&gt; verify</code></pre>
 <p>Observe which tool owns each stage: the <code>.ioc</code> configuration lives in STM32CubeMX; <code>main.c</code>, the build terminal, debug controls, and the variable panels live in VS Code. Record questions; do not copy menu clicks without understanding the stage they belong to.</p>
 </section>
-<section id="checkpoint-a---foundation" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-a---foundation">Checkpoint A - Foundation</h2>
+<section id="checkpoint-a---orient-board-and-tools" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-a---orient-board-and-tools">Checkpoint A - Orient: board and tools</h2>
 <ol type="1">
 <li>Connect the board through the ST-LINK USB connector.</li>
 <li>In <strong>STM32CubeMX</strong>: create a project for <strong>NUCLEO-F401RE</strong> (Board Selector) and accept the board’s default peripheral initialization.</li>
@@ -237,21 +264,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <p><strong>Evidence for Checkpoint A:</strong> Show the selected board, PA5 configuration, and a successful build message.</p>
 </section>
-<section id="checkpoint-b---core-behavior" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-b---core-behavior">Checkpoint B - Core behavior</h2>
+<section id="checkpoint-b---prove-build-and-flash" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-b---prove-build-and-flash">Checkpoint B - Prove: build and flash</h2>
 <p>Inside the <strong>existing generated</strong> <code>while (1)</code>, between <code>/* USER CODE BEGIN 3 */</code> and <code>/* USER CODE END 3 */</code>, add these statements. Do not create a second infinite loop.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Build, flash, and verify a stable blink. Explain why the physical observation is stronger evidence than the build message alone.</p>
 </section>
-<section id="checkpoint-c---debugger-evidence" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-c---debugger-evidence">Checkpoint C - Debugger evidence</h2>
+<section id="checkpoint-c---observe-breakpoint-and-variable" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-c---observe-breakpoint-and-variable">Checkpoint C - Observe: breakpoint and variable</h2>
 <p>Add before the loop, between <code>/* USER CODE BEGIN 2 */</code> and <code>/* USER CODE END 2 */</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> toggle_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Increment it after every toggle:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>toggle_count <span class="op">=</span> toggle_count <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
-<li>Place a breakpoint on or immediately after the increment.</li>
+<li>Place a breakpoint on or immediately after the increment — and <strong>write down which</strong>: a breakpoint <em>on</em> the increment pauses before it runs, so the first value you see is <code>0</code>; on the line <em>after</em> it, the first value is <code>1</code>. Predict for the line you chose.</li>
 <li>Start a debug session.</li>
 <li>Predict the value before pressing <strong>Resume</strong>.</li>
 <li>Resume twice and record the observed values.</li>
@@ -284,10 +311,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p><strong>Evidence for Checkpoint C:</strong> Show the breakpoint, execution marker, and changing <code>toggle_count</code> value.</p>
 </section>
-<section id="checkpoint-d---individual-modification" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-d---individual-modification">Checkpoint D - Individual modification</h2>
+<section id="checkpoint-d---own-modify-and-justify" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-d---own-modify-and-justify">Checkpoint D - Own: modify and justify</h2>
 <p>Each student must make one assigned change and demonstrate it individually.</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Variant</th>
@@ -308,8 +339,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Change the delay to 750 ms</td>
 </tr>
 <tr class="even">
-<td>D</td>
-<td>Blink three times quickly, then pause for 1 s</td>
+<td>D (stretch)</td>
+<td>Blink three times quickly, then pause for 1 s — write the three toggle pairs out; the loop that shortens this arrives in L02</td>
 </tr>
 </tbody>
 </table>
@@ -326,6 +357,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><label><input type="checkbox">Student explains build versus flash versus run evidence.</label></li>
 <li><label><input type="checkbox">Code remains inside protected user-code regions.</label></li>
 </ul>
+<p><strong>Marks (10):</strong> pre-lab quiz + entry ticket 2 · Blinky 3 · debugger evidence 1 · modification 2 · oral check 2.</p>
 </section>
 <section id="individual-oral-check" class="level2">
 <h2 class="anchored" data-anchor-id="individual-oral-check">Individual oral check</h2>

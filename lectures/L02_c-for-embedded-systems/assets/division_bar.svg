@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 320" font-family="Quicksand,Arial,sans-serif">
 <text x="100" y="60" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">25990 / 8</text>
-<text x="300" y="60" font-size="26" fill="#5a6b76">— how many whole 3248s fit? eight.</text>
+<text x="300" y="60" font-size="26" fill="#5a6b76">— split into 8 equal whole parts: 3248 each, 6 left over</text>
 <rect x="100.0" y="120" width="124.8" height="90" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="3"/>
 <text x="162.4" y="176.0" text-anchor="middle" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">3248</text>
 <rect x="228.8" y="120" width="124.8" height="90" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="3"/>

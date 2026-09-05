@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -100,14 +100,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-</head><body class="nav-fixed">\usepackage{titlesec}
-\titlespacing*{\section}{0pt}{6pt}{2pt}
 
 
 <link rel="stylesheet" href="../assets/materials.css">
+</head>
 
-
-
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -173,15 +171,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Identify the compiler, linker, programmer, and debugger roles.</li>
 <li>Explain why a successful build, successful flash, and correct behavior are different claims.</li>
 <li>Use a breakpoint and variable inspection as engineering evidence.</li>
-<li>Describe the course policy: <strong>register literacy, HAL fluency</strong>.</li>
+<li>Describe the course policy: <strong>registers explain, HAL builds</strong> — HAL now, direct registers from L04.</li>
 </ul>
 </section>
 <section id="core-model" class="level2">
 <h2 class="anchored" data-anchor-id="core-model">Core model</h2>
-<pre class="text"><code>Input -&gt; STM32 microcontroller -&gt; Output
-              |
-       software + memory
-       + peripherals + timing</code></pre>
+<p><img src="../assets/system_signal_flow.svg" class="img-fluid" style="width:84.0%" alt="Inputs enter the STM32 microcontroller, which drives outputs; four tags name software, electronic hardware, a dedicated function, and constraints"></p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -215,11 +210,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="toolchain-path" class="level2">
 <h2 class="anchored" data-anchor-id="toolchain-path">Toolchain path</h2>
-<pre class="text"><code>C source -&gt; compiler -&gt; object files -&gt; linker -&gt; .elf firmware
-                                                |
-                                         flash/program
-                                                v
-                                          STM32 memory</code></pre>
+<p><img src="../assets/toolchain_pipeline.svg" class="img-fluid" style="width:84.0%" alt="Source, compile, link, flash, run, debug: the six stages of the embedded C toolchain"></p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -259,16 +250,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="first-c-pattern" class="level2">
 <h2 class="anchored" data-anchor-id="first-c-pattern">First C pattern</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li><code>while (1)</code> repeats indefinitely.</li>
 <li><code>HAL_GPIO_TogglePin(...)</code> changes the physical LD2 state.</li>
 <li><code>HAL_Delay(500)</code> blocks for approximately 500 ms.</li>
-<li>We use HAL here to learn the toolchain. Direct GPIO registers follow after the four-lecture Embedded C Foundation.</li>
+<li>We use HAL here to learn the toolchain. Direct GPIO registers arrive in L04, after the three C lectures L01–L03.</li>
 </ul>
 </section>
 <section id="board-facts" class="level2">

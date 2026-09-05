@@ -16,10 +16,10 @@
 <text x="290" y="232" font-size="24" fill="#5a6b76">32 bits on this processor · negative and positive · counters, sums, results</text>
 <path d="M200 290 H1330" stroke="#174f73" stroke-width="5"/>
 <path d="M200.0 276 V304" stroke="#174f73" stroke-width="4"/>
-<text x="200.0" y="338" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">−2 147 483 648</text>
+<text x="140.0" y="338" text-anchor="start" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">−2 147 483 648</text>
 <path d="M765.0 276 V304" stroke="#174f73" stroke-width="4"/>
 <text x="765.0" y="338" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">0</text>
 <path d="M1330.0 276 V304" stroke="#174f73" stroke-width="4"/>
-<text x="1330.0" y="338" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">2 147 483 647</text>
+<text x="1370.0" y="338" text-anchor="end" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">2 147 483 647</text>
 <text x="700" y="382" text-anchor="middle" font-size="24" fill="#5a6b76">both come from <tspan font-family="ui-monospace,Menlo,Consolas,monospace" font-weight="700" fill="#174f73">#include &lt;stdint.h&gt;</tspan> — the <tspan font-family="ui-monospace,Menlo,Consolas,monospace">_t</tspan> marks a standard type name</text>
 </svg>

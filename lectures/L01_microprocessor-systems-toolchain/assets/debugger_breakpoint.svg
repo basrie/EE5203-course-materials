@@ -13,10 +13,10 @@
     <rect x="862" y="112" width="360" height="49" rx="10" fill="#e2edf3"/>
     <text x="888" y="144" font-family="Quicksand,Arial,sans-serif" font-size="22" font-weight="700" fill="#174f73">VARIABLES</text>
     <g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="23" fill="#d8e4ea">
-      <text x="125" y="170">uint32_t toggle_count = 0;</text>
+      <text x="125" y="170">int toggle_count = 0;</text>
       <text x="125" y="225">while (1)</text><text x="125" y="265">{</text>
       <text x="160" y="310">HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);</text>
-      <text x="160" y="355">toggle_count++;</text>
+      <text x="160" y="355">toggle_count = toggle_count + 1;</text>
       <text x="160" y="400">HAL_Delay(500);</text><text x="125" y="438">}</text>
     </g>
     <circle cx="96" cy="310" r="12" fill="#e65353" stroke="#ffd7d7" stroke-width="3"/>
@@ -25,12 +25,12 @@
     <g font-family="Quicksand,Arial,sans-serif" font-size="21" fill="#355262">
       <text x="888" y="205" font-weight="700">toggle_count</text><text x="1160" y="205" text-anchor="end">0</text>
       <path d="M885 224 H1197" stroke="#dce6eb" stroke-width="2"/>
-      <text x="888" y="264" font-weight="700">LD2_Pin</text><text x="1160" y="264" text-anchor="end">0x0020</text>
+      <text x="888" y="264" font-weight="700">execution</text><text x="1160" y="264" text-anchor="end" fill="#b23f3f">paused</text>
       <path d="M885 283 H1197" stroke="#dce6eb" stroke-width="2"/>
-      <text x="888" y="323" font-weight="700">execution</text><text x="1160" y="323" text-anchor="end" fill="#b23f3f">paused</text>
     </g>
-    <rect x="888" y="360" width="280" height="58" rx="12" fill="#eaf3f8"/>
-    <text x="1028" y="386" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="18" fill="#355262">Step once, then ask:</text>
-    <text x="1028" y="409" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="19" font-weight="700" fill="#174f73">what changed?</text>
+    <rect x="888" y="306" width="300" height="118" rx="12" fill="#eaf3f8"/>
+    <text x="1038" y="338" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="18" fill="#355262">Step once, then ask:</text>
+    <text x="1038" y="362" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="19" font-weight="700" fill="#174f73">what changed?</text>
+    <text x="1038" y="404" text-anchor="middle" font-family="Quicksand,Arial,sans-serif" font-size="18" fill="#355262">prediction: <tspan font-family="ui-monospace,Menlo,monospace" font-weight="700" fill="#174f73">toggle_count = 1</tspan></text>
   </g>
 </svg>

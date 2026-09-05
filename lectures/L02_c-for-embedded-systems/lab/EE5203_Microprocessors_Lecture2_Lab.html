@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -5064,10 +5064,58 @@ pre { font-size: 8.7pt; }
 </table>
 <p><strong>Evidence:</strong> Break after the <code>if/else</code> statement and compare every observed value with the prediction.</p>
 </section>
-<section id="checkpoint-e---make-one-controlled-change" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-e---make-one-controlled-change">Checkpoint E - Make one controlled change</h2>
-<p>Change only the first sample from <code>850</code> to <code>3500</code>. Predict which results change and which do not, debug again, and explain any wrong prediction. Restore the original value afterwards.</p>
-<p><strong>Evidence:</strong> Show the revised prediction and the debugger result.</p>
+<section id="checkpoint-e---change-the-rule-your-variant" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-e---change-the-rule-your-variant">Checkpoint E - Change the rule (your variant)</h2>
+<p>Your TA assigns one variant by seat. Each changes a <strong>rule</strong>, not a value, so the lecture numbers cannot be copied. Write your prediction <strong>before</strong> editing; the answer depends on a choice you must make and state.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variant</th>
+<th>Task</th>
+<th>You must state</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>High now means above <code>2800</code>. Predict <code>high_count</code>; then predict it again for <em>at or above</em> <code>2800</code>.</td>
+<td>why the two answers differ</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>Count <strong>rising steps</strong>: how many samples are larger than the sample before them?</td>
+<td>whether you compare clamped or raw values, and which <code>i</code> you start at</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>Find the <strong>index of the largest sample</strong> with a <code>max_index</code> variable updated in the loop.</td>
+<td>whether you used <code>&gt;</code> or <code>&gt;=</code>, and what changes with the other one</td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>Find the <strong>first index above <code>4000</code></strong> with a <code>while</code> loop and a compound condition (<code>i &lt; 8 &amp;&amp; …</code>). Then redo it for <code>4100</code>.</td>
+<td>what the index means when nothing qualifies, and what the <code>i &lt; 8</code> part protects</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Evidence:</strong> the written prediction, the debugger value, and one sentence on any mismatch. Restore the original pipeline afterwards.</p>
+</section>
+<section id="stretch---make-the-board-show-the-result-optional" class="level2">
+<h2 class="anchored" data-anchor-id="stretch---make-the-board-show-the-result-optional">Stretch - make the board show the result (optional)</h2>
+<p>For students who finish early. Inside the generated <code>while (1)</code>, after the status chain has run once, blink LD2 <code>high_count</code> times, wait one second, and repeat:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> high_count<span class="op">;</span> k<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">150</span><span class="op">);</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">150</span><span class="op">);</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>HAL_Delay<span class="op">(</span><span class="dv">1000</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Count the blinks. They must agree with <code>high_count</code> in the debugger — two independent pieces of evidence for one number. Then let the status choose the speed: set an <code>int period</code> to <code>100</code> for HIGH and <code>500</code> otherwise with an <code>if/else</code>, and use it in both delays. Show the TA both versions.</p>
 </section>
 <section id="common-problems" class="level2">
 <h2 class="anchored" data-anchor-id="common-problems">Common problems</h2>
@@ -5110,7 +5158,8 @@ pre { font-size: 8.7pt; }
 <li><label><input type="checkbox">Array indices stay between <code>0</code> and <code>7</code>.</label></li>
 <li><label><input type="checkbox"><code>4200</code> is replaced by <code>4095</code>.</label></li>
 <li><label><input type="checkbox">Sum, average, counts, and status match the prediction.</label></li>
-<li><label><input type="checkbox">The controlled input change is demonstrated.</label></li>
+<li><label><input type="checkbox">Your Checkpoint E variant is predicted, demonstrated and explained.</label></li>
+<li><label><input type="checkbox">(Stretch) blink count on the board equals <code>high_count</code> in the debugger.</label></li>
 <li><label><input type="checkbox">Every submitted screenshot shows readable variables.</label></li>
 </ul>
 </section>
@@ -5127,7 +5176,12 @@ pre { font-size: 8.7pt; }
 </section>
 <section id="submit" class="level2">
 <h2 class="anchored" data-anchor-id="submit">Submit</h2>
-<p>Submit <code>main.c</code>, the completed prediction table, one build-console screenshot, one debugger screenshot of the final array and results, and three sentences explaining the controlled change.</p>
+<p>Submit <code>main.c</code>, the completed prediction table, one build-console screenshot, one debugger screenshot of the final array and results, and three sentences explaining your Checkpoint E variant.</p>
+<p><strong>Marks (10):</strong> entry ticket + clean copy/build 1 · declarations explained 2 · stepped loop trace 3 · prediction table + mismatches explained 2 · Checkpoint E variant + oral 2.</p>
+</section>
+<section id="homework-10-points-on-cats" class="level2">
+<h2 class="anchored" data-anchor-id="homework-10-points-on-cats">Homework — 10 points, on CATS</h2>
+<p>Four transfer problems on new data (longest run, rising steps, bands counted two ways, a four-fault bug hunt), each with a prediction table and a debugger screenshot. It is posted on CATS after the lab and is due before Lab 3. It is not on the course site.</p>
 
 
 </section>

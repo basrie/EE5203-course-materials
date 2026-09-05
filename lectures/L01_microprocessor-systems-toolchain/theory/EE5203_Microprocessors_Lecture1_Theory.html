@@ -6,8 +6,8 @@
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.42">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.43">
 
   <meta name="author" content="Basri Erdogan">
   <title>EE5203 Microprocessors</title>
@@ -219,16 +219,6 @@ Basri Erdogan
 <div class="caption">
 <p>By the end of today you will trace this path <strong>and prove each stage with evidence</strong>.</p>
 </div>
-</section>
-<section id="where-this-course-goes" class="slide level2">
-<h2>Where this course goes</h2>
-<p><img data-src="../assets/project_architecture.svg" class="hero-xs" alt="A reusable architecture for the semester project: input, acquisition, processing, output, communication"></p>
-<div class="outcome-line">
-<p><strong>Write and debug</strong> embedded C · <strong>model</strong> the Cortex-M · <strong>control</strong> peripherals · <strong>design</strong> responsive systems · <strong>integrate and defend</strong> a project · and treat compiler output, debugger state and registers <strong>as evidence</strong></p>
-</div>
-<div class="example-strip">
-<p>Environmental monitor · Reaction-time game · Smart controller · Motion alarm · Sensor logger</p>
-</div>
 <!-- ===================== Act 1 — The machine ===================== -->
 </section>
 <section id="a-system-is-more-than-its-processor" class="slide level2">
@@ -243,19 +233,19 @@ Basri Erdogan
 <div class="poll-grid">
 <div class="poll-tile">
 <p>Washing-machine controller</p>
-<p>Dedicated function? Constraints?</p>
+<p>One fixed program, a door interlock — dedicated? constrained?</p>
 </div>
 <div class="poll-tile">
 <p>Laptop</p>
-<p>Dedicated function? Constraints?</p>
+<p>Runs any program you install — is that a dedicated function?</p>
 </div>
 <div class="poll-tile">
 <p>Digital thermostat</p>
-<p>Dedicated function? Constraints?</p>
+<p>One job, a few kilobytes of memory, years on a battery.</p>
 </div>
 <div class="poll-tile">
 <p>Car braking controller</p>
-<p>Dedicated function? Constraints?</p>
+<p>Must answer within milliseconds, every time — which constraint rules?</p>
 </div>
 </div>
 <div class="fragment example-strip">
@@ -354,13 +344,13 @@ Basri Erdogan
 <p>In the lab you add exactly this line, then watch the value change in the debugger.</p>
 </div>
 </section>
-<section id="the-forever-loop" class="slide level2">
+<section id="the-forever-loop" class="slide level2 code-tight">
 <h2>The forever loop</h2>
 <div class="stage-strip" aria-hidden="true">
 <span class="s1 on">Source</span><span class="s2">Compile</span><span class="s3">Link</span><span class="s4">Flash</span><span class="s5">Run</span><span class="s6">Debug</span>
 </div>
 <div class="columns">
-<div class="column" style="width:58%;">
+<div class="column" style="width:64%;">
 <div class="sourceCode" id="cb4" data-code-line-numbers="|5|7-8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
 <span id="cb4-2"><a></a><span class="op">{</span></span>
 <span id="cb4-3"><a></a>    <span class="dt">int</span> toggle_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
@@ -373,12 +363,12 @@ Basri Erdogan
 <span id="cb4-10"><a></a>    <span class="op">}</span></span>
 <span id="cb4-11"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>while (1)</code> means <em>repeat forever</em>. Firmware initialises the hardware once, then stays in its main loop.</p>
-</div><div class="column" style="width:40%;">
+</div><div class="column" style="width:34%;">
 <p><img data-src="../assets/init_then_loop.svg" class="hero-mid" alt="Reset, initialise once, then loop forever"></p>
 </div></div>
 </section>
-<section id="generated-code-and-your-code" class="slide level2 code-tight">
-<h2>Generated code and your code</h2>
+<section id="where-your-code-lives" class="slide level2 code-tight">
+<h2>Where your code lives</h2>
 <div class="stage-strip" aria-hidden="true">
 <span class="s1 on">Source</span><span class="s2">Compile</span><span class="s3">Link</span><span class="s4">Flash</span><span class="s5">Run</span><span class="s6">Debug</span>
 </div>
@@ -500,17 +490,17 @@ Basri Erdogan
 </thead>
 <tbody>
 <tr class="odd">
-<td>Build succeeds</td>
+<td><span class="stage-tag s3">compile · link</span> Build succeeds</td>
 <td>Source compiles and links</td>
 <td>Hardware behaves correctly</td>
 </tr>
 <tr class="even">
-<td>Flash succeeds</td>
+<td><span class="stage-tag s4">flash</span> Flash succeeds</td>
 <td>Firmware reached the MCU</td>
 <td>The logic is correct</td>
 </tr>
 <tr class="odd">
-<td>LED blinks</td>
+<td><span class="stage-tag s5">run</span> LED blinks</td>
 <td>One observable requirement works</td>
 <td>Every requirement works</td>
 </tr>
@@ -520,13 +510,13 @@ Basri Erdogan
 <p>Engineering conclusions must match the evidence available.</p>
 </div>
 </section>
-<section id="three-error-families" class="slide level2">
-<h2>Three error families</h2>
+<section id="four-error-families" class="slide level2">
+<h2>Four error families</h2>
 <div class="stage-strip" aria-hidden="true">
 <span class="s1">Source</span><span class="s2 on">Compile</span><span class="s3 on">Link</span><span class="s4 on">Flash</span><span class="s5 on">Run</span><span class="s6">Debug</span>
 </div>
-<svg class="scene" viewbox="0 0 1500 585" role="img" aria-label="The three error families anchored to the pipeline stages that produce them" font-family="Quicksand,Arial,sans-serif">
-<defs><marker id="l01ar" markerwidth="14" markerheight="14" refx="13" refy="7" orient="auto" markerunits="userSpaceOnUse"><path d="M0 0 L14 7 L0 14 Z" fill="#3d7f9f"></path></marker></defs> <g class="stage s1"><rect x="40" y="40" width="205" height="190" rx="24" fill="#eef2f5" stroke="#8194a0" stroke-width="3"></rect><circle cx="142.5" cy="80" r="24" fill="#8194a0"></circle><text x="142.5" y="89" text-anchor="middle" font-size="24" font-weight="700" fill="white">1</text><text x="142.5" y="152" text-anchor="middle" font-size="31" font-weight="700" fill="#324c5b">SOURCE</text><text x="142.5" y="194" text-anchor="middle" font-size="23" fill="#526c7c">main.c</text></g> <path d="M248 135.0 H281" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#l01ar)"></path> <g class="stage s2"><rect x="285" y="40" width="205" height="190" rx="24" fill="#e4f1f7" stroke="#4383a5" stroke-width="3"></rect><circle cx="387.5" cy="80" r="24" fill="#4383a5"></circle><text x="387.5" y="89" text-anchor="middle" font-size="24" font-weight="700" fill="white">2</text><text x="387.5" y="152" text-anchor="middle" font-size="31" font-weight="700" fill="#174f73">COMPILE</text><text x="387.5" y="194" text-anchor="middle" font-size="23" fill="#526c7c">object files</text></g> <path d="M493 135.0 H526" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#l01ar)"></path> <g class="stage s3"><rect x="530" y="40" width="205" height="190" rx="24" fill="#d8ebf4" stroke="#2b789f" stroke-width="3"></rect><circle cx="632.5" cy="80" r="24" fill="#2b789f"></circle><text x="632.5" y="89" text-anchor="middle" font-size="24" font-weight="700" fill="white">3</text><text x="632.5" y="152" text-anchor="middle" font-size="31" font-weight="700" fill="#174f73">LINK</text><text x="632.5" y="194" text-anchor="middle" font-size="23" fill="#526c7c">firmware .elf</text></g> <path d="M738 135.0 H771" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#l01ar)"></path> <g class="stage s4"><rect x="775" y="40" width="205" height="190" rx="24" fill="#174f73" stroke="#174f73" stroke-width="3"></rect><circle cx="877.5" cy="80" r="24" fill="#8fc5dd"></circle><text x="877.5" y="89" text-anchor="middle" font-size="24" font-weight="700" fill="#174f73">4</text><text x="877.5" y="152" text-anchor="middle" font-size="31" font-weight="700" fill="white">FLASH</text><text x="877.5" y="194" text-anchor="middle" font-size="23" fill="#d9edf7">MCU memory</text></g> <path d="M983 135.0 H1016" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#l01ar)"></path> <g class="stage s5"><rect x="1020" y="40" width="205" height="190" rx="24" fill="#fff0dc" stroke="#d47b28" stroke-width="3"></rect><circle cx="1122.5" cy="80" r="24" fill="#d47b28"></circle><text x="1122.5" y="89" text-anchor="middle" font-size="24" font-weight="700" fill="white">5</text><text x="1122.5" y="152" text-anchor="middle" font-size="31" font-weight="700" fill="#95511d">RUN</text><text x="1122.5" y="194" text-anchor="middle" font-size="23" fill="#735a3d">physical behavior</text></g> <path d="M1228 135.0 H1261" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#l01ar)"></path> <g class="stage s6"><rect x="1265" y="40" width="205" height="190" rx="24" fill="#e8f4eb" stroke="#4a8b62" stroke-width="3"></rect><circle cx="1367.5" cy="80" r="24" fill="#4a8b62"></circle><text x="1367.5" y="89" text-anchor="middle" font-size="24" font-weight="700" fill="white">6</text><text x="1367.5" y="152" text-anchor="middle" font-size="31" font-weight="700" fill="#326747">DEBUG</text><text x="1367.5" y="194" text-anchor="middle" font-size="23" fill="#456d54">state + evidence</text></g> <g class="fragment"><path d="M387.5 234 V292" stroke="#d47b28" stroke-width="4"></path><rect x="247" y="300" width="281" height="180" rx="18" fill="#ffffff" stroke="#d47b28" stroke-width="3"></rect><rect x="247" y="300" width="281" height="8" fill="#d47b28"></rect><text x="387.5" y="350" text-anchor="middle" font-size="28" font-weight="700" fill="#d47b28">COMPILE ERRORS</text><text x="387.5" y="388" text-anchor="middle" font-size="26" fill="#4a5c66">syntax · types · names</text><text x="387.5" y="424" text-anchor="middle" font-size="26" fill="#4a5c66">warnings</text></g> <g class="fragment"><path d="M632.5 234 V292" stroke="#8c66a8" stroke-width="4"></path><rect x="492" y="300" width="281" height="180" rx="18" fill="#ffffff" stroke="#8c66a8" stroke-width="3"></rect><rect x="492" y="300" width="281" height="8" fill="#8c66a8"></rect><text x="632.5" y="350" text-anchor="middle" font-size="28" font-weight="700" fill="#8c66a8">LINK ERRORS</text><text x="632.5" y="388" text-anchor="middle" font-size="26" fill="#4a5c66">missing symbols</text><text x="632.5" y="424" text-anchor="middle" font-size="26" fill="#4a5c66">duplicates · memory</text></g> <g class="fragment"><path d="M1122.5 234 V292" stroke="#c34f4f" stroke-width="4"></path><rect x="982" y="300" width="281" height="180" rx="18" fill="#ffffff" stroke="#c34f4f" stroke-width="3"></rect><rect x="982" y="300" width="281" height="8" fill="#c34f4f"></rect><text x="1122.5" y="350" text-anchor="middle" font-size="28" font-weight="700" fill="#c34f4f">RUN / HARDWARE</text><text x="1122.5" y="388" text-anchor="middle" font-size="26" fill="#4a5c66">logic · clocks · pins</text><text x="1122.5" y="424" text-anchor="middle" font-size="26" fill="#4a5c66">wiring · power</text></g> <text x="750" y="565" text-anchor="middle" font-size="30" font-weight="600" fill="#174f73">Read the stage first; it tells you which family the error belongs to.</text>
+<svg class="scene" viewbox="0 0 1500 585" role="img" aria-label="The four error families anchored to the pipeline stages that produce them" font-family="Quicksand,Arial,sans-serif">
+<defs><marker id="l01ar" markerwidth="14" markerheight="14" refx="13" refy="7" orient="auto" markerunits="userSpaceOnUse"><path d="M0 0 L14 7 L0 14 Z" fill="#3d7f9f"></path></marker></defs> <g class="stage s1"><rect x="40" y="40" width="205" height="190" rx="24" fill="#eef2f5" stroke="#8194a0" stroke-width="3"></rect><circle cx="142.5" cy="80" r="24" fill="#8194a0"></circle><text x="142.5" y="89" text-anchor="middle" font-size="24" font-weight="700" fill="white">1</text><text x="142.5" y="152" text-anchor="middle" font-size="31" font-weight="700" fill="#324c5b">SOURCE</text><text x="142.5" y="194" text-anchor="middle" font-size="23" fill="#526c7c">main.c</text></g> <path d="M248 135.0 H281" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#l01ar)"></path> <g class="stage s2"><rect x="285" y="40" width="205" height="190" rx="24" fill="#e4f1f7" stroke="#4383a5" stroke-width="3"></rect><circle cx="387.5" cy="80" r="24" fill="#4383a5"></circle><text x="387.5" y="89" text-anchor="middle" font-size="24" font-weight="700" fill="white">2</text><text x="387.5" y="152" text-anchor="middle" font-size="31" font-weight="700" fill="#174f73">COMPILE</text><text x="387.5" y="194" text-anchor="middle" font-size="23" fill="#526c7c">object files</text></g> <path d="M493 135.0 H526" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#l01ar)"></path> <g class="stage s3"><rect x="530" y="40" width="205" height="190" rx="24" fill="#d8ebf4" stroke="#2b789f" stroke-width="3"></rect><circle cx="632.5" cy="80" r="24" fill="#2b789f"></circle><text x="632.5" y="89" text-anchor="middle" font-size="24" font-weight="700" fill="white">3</text><text x="632.5" y="152" text-anchor="middle" font-size="31" font-weight="700" fill="#174f73">LINK</text><text x="632.5" y="194" text-anchor="middle" font-size="23" fill="#526c7c">firmware .elf</text></g> <path d="M738 135.0 H771" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#l01ar)"></path> <g class="stage s4"><rect x="775" y="40" width="205" height="190" rx="24" fill="#174f73" stroke="#174f73" stroke-width="3"></rect><circle cx="877.5" cy="80" r="24" fill="#8fc5dd"></circle><text x="877.5" y="89" text-anchor="middle" font-size="24" font-weight="700" fill="#174f73">4</text><text x="877.5" y="152" text-anchor="middle" font-size="31" font-weight="700" fill="white">FLASH</text><text x="877.5" y="194" text-anchor="middle" font-size="23" fill="#d9edf7">MCU memory</text></g> <path d="M983 135.0 H1016" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#l01ar)"></path> <g class="stage s5"><rect x="1020" y="40" width="205" height="190" rx="24" fill="#fff0dc" stroke="#d47b28" stroke-width="3"></rect><circle cx="1122.5" cy="80" r="24" fill="#d47b28"></circle><text x="1122.5" y="89" text-anchor="middle" font-size="24" font-weight="700" fill="white">5</text><text x="1122.5" y="152" text-anchor="middle" font-size="31" font-weight="700" fill="#95511d">RUN</text><text x="1122.5" y="194" text-anchor="middle" font-size="23" fill="#735a3d">physical behavior</text></g> <path d="M1228 135.0 H1261" stroke="#3d7f9f" stroke-width="4.5" marker-end="url(#l01ar)"></path> <g class="stage s6"><rect x="1265" y="40" width="205" height="190" rx="24" fill="#e8f4eb" stroke="#4a8b62" stroke-width="3"></rect><circle cx="1367.5" cy="80" r="24" fill="#4a8b62"></circle><text x="1367.5" y="89" text-anchor="middle" font-size="24" font-weight="700" fill="white">6</text><text x="1367.5" y="152" text-anchor="middle" font-size="31" font-weight="700" fill="#326747">DEBUG</text><text x="1367.5" y="194" text-anchor="middle" font-size="23" fill="#456d54">state + evidence</text></g> <g class="fragment"><path d="M387.5 234 V292" stroke="#d47b28" stroke-width="4"></path><rect x="270.0" y="300" width="235" height="170" rx="18" fill="#ffffff" stroke="#d47b28" stroke-width="3"></rect><rect x="270.0" y="300" width="235" height="8" fill="#d47b28"></rect><text x="387.5" y="348" text-anchor="middle" font-size="24" font-weight="700" fill="#d47b28">COMPILE ERRORS</text><text x="387.5" y="384" text-anchor="middle" font-size="22" fill="#4a5c66">syntax · types</text><text x="387.5" y="417" text-anchor="middle" font-size="22" fill="#4a5c66">names · warnings</text></g> <g class="fragment"><path d="M632.5 234 V292" stroke="#8c66a8" stroke-width="4"></path><rect x="515.0" y="300" width="235" height="170" rx="18" fill="#ffffff" stroke="#8c66a8" stroke-width="3"></rect><rect x="515.0" y="300" width="235" height="8" fill="#8c66a8"></rect><text x="632.5" y="348" text-anchor="middle" font-size="24" font-weight="700" fill="#8c66a8">LINK ERRORS</text><text x="632.5" y="384" text-anchor="middle" font-size="22" fill="#4a5c66">missing symbols</text><text x="632.5" y="417" text-anchor="middle" font-size="22" fill="#4a5c66">duplicates · memory</text></g> <g class="fragment"><path d="M877.5 234 V292" stroke="#174f73" stroke-width="4"></path><rect x="760.0" y="300" width="235" height="170" rx="18" fill="#ffffff" stroke="#174f73" stroke-width="3"></rect><rect x="760.0" y="300" width="235" height="8" fill="#174f73"></rect><text x="877.5" y="348" text-anchor="middle" font-size="24" font-weight="700" fill="#174f73">FLASH ERRORS</text><text x="877.5" y="384" text-anchor="middle" font-size="22" fill="#4a5c66">cable · ST-LINK</text><text x="877.5" y="417" text-anchor="middle" font-size="22" fill="#4a5c66">driver · busy session</text></g> <g class="fragment"><path d="M1122.5 234 V292" stroke="#c34f4f" stroke-width="4"></path><rect x="1005.0" y="300" width="235" height="170" rx="18" fill="#ffffff" stroke="#c34f4f" stroke-width="3"></rect><rect x="1005.0" y="300" width="235" height="8" fill="#c34f4f"></rect><text x="1122.5" y="348" text-anchor="middle" font-size="24" font-weight="700" fill="#c34f4f">RUN / HARDWARE</text><text x="1122.5" y="384" text-anchor="middle" font-size="22" fill="#4a5c66">logic · clocks · pins</text><text x="1122.5" y="417" text-anchor="middle" font-size="22" fill="#4a5c66">wiring · power</text></g> <text x="750" y="565" text-anchor="middle" font-size="30" font-weight="600" fill="#174f73">Read the stage first; it tells you which family the error belongs to.</text>
 </svg>
 <!-- ===================== Act 4 — The proof ===================== -->
 </section>
@@ -581,12 +571,12 @@ Basri Erdogan
 <div class="duo-card">
 <p>Baseline</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a>HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Observe the blink period.</p>
+<p><strong>Measure:</strong> blinks in 10 s · <code>toggle_count</code> at a breakpoint after 10 s.</p>
 </div>
 <div class="duo-card changed">
 <p>Modified — one change</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a>HAL_Delay<span class="op">(</span><span class="dv">100</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Predict before flashing.</p>
+<p><strong>Predict</strong> both numbers before flashing — then measure the same way.</p>
 </div>
 </div>
 <div class="caption">
@@ -640,11 +630,21 @@ Basri Erdogan
 </div>
 <!-- ===================== Coda — This course ===================== -->
 </section>
+<section id="where-this-course-goes" class="slide level2">
+<h2>Where this course goes</h2>
+<p><img data-src="../assets/project_architecture.svg" class="hero-xs" alt="A reusable architecture for the semester project: input, acquisition, processing, output, communication"></p>
+<div class="outcome-line">
+<p><strong>Write and debug</strong> embedded C · <strong>model</strong> the Cortex-M · <strong>control</strong> peripherals · <strong>design</strong> responsive systems · <strong>integrate and defend</strong> a project · and treat compiler output, debugger state and registers <strong>as evidence</strong></p>
+</div>
+<div class="example-strip">
+<p>Environmental monitor · Reaction-time game · Smart controller · Motion alarm · Sensor logger</p>
+</div>
+</section>
 <section id="the-twelve-week-journey" class="slide level2">
 <h2>The twelve-week journey</h2>
 <p><img data-src="../assets/course_track.svg" class="hero-fill" alt="Eleven lecture weeks in five modules, the midterm in week 7, and the project milestones beneath"></p>
 <div class="caption">
-<p>Eleven lecture weeks, the midterm in week 7, one project. Today, simply <strong>notice</strong> possible inputs, processing, and outputs; teams launch in L05. Topics per week: see the syllabus.</p>
+<p>Eleven lecture weeks, the midterm in week 7, one project. Today, simply <strong>notice</strong> possible inputs, processing, and outputs; teams launch in week 5. The small codes name each week’s lecture package on the course site.</p>
 </div>
 </section>
 <section id="how-learning-will-work" class="slide level2">
@@ -721,7 +721,7 @@ Basri Erdogan
 </div>
 </div>
 <div class="caption">
-<p>The lab opens with a 15-minute <strong>readiness diagnostic</strong> — not a grade, a routing tool for the C practice track. Bring the completed pre-lab entry ticket.</p>
+<p><strong>Session plan:</strong> 0:00 a 15-minute <strong>readiness diagnostic</strong> (not a grade — it routes you to a C practice track) · 0:15 one live demonstration of the whole workflow · 0:30 checkpoints A–D. Pre-lab quiz: <strong>QR in the lab guide, link in CATS</strong>; bring the completed entry ticket.</p>
 </div>
 </section>
 <section id="exit-ticket" class="slide level2">
@@ -740,9 +740,13 @@ Basri Erdogan
 <p>Which part of today’s workflow remains least clear?</p>
 </div>
 </div>
-<div class="caption">
+<div class="columns qr-row">
+<div class="column" style="width:18%;">
+<p><img data-src="../assets/exit_ticket_qr.svg" alt="QR code for the L01 exit-ticket form" width="210"></p>
+</div><div class="column" style="width:80%;">
+<p><strong>Scan and answer before you leave</strong> — sign in with your Google account; one or two sentences per card. Ungraded; your answers open L02. Link also in CATS: <code>forms.gle/cLt2EYNVELqkP3bdA</code>.</p>
 <p>Next: values, decisions, loops, and arrays.</p>
-</div>
+</div></div>
 <div class="source-note">
 <p>Every concept in this lecture, with page-linked sources: <a href="../../../resources/references/academic_references.html">academic references</a>.</p>
 </div>
