@@ -273,7 +273,7 @@ Basri Erdogan
 </svg>
 </div>
 </section>
-<section id="why-uint16_t" class="slide level2">
+<section id="why-uint16_t" class="slide level2 type-visual">
 <h2>Why <code>uint16_t</code></h2>
 <div class="stage-strip" aria-hidden="true">
 <span class="s1 on">Data</span><span class="s2">Loop</span><span class="s3">Body</span><span class="s4">Verdict</span><span class="s5">Proof</span>
@@ -378,47 +378,32 @@ Basri Erdogan
 </div>
 <!-- ===================== Act 2 — The loop ===================== -->
 </section>
-<section id="visiting-all-eight" class="slide level2">
+<section id="visiting-all-eight" class="slide level2 loop-visual">
 <h2>Visiting all eight</h2>
 <div class="stage-strip" aria-hidden="true">
 <span class="s1">Data</span><span class="s2 on">Loop</span><span class="s3">Body</span><span class="s4">Verdict</span><span class="s5">Proof</span>
 </div>
-<div class="columns">
-<div class="column" style="width:52%;">
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">8</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb5-2"><a></a>    <span class="co">/* use samples[i] */</span></span>
 <span id="cb5-3"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="vertical-list compact-list">
-<div class="vertical-item">
-<p><span>01</span> <strong>START:</strong> <code>int i = 0</code> — once, before anything else.</p>
-</div>
-<div class="vertical-item fragment">
-<p><span>02</span> <strong>TEST:</strong> <code>i &lt; 8</code> — before <em>every</em> repetition; false ends the loop.</p>
-</div>
-<div class="vertical-item fragment">
-<p><span>03</span> <strong>UPDATE:</strong> <code>i++</code> — after each run of the body, then test again.</p>
-</div>
-</div>
-</div><div class="column" style="width:46%;">
 <p><img data-src="../assets/loop_cycle.svg" class="hero-small" alt="The for loop as a cycle: start once, test, run the body, update, test again; a false test leaves the loop"></p>
-</div></div>
 <div class="caption">
-<p>Eight copies of the same statement would work — once. The loop works for eight, eighty, or eight thousand values by changing one number.</p>
+<p><strong>Start once. Test before every repetition. Update after the body.</strong> A false test ends the loop. The same pattern visits eight, eighty, or eight thousand values.</p>
 </div>
 </section>
-<section id="trace-it" class="slide level2 big-table">
+<section id="trace-it" class="slide level2 big-table trace-visual">
 <h2>Trace it</h2>
 <div class="stage-strip" aria-hidden="true">
 <span class="s1">Data</span><span class="s2 on">Loop</span><span class="s3">Body</span><span class="s4">Verdict</span><span class="s5">Proof</span>
 </div>
 <div class="columns">
-<div class="column" style="width:40%;">
+<div class="column" style="width:46%;">
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a><span class="dt">int</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb6-2"><a></a></span>
 <span id="cb6-3"><a></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb6-4"><a></a>    total <span class="op">+=</span> i<span class="op">;</span></span>
 <span id="cb6-5"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column" style="width:58%;">
+</div><div class="column" style="width:52%;">
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -680,7 +665,7 @@ Basri Erdogan
 <p>Tests run <strong>top to bottom</strong>, stop at the first true one, exactly one block runs — on the <strong>average</strong>, not on any single sample. Here <code>3248 &gt; 3000</code>: lines 3–4 run, the <code>else</code> is skipped.</p>
 </div>
 </section>
-<section id="combining-conditions" class="slide level2 code-tight">
+<section id="combining-conditions" class="slide level2 code-tight conditions-visual">
 <h2>Combining conditions</h2>
 <div class="stage-strip" aria-hidden="true">
 <span class="s1">Data</span><span class="s2">Loop</span><span class="s3">Body</span><span class="s4 on">Verdict</span><span class="s5">Proof</span>
@@ -689,30 +674,46 @@ Basri Erdogan
 <defs><marker id="ar" markerwidth="12" markerheight="12" refx="11" refy="6" orient="auto" markerunits="userSpaceOnUse"><path d="M0 0 L12 6 L0 12 Z" fill="#3d7f9f"></path></marker><marker id="arr" markerwidth="12" markerheight="12" refx="11" refy="6" orient="auto" markerunits="userSpaceOnUse"><path d="M0 0 L12 6 L0 12 Z" fill="#c0392b"></path></marker></defs> <rect x="120.0" y="84" width="461.5" height="78" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="3"></rect> <text x="350.8" y="114" text-anchor="middle" font-size="25" font-weight="700" fill="#174f73">LOW · status −1</text> <rect x="581.5" y="84" width="461.5" height="78" rx="10" fill="#edf6f0" stroke="#3f7f58" stroke-width="3"></rect> <text x="812.3" y="114" text-anchor="middle" font-size="25" font-weight="700" fill="#3f7f58">OK · status 0</text> <rect x="1043.1" y="84" width="336.9" height="78" rx="10" fill="#fff0dc" stroke="#d47b28" stroke-width="3"></rect> <text x="1211.5" y="114" text-anchor="middle" font-size="25" font-weight="700" fill="#95511d">HIGH · status 1</text> <path d="M120.0 162 V176" stroke="#5a6b76" stroke-width="3"></path> <text x="120.0" y="206" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">0</text> <path d="M581.5 162 V176" stroke="#5a6b76" stroke-width="3"></path> <text x="581.5" y="206" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">1500</text> <path d="M1043.1 162 V176" stroke="#5a6b76" stroke-width="3"></path> <text x="1043.1" y="206" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">3000</text> <path d="M1380.0 162 V176" stroke="#5a6b76" stroke-width="3"></path> <text x="1380.0" y="206" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">4095</text> <circle cx="1119.4" cy="140" r="14" fill="#174f73" stroke="#ffffff" stroke-width="4"></circle><path d="M1119.4 62 V76" stroke="#174f73" stroke-width="3"></path><text x="1119.4" y="50" text-anchor="middle" font-size="28" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">average = 3248</text>
 </svg>
 <div class="columns">
-<div class="column" style="width:45%;">
+<div class="column" style="width:44%;">
+<div class="comparison-label">
+<p>OK by elimination</p>
+</div>
 <div class="sourceCode" id="cb17"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a></a><span class="cf">if</span> <span class="op">(</span>average <span class="op">&lt;</span> <span class="dv">1500</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb17-2"><a></a>    status_code <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
 <span id="cb17-3"><a></a><span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>average <span class="op">&gt;</span> <span class="dv">3000</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb17-4"><a></a>    status_code <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb17-5"><a></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
-<span id="cb17-6"><a></a>    status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">/* OK: neither */</span></span>
+<span id="cb17-6"><a></a>    status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb17-7"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column" style="width:53%;">
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a></a><span class="cf">if</span> <span class="op">(</span>average <span class="op">&gt;=</span> <span class="dv">1500</span> <span class="op">&amp;&amp;</span> average <span class="op">&lt;=</span> <span class="dv">3000</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb18-2"><a></a>    status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">/* OK: said directly */</span></span>
-<span id="cb18-3"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="side-note">
-<p><code>&amp;&amp;</code> <strong>both</strong> true — inside the band, as above.</p>
-<p><code>||</code> <strong>at least one</strong> true — <code>status_code == -1 || status_code == 1</code> is <em>out of band</em>.</p>
-<p><code>!</code> <strong>reversed</strong> — <code>!(average &gt; 3000)</code> is <em>not HIGH</em>.</p>
+</div><div class="column" style="width:54%;">
+<div class="comparison-label">
+<p>OK by checking both limits</p>
 </div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a></a><span class="cf">if</span> <span class="op">(</span>average <span class="op">&gt;=</span> <span class="dv">1500</span> <span class="op">&amp;&amp;</span></span>
+<span id="cb18-2"><a></a>    average <span class="op">&lt;=</span> <span class="dv">3000</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-3"><a></a>    status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb18-4"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
+<div class="logic-key">
+<div class="logic-item">
+<p><strong><code>&amp;&amp;</code> Both</strong></p>
+<p>Inside the OK band</p>
+</div>
+<div class="logic-item">
+<p><strong><code>||</code> Either or both</strong></p>
+<p><code>status_code == -1</code> or <code>status_code == 1</code></p>
+</div>
+<div class="logic-item">
+<p><strong><code>!</code> Reverse</strong></p>
+<p><code>!(average &gt; 3000)</code> means not HIGH</p>
+</div>
+</div>
 <div class="caption">
-<p>The chain reaches OK by <strong>elimination</strong>; <code>&amp;&amp;</code> states the band <strong>directly</strong> — same result, both limits visible. Parentheses whenever the grouping is not obvious.</p>
+<p>The chain reaches OK by <strong>elimination</strong>; <code>&amp;&amp;</code> states the band <strong>directly</strong> — same result, both limits visible.</p>
 </div>
 <!-- ===================== Act 5 — The proof ===================== -->
 </section>
-<section id="the-complete-program" class="slide level2 code-cols">
+<section id="the-complete-program" class="slide level2 code-cols program-visual">
 <h2>The complete program</h2>
 <div class="stage-strip" aria-hidden="true">
 <span class="s1">Data</span><span class="s2">Loop</span><span class="s3">Body</span><span class="s4">Verdict</span><span class="s5 on">Proof</span>
@@ -760,10 +761,13 @@ Basri Erdogan
 <span id="cb21-9"><a aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
 <div class="caption">
-<p>Twenty-eight lines in four blocks. Around them: <code>#include &lt;stdint.h&gt;</code> at the top of the file and <code>int main(void) { … }</code> — both already in your L01 project; the blocks go in <code>USER CODE BEGIN 2</code>. Read it top to bottom once more — then predict the six results before the next slide.</p>
+<p>Read each block top to bottom, then move right. <strong>Predict the six results</strong> before the next slide.</p>
+</div>
+<div class="placement-note">
+<p><strong>Where this runs:</strong> inside <code>main()</code>, in <code>USER CODE BEGIN 2</code>, before <code>while (1)</code>. Keep <code>#include &lt;stdint.h&gt;</code> at the top of the file.</p>
 </div>
 </section>
-<section id="predict-then-verify" class="slide level2">
+<section id="predict-then-verify" class="slide level2 prediction-visual">
 <h2>Predict, then verify</h2>
 <div class="stage-strip" aria-hidden="true">
 <span class="s1">Data</span><span class="s2">Loop</span><span class="s3">Body</span><span class="s4">Verdict</span><span class="s5 on">Proof</span>

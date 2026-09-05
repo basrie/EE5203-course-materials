@@ -1,41 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 640" font-family="ui-monospace,Menlo,Consolas,monospace">
-<rect x="0" y="0" width="900" height="640" rx="14" fill="#1e1e1e"/>
-<rect x="0" y="0" width="900" height="52" rx="14" fill="#252526"/>
-<text x="24" y="34" font-size="22" font-weight="700" fill="#cccccc" font-family="Quicksand,Arial,sans-serif">VARIABLES</text>
-<text x="876" y="34" text-anchor="end" font-size="20" fill="#8a8a8a" font-family="Quicksand,Arial,sans-serif">paused after the status chain · main.c</text>
-<text x="24" y="92" font-size="22" fill="#cccccc" font-family="Quicksand,Arial,sans-serif">▾ Locals</text>
-<text x="40" y="132" font-size="24" fill="#9cdcfe" xml:space="preserve">▾ samples:</text>
-<text x="244" y="132" font-size="24" fill="#dcdcaa">uint16_t [8]</text>
-<text x="40" y="168" font-size="24" fill="#9cdcfe" xml:space="preserve">    [0]:</text>
-<text x="204" y="168" font-size="24" fill="#b5cea8">3000</text>
-<text x="40" y="204" font-size="24" fill="#9cdcfe" xml:space="preserve">    [1]:</text>
-<text x="204" y="204" font-size="24" fill="#b5cea8">4095</text>
-<rect x="12" y="214" width="876" height="36" rx="6" fill="#2a3a2a"/>
-<text x="40" y="240" font-size="24" fill="#9cdcfe" xml:space="preserve">    [2]:</text>
-<text x="204" y="240" font-size="24" fill="#b5cea8">4095</text>
-<text x="40" y="276" font-size="24" fill="#9cdcfe" xml:space="preserve">    [3]:</text>
-<text x="204" y="276" font-size="24" fill="#b5cea8">2500</text>
-<text x="40" y="312" font-size="24" fill="#9cdcfe" xml:space="preserve">    [4]:</text>
-<text x="204" y="312" font-size="24" fill="#b5cea8">3500</text>
-<text x="40" y="348" font-size="24" fill="#9cdcfe" xml:space="preserve">    [5]:</text>
-<text x="204" y="348" font-size="24" fill="#b5cea8">1000</text>
-<text x="40" y="384" font-size="24" fill="#9cdcfe" xml:space="preserve">    [6]:</text>
-<text x="204" y="384" font-size="24" fill="#b5cea8">3800</text>
-<text x="40" y="420" font-size="24" fill="#9cdcfe" xml:space="preserve">    [7]:</text>
-<text x="204" y="420" font-size="24" fill="#b5cea8">4000</text>
-<rect x="12" y="430" width="876" height="36" rx="6" fill="#2a3a2a"/>
-<text x="40" y="456" font-size="24" fill="#9cdcfe" xml:space="preserve">  sum:</text>
-<text x="164" y="456" font-size="24" fill="#b5cea8">25990</text>
-<rect x="12" y="466" width="876" height="36" rx="6" fill="#2a3a2a"/>
-<text x="40" y="492" font-size="24" fill="#9cdcfe" xml:space="preserve">  average:</text>
-<text x="244" y="492" font-size="24" fill="#b5cea8">3248</text>
-<rect x="12" y="502" width="876" height="36" rx="6" fill="#2a3a2a"/>
-<text x="40" y="528" font-size="24" fill="#9cdcfe" xml:space="preserve">  high_count:</text>
-<text x="304" y="528" font-size="24" fill="#b5cea8">6</text>
-<rect x="12" y="538" width="876" height="36" rx="6" fill="#2a3a2a"/>
-<text x="40" y="564" font-size="24" fill="#9cdcfe" xml:space="preserve">  invalid_count:</text>
-<text x="364" y="564" font-size="24" fill="#b5cea8">1</text>
-<rect x="12" y="574" width="876" height="36" rx="6" fill="#2a3a2a"/>
-<text x="40" y="600" font-size="24" fill="#9cdcfe" xml:space="preserve">  status_code:</text>
-<text x="324" y="600" font-size="24" fill="#b5cea8">1</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 660" role="img" aria-labelledby="title desc" font-family="ui-monospace,Menlo,Consolas,monospace">
+  <title id="title">Debugger variables after the status chain</title>
+  <desc id="desc">Array values 3000,4095,4095,2500,3500,1000,3800,4000. Sum 25990, average 3248, high count 6, invalid count 1, status code 1.</desc>
+  <rect width="900" height="660" rx="16" fill="#1e1e1e"/>
+  <path d="M16 0H884Q900 0 900 16V72H0V16Q0 0 16 0" fill="#2d2d30"/>
+  <text x="30" y="48" font-size="30" font-weight="700" fill="#f0f0f0" font-family="Quicksand,Arial,sans-serif">VARIABLES</text>
+  <text x="868" y="47" text-anchor="end" font-size="25" fill="#c6c6c6" font-family="Quicksand,Arial,sans-serif">after the status chain</text>
+  <text x="30" y="130" font-size="30" fill="#9cdcfe">samples</text>
+  <text x="30" y="168" font-size="25" fill="#dcdcaa">uint16_t [8]</text>
+  <path d="M393 108V612" stroke="#48484b" stroke-width="2"/>
+  <rect x="16" y="292" width="357" height="48" rx="5" fill="#304936"/>
+  <g font-size="33" fill="#9cdcfe">
+    <text x="48" y="224">[0]</text><text x="48" y="275">[1]</text>
+    <text x="48" y="326">[2]</text><text x="48" y="377">[3]</text>
+    <text x="48" y="428">[4]</text><text x="48" y="479">[5]</text>
+    <text x="48" y="530">[6]</text><text x="48" y="581">[7]</text>
+  </g>
+  <g font-size="35" fill="#d6eacb" text-anchor="end">
+    <text x="345" y="224">3000</text><text x="345" y="275">4095</text>
+    <text x="345" y="326" font-weight="700">4095</text><text x="345" y="377">2500</text>
+    <text x="345" y="428">3500</text><text x="345" y="479">1000</text>
+    <text x="345" y="530">3800</text><text x="345" y="581">4000</text>
+  </g>
+  <text x="428" y="130" font-size="30" fill="#ededed" font-family="Quicksand,Arial,sans-serif" font-weight="700">Results</text>
+  <g font-size="27" fill="#9cdcfe">
+    <text x="428" y="224">sum</text>
+    <text x="428" y="302">average</text>
+    <text x="428" y="380">high_count</text>
+    <text x="428" y="458">invalid_count</text>
+    <text x="428" y="536">status_code</text>
+  </g>
+  <g font-size="35" fill="#d6eacb" font-weight="700" text-anchor="end">
+    <text x="868" y="224">25990</text><text x="868" y="302">3248</text>
+    <text x="868" y="380">6</text><text x="868" y="458">1</text><text x="868" y="536">1</text>
+  </g>
+  <text x="428" y="606" font-size="25" fill="#b6c8b0" font-family="Quicksand,Arial,sans-serif">Compare with your prediction.</text>
 </svg>

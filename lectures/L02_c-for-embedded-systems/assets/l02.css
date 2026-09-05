@@ -182,3 +182,106 @@
 .reveal .side-note { margin: 0.15em 0 0 0.3em; color: #355262; font-size: 0.70em; line-height: 1.3; text-align: left; }
 .reveal .side-note p { margin: 0 0 0.3em; }
 .reveal .side-note strong { color: #174f73; }
+
+/* Local visual study: scoped to six slides, leaving the shared theme intact. */
+.reveal .loop-visual img.hero-small {
+  width: 100%;
+  max-width: 100%;
+  max-height: 390px;
+  margin: 0.4em auto 0.1em;
+}
+.reveal .type-visual img.hero-small {
+  width: 100%;
+  max-width: 100%;
+  max-height: 470px;
+}
+.reveal .loop-visual .caption,
+.reveal .type-visual .caption,
+.reveal .trace-visual .caption,
+.reveal .conditions-visual .caption,
+.reveal .program-visual .caption,
+.reveal .prediction-visual .caption {
+  width: 100%;
+  text-align: left;
+  line-height: 1.35;
+  margin-top: 0.5em;
+}
+.reveal .trace-visual .columns,
+.reveal .conditions-visual .columns {
+  column-gap: 24px;
+  align-items: start;
+}
+.reveal section.trace-visual table {
+  font-size: 29px;
+  margin-top: 0.45em;
+}
+.reveal section.trace-visual table th,
+.reveal section.trace-visual table td { padding: 0.5em 0.35em; white-space: nowrap; }
+.reveal section.trace-visual table code { white-space: nowrap; }
+.reveal .trace-visual tbody tr:last-child td {
+  background: #fff0dc;
+  border-top: 3px solid #d47b28;
+  font-weight: 700;
+}
+.reveal .comparison-label {
+  color: #174f73;
+  font-size: 0.7em;
+  font-weight: 700;
+  margin: 0.35em 0 0;
+}
+.reveal .comparison-label p { margin: 0; }
+.reveal .conditions-visual pre { margin-top: 0.2em; }
+.reveal .logic-key {
+  display: grid;
+  grid-template-columns: 0.8fr 1.3fr 1.2fr;
+  gap: 30px;
+  margin-top: 0.45em;
+  padding-top: 0.35em;
+  border-top: 2px solid #c7dce7;
+  font-size: 0.64em;
+  color: #355262;
+  text-align: left;
+}
+.reveal .logic-item p { margin: 0 0 0.15em; }
+.reveal .logic-item strong { color: #174f73; }
+.reveal .program-visual .block-label {
+  display: block;
+  padding: 0.35em 0;
+  border-radius: 0;
+  border-bottom: 4px solid #8194a0;
+  color: #526b79;
+  background: transparent;
+  font-size: 0.65em;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.reveal .program-visual .block-label.b2 { border-color: #2b789f; color: #174f73; background: transparent; }
+.reveal .program-visual .block-label.b4 { border-color: #d47b28; color: #95511d; background: transparent; }
+.reveal .program-visual .block-label p { margin: 0; }
+.reveal .program-visual div.sourceCode {
+  background: #fff;
+  border: 1px solid #d8e5ec;
+  border-radius: 0 0 10px 10px;
+}
+.reveal .program-visual pre {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.reveal .program-visual .placement-note {
+  margin-top: 0.55em;
+  padding-top: 0.5em;
+  border-top: 2px solid #d8e5ec;
+  font-size: 0.67em;
+  line-height: 1.45;
+  color: #526b79;
+  text-align: left;
+}
+.reveal .program-visual .placement-note p { margin: 0; }
+.reveal .prediction-visual img.hero-small {
+  width: 100%;
+  max-width: 100%;
+  max-height: 540px;
+  margin-top: 0.45em;
+}

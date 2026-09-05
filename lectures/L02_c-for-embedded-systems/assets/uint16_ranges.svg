@@ -1,25 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 400" font-family="Quicksand,Arial,sans-serif">
-<defs><marker id="ar" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L12 6 L0 12 Z" fill="#3d7f9f"/></marker><marker id="arr" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L12 6 L0 12 Z" fill="#c0392b"/></marker></defs>
-<text x="200" y="62" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">uint16_t</text>
-<text x="370" y="62" font-size="24" fill="#5a6b76">16 bits · 65 536 values · none of them negative</text>
-<rect x="200" y="104" width="70.6" height="32" fill="#fff0dc" stroke="#d47b28" stroke-width="2"/>
-<path d="M200 120 H1330" stroke="#174f73" stroke-width="5"/>
-<path d="M200.0 106 V134" stroke="#174f73" stroke-width="4"/>
-<text x="200.0" y="168" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">0</text>
-<path d="M1330.0 106 V134" stroke="#174f73" stroke-width="4"/>
-<text x="1330.0" y="168" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">65535</text>
-<path d="M270.6 80 V134" stroke="#d47b28" stroke-width="3"/>
-<text x="280.6" y="94" font-size="24" font-weight="700" fill="#95511d">4095 — the 12-bit sensor range (L09) fits in the first 6 %</text>
-<text x="186" y="130" text-anchor="end" font-size="34" font-weight="700" fill="#c0392b">✗</text>
-<text x="186" y="162" text-anchor="end" font-size="20" fill="#c0392b">no negative side</text>
-<text x="200" y="232" font-size="30" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,Consolas,monospace">int</text>
-<text x="290" y="232" font-size="24" fill="#5a6b76">32 bits on this processor · negative and positive · counters, sums, results</text>
-<path d="M200 290 H1330" stroke="#174f73" stroke-width="5"/>
-<path d="M200.0 276 V304" stroke="#174f73" stroke-width="4"/>
-<text x="140.0" y="338" text-anchor="start" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">−2 147 483 648</text>
-<path d="M765.0 276 V304" stroke="#174f73" stroke-width="4"/>
-<text x="765.0" y="338" text-anchor="middle" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">0</text>
-<path d="M1330.0 276 V304" stroke="#174f73" stroke-width="4"/>
-<text x="1370.0" y="338" text-anchor="end" font-size="24" fill="#5a6b76" font-family="ui-monospace,Menlo,Consolas,monospace">2 147 483 647</text>
-<text x="700" y="382" text-anchor="middle" font-size="24" fill="#5a6b76">both come from <tspan font-family="ui-monospace,Menlo,Consolas,monospace" font-weight="700" fill="#174f73">#include &lt;stdint.h&gt;</tspan> — the <tspan font-family="ui-monospace,Menlo,Consolas,monospace">_t</tspan> marks a standard type name</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 470" role="img" aria-labelledby="title desc" font-family="Quicksand,Arial,sans-serif">
+  <title id="title">Two integer types, two ranges</title>
+  <desc id="desc">uint16_t from stdint.h holds zero to 65535. The simulated sensor range zero to 4095 occupies the first 6.25 percent. On this STM32, built-in int is signed 32-bit, from minus 2147483648 to 2147483647. The two axes use different scales.</desc>
+  <text x="60" y="48" font-size="38" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,monospace">uint16_t</text>
+  <text x="340" y="48" font-size="28" fill="#355262">16 bits · unsigned</text>
+  <text x="1380" y="48" text-anchor="end" font-size="27" fill="#526b79">provided by &lt;stdint.h&gt;</text>
+  <rect x="140" y="118" width="75" height="26" fill="#f6c887"/>
+  <path d="M140 132H1340M140 116V148M1340 116V148" fill="none" stroke="#174f73" stroke-width="4"/>
+  <path d="M215 95V148" stroke="#c46b21" stroke-width="3"/>
+  <text x="238" y="100" font-size="28" font-weight="700" fill="#95511d">0–4095: the sensor band occupies 6.25% of the range</text>
+  <text x="140" y="188" text-anchor="middle" font-size="30" fill="#174f73" font-family="ui-monospace,Menlo,monospace">0</text>
+  <text x="1340" y="188" text-anchor="end" font-size="30" fill="#174f73" font-family="ui-monospace,Menlo,monospace">65535</text>
+  <path d="M60 224H1380" stroke="#d8e5ec" stroke-width="2"/>
+  <text x="60" y="282" font-size="38" font-weight="700" fill="#174f73" font-family="ui-monospace,Menlo,monospace">int</text>
+  <text x="210" y="282" font-size="28" fill="#355262">32 bits on this STM32 · signed</text>
+  <text x="1380" y="282" text-anchor="end" font-size="27" fill="#526b79">built into C</text>
+  <path d="M140 344H1340M140 328V360M740 328V360M1340 328V360" fill="none" stroke="#174f73" stroke-width="4"/>
+  <text x="140" y="401" font-size="30" fill="#174f73" font-family="ui-monospace,Menlo,monospace">−2 147 483 648</text>
+  <text x="740" y="401" text-anchor="middle" font-size="30" fill="#174f73" font-family="ui-monospace,Menlo,monospace">0</text>
+  <text x="1340" y="401" text-anchor="end" font-size="30" fill="#174f73" font-family="ui-monospace,Menlo,monospace">2 147 483 647</text>
+  <text x="1380" y="454" text-anchor="end" font-size="24" fill="#526b79">Each number line has its own scale.</text>
 </svg>

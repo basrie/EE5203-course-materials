@@ -3399,7 +3399,7 @@
     "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#visiting-all-eight",
     "title": "EE5203 Microprocessors",
     "section": "Visiting all eight",
-    "text": "Visiting all eight\n\nDataLoopBodyVerdictProof\n\n\n\nfor (int i = 0; i &lt; 8; i++) {\n    /* use samples[i] */\n}\n\n\n01 START: int i = 0 — once, before anything else.\n\n\n02 TEST: i &lt; 8 — before every repetition; false ends the loop.\n\n\n03 UPDATE: i++ — after each run of the body, then test again.\n\n\n\n\n\n\nEight copies of the same statement would work — once. The loop works for eight, eighty, or eight thousand values by changing one number."
+    "text": "Visiting all eight\n\nDataLoopBodyVerdictProof\n\nfor (int i = 0; i &lt; 8; i++) {\n    /* use samples[i] */\n}\n\n\nStart once. Test before every repetition. Update after the body. A false test ends the loop. The same pattern visits eight, eighty, or eight thousand values."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#trace-it",
@@ -3476,14 +3476,14 @@
     "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#combining-conditions",
     "title": "EE5203 Microprocessors",
     "section": "Combining conditions",
-    "text": "Combining conditions\n\nDataLoopBodyVerdictProof\n\n\n  LOW · status −1  OK · status 0  HIGH · status 1  0  1500  3000  4095 average = 3248\n\n\n\nif (average &lt; 1500) {\n    status_code = -1;\n} else if (average &gt; 3000) {\n    status_code = 1;\n} else {\n    status_code = 0;   /* OK: neither */\n}\n\nif (average &gt;= 1500 && average &lt;= 3000) {\n    status_code = 0;   /* OK: said directly */\n}\n\n&& both true — inside the band, as above.\n|| at least one true — status_code == -1 || status_code == 1 is out of band.\n! reversed — !(average &gt; 3000) is not HIGH.\n\n\n\nThe chain reaches OK by elimination; && states the band directly — same result, both limits visible. Parentheses whenever the grouping is not obvious."
+    "text": "Combining conditions\n\nDataLoopBodyVerdictProof\n\n\n  LOW · status −1  OK · status 0  HIGH · status 1  0  1500  3000  4095 average = 3248\n\n\n\n\nOK by elimination\n\nif (average &lt; 1500) {\n    status_code = -1;\n} else if (average &gt; 3000) {\n    status_code = 1;\n} else {\n    status_code = 0;\n}\n\n\nOK by checking both limits\n\nif (average &gt;= 1500 &&\n    average &lt;= 3000) {\n    status_code = 0;\n}\n\n\n\n&& Both\nInside the OK band\n\n\n|| Either or both\nstatus_code == -1 or status_code == 1\n\n\n! Reverse\n!(average &gt; 3000) means not HIGH\n\n\n\nThe chain reaches OK by elimination; && states the band directly — same result, both limits visible."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-complete-program",
     "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#the-complete-program",
     "title": "EE5203 Microprocessors",
     "section": "The complete program",
-    "text": "The complete program\n\nDataLoopBodyVerdictProof\n\n\n\n\n1 · data\n\nuint16_t samples[8] = {\n    3000, 4095, 4200, 2500,\n    3500, 1000, 3800, 4000\n};\nint sum = 0;\nint average = 0;\nint high_count = 0;\nint invalid_count = 0;\nint status_code = 0;\n\n\n2 · loop   3 · body\n\nfor (int i = 0; i &lt; 8; i++) {\n    if (samples[i] &gt; 4095) {\n        samples[i] = 4095;\n        invalid_count++;\n    }\n    sum += samples[i];\n    if (samples[i] &gt; 2500) {\n        high_count++;\n    }\n}\n\n\n4 · verdict\n\naverage = sum / 8;\n\nif (average &lt; 1500) {\n    status_code = -1;\n} else if (average &gt; 3000) {\n    status_code = 1;\n} else {\n    status_code = 0;\n}\n\n\nTwenty-eight lines in four blocks. Around them: #include &lt;stdint.h&gt; at the top of the file and int main(void) { … } — both already in your L01 project; the blocks go in USER CODE BEGIN 2. Read it top to bottom once more — then predict the six results before the next slide."
+    "text": "The complete program\n\nDataLoopBodyVerdictProof\n\n\n\n\n1 · data\n\nuint16_t samples[8] = {\n    3000, 4095, 4200, 2500,\n    3500, 1000, 3800, 4000\n};\nint sum = 0;\nint average = 0;\nint high_count = 0;\nint invalid_count = 0;\nint status_code = 0;\n\n\n2 · loop   3 · body\n\nfor (int i = 0; i &lt; 8; i++) {\n    if (samples[i] &gt; 4095) {\n        samples[i] = 4095;\n        invalid_count++;\n    }\n    sum += samples[i];\n    if (samples[i] &gt; 2500) {\n        high_count++;\n    }\n}\n\n\n4 · verdict\n\naverage = sum / 8;\n\nif (average &lt; 1500) {\n    status_code = -1;\n} else if (average &gt; 3000) {\n    status_code = 1;\n} else {\n    status_code = 0;\n}\n\n\nRead each block top to bottom, then move right. Predict the six results before the next slide.\n\n\nWhere this runs: inside main(), in USER CODE BEGIN 2, before while (1). Keep #include &lt;stdint.h&gt; at the top of the file."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#predict-then-verify",
