@@ -261,8 +261,79 @@ Basri Erdogan
 </section>
 <section id="our-hardware-platform" class="slide level2">
 <h2>Our hardware platform</h2>
-<svg class="scene scene-tall" viewbox="0 0 1500 900" role="img" aria-label="The Nucleo-F401RE board with the six items used in the laboratory called out" font-family="Quicksand,Arial,sans-serif">
-<image href="../assets/nucleo_f401re_board.svg" x="370" y="0" width="760" height="900"></image> <g stroke="#2b789f" stroke-width="3" fill="none"> <!-- right-side leaders --> <path d="M925 52 H1170"></path> <path d="M850 200 H1170"></path> <path d="M826 480 H1170"></path> <path d="M836 640 H1170"></path> <!-- left-side leaders --> <path d="M608 363 H350"></path> <path d="M446 600 H350"></path> </g> <g fill="#2b789f"> <circle cx="925" cy="52" r="8"></circle><circle cx="850" cy="200" r="8"></circle><circle cx="826" cy="480" r="8"></circle><circle cx="836" cy="640" r="8"></circle> <circle cx="608" cy="363" r="8"></circle><circle cx="446" cy="600" r="8"></circle> </g> <g font-size="28" fill="#355262"> <!-- right labels --> <g><rect x="1170" y="18" width="320" height="72" rx="14" fill="#f8fbfd" stroke="#c8dbe5" stroke-width="2"></rect> <text x="1190" y="48" font-weight="700" fill="#174f73">USB</text><text x="1190" y="78" font-size="23">power + data · to the PC</text></g> <g><rect x="1170" y="166" width="320" height="72" rx="14" fill="#f8fbfd" stroke="#c8dbe5" stroke-width="2"></rect> <text x="1190" y="196" font-weight="700" fill="#174f73">ST-LINK</text><text x="1190" y="226" font-size="23">programs + debugs the target</text></g> <g><rect x="1170" y="446" width="320" height="72" rx="14" fill="#f8fbfd" stroke="#c8dbe5" stroke-width="2"></rect> <text x="1190" y="476" font-weight="700" fill="#174f73">LD2 · PA5</text><text x="1190" y="506" font-size="23">the user LED we toggle</text></g> <g><rect x="1170" y="606" width="320" height="72" rx="14" fill="#f8fbfd" stroke="#c8dbe5" stroke-width="2"></rect> <text x="1190" y="636" font-weight="700" fill="#174f73">STM32F401RE</text><text x="1190" y="666" font-size="23">target MCU · Cortex-M4</text></g> <!-- left labels --> <g><rect x="30" y="329" width="320" height="72" rx="14" fill="#f8fbfd" stroke="#c8dbe5" stroke-width="2"></rect> <text x="50" y="359" font-weight="700" fill="#174f73">B1 · PC13</text><text x="50" y="389" font-size="23">the user button (L06)</text></g> <g><rect x="30" y="566" width="320" height="72" rx="14" fill="#f8fbfd" stroke="#c8dbe5" stroke-width="2"></rect> <text x="50" y="596" font-weight="700" fill="#174f73">HEADERS</text><text x="50" y="626" font-size="23">Arduino + Morpho pins</text></g> </g> <!-- fragment: highlight the two things today's code touches --> <g class="fragment" fill="none" stroke="#d47b28" stroke-width="5"> <circle cx="811" cy="480" r="30"></circle> <rect x="1160" y="438" width="340" height="88" rx="18"></rect> </g> <g class="fragment" fill="none" stroke="#d47b28" stroke-width="5"> <circle cx="643" cy="363" r="46"></circle> <rect x="20" y="321" width="340" height="88" rx="18"></rect> </g>
+<svg class="scene scene-tall" viewbox="0 0 1500 900" role="img" aria-labelledby="board-title board-desc" font-family="Quicksand,Arial,sans-serif">
+<title id="board-title">Meet the Nucleo-F401RE</title>
+<desc id="board-desc">The blue-tinted upper section programs and debugs the target. The lower section contains the STM32F401RE that runs your code. Callouts locate the USB connector, ST-LINK, user button B1 on PC13, green user LED LD2 on PA5, target MCU, and expansion headers.</desc>
+<image href="../assets/nucleo_f401re_board.svg" x="370" y="0" width="760" height="900"></image>
+
+<!-- Functional grouping is outside the board, distinct from silkscreen. -->
+<g fill="#174f73">
+  <text x="42" y="94" font-size="22" font-weight="700" letter-spacing="2">PROGRAM + DEBUG</text>
+  <text x="42" y="132" font-size="27">The upper section</text>
+  <text x="42" y="166" font-size="27">connects to your PC.</text>
+  <text x="42" y="748" font-size="22" font-weight="700" letter-spacing="2">RUN YOUR CODE</text>
+  <text x="42" y="786" font-size="27">The target MCU</text>
+  <text x="42" y="820" font-size="27">controls the hardware.</text>
+</g>
+<path d="M42 58 H132" stroke="#2b789f" stroke-width="6"></path>
+<path d="M42 712 H132" stroke="#174f73" stroke-width="6"></path>
+
+<!-- Leaders meet component edges; labels remain outside the board. -->
+<g stroke="#2b789f" stroke-width="3" fill="none">
+  <path d="M925 52 H1150"></path>
+  <path d="M850 200 H1150"></path>
+  <path d="M836 640 H1150"></path>
+  <path d="M608 363 H350"></path>
+  <path d="M446 600 H350"></path>
+</g>
+<path d="M826 480 H1150" stroke="#28804e" stroke-width="3" fill="none"></path>
+<g fill="#2b789f" stroke="#fff" stroke-width="2">
+  <circle cx="925" cy="52" r="7"></circle><circle cx="850" cy="200" r="7"></circle>
+  <circle cx="836" cy="640" r="7"></circle><circle cx="608" cy="363" r="7"></circle>
+  <circle cx="446" cy="600" r="7"></circle>
+</g>
+<circle cx="826" cy="480" r="7" fill="#28804e" stroke="#fff" stroke-width="2"></circle>
+<g font-size="32" fill="#174f73">
+  <g>
+    <rect x="1150" y="6" width="344" height="94" rx="8" fill="#eaf3f8"></rect>
+    <text x="1170" y="43" font-weight="700">USB · Mini-B</text>
+    <text x="1170" y="78" font-size="27">Power + PC connection</text>
+  </g>
+  <g>
+    <rect x="1150" y="154" width="344" height="94" rx="8" fill="#eaf3f8"></rect>
+    <text x="1170" y="191" font-weight="700">ST-LINK/V2-1</text>
+    <text x="1170" y="226" font-size="27">Programs + debugs</text>
+  </g>
+  <g>
+    <rect x="1150" y="434" width="344" height="94" rx="8" fill="#edf7ef"></rect>
+    <text x="1170" y="471" font-weight="700" fill="#24623f">LD2 · PA5</text>
+    <text x="1170" y="506" font-size="27">User LED · output</text>
+  </g>
+  <g>
+    <rect x="1150" y="594" width="344" height="94" rx="8" fill="#174f73"></rect>
+    <text x="1170" y="631" font-weight="700" fill="#fff">STM32F401RE</text>
+    <text x="1170" y="666" font-size="27" fill="#e1eef5">Target MCU · Cortex-M4</text>
+  </g>
+  <g>
+    <rect x="30" y="317" width="320" height="94" rx="8" fill="#eaf3f8"></rect>
+    <text x="50" y="354" font-weight="700">B1 · PC13</text>
+    <text x="50" y="389" font-size="27">User button · input</text>
+  </g>
+  <g>
+    <rect x="30" y="554" width="320" height="94" rx="8" fill="#eaf3f8"></rect>
+    <text x="50" y="591" font-weight="700">Expansion headers</text>
+    <text x="50" y="626" font-size="27">Arduino + ST Morpho</text>
+  </g>
+</g>
+<!-- Preserve the lecturer's sequential LED and button highlights. -->
+<g class="fragment" fill="none" stroke="#d47b28" stroke-width="5">
+  <circle cx="811" cy="480" r="30"></circle>
+  <rect x="1143" y="427" width="358" height="108" rx="12"></rect>
+</g>
+<g class="fragment" fill="none" stroke="#d47b28" stroke-width="5">
+  <circle cx="643" cy="363" r="46"></circle>
+  <rect x="23" y="310" width="334" height="108" rx="12"></rect>
+</g>
 </svg>
 <div class="source-note">
 <p>Deep dive: <a href="https://www.st.com/resource/en/user_manual/um1724-stm32-nucleo64-boards-mb1136-stmicroelectronics.pdf#page=13">UM1724 Rev 17, §6 <em>Hardware layout</em> — p.&nbsp;13</a> · <a href="https://www.st.com/resource/en/schematic_pack/mb1136-default-c04_schematic.pdf">MB1136 C-04 schematic</a>.</p>

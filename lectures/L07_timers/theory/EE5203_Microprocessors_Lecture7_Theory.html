@@ -216,19 +216,6 @@ Basri Erdogan
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Prescaler <span class="op">=</span> <span class="dv">15999</span><span class="op">;</span>   <span class="co">// why 15999?</span></span>
 <span id="cb1-2"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Period    <span class="op">=</span> <span class="dv">999</span><span class="op">;</span>     <span class="co">// why 999?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>By the end, you will explain both numbers, replace <code>HAL_Delay()</code> with them, and prove the result in the register view.</p>
-<aside class="notes">
-<p>Ask for guesses about the two numbers before revealing anything. Someone will say 16000/1000 — perfect setup for the +1 rule later.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 </section>
 <section id="the-story-so-far" class="slide level2">
 <h2>The story so far</h2>
@@ -329,19 +316,6 @@ The timer pipeline: the 16 megahertz clock is divided by the prescaler, the coun
 <defs> <marker id="tim-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> <filter id="tim-glow" x="-100%" y="-100%" width="300%" height="300%"><fegaussianblur stddeviation="6" result="blur"></fegaussianblur><femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter> </defs> <rect x="30" y="70" width="230" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="30" y="70" width="230" height="8" fill="#174f73"></rect> <text x="145" y="125" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">TIMER CLOCK</text> <text x="145" y="165" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700">16 MHz</text> <g class="fragment"> <line x1="264" y1="145" x2="296" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="305" y="70" width="230" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="305" y="70" width="230" height="8" fill="#2b789f"></rect> <text x="420" y="125" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">PRESCALER</text> <text x="420" y="165" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">PSC</text> <text x="420" y="196" text-anchor="middle" fill="#5a6b76" font-size="16">divide by PSC + 1</text> </g> <g class="fragment"> <line x1="539" y1="145" x2="571" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="580" y="70" width="230" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="580" y="70" width="230" height="8" fill="#2b789f"></rect> <text x="695" y="125" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">COUNTER</text> <text x="695" y="165" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">CNT</text> <text x="695" y="196" text-anchor="middle" fill="#5a6b76" font-size="16">counts 0, 1, 2, …</text> </g> <g class="fragment"> <line x1="814" y1="145" x2="846" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="855" y="70" width="230" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="855" y="70" width="230" height="8" fill="#2b789f"></rect> <text x="970" y="125" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">AUTO-RELOAD</text> <text x="970" y="165" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">ARR</text> <text x="970" y="196" text-anchor="middle" fill="#5a6b76" font-size="16">the top value</text> </g> <g class="fragment"> <line x1="1089" y1="145" x2="1121" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="1130" y="70" width="280" height="150" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect> <rect x="1130" y="70" width="280" height="8" fill="#d47b28"></rect> <text x="1270" y="125" text-anchor="middle" fill="#d47b28" font-size="17" font-weight="700" letter-spacing="1">UPDATE EVENT</text> <text x="1270" y="165" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700">CNT rolls to 0</text> <text x="1270" y="196" text-anchor="middle" fill="#5a6b76" font-size="16">flag UIF = 1 · can interrupt</text> <text x="145" y="268" text-anchor="middle" fill="#5a6b76" font-size="18">what the chip provides</text> <text x="1270" y="268" text-anchor="middle" fill="#5a6b76" font-size="18">what your program consumes</text> <circle class="story-pulse" r="12" fill="#d47b28" filter="url(#tim-glow)"> <animatemotion dur="4.5s" repeatcount="indefinite" calcmode="linear" path="M 145 145 H 1270"></animatemotion> <animate attributename="opacity" values="0;1;1;0" keytimes="0;0.08;0.9;1" dur="4.5s" repeatcount="indefinite"></animate> </circle> </g>
 </svg>
 <p>Every slide today configures or consumes one stage of this pipeline.</p>
-<aside class="notes">
-<p>Walk the fragments left to right. Emphasize: the first four boxes are configuration written once; the last box is what the program lives off.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 </section>
 <section id="the-timer-clock" class="slide level2">
 <h2>The timer clock</h2>
@@ -371,19 +345,6 @@ The timer pipeline: the 16 megahertz clock is divided by the prescaler, the coun
 </figure>
 </div>
 <p><code>PSC</code> is 16-bit (<code>0…65535</code>): <code>15</code> → 1 MHz (one tick per µs) · <code>1599</code> → 10 kHz · <code>15999</code> → 1 kHz (one tick per ms). The reference manual’s name for this is the <strong>counter clock</strong> (CK_CNT).</p>
-<aside class="notes">
-<p>Why not one big divider? Preview the two-knobs slide: 16-bit limits. 16,000,000 does not fit in 16 bits.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 </section>
 <section id="the-counter" class="slide level2">
 <h2>The counter</h2>
@@ -623,19 +584,6 @@ The timer update event follows the same interrupt path as the L06 button: the up
 <span id="cb10-10"><a></a>    <span class="op">}</span></span>
 <span id="cb10-11"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>ms</code> is the L06 <code>button_event</code> pattern generalized: the callback reports, <code>main()</code> consumes. <code>volatile</code> for the same reason.</p>
-<aside class="notes">
-<p>Live demo idea: comment out volatile with optimization on and show the loop freeze — or just promise it for the lab.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 </section>
 <section id="many-intervals-one-timer" class="slide level2">
 <h2>Many intervals, one timer</h2>
@@ -880,19 +828,6 @@ One pass of the scheduler loop: check whether 500 milliseconds have elapsed and 
 <li>two software intervals driven by one <code>ms</code> counter;</li>
 <li>one individual period change, predicted before flashing.</li>
 </ol>
-<aside class="notes">
-<p>Checkoff pacing: A and B before the break; C and the extension after. The SFR proof is the non-negotiable part.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 </section>
 <section id="mastery-checklist" class="slide level2">
 <h2>Mastery checklist</h2>

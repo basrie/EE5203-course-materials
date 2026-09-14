@@ -102,7 +102,7 @@
     "href": "lectures/L13_integration-review/theory/EE5203_Microprocessors_Lecture13_Theory.html#the-last-question-is-always-the-same",
     "title": "EE5203 Microprocessors",
     "section": "The last question is always the same",
-    "text": "The last question is always the same\n\nNot “does it work?” — by now it either does or it does not. The question is “can you explain it?” Point at any wire, any register, any line, and tell me why it is that way and not another.\n\nToday you demonstrate a system, and then you answer for it individually.\n\nSet the tone early: the defence is not an interrogation, it is the part of the assessment that only the student can do. A team cannot answer for a member."
+    "text": "The last question is always the same\n\nNot “does it work?” — by now it either does or it does not. The question is “can you explain it?” Point at any wire, any register, any line, and tell me why it is that way and not another.\n\nToday you demonstrate a system, and then you answer for it individually."
   },
   {
     "objectID": "lectures/L13_integration-review/theory/EE5203_Microprocessors_Lecture13_Theory.html#the-story-so-far",
@@ -319,7 +319,7 @@
     "href": "lectures/L12_project-clinic/theory/EE5203_Microprocessors_Lecture12_Theory.html#every-part-works.-the-system-does-not.",
     "title": "EE5203 Microprocessors",
     "section": "Every part works. The system does not.",
-    "text": "Every part works. The system does not.\n\nYour timer works. Your ADC works. Your UART works. You put all three in one program and the servo stutters, the display flickers, and one reading in twenty is nonsense. Nothing you tested is broken.\n\nIntegration failures are a different species from component failures, and they need a different method.\n\nAsk for a show of hands: who has had something work alone and break when combined? This is the lecture where that stops being bad luck."
+    "text": "Every part works. The system does not.\n\nYour timer works. Your ADC works. Your UART works. You put all three in one program and the servo stutters, the display flickers, and one reading in twenty is nonsense. Nothing you tested is broken.\n\nIntegration failures are a different species from component failures, and they need a different method."
   },
   {
     "objectID": "lectures/L12_project-clinic/theory/EE5203_Microprocessors_Lecture12_Theory.html#the-story-so-far",
@@ -557,7 +557,7 @@
     "href": "lectures/L11_i2c-spi/theory/EE5203_Microprocessors_Lecture11_Theory.html#two-wires-eight-devices",
     "title": "EE5203 Microprocessors",
     "section": "Two wires, eight devices",
-    "text": "Two wires, eight devices\n\nA display, a temperature sensor, a real-time clock, an accelerometer. Four chips that have never met, sharing two wires — and every one of them knows when it is being spoken to.\n\nLast lecture’s UART connected exactly two ends and needed no clock. Today we add a clock line, and in exchange we get addressing, acknowledgement, and a bus.\n\nHold up the LCD module. Point out it has four pins: power, ground, and two signal wires. Ask how a chip knows a message is meant for it."
+    "text": "Two wires, eight devices\n\nA display, a temperature sensor, a real-time clock, an accelerometer. Four chips that have never met, sharing two wires — and every one of them knows when it is being spoken to.\n\nLast lecture’s UART connected exactly two ends and needed no clock. Today we add a clock line, and in exchange we get addressing, acknowledgement, and a bus."
   },
   {
     "objectID": "lectures/L11_i2c-spi/theory/EE5203_Microprocessors_Lecture11_Theory.html#the-story-so-far",
@@ -844,7 +844,7 @@
     "href": "lectures/L10_uart/theory/EE5203_Microprocessors_Lecture10_Theory.html#the-number-nobody-can-see",
     "title": "EE5203 Microprocessors",
     "section": "The number nobody can see",
-    "text": "The number nobody can see\n\nLast lecture you acquired a real voltage and converted it to 1650. That number existed for a few microseconds inside a register, drove an LED, and vanished. Nobody watched it. Nothing recorded it.\n\nToday the number leaves the board: onto your screen, into a log file, into a plot. And a command comes back the other way.\n\nOpen by asking how they have debugged so far: breakpoints and the Watch panel. Both stop the program. Point out that you cannot breakpoint a motor mid-flight."
+    "text": "The number nobody can see\n\nLast lecture you acquired a real voltage and converted it to 1650. That number existed for a few microseconds inside a register, drove an LED, and vanished. Nobody watched it. Nothing recorded it.\n\nToday the number leaves the board: onto your screen, into a log file, into a plot. And a command comes back the other way."
   },
   {
     "objectID": "lectures/L10_uart/theory/EE5203_Microprocessors_Lecture10_Theory.html#the-story-so-far",
@@ -1166,7 +1166,7 @@
     "href": "lectures/L09_adc/theory/EE5203_Microprocessors_Lecture9_Theory.html#one-number-from-a-knob",
     "title": "EE5203 Microprocessors",
     "section": "One number from a knob",
-    "text": "One number from a knob\n\nThe pin was neither HIGH nor LOW. The hardware answered with a number anyway—while your program did something else.\n\nuint16_t raw = HAL_ADC_GetValue(&hadc1);   // 2867 ?!\nBy the end, you will know what 2867 means, how the hardware found it in twelve guesses, and how to turn a knob, a light level, or a temperature into brightness and motion.\n\nLive demo if hardware is ready: pot on A0, raw value live in the Watch panel, turn the knob. 2867 × 3300 / 4095 ≈ 2311 mV — the same 2.31 V the SAR figure later converts."
+    "text": "One number from a knob\n\nThe pin was neither HIGH nor LOW. The hardware answered with a number anyway—while your program did something else.\n\nuint16_t raw = HAL_ADC_GetValue(&hadc1);   // 2867 ?!\nBy the end, you will know what 2867 means, how the hardware found it in twelve guesses, and how to turn a knob, a light level, or a temperature into brightness and motion."
   },
   {
     "objectID": "lectures/L09_adc/theory/EE5203_Microprocessors_Lecture9_Theory.html#the-story-so-far",
@@ -1446,7 +1446,7 @@
     "href": "lectures/L08_pwm-input-capture/theory/EE5203_Microprocessors_Lecture8_Theory.html#one-register-two-directions",
     "title": "EE5203 Microprocessors",
     "section": "One register, two directions",
-    "text": "One register, two directions\n\nThis line makes LD2 glow at 25 % brightness—no loop, no delay, no interrupt. The hardware does everything.\n\n__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 250);   // why 250?\nThen we reverse the arrow. The same channel hardware, pointed at an input, timestamps a signal instead of making one—and the register it writes into is the one you just wrote by hand.\n\nLive demo first if hardware is ready: change 250 to 950 and to 20, show brightness. Then promise both halves: today you generate a waveform, and then measure one back."
+    "text": "One register, two directions\n\nThis line makes LD2 glow at 25 % brightness—no loop, no delay, no interrupt. The hardware does everything.\n\n__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 250);   // why 250?\nThen we reverse the arrow. The same channel hardware, pointed at an input, timestamps a signal instead of making one—and the register it writes into is the one you just wrote by hand."
   },
   {
     "objectID": "lectures/L08_pwm-input-capture/theory/EE5203_Microprocessors_Lecture8_Theory.html#the-story-so-far",
@@ -1488,7 +1488,7 @@
     "href": "lectures/L08_pwm-input-capture/theory/EE5203_Microprocessors_Lecture8_Theory.html#the-mechanism-cnt-vs-ccr",
     "title": "EE5203 Microprocessors",
     "section": "The mechanism: CNT vs CCR",
-    "text": "The mechanism: CNT vs CCR\n\n\n\n\n\n\nThis is the whole lecture in one figure. The sawtooth is last week’s slide — literally the same figure with one new dashed line. Spend time here."
+    "text": "The mechanism: CNT vs CCR"
   },
   {
     "objectID": "lectures/L08_pwm-input-capture/theory/EE5203_Microprocessors_Lecture8_Theory.html#one-new-register",
@@ -1572,7 +1572,7 @@
     "href": "lectures/L08_pwm-input-capture/theory/EE5203_Microprocessors_Lecture8_Theory.html#servo-numbers",
     "title": "EE5203 Microprocessors",
     "section": "Servo numbers",
-    "text": "Servo numbers\nThe 1 µs tick makes the contract trivial:\nPSC = 15      → 1 MHz: one tick = 1 µs\nARR = 19999   → 20 000 µs frame = 20 ms → 50 Hz\nCCR = 1000    → 1.0 ms pulse →   0°\nCCR = 1500    → 1.5 ms pulse →  90°\nCCR = 2000    → 2.0 ms pulse → 180°\n\nCCR is the pulse width in microseconds. Choose units once, and the register values become readable.\n\n\nAsk: what duty cycle is a 1.5 ms pulse in a 20 ms frame? (7.5 %) — then stress the servo doesn’t care about that number, only the width."
+    "text": "Servo numbers\nThe 1 µs tick makes the contract trivial:\nPSC = 15      → 1 MHz: one tick = 1 µs\nARR = 19999   → 20 000 µs frame = 20 ms → 50 Hz\nCCR = 1000    → 1.0 ms pulse →   0°\nCCR = 1500    → 1.5 ms pulse →  90°\nCCR = 2000    → 2.0 ms pulse → 180°\n\nCCR is the pulse width in microseconds. Choose units once, and the register values become readable."
   },
   {
     "objectID": "lectures/L08_pwm-input-capture/theory/EE5203_Microprocessors_Lecture8_Theory.html#positioning-the-servo",
@@ -1796,7 +1796,7 @@
     "href": "lectures/L07_timers/theory/EE5203_Microprocessors_Lecture7_Theory.html#one-update-event-per-second",
     "title": "EE5203 Microprocessors",
     "section": "One update event per second",
-    "text": "One update event per second\n\nThese two numbers make the timer hardware raise one event every second—while your program does something else.\n\nhtim2.Init.Prescaler = 15999;   // why 15999?\nhtim2.Init.Period    = 999;     // why 999?\nBy the end, you will explain both numbers, replace HAL_Delay() with them, and prove the result in the register view.\n\nAsk for guesses about the two numbers before revealing anything. Someone will say 16000/1000 — perfect setup for the +1 rule later."
+    "text": "One update event per second\n\nThese two numbers make the timer hardware raise one event every second—while your program does something else.\n\nhtim2.Init.Prescaler = 15999;   // why 15999?\nhtim2.Init.Period    = 999;     // why 999?\nBy the end, you will explain both numbers, replace HAL_Delay() with them, and prove the result in the register view."
   },
   {
     "objectID": "lectures/L07_timers/theory/EE5203_Microprocessors_Lecture7_Theory.html#the-story-so-far",
@@ -1838,7 +1838,7 @@
     "href": "lectures/L07_timers/theory/EE5203_Microprocessors_Lecture7_Theory.html#the-timer-pipeline",
     "title": "EE5203 Microprocessors",
     "section": "The timer pipeline",
-    "text": "The timer pipeline\n\nA timer is a hardware counter that increments at a fixed rate and raises an event when it reaches a chosen value.\n\n\n\nThe timer pipeline: the 16 megahertz clock is divided by the prescaler, the counter counts the divided ticks, the auto-reload register defines the top value, and reaching it produces the update event\n\n      TIMER CLOCK 16 MHz     PRESCALER PSC divide by PSC + 1      COUNTER CNT counts 0, 1, 2, …      AUTO-RELOAD ARR the top value      UPDATE EVENT CNT rolls to 0 flag UIF = 1 · can interrupt what the chip provides what your program consumes     \n\nEvery slide today configures or consumes one stage of this pipeline.\n\nWalk the fragments left to right. Emphasize: the first four boxes are configuration written once; the last box is what the program lives off."
+    "text": "The timer pipeline\n\nA timer is a hardware counter that increments at a fixed rate and raises an event when it reaches a chosen value.\n\n\n\nThe timer pipeline: the 16 megahertz clock is divided by the prescaler, the counter counts the divided ticks, the auto-reload register defines the top value, and reaching it produces the update event\n\n      TIMER CLOCK 16 MHz     PRESCALER PSC divide by PSC + 1      COUNTER CNT counts 0, 1, 2, …      AUTO-RELOAD ARR the top value      UPDATE EVENT CNT rolls to 0 flag UIF = 1 · can interrupt what the chip provides what your program consumes     \n\nEvery slide today configures or consumes one stage of this pipeline."
   },
   {
     "objectID": "lectures/L07_timers/theory/EE5203_Microprocessors_Lecture7_Theory.html#the-timer-clock",
@@ -1852,7 +1852,7 @@
     "href": "lectures/L07_timers/theory/EE5203_Microprocessors_Lecture7_Theory.html#the-prescaler",
     "title": "EE5203 Microprocessors",
     "section": "The prescaler",
-    "text": "The prescaler\nThe prescaler divides the timer clock by PSC + 1 before it reaches the counter.\ncounting frequency = timer clock / (PSC + 1)\n\n\n\n\n\nPSC is 16-bit (0…65535): 15 → 1 MHz (one tick per µs) · 1599 → 10 kHz · 15999 → 1 kHz (one tick per ms). The reference manual’s name for this is the counter clock (CK_CNT).\n\nWhy not one big divider? Preview the two-knobs slide: 16-bit limits. 16,000,000 does not fit in 16 bits."
+    "text": "The prescaler\nThe prescaler divides the timer clock by PSC + 1 before it reaches the counter.\ncounting frequency = timer clock / (PSC + 1)\n\n\n\n\n\nPSC is 16-bit (0…65535): 15 → 1 MHz (one tick per µs) · 1599 → 10 kHz · 15999 → 1 kHz (one tick per ms). The reference manual’s name for this is the counter clock (CK_CNT)."
   },
   {
     "objectID": "lectures/L07_timers/theory/EE5203_Microprocessors_Lecture7_Theory.html#the-counter",
@@ -1943,7 +1943,7 @@
     "href": "lectures/L07_timers/theory/EE5203_Microprocessors_Lecture7_Theory.html#the-1-ms-tick",
     "title": "EE5203 Microprocessors",
     "section": "The 1 ms tick",
-    "text": "The 1 ms tick\nThe most useful timer configuration in embedded practice—one fast timer, one counter:\nvolatile uint32_t ms = 0;\n\n/* PSC = 15  -&gt; 16 MHz / 16   = 1 MHz\n   ARR = 999 -&gt; 1 MHz / 1000  = 1 kHz -&gt; update every 1 ms */\n\nvoid HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)\n{\n    if (htim-&gt;Instance == TIM2) {\n        ms++;\n    }\n}\nms is the L06 button_event pattern generalized: the callback reports, main() consumes. volatile for the same reason.\n\nLive demo idea: comment out volatile with optimization on and show the loop freeze — or just promise it for the lab."
+    "text": "The 1 ms tick\nThe most useful timer configuration in embedded practice—one fast timer, one counter:\nvolatile uint32_t ms = 0;\n\n/* PSC = 15  -&gt; 16 MHz / 16   = 1 MHz\n   ARR = 999 -&gt; 1 MHz / 1000  = 1 kHz -&gt; update every 1 ms */\n\nvoid HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)\n{\n    if (htim-&gt;Instance == TIM2) {\n        ms++;\n    }\n}\nms is the L06 button_event pattern generalized: the callback reports, main() consumes. volatile for the same reason."
   },
   {
     "objectID": "lectures/L07_timers/theory/EE5203_Microprocessors_Lecture7_Theory.html#many-intervals-one-timer",
@@ -2013,7 +2013,7 @@
     "href": "lectures/L07_timers/theory/EE5203_Microprocessors_Lecture7_Theory.html#laboratory-mission",
     "title": "EE5203 Microprocessors",
     "section": "Laboratory mission",
-    "text": "Laboratory mission\n\nBlink LD2 every 500 ms from a TIM2 update interrupt—no HAL_Delay() anywhere—then build the 1 ms tick and schedule two independent intervals.\n\nYou will show:\n\nPSC/ARR calculated from 16 MHz, with the +1s explained;\na breakpoint proving HAL_TIM_PeriodElapsedCallback runs;\nTIM2-&gt;CNT moving and UIF setting in the SFR view;\ntwo software intervals driven by one ms counter;\none individual period change, predicted before flashing.\n\n\nCheckoff pacing: A and B before the break; C and the extension after. The SFR proof is the non-negotiable part."
+    "text": "Laboratory mission\n\nBlink LD2 every 500 ms from a TIM2 update interrupt—no HAL_Delay() anywhere—then build the 1 ms tick and schedule two independent intervals.\n\nYou will show:\n\nPSC/ARR calculated from 16 MHz, with the +1s explained;\na breakpoint proving HAL_TIM_PeriodElapsedCallback runs;\nTIM2-&gt;CNT moving and UIF setting in the SFR view;\ntwo software intervals driven by one ms counter;\none individual period change, predicted before flashing."
   },
   {
     "objectID": "lectures/L07_timers/theory/EE5203_Microprocessors_Lecture7_Theory.html#mastery-checklist",
@@ -3630,7 +3630,7 @@
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#our-hardware-platform",
     "title": "EE5203 Microprocessors",
     "section": "Our hardware platform",
-    "text": "Our hardware platform\n\n                  USBpower + data · to the PC  ST-LINKprograms + debugs the target  LD2 · PA5the user LED we toggle  STM32F401REtarget MCU · Cortex-M4   B1 · PC13the user button (L06)  HEADERSArduino + Morpho pins          \n\n\nDeep dive: UM1724 Rev 17, §6 Hardware layout — p. 13 · MB1136 C-04 schematic."
+    "text": "Our hardware platform\n\nMeet the Nucleo-F401RE\nThe blue-tinted upper section programs and debugs the target. The lower section contains the STM32F401RE that runs your code. Callouts locate the USB connector, ST-LINK, user button B1 on PC13, green user LED LD2 on PA5, target MCU, and expansion headers.\n\n\n\n\n  PROGRAM + DEBUG\n  The upper section\n  connects to your PC.\n  RUN YOUR CODE\n  The target MCU\n  controls the hardware.\n\n\n\n\n\n\n  \n  \n  \n  \n  \n\n\n\n  \n  \n  \n\n\n\n  \n    \n    USB · Mini-B\n    Power + PC connection\n  \n  \n    \n    ST-LINK/V2-1\n    Programs + debugs\n  \n  \n    \n    LD2 · PA5\n    User LED · output\n  \n  \n    \n    STM32F401RE\n    Target MCU · Cortex-M4\n  \n  \n    \n    B1 · PC13\n    User button · input\n  \n  \n    \n    Expansion headers\n    Arduino + ST Morpho\n  \n\n\n\n  \n  \n\n\n  \n  \n\n\n\nDeep dive: UM1724 Rev 17, §6 Hardware layout — p. 13 · MB1136 C-04 schematic."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#inside-the-stm32f401re",

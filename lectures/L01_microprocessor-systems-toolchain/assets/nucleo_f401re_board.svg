@@ -11,9 +11,13 @@
     <linearGradient id="btn-black" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a555c"/><stop offset=".6" stop-color="#272f33"/><stop offset="1" stop-color="#14191c"/></linearGradient>
     <style>
       .silk{font-family:Quicksand,Arial,sans-serif;fill:#1682bd;font-weight:700}
-      .ref{font-family:Quicksand,Arial,sans-serif;fill:#1682bd;font-size:12px;font-weight:600}
+      .ref{font-family:Arial,sans-serif;fill:#547484;font-size:12px;font-weight:600}
       .pin{font-family:Quicksand,Arial,sans-serif;fill:#1682bd;font-size:13px;font-weight:700}
-      .chip-label{font-family:Quicksand,Arial,sans-serif;fill:#dfe9ee;text-anchor:middle;font-weight:700}
+      .chip-label{font-family:Arial,sans-serif;fill:#f4f8fa;text-anchor:middle;font-weight:700}
+      #stlink-passives .ref, #target-support-components .ref{fill:#718590;font-weight:400}
+      #stlink-silk-marks{opacity:.55}
+      #stlink-mcu-u2 > g, #target-mcu-u5 > g, #t2-soic8 > g{stroke:#aebbc3}
+      #target-mcu-u5 > rect{stroke:#174f73;stroke-width:3}
       .passive{fill:#4a5258;stroke:#20272b;stroke-width:1}
       .passive-cap{fill:#b48a55;stroke:#7d5c33;stroke-width:1}
       .small-chip{fill:url(#chip-body);stroke:#10191e;stroke-width:1.5}
@@ -24,6 +28,8 @@
 
   <g id="board" filter="url(#board-shadow)">
     <path id="board-outline" d="M64 20 H696 Q714 20 714 38 V854 Q714 874 694 874 H66 Q46 874 46 854 V38 Q46 20 64 20Z" fill="#fbfcfa" stroke="#b9c5ca" stroke-width="5"/>
+    <!-- Subtle functional zoning; component positions remain unchanged. -->
+    <path d="M64 23 H696 Q711 23 711 38 V294 H49 V38 Q49 23 64 23Z" fill="#eaf3f8"/>
     <!-- mounting holes -->
     <g id="mounting-holes">
       <circle cx="93" cy="327" r="15" fill="#fff" stroke="#c0c9cd" stroke-width="4"/><circle cx="93" cy="327" r="7" fill="#dfe7ea"/>
@@ -38,8 +44,10 @@
 
       <!-- mini-B USB, protrudes past top edge -->
       <g id="usb-cn1">
-        <rect x="452" y="6" width="96" height="86" rx="6" fill="url(#usb-amber)" stroke="#6b4c0d" stroke-width="2.5"/>
-        <rect x="459" y="12" width="82" height="26" rx="3" fill="#3d2c08" opacity=".55"/>
+        <rect x="452" y="6" width="96" height="86" rx="6" fill="url(#metal)" stroke="#71838e" stroke-width="2.5"/>
+        <path d="M461 14 H539 V36 H461Z" fill="#263944"/>
+        <path d="M472 20 H528" stroke="#c5a568" stroke-width="4" stroke-dasharray="5 7"/>
+        <path d="M462 45 H538 M462 52 H538" stroke="#f7fafb" stroke-width="3"/>
         <rect x="446" y="66" width="108" height="30" rx="4" fill="url(#metal)" stroke="#78868d" stroke-width="2.5"/>
         <rect x="470" y="72" width="60" height="17" rx="3" fill="#2d3438"/>
         <circle cx="459" cy="81" r="4" fill="#8d9aa1"/><circle cx="541" cy="81" r="4" fill="#8d9aa1"/>
@@ -71,8 +79,9 @@
         </g>
         <rect x="341" y="149" width="134" height="104" rx="6" class="small-chip"/>
         <circle cx="356" cy="164" r="4.5" fill="#d7e0e4"/>
-        <text x="408" y="192" class="chip-label" font-size="17">STM32F103</text>
-        <text x="408" y="216" class="chip-label" font-size="13">ST-LINK/V2-1</text>
+        <text x="408" y="190" class="chip-label" font-size="20">ST-LINK</text>
+        <text x="408" y="214" class="chip-label" font-size="14">V2-1 · debugger</text>
+        <text x="408" y="238" class="chip-label" font-size="11">STM32F103</text>
         <text x="330" y="142" class="ref">U2</text>
       </g>
 
@@ -236,10 +245,10 @@
         <rect x="307" y="569" width="156" height="142" rx="6" class="small-chip"/>
         <path d="M307 569 L463 711" stroke="#3d4a52" stroke-width="30" opacity=".25"/>
         <circle cx="324" cy="586" r="5" fill="#d7e0e4"/>
-        <text x="385" y="616" class="chip-label" font-size="17">Arm Cortex-M4</text>
-        <text x="385" y="644" class="chip-label" font-size="19">STM32F401</text>
-        <text x="385" y="668" class="chip-label" font-size="19">RET6</text>
-        <text x="385" y="694" class="chip-label" font-size="11">84 MHz · 512 KB Flash</text>
+        <text x="385" y="616" class="chip-label" font-size="21">STM32</text>
+        <text x="385" y="644" class="chip-label" font-size="24">F401RE</text>
+        <path d="M328 659 H442" stroke="#65899b"/>
+        <text x="385" y="681" class="chip-label" font-size="16">Cortex-M4</text>
         <text x="290" y="562" class="ref">U5</text>
       </g>
 

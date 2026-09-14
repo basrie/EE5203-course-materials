@@ -215,19 +215,6 @@ Basri Erdogan
 </div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="dv">250</span><span class="op">);</span>   <span class="co">// why 250?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then we reverse the arrow. The <em>same</em> channel hardware, pointed at an input, timestamps a signal instead of making one—and the register it writes into is the one you just wrote by hand.</p>
-<aside class="notes">
-<p>Live demo first if hardware is ready: change 250 to 950 and to 20, show brightness. Then promise both halves: today you generate a waveform, and then measure one back.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 </section>
 <section id="the-story-so-far" class="slide level2">
 <h2>The story so far</h2>
@@ -320,19 +307,6 @@ Basri Erdogan
 <p><img data-src="../assets/images/pwm_mechanism.svg" class="quarto-figure quarto-figure-center" alt="Top: the counter sawtooth with the compare value CCR1 at 350 marked as a dashed line; the counter crosses it once per period. Bottom: the pin output, high while the counter is below CCR1, giving a 35 percent duty cycle" height="470"></p>
 </figure>
 </div>
-<aside class="notes">
-<p>This is the whole lecture in one figure. The sawtooth is last week’s slide — literally the same figure with one new dashed line. Spend time here.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 </section>
 <section id="one-new-register" class="slide level2">
 <h2>One new register</h2>
@@ -550,19 +524,6 @@ Simplified hardware diagram of one timer channel: the time base counter feeds a 
 <div class="relationship-strip">
 <p><code>CCR</code> <em>is</em> the pulse width in microseconds. Choose units once, and the register values become readable.</p>
 </div>
-<aside class="notes">
-<p>Ask: what duty cycle is a 1.5 ms pulse in a 20 ms frame? (7.5 %) — then stress the servo doesn’t care about that number, only the width.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 </section>
 <section id="positioning-the-servo" class="slide level2">
 <h2>Positioning the servo</h2>
