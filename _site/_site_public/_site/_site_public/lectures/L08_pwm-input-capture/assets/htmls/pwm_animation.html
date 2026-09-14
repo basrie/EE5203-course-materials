@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PWM → Mean Value (Interactive)</title>
+  <style>
+    :root { --bg:#f7fafc; --fg:#0b1220; --muted:#5a6a85; --accent:#2563eb; --accent2:#059669; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background:var(--bg); color:var(--fg); }
+    header { padding: 18px 20px 8px; text-align: center; }
+    h1 { margin:0 0 6px; font-size: clamp(28px, 3.6vw, 44px); letter-spacing: 0.2px; }
+    p.sub { margin:0; color:var(--muted); font-size: clamp(14px, 2vw, 18px); }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 14px 16px 28px; }
+    .panel { display: grid; grid-template-columns: 1.1fr 420px; gap: 16px; }
+    @media (max-width: 980px){ .panel { grid-template-columns: 1fr; } }
+
+    .card { background:#ffffff; border:1px solid #dbe2ea; border-radius:16px; padding:18px; box-shadow: 0 6px 20px rgba(17,24,39,.06); }
+    .canvas-wrap { position: relative; }
+    canvas { width: 100%; height: 460px; display: block; border-radius: 12px; background: #ffffff; }
+
+    .ctrls h2 { margin:6px 0 10px; font-size: clamp(18px, 2.4vw, 24px); }
+    .row { margin: 14px 0; }
+    .row label { display:block; font-size: 18px; color: var(--muted); margin-bottom: 8px; }
+    .row input[type=range] { width: 100%; }
+    .metric { display:flex; gap:12px; flex-wrap: wrap; margin-top:10px; }
+    .pill { background:#f4f7fb; border:1px solid #dbe2ea; border-radius:999px; padding: 12px 16px; font-size:18px; font-variant-numeric: tabular-nums; }
+
+    .legend { position:absolute; top:10px; left:12px; display:flex; gap:10px; align-items:center; font-size:16px; color:var(--muted); background:rgba(255,255,255,0.85); padding:8px 12px; border:1px solid #dbe2ea; border-radius:10px; backdrop-filter: blur(6px); }
+    .swatch { width:18px; height:3px; border-radius:2px; }
+    .swatch.pwm { background: var(--accent); }
+    .swatch.mean { background: repeating-linear-gradient(90deg, var(--fg), var(--fg) 6px, transparent 6px, transparent 12px); height:4px; }
+
+    .foot { text-align:center; color:var(--muted); font-size:14px; margin-top:10px; }
+    .btn { appearance:none; border:1px solid #cbd5e1; background:#f8fafc; color:#0b1220; border-radius:10px; padding:12px 16px; font-size:18px; cursor:pointer; }
+    .btn:active { transform: translateY(1px); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PWM → Mean Value (Interactive)</h1>
+    <p class="sub">Adjust duty cycle to see a PWM waveform and its mean (normalized to <em>V<sub>ref</sub></em>).</p>
+  </header>
+
+  <div class="wrap">
+    <div class="panel">
+      <div class="card canvas-wrap">
+        <div class="legend">
+          <div class="swatch pwm"></div><span>PWM</span>
+          <div class="swatch mean"></div><span>Mean = Duty × V<sub>ref</sub></span>
+        </div>
+        <canvas id="scope" width="1280" height="480"></canvas>
+        <div class="foot">Time window: <span id="winLabel">2.0</span> s • Grid: major at period</div>
+      </div>
+
+      <div class="card ctrls">
+        <h2>Controls</h2>
+        <div class="row">
+          <label for="duty">Duty cycle: <b><span id="dutyLabel">50</span>%</b></label>
+          <input id="duty" type="range" min="0" max="100" value="50" step="1" />
+        </div>
+        <div class="row">
+          <label for="freq">Frequency: <b><span id="freqLabel">2.0</span> Hz</b></label>
+          <input id="freq" type="range" min="0.5" max="10" value="2" step="0.1" />
+        </div>
+        <div class="row">
+          <label for="window">Time window shown: <b><span id="windowLabel">2.0</span> s</b></label>
+          <input id="window" type="range" min="0.5" max="5" value="2" step="0.1" />
+        </div>
+        <div class="row">
+          <label><input id="animate" type="checkbox" /> Animate sweep (duty oscillates)</label>
+        </div>
+        <div class="metric">
+          <div class="pill">Period T = <span id="period">0.500</span> s</div>
+          <div class="pill">Mean = <span id="mean">0.500</span> × Vref</div>
+          <div class="pill">Duty = <span id="dutyText">50</span>%</div>
+        </div>
+        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button id="reset" class="btn">Reset</button>
+          <button id="pause" class="btn">Pause</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (() => {
+    const canvas = document.getElementById('scope');
+    const ctx = canvas.getContext('2d');
+
+    const dutyEl = document.getElementById('duty');
+    const freqEl = document.getElementById('freq');
+    const windowEl = document.getElementById('window');
+    const animateEl = document.getElementById('animate');
+
+    const dutyLabel = document.getElementById('dutyLabel');
+    const dutyText = document.getElementById('dutyText');
+    const freqLabel = document.getElementById('freqLabel');
+    const periodEl = document.getElementById('period');
+    const meanEl = document.getElementById('mean');
+    const windowLabel = document.getElementById('windowLabel');
+    const winLabel = document.getElementById('winLabel');
+
+    const resetBtn = document.getElementById('reset');
+    const pauseBtn = document.getElementById('pause');
+
+    let running = true;
+
+    // Resize handling (high-DPI aware)
+    function fitCanvas() {
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener('resize', fitCanvas);
+    fitCanvas();
+
+    // State
+    let duty = parseFloat(dutyEl.value) / 100;   // 0..1
+    let freq = parseFloat(freqEl.value);         // Hz
+    let tWindow = parseFloat(windowEl.value);    // seconds shown
+
+    // UI wiring
+    function syncLabels(){
+      dutyLabel.textContent = Math.round(duty * 100);
+      dutyText.textContent = Math.round(duty * 100);
+      freqLabel.textContent = freq.toFixed(1);
+      periodEl.textContent = (1/freq).toFixed(3);
+      meanEl.textContent = duty.toFixed(3);
+      windowLabel.textContent = tWindow.toFixed(1);
+      winLabel.textContent = tWindow.toFixed(1);
+    }
+    syncLabels();
+
+    dutyEl.addEventListener('input', e => { duty = e.target.value/100; animateEl.checked = false; running = true; requestAnimationFrame(tick); pauseBtn.textContent = 'Pause'; syncLabels(); });
+    freqEl.addEventListener('input', e => { freq = parseFloat(e.target.value); syncLabels(); });
+    windowEl.addEventListener('input', e => { tWindow = parseFloat(e.target.value); syncLabels(); });
+
+    resetBtn.addEventListener('click', () => {
+      duty = 0.5; dutyEl.value = 50;
+      freq = 2.0; freqEl.value = 2.0;
+      tWindow = 2.0; windowEl.value = 2.0;
+      syncLabels();
+    });
+
+    pauseBtn.addEventListener('click', () => {
+      running = !running;
+      pauseBtn.textContent = running ? 'Pause' : 'Resume';
+      if (running) requestAnimationFrame(tick);
+    });
+
+    // Helpers
+    function gridColor(alpha){ return `rgba(60,72,92,${alpha})`; }
+
+    function drawGrid(T){
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      ctx.save();
+      ctx.strokeStyle = gridColor(0.12);
+      ctx.lineWidth = 1;
+
+      // Horizontal lines at 0, 0.5, 1.0
+      const y0 = mapY(0), y05 = mapY(0.5), y1 = mapY(1);
+      [y0, y05, y1].forEach((y,i)=>{ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); });
+
+      // Vertical grid at each period boundary
+      const nMajors = Math.ceil(tWindow / T) + 1;
+      for(let i=0; i<nMajors; i++){
+        const x = mapX(tWindow - (i*T)); // map relative time from right edge
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
+    function mapX(dtFromRight){ // seconds from right edge (0 at right)
+      const w = canvas.clientWidth;
+      const ratio = (tWindow - dtFromRight) / tWindow; // 0..1 left->right
+      return ratio * w;
+    }
+    function mapY(norm){ // 0..1 -> canvas Y
+      const h = canvas.clientHeight;
+      const pad = 36; // extra top/bottom padding to avoid legend overlap // top/bot padding
+      const innerH = h - pad*2;
+      return pad + (1 - norm) * innerH;
+    }
+
+    function drawAxes(){
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      ctx.save();
+      ctx.strokeStyle = gridColor(0.35);
+      ctx.lineWidth = 1.8;
+      // Left axis
+      ctx.beginPath(); ctx.moveTo(0, mapY(0)); ctx.lineTo(0, mapY(1)); ctx.stroke();
+      // Bottom axis
+      ctx.beginPath(); ctx.moveTo(0, mapY(0)); ctx.lineTo(w, mapY(0)); ctx.stroke();
+      ctx.restore();
+
+      // Labels
+      ctx.save();
+      ctx.fillStyle = 'rgba(15,23,42,0.9)';
+      ctx.font = '16px ui-sans-serif, system-ui, -apple-system';
+      ctx.fillText('0', 6, mapY(0)-4);
+      ctx.fillText('1.0', 6, mapY(1)-4);
+      ctx.fillText('0.5', 6, mapY(0.5)-4);
+      ctx.restore();
+    }
+
+    function drawPWM(tNow, T, D){
+      const w = canvas.clientWidth;
+      const samples = Math.max(400, Math.floor(w));
+      const dt = tWindow / samples;
+      ctx.save();
+      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+      ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      let first = true;
+      for(let i=0;i<=samples;i++){
+        const t = tNow - tWindow + i*dt;        // actual time at this x
+        const phase = (t % T + T) % T;          // 0..T
+        const y = phase < D*T ? 1 : 0;          // PWM level
+        const xpix = (i / samples) * w;
+        const ypix = mapY(y);
+        if(first){ ctx.moveTo(xpix, ypix); first=false; }
+        else ctx.lineTo(xpix, ypix);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawMean(D){
+      const w = canvas.clientWidth;
+      const y = mapY(D);
+      ctx.save();
+      // dashed line
+      ctx.setLineDash([10,8]);
+      ctx.strokeStyle = 'rgba(15,23,42,0.85)';
+      ctx.lineWidth = 2.2;
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      ctx.setLineDash([]);
+      // label
+      ctx.fillStyle = 'rgba(15,23,42,0.9)';
+      ctx.font = 'bold 18px ui-sans-serif, system-ui, -apple-system';
+      ctx.fillText(`Mean = ${D.toFixed(3)} × Vref`, 80, y - 10);
+      ctx.restore();
+    }
+
+    // Animation loop
+    let t0 = performance.now() / 1000; // seconds
+
+    function tick(){
+      if(!running) return;
+      const now = performance.now()/1000;
+      const T = 1 / freq;
+
+      // Optional auto-sweep
+      if(animateEl.checked){
+        // smooth oscillation between 15% and 85%
+        const s = Math.sin((now - t0) * 0.6); // speed
+        const center = 0.5, span = 0.35; // 0.15..0.85
+        duty = center + span * s * 0.7 + span * 0.3 * Math.sin((now - t0) * 0.13 + 1.2);
+        duty = Math.min(0.95, Math.max(0.05, duty));
+        dutyEl.value = Math.round(duty*100);
+        syncLabels();
+      }
+
+      // Clear
+      ctx.clearRect(0,0,canvas.clientWidth, canvas.clientHeight);
+      drawGrid(T);
+      drawAxes();
+      drawPWM(now, T, duty);
+      drawMean(duty);
+
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+
+    // --- basic self-tests (console only) ---
+    (function runTests(){
+      try{
+        const expect = (cond,msg)=>{ if(!cond) console.error('TEST FAIL:',msg); else console.log('TEST OK:',msg); };
+        // Test 1: initial label matches slider
+        expect(parseInt(document.getElementById('dutyLabel').textContent)===parseInt(document.getElementById('duty').value),'initial duty label reflects slider');
+        // Test 2: changing duty updates mean
+        const dEl=document.getElementById('duty');
+        dEl.value=73; dEl.dispatchEvent(new Event('input'));
+        expect(document.getElementById('mean').textContent.startsWith((73/100).toFixed(3).slice(0,4)),'mean tracks duty after input');
+        // Test 3: gridColor returns a valid string
+        expect(gridColor(0.5)==='rgba(60,72,92,0.5)','gridColor produces expected rgba');
+        // Test 4: manual duty drag disables animate and resumes loop
+        animateEl.checked = true; // turn on
+        running = false; // pause intentionally
+        dEl.value=25; dEl.dispatchEvent(new Event('input'));
+        expect(!animateEl.checked && running,'manual duty turns off animate and resumes');
+      }catch(e){ console.warn('Tests skipped:', e); }
+    })();
+
+  })();
+  </script>
+</body>
+</html>
