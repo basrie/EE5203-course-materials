@@ -3668,39 +3668,39 @@
     "text": "The forever loop\n\nSourceCompileLinkFlashRunDebug\n\n\n\nint main(void)\n{\n    int toggle_count = 0;\n\n    while (1)\n    {\n        HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n        toggle_count = toggle_count + 1;\n        HAL_Delay(500);\n    }\n}\nwhile (1) means repeat forever. Firmware initialises the hardware once, then stays in its main loop."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#where-your-code-lives",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#where-your-code-lives",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#where-to-put-your-code",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#where-to-put-your-code",
     "title": "EE5203 Microprocessors",
-    "section": "Where your code lives",
-    "text": "Where your code lives\n\nSourceCompileLinkFlashRunDebug\n\n/* USER CODE BEGIN 2 */\nint toggle_count = 0;\n/* USER CODE END 2 */\n\n/* USER CODE BEGIN WHILE */\nwhile (1)\n{\n    /* USER CODE END WHILE */\n\n    /* USER CODE BEGIN 3 */\n    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n    toggle_count = toggle_count + 1;\n    HAL_Delay(500);\n}\n/* USER CODE END 3 */\n\nThis is the layout CubeMX generates. Your statements live inside a USER CODE region; everything outside can be regenerated from the .ioc configuration."
+    "section": "Where to put your code",
+    "text": "Where to put your code\n\nSourceCompileLinkFlashRunDebug\n\n/* USER CODE BEGIN 2 */\nint toggle_count = 0;\n/* USER CODE END 2 */\n\n/* USER CODE BEGIN WHILE */\nwhile (1)\n{\n    /* USER CODE END WHILE */\n\n    /* USER CODE BEGIN 3 */\n    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n    toggle_count = toggle_count + 1;\n    HAL_Delay(500);\n}\n/* USER CODE END 3 */\n\nThis is the layout CubeMX generates. Your statements live inside a USER CODE region; everything outside can be regenerated from the .ioc configuration."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#registers-explain-hal-builds",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#registers-explain-hal-builds",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#two-ways-to-toggle-the-led",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#two-ways-to-toggle-the-led",
     "title": "EE5203 Microprocessors",
-    "section": "Registers explain, HAL builds",
-    "text": "Registers explain, HAL builds\n\nSourceCompileLinkFlashRunDebug\n\n\n\nRegisters explain the machine\nGPIOA-&gt;ODR ^= (1U &lt;&lt; 5);   /* L04 */\nClocks · bit fields · flags · cause and effect. One line, but every symbol needs explaining — that is L04’s job.\n\n\nHAL helps build systems\nHAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\nReadable operations · generated setup · manageable complexity. The same toggle, named by what it does.\n\n\n\nOur sequence: working HAL today → C foundations → direct GPIO registers → informed abstraction choices"
+    "section": "Two ways to toggle the LED",
+    "text": "Two ways to toggle the LED\n\nSourceCompileLinkFlashRunDebug\n\n\n\nRegisters explain the machine\nGPIOA-&gt;ODR ^= (1U &lt;&lt; 5);   /* L04 */\nClocks · bit fields · flags · cause and effect. One line, but every symbol needs explaining — that is L04’s job.\n\n\nHAL helps build systems\nHAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\nReadable operations · generated setup · manageable complexity. The same toggle, named by what it does.\n\n\n\nOur sequence: working HAL today → C foundations → direct GPIO registers → informed abstraction choices"
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#source-code-is-not-firmware",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#source-code-is-not-firmware",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#from-source-to-firmware",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#from-source-to-firmware",
     "title": "EE5203 Microprocessors",
-    "section": "Source code is not firmware",
-    "text": "Source code is not firmware\n\nSourceCompileLinkFlashRunDebug\n\n\n 1SOURCE  2COMPILE  3LINK  4FLASH  5RUN  6DEBUG what you wrotemain.c — text you can read; the compiler reads the same file what it becomesmain.o, stm32f4xx_hal_gpio.o, … — machine code, one object file per source file one programEE5203_L01.elf — every function and variable now has an address in the chipflash memory from 0x0800 0000, written through the ST-LINK what you seeLD2 toggles every 500 ms — behaviour, not code what you measurepaused at the breakpoint, toggle_count = 2 — state as evidence Every stage produces something different — and can fail in a different way."
+    "section": "From source to firmware",
+    "text": "From source to firmware\n\nSourceCompileLinkFlashRunDebug\n\n\n 1SOURCE  2COMPILE  3LINK  4FLASH  5RUN  6DEBUG what you wrotemain.c — text you can read; the compiler reads the same file what it becomesmain.o, stm32f4xx_hal_gpio.o, … — machine code, one object file per source file one programEE5203_L01.elf — every function and variable now has an address in the chipflash memory from 0x0800 0000, written through the ST-LINK what you seeLD2 toggles every 500 ms — behaviour, not code what you measurepaused at the breakpoint, toggle_count = 2 — state as evidence Every stage produces something different — and can fail in a different way."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#tools-and-their-evidence",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#tools-and-their-evidence",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#each-tool-and-what-it-proves",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#each-tool-and-what-it-proves",
     "title": "EE5203 Microprocessors",
-    "section": "Tools and their evidence",
-    "text": "Tools and their evidence\n\nSourceCompileLinkFlashRunDebug\n\n\n\n\n\n\n\n\n\nTool\nJob\nEvidence\n\n\n\n\nCompiler\nTranslate each C file to object code\nErrors, warnings, .o files\n\n\nLinker\nCombine objects and libraries into one program\nMemory map, .elf file\n\n\nProgrammer\nWrite the firmware into flash\nSuccessful download\n\n\nDebugger\nControl and inspect execution\nBreakpoints, variables, registers\n\n\n\n\nIn our lab: STM32CubeMX configures and generates, VS Code edits and debugs, and the STM32CubeCLT toolbox underneath supplies the compiler, linker, and programmer.\n\n\nThe full story behind this table — what each tool consumes and produces, from keypress to blinking LED: From C to Silicon, the toolchain companion."
+    "section": "Each tool and what it proves",
+    "text": "Each tool and what it proves\n\nSourceCompileLinkFlashRunDebug\n\n\n\n\n\n\n\n\n\nTool\nJob\nEvidence\n\n\n\n\nCompiler\nTranslate each C file to object code\nErrors, warnings, .o files\n\n\nLinker\nCombine objects and libraries into one program\nMemory map, .elf file\n\n\nProgrammer\nWrite the firmware into flash\nSuccessful download\n\n\nDebugger\nControl and inspect execution\nBreakpoints, variables, registers\n\n\n\n\nIn our lab: STM32CubeMX configures and generates, VS Code edits and debugs, and the STM32CubeCLT toolbox underneath supplies the compiler, linker, and programmer.\n\n\nThe full story behind this table — what each tool consumes and produces, from keypress to blinking LED: From C to Silicon, the toolchain companion."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#build-flash-run-three-claims",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#build-flash-run-three-claims",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#what-build-flash-run-prove",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#what-build-flash-run-prove",
     "title": "EE5203 Microprocessors",
-    "section": "Build, flash, run: three claims",
-    "text": "Build, flash, run: three claims\n\nSourceCompileLinkFlashRunDebug\n\n\n\n\n\n\n\n\n\nClaim\nWhat it proves\nWhat it does not prove\n\n\n\n\ncompile · link Build succeeds\nSource compiles and links\nHardware behaves correctly\n\n\nflash Flash succeeds\nFirmware reached the MCU\nThe logic is correct\n\n\nrun LED blinks\nOne observable requirement works\nEvery requirement works\n\n\n\n\nEngineering conclusions must match the evidence available."
+    "section": "What build, flash, run prove",
+    "text": "What build, flash, run prove\n\nSourceCompileLinkFlashRunDebug\n\n\n\n\n\n\n\n\n\nClaim\nWhat it proves\nWhat it does not prove\n\n\n\n\ncompile · link Build succeeds\nSource compiles and links\nHardware behaves correctly\n\n\nflash Flash succeeds\nFirmware reached the MCU\nThe logic is correct\n\n\nrun LED blinks\nOne observable requirement works\nEvery requirement works\n\n\n\n\nEngineering conclusions must match the evidence available."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#four-error-families",
@@ -3710,18 +3710,18 @@
     "text": "Four error families\n\nSourceCompileLinkFlashRunDebug\n\n\n 1SOURCEmain.c  2COMPILEobject files  3LINKfirmware .elf  4FLASHMCU memory  5RUNphysical behavior  6DEBUGstate + evidence COMPILE ERRORSsyntax · typesnames · warnings LINK ERRORSmissing symbolsduplicates · memory FLASH ERRORScable · ST-LINKdriver · busy session RUN / HARDWARElogic · clocks · pinswiring · power Read the stage first; it tells you which family the error belongs to."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#controlled-observation",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#controlled-observation",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-to-debug-predict-first",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-to-debug-predict-first",
     "title": "EE5203 Microprocessors",
-    "section": "Controlled observation",
-    "text": "Controlled observation\n\nSourceCompileLinkFlashRunDebug\n\n\n\nChange one thing, then repeat the cycle with new evidence."
+    "section": "How to debug: predict first",
+    "text": "How to debug: predict first\n\nSourceCompileLinkFlashRunDebug\n\n\n\nChange one thing, then repeat the cycle with new evidence."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#four-statements-that-help",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#four-statements-that-help",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-to-ask-for-help",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-to-ask-for-help",
     "title": "EE5203 Microprocessors",
-    "section": "Four statements that help",
-    "text": "Four statements that help\n\nSourceCompileLinkFlashRunDebug\n\n\n\n“It does not work.”\n\n\nExpected LD2 blinks once a second.\nObserved LD2 stays on; no blinking.\nEvidence a breakpoint inside the loop is never hit.\nNext test does execution reach main() at all?\n\n\n\nThe sentence on the left contains none of the four. Before asking for help, write the four lines on the right."
+    "section": "How to ask for help",
+    "text": "How to ask for help\n\nSourceCompileLinkFlashRunDebug\n\n\n\n“It does not work.”\n\n\nExpected LD2 blinks once a second.\nObserved LD2 stays on; no blinking.\nEvidence a breakpoint inside the loop is never hit.\nNext test does execution reach main() at all?\n\n\n\nThe sentence on the left contains none of the four. Before asking for help, write the four lines on the right."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#breakpoints-and-variables",
@@ -3731,11 +3731,11 @@
     "text": "Breakpoints and variables\n\nSourceCompileLinkFlashRunDebug\n\n\n\n\nPause → inspect state → compare with prediction → step → observe again"
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#a-controlled-experiment",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#a-controlled-experiment",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#experiment-delay-500-to-100",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#experiment-delay-500-to-100",
     "title": "EE5203 Microprocessors",
-    "section": "A controlled experiment",
-    "text": "A controlled experiment\n\nSourceCompileLinkFlashRunDebug\n\n\n\nBaseline\nHAL_Delay(500);\nMeasure: blinks in 10 s · toggle_count at a breakpoint after 10 s.\n\n\nModified — one change\nHAL_Delay(100);\nPredict both numbers before flashing — then measure the same way.\n\n\n\nWhat stays fixed? What changes? Which physical observation would confirm it?\n\n\npredict → flash → observe → compare"
+    "section": "Experiment: delay 500 to 100",
+    "text": "Experiment: delay 500 to 100\n\nSourceCompileLinkFlashRunDebug\n\n\n\nBaseline\nHAL_Delay(500);\nMeasure: blinks in 10 s · toggle_count at a breakpoint after 10 s.\n\n\nModified — one change\nHAL_Delay(100);\nPredict both numbers before flashing — then measure the same way.\n\n\n\nWhat stays fixed? What changes? Which physical observation would confirm it?\n\n\npredict → flash → observe → compare"
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#common-first-day-problems",
@@ -3745,25 +3745,25 @@
     "text": "Common first-day problems\n\nSourceCompileLinkFlashRunDebug\n\n\n\n\n\n\n\n\nSymptom\nFirst checks\n\n\n\n\nBoard is not detected\nUSB data cable, ST-LINK connector, driver, power LED\n\n\nBuild fails\nFirst error, not the last; file saved; braces and semicolons\n\n\nFlash fails\nST-LINK connected; no other debug session holding it\n\n\nLED does not blink\nCorrect board, PA5/LD2 configuration, code in a user region\n\n\nChange has no effect\nRebuild and flash the new binary; confirm the edited project\n\n\n\n\nCollect evidence before changing several settings at once."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#where-this-course-goes",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#where-this-course-goes",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#what-you-will-build-this-semester",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#what-you-will-build-this-semester",
     "title": "EE5203 Microprocessors",
-    "section": "Where this course goes",
-    "text": "Where this course goes\n\n\nWrite and debug embedded C · model the Cortex-M · control peripherals · design responsive systems · integrate and defend a project · and treat compiler output, debugger state and registers as evidence\n\n\nEnvironmental monitor · Reaction-time game · Smart controller · Motion alarm · Sensor logger"
+    "section": "What you will build this semester",
+    "text": "What you will build this semester\n\n\nWrite and debug embedded C · model the Cortex-M · control peripherals · design responsive systems · integrate and defend a project · and treat compiler output, debugger state and registers as evidence\n\n\nEnvironmental monitor · Reaction-time game · Smart controller · Motion alarm · Sensor logger"
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-twelve-week-journey",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-twelve-week-journey",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-12-week-plan",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#the-12-week-plan",
     "title": "EE5203 Microprocessors",
-    "section": "The twelve-week journey",
-    "text": "The twelve-week journey\n\n\nEleven lecture weeks, the midterm in week 7, one project. Today, simply notice possible inputs, processing, and outputs; teams launch in week 5. The small codes name each week’s lecture package on the course site."
+    "section": "The 12-week plan",
+    "text": "The 12-week plan\n\n\nEleven lecture weeks, the midterm in week 8, one project. Today, simply notice possible inputs, processing, and outputs; teams launch in week 5. The small codes name each week’s lecture package on the course site."
   },
   {
-    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-learning-will-work",
-    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-learning-will-work",
+    "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-each-week-works",
+    "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#how-each-week-works",
     "title": "EE5203 Microprocessors",
-    "section": "How learning will work",
-    "text": "How learning will work\n\n\nShort preparation creates a starting point; class time goes to explanation, prediction, coding, and feedback. Every laboratory ends with an individual modification and oral check; solutions follow the practice window."
+    "section": "How each week works",
+    "text": "How each week works\n\n\nShort preparation creates a starting point; class time goes to explanation, prediction, coding, and feedback. Every laboratory ends with an individual modification and oral check; solutions follow the practice window."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#assessment-what-will-count",
@@ -3784,7 +3784,7 @@
     "href": "lectures/L01_microprocessor-systems-toolchain/theory/EE5203_Microprocessors_Lecture1_Theory.html#exit-ticket",
     "title": "EE5203 Microprocessors",
     "section": "Exit ticket",
-    "text": "Exit ticket\n\n\nEVIDENCE\nWhat observation proves new firmware reached the board?\n\n\nPREDICTION\nWhat changes when 500 becomes 100?\n\n\nQUESTION\nWhich part of today’s workflow remains least clear?\n\n\n\n\n\n\nScan and answer before you leave — sign in with your Google account; one or two sentences per card. Ungraded; your answers open L02. Link also in CATS: forms.gle/cLt2EYNVELqkP3bdA.\nNext: values, decisions, loops, and arrays.\n\n\nEvery concept in this lecture, with page-linked sources: academic references."
+    "text": "Exit ticket\n\n\nEVIDENCE\n“Build: 0 errors.” “Download: OK.” What do you know now?\nThe program is correct · The code is inside the chip, but I don’t know yet if it works · The LED will blink · Everything works, no bugs\n\n\nPREDICTION\nWhat changes when 500 becomes 100?\n\n\nQUESTION\nWhich part of today’s workflow remains least clear?\n\n\n\n\n\n\nScan and answer before you leave — sign in with your Google account; pick one option, then one sentence per card. Ungraded; your answers open L02. Link also in CATS: forms.gle/cLt2EYNVELqkP3bdA.\nNext: values, decisions, loops, and arrays.\n\n\nEvery concept in this lecture, with page-linked sources: academic references."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/practice/EE5203_Microprocessors_Lecture1_Study_Sheet.html",
@@ -3931,7 +3931,7 @@
     "href": "index.html",
     "title": "EE5203 Microprocessors",
     "section": "",
-    "text": "Slides, study sheets, worksheets and lab guides. Graded work and the weekly calendar are in CATS.\n\nEmbedded C\n\n  \n    L01\n    \n      Embedded Systems, the C Toolchain, and Debugging\n      \n        C diagnostic\n        Lab reference\n      \n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L02\n    \n      Values, Decisions, Loops, and Arrays\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L03\n    \n      Functions, Arrays, Strings, and Multiple C Files\n      \n        Starter files\n      \n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nRegisters and GPIO\n\n  \n    L04\n    \n      Pointers, Structures, Bits, Registers, and GPIO\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L05\n    \n      GPIO and Hardware Abstraction\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nEvents and Time\n\n  \n    L06\n    \n      Interrupts and the NVIC\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  Week 7 · Midterm examination\n\n    L07\n    \n      Timers and Non-Blocking Time\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\n\nPeripherals\n\n  \n    L08\n    \n      PWM, Output Compare, and Input Capture\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L09\n    \n      ADC and Sensor Acquisition\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L10\n    \n      UART and PC Communication\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L11\n    \n      I2C and SPI\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nIntegration and Project\n\n  \n    L12\n    \n      System Integration and Project Clinic\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Clinic\n    \n  \n  \n    L13\n    \n      Demonstration, Oral Defence, and Reflection\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Demo"
+    "text": "Slides, study sheets, worksheets and lab guides. Graded work and the weekly calendar are in CATS.\n\nEmbedded C\n\n  \n    L01\n    \n      Embedded Systems, the C Toolchain, and Debugging\n      \n        C diagnostic\n        Lab reference\n      \n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L02\n    \n      Values, Decisions, Loops, and Arrays\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L03\n    \n      Functions, Arrays, Strings, and Multiple C Files\n      \n        Starter files\n      \n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nRegisters and GPIO\n\n  \n    L04\n    \n      Pointers, Structures, Bits, Registers, and GPIO\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L05\n    \n      GPIO and Hardware Abstraction\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nEvents and Time\n\n  \n    L06\n    \n      Interrupts and the NVIC\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n    L07\n    \n      Timers and Non-Blocking Time\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  Week 8 · Midterm examination\n\n\n\nPeripherals\n\n  \n    L08\n    \n      PWM, Output Compare, and Input Capture\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L09\n    \n      ADC and Sensor Acquisition\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L10\n    \n      UART and PC Communication\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L11\n    \n      I2C and SPI\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nIntegration and Project\n\n  \n    L12\n    \n      System Integration and Project Clinic\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Clinic\n    \n  \n  \n    L13\n    \n      Demonstration, Oral Defence, and Reflection\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Demo"
   },
   {
     "objectID": "SYLLABUS.html",
@@ -3973,7 +3973,7 @@
     "href": "SYLLABUS.html#course-sequence",
     "title": "EE5203 Microprocessors — Syllabus",
     "section": "Course sequence",
-    "text": "Course sequence\nTwelve teaching weeks: eleven lecture weeks and a midterm week. Week 7 is the midterm and introduces no new material. UART and I2C are taught together in week 11 (SPI is summarised there and continues in the project track), and the integration clinic runs in the laboratory hours of weeks 11 and 12.\n\n\n\n\n\n\n\n\n\n\nID\nWeek\nTopic\nCentral performance\nProject step\n\n\n\n\nL01\n1\nEmbedded systems, C toolchain, and debugging\nBuild, flash, debug, and modify Blinky\nSee example projects\n\n\nL02\n2\nValues, decisions, loops, and arrays\nProcess a sensor-data array in one C file\nIdentify project inputs\n\n\nL03\n3\nFunctions, arrays, strings, and modular C\nDecompose the sensor program into functions and files\nIdentify processing functions\n\n\nL04\n4\nPointers, structures, bits, registers, and GPIO\nControl PA5 through CMSIS registers\nIndividual idea canvas\n\n\nL05\n5\nGPIO and hardware abstraction\nRebuild GPIO with HAL and compare the two interfaces\nTeams form; project launch\n\n\nL06\n6\nInterrupts and the NVIC\nImplement and explain an event-driven application\nProposal and block diagram\n\n\n\n7\nMidterm examination\n\n\n\n\nL07\n8\nTimers and non-blocking time\nGenerate periodic events without blocking delays\nDesign review\n\n\nL08\n9\nPWM, output compare, and input capture\nGenerate timed signals — and measure them\nFirst hardware milestone\n\n\nL09\n10\nADC and sensor acquisition\nAcquire, scale, and validate analog data\nData-acquisition milestone\n\n\nL10\n11\nSerial communication: UART and I2C (SPI summary)\nStream data to a PC, accept commands, read one I2C device\nCommunication milestone\n\n\nL11\n11\nI2C and SPI — taught with L10\nInterface a synchronous serial device\nSensor/display integration\n\n\nL12\n11–12 (lab)\nIntegration clinic in laboratory hours\nIntegrate peripherals and diagnose faults\nWorking prototype\n\n\nL13\n12\nDemonstration and defense\nDemonstrate, test, and individually explain the system\nFinal assessment\n\n\n\nWeek numbers are the planned sequence; the authoritative weekly calendar, including any holiday shifts, is always the one announced in CATS."
+    "text": "Course sequence\nTwelve teaching weeks: eleven lecture weeks and a midterm week. Week 8 is the midterm and introduces no new material. UART and I2C are taught together in week 11 (SPI is summarised there and continues in the project track), and the integration clinic runs in the laboratory hours of weeks 11 and 12.\n\n\n\n\n\n\n\n\n\n\nID\nWeek\nTopic\nCentral performance\nProject step\n\n\n\n\nL01\n1\nEmbedded systems, C toolchain, and debugging\nBuild, flash, debug, and modify Blinky\nSee example projects\n\n\nL02\n2\nValues, decisions, loops, and arrays\nProcess a sensor-data array in one C file\nIdentify project inputs\n\n\nL03\n3\nFunctions, arrays, strings, and modular C\nDecompose the sensor program into functions and files\nIdentify processing functions\n\n\nL04\n4\nPointers, structures, bits, registers, and GPIO\nControl PA5 through CMSIS registers\nIndividual idea canvas\n\n\nL05\n5\nGPIO and hardware abstraction\nRebuild GPIO with HAL and compare the two interfaces\nTeams form; project launch\n\n\nL06\n6\nInterrupts and the NVIC\nImplement and explain an event-driven application\nProposal and block diagram\n\n\nL07\n7\nTimers and non-blocking time\nGenerate periodic events without blocking delays\n—\n\n\n\n8\nMidterm examination\n\n\n\n\nL08\n9\nPWM, output compare, and input capture\nGenerate timed signals — and measure them\nDesign review; first hardware milestone\n\n\nL09\n10\nADC and sensor acquisition\nAcquire, scale, and validate analog data\nData-acquisition milestone\n\n\nL10\n11\nSerial communication: UART and I2C (SPI summary)\nStream data to a PC, accept commands, read one I2C device\nCommunication milestone\n\n\nL11\n11\nI2C and SPI — taught with L10\nInterface a synchronous serial device\nSensor/display integration\n\n\nL12\n11–12 (lab)\nIntegration clinic in laboratory hours\nIntegrate peripherals and diagnose faults\nWorking prototype\n\n\nL13\n12\nDemonstration and defense\nDemonstrate, test, and individually explain the system\nFinal assessment\n\n\n\nWeek numbers are the planned sequence; the authoritative weekly calendar, including any holiday shifts, is always the one announced in CATS."
   },
   {
     "objectID": "SYLLABUS.html#assessment",
@@ -3987,7 +3987,7 @@
     "href": "SYLLABUS.html#project-timeline",
     "title": "EE5203 Microprocessors — Syllabus",
     "section": "Project timeline",
-    "text": "Project timeline\n\n\n\n\n\n\n\n\nPoint\nWeek\nMilestone\n\n\n\n\nL04\n4\nOne-page individual idea canvas\n\n\nL05\n5\nTeams form; preliminary topic\n\n\nL06\n6\nProposal: problem, block diagram, components, minimum viable system\n\n\nL07\n8\nDesign review: pins, peripherals, data flow, responsibilities, risks\n\n\nL08\n9\nFirst hardware milestone — one input or output peripheral working\n\n\nL09\n10\nAcquired and validated sensor data\n\n\nL10\n11\nCommunication milestone — UART logging or command interface\n\n\nL11\n11\nIntegration milestone — input, processing, output, communication connected\n\n\nL12\n11–12 (lab)\nReadiness review: working prototype and test evidence\n\n\nL13\n12\nDemonstration, report, presentation, and individual oral defense\n\n\n\nThere is no milestone in week 7. That week is yours for the midterm."
+    "text": "Project timeline\n\n\n\n\n\n\n\n\nPoint\nWeek\nMilestone\n\n\n\n\nL04\n4\nOne-page individual idea canvas\n\n\nL05\n5\nTeams form; preliminary topic\n\n\nL06\n6\nProposal: problem, block diagram, components, minimum viable system\n\n\nL08\n9\nDesign review (pins, peripherals, data flow, risks) and first hardware milestone\n\n\nL09\n10\nAcquired and validated sensor data\n\n\nL10\n11\nCommunication milestone — UART logging or command interface\n\n\nL11\n11\nIntegration milestone — input, processing, output, communication connected\n\n\nL12\n11–12 (lab)\nReadiness review: working prototype and test evidence\n\n\nL13\n12\nDemonstration, report, presentation, and individual oral defense\n\n\n\nThere is no milestone in week 8. That week is yours for the midterm."
   },
   {
     "objectID": "lectures/L01_microprocessor-systems-toolchain/lab/EE5203_Microprocessors_Lecture1_Lab.html",
