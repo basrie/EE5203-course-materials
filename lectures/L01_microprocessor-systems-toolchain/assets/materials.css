@@ -69,3 +69,7 @@ code {
   table { font-size: 9.3pt; }
   pre { font-size: 8.7pt; }
 }
+
+/* worksheet tables with blank cells to write in: give the rows room */
+.answer table td { height: 2.8em; vertical-align: top; }
+.answer table th { vertical-align: bottom; }

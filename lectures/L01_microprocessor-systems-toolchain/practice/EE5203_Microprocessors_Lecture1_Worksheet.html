@@ -160,109 +160,191 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="ee5203-l01-practice-worksheet" class="level1 unlisted">
 <h1 class="unlisted">EE5203 L01 Practice Worksheet</h1>
-<p><em>Toolchain reasoning, prediction, and debugging - Basri Erdogan</em></p>
-<p><strong>Expected time:</strong> 30-45 minutes<br>
-<strong>Policy:</strong> Attempt every question before consulting the worked solutions.</p>
-<section id="part-a---core-concepts" class="level2">
-<h2 class="anchored" data-anchor-id="part-a---core-concepts">Part A - Core concepts</h2>
+<p><em>From C code to a blinking LED: what each step proves - Basri Erdogan</em></p>
+<p><strong>Time:</strong> 30-45 minutes</p>
+<p><strong>Rule:</strong> Try every question before you open the solutions. Short answers are fine. One sentence is usually enough.</p>
+<section id="part-a---name-the-parts-5-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-a---name-the-parts-5-minutes">Part A - Name the parts (5 minutes)</h2>
 <ol type="1">
-<li><p>For each item, classify it as a <strong>processor</strong>, <strong>microcontroller</strong>, <strong>peripheral</strong>, <strong>development board</strong>, or <strong>embedded system</strong>. Some descriptions may contain more than one relevant level; state the most useful classification.</p>
-<ol type="a">
-<li>Arm Cortex-M4<br>
-</li>
-<li>STM32F401RE<br>
-</li>
-<li>Nucleo-F401RE<br>
-</li>
-<li>TIM2<br>
-</li>
-<li>A thermostat containing an STM32 board, temperature sensor, and relay</li>
-</ol></li>
-<li><p>Give one example of each constraint:</p>
-<ol type="a">
-<li>timing constraint;<br>
-</li>
-<li>memory constraint;<br>
-</li>
-<li>energy constraint;<br>
-</li>
-<li>safety or reliability constraint.</li>
-</ol></li>
-<li><p>A project builds with zero errors, but the LED never changes. Explain why this is not a contradiction.</p></li>
+<li>Write one word from this list next to each item: <strong>processor</strong>, <strong>microcontroller</strong>, <strong>peripheral</strong>, <strong>board</strong>, <strong>embedded system</strong>.</li>
 </ol>
-</section>
-<section id="part-b---toolchain-sequencing" class="level2">
-<h2 class="anchored" data-anchor-id="part-b---toolchain-sequencing">Part B - Toolchain sequencing</h2>
-<ol start="4" type="1">
-<li><p>Put these actions in a valid order:</p>
-<ul>
-<li>flash firmware;</li>
-<li>link object files;</li>
-<li>edit <code>main.c</code>;</li>
-<li>compile source files;</li>
-<li>observe the LED;</li>
-<li>inspect a variable at a breakpoint.</li>
-</ul></li>
-<li><p>Match each symptom to the most likely initial investigation.</p></li>
-</ol>
+<div class="answer">
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Symptom</th>
-<th>Investigation choices</th>
+<th>Item</th>
+<th>Your word</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Arm Cortex-M4</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>STM32F401RE</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Nucleo-F401RE</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>TIM2 (a timer inside the chip)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>A thermostat: STM32 board + temperature sensor + relay</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="2" type="1">
+<li><p>An embedded system has limits. Give one example for each limit. Example for time: <em>“it must react within 10 ms”</em>.</p>
+<ol type="a">
+<li>Memory: …<br>
+</li>
+<li>Energy: …<br>
+</li>
+<li>Safety: …</li>
+</ol></li>
+<li><p>The console says <strong>“Build: 0 errors”</strong>, but the LED does not blink. Is this possible? <strong>Yes / No.</strong> Explain in one sentence.</p></li>
+</ol>
+</section>
+<section id="part-b---the-path-from-code-to-led-10-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-b---the-path-from-code-to-led-10-minutes">Part B - The path from code to LED (10 minutes)</h2>
+<ol start="4" type="1">
+<li>Put the six steps in order. Write 1 (first) to 6 (last).</li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Order</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Flash the firmware into the chip</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Link the object files into one program</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Edit <code>main.c</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Compile the C files</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Watch the LED</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Look at a variable at a breakpoint</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="5" type="1">
+<li>Each message comes from one step of the path. Match them. Steps: <strong>compile</strong>, <strong>link</strong>, <strong>flash</strong>, <strong>run</strong>.</li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Message or symptom</th>
+<th>Step</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><code>expected ';' before '}'</code></td>
-<td>A. Debug connection/USB</td>
+<td></td>
 </tr>
 <tr class="even">
 <td><code>undefined reference to process_sample</code></td>
-<td>B. Compile-time syntax</td>
+<td></td>
 </tr>
 <tr class="odd">
 <td><code>No ST-LINK detected</code></td>
-<td>C. Link-time definition</td>
+<td></td>
 </tr>
 <tr class="even">
-<td>Program pauses but variable is wrong</td>
-<td>D. Run-time logic/state</td>
+<td>The program stops at the breakpoint, but the variable has the wrong value</td>
+<td></td>
 </tr>
 </tbody>
 </table>
+</div>
 <ol start="6" type="1">
-<li><p>What evidence would you record for each claim?</p>
+<li><p>Each sentence below is a claim. Write <strong>what you would look at</strong> to prove it: the build console, the download message, the debugger, or the board itself.</p>
 <ol type="a">
-<li>The source compiled.<br>
+<li>“My code compiled.”<br>
 </li>
-<li>The firmware was written to the board.<br>
+<li>“The program is inside the chip.”<br>
 </li>
-<li>The loop executed repeatedly.<br>
+<li>“The loop runs again and again.”<br>
 </li>
-<li>The physical output met the timing requirement.</li>
+<li>“The LED blinks once per second.”</li>
 </ol></li>
 </ol>
 </section>
-<section id="part-c---predict-and-trace" class="level2">
-<h2 class="anchored" data-anchor-id="part-c---predict-and-trace">Part C - Predict and trace</h2>
+<section id="part-c---predict-before-you-run-10-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-c---predict-before-you-run-10-minutes">Part C - Predict before you run (10 minutes)</h2>
 <ol start="7" type="1">
-<li>Trace the code without running it.</li>
+<li>Read the code. Do <strong>not</strong> run it.</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>count <span class="op">&lt;</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    count <span class="op">=</span> count <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="text"><code>1  int count = 0;
+2
+3  while (count &lt; 3) {
+4      count = count + 1;
+5  }</code></pre>
 <ol type="a">
-<li>List <code>count</code> after each loop body execution.<br>
+<li>Fill the table.</li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>After loop pass</th>
+<th><code>count</code> is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="2" type="a">
+<li>What is the final value of <code>count</code>?<br>
 </li>
-<li>What is its final value?<br>
-</li>
-<li>On which line would you place a breakpoint to observe the value changing?</li>
+<li>On which line would you put a breakpoint to watch <code>count</code> change? Why there?</li>
 </ol>
 <ol start="8" type="1">
-<li>Predict the observable difference between the two loops.</li>
+<li>Two programs. Only one number is different.</li>
 </ol>
 <div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* Program A */</span>                   <span class="co">/* Program B */</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span>                         <span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span></span>
@@ -270,50 +352,128 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(...);</span>          HAL_GPIO_TogglePin<span class="op">(...);</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span>                   HAL_Delay<span class="op">(</span><span class="dv">100</span><span class="op">);</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>                                 <span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>What remains identical? What changes? What measurement would support your claim?</p>
+<ol type="a">
+<li>In 10 seconds, about how many times does the LED toggle in Program A? In Program B?<br>
+</li>
+<li>What stays the same in both programs?<br>
+</li>
+<li>How would you check your answer with a phone stopwatch?</li>
+</ol>
 <ol start="9" type="1">
-<li>A student changes <code>HAL_Delay(500)</code> to <code>HAL_Delay(100)</code>, presses <strong>F5</strong>, and observes no change. List four distinct explanations and give one test for each.</li>
+<li>You change <code>500</code> to <code>100</code>, press <strong>F5</strong>, and the LED blinks exactly as before. Give <strong>three</strong> possible reasons. For each reason, write one quick test.</li>
 </ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Possible reason</th>
+<th>Quick test</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. &nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="even">
+<td>2. &nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="odd">
+<td>3. &nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
-<section id="part-d---debugging-decisions" class="level2">
-<h2 class="anchored" data-anchor-id="part-d---debugging-decisions">Part D - Debugging decisions</h2>
+<section id="part-d---ask-for-help-the-right-way-10-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-d---ask-for-help-the-right-way-10-minutes">Part D - Ask for help the right way (10 minutes)</h2>
 <ol start="10" type="1">
-<li><p>Rewrite “My code does not work” as a useful debugging report using:</p>
+<li><p>A student says: <em>“My code does not work.”</em> Here are the facts: the build and the download succeeded; LD2 should blink every 0.5 s; LD2 stays off; a breakpoint inside <code>while (1)</code> is never hit. Write the four lines:</p>
 <ul>
-<li>expected behavior;</li>
-<li>observed behavior;</li>
-<li>evidence;</li>
-<li>next test.</li>
+<li><strong>Expected:</strong> …</li>
+<li><strong>Observed:</strong> …</li>
+<li><strong>Evidence:</strong> …</li>
+<li><strong>Next test:</strong> …</li>
 </ul></li>
-<li><p>A breakpoint placed on <code>HAL_GPIO_TogglePin(...)</code> is never reached. Rank the following checks in a sensible order and justify the first two:</p>
-<ul>
-<li>confirm the correct project was flashed;</li>
-<li>replace the USB cable;</li>
-<li>confirm the program reached <code>main</code>;</li>
-<li>inspect whether execution is paused elsewhere;</li>
-<li>check the loop and branch conditions.</li>
-</ul></li>
-<li><p>The LED blinks correctly, but the debugger displays an unexpected local variable value. Give two reasons the LED result alone cannot prove the variable is correct.</p></li>
+<li><p>A breakpoint on <code>HAL_GPIO_TogglePin(...)</code> is never reached. Number these checks from 1 (do first) to 5 (do last). Then explain your number 1 in one sentence.</p></li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Check</th>
+<th>Order</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Replace the USB cable</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Check that the program reaches <code>main()</code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Check that the correct project was flashed</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Check whether the program is stopped somewhere else</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Check the loop and <code>if</code> conditions</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="12" type="1">
+<li>The LED blinks correctly. In the debugger, <code>toggle_count</code> still shows <code>0</code> after 10 seconds. Can the blinking LED prove that <code>toggle_count</code> is correct? <strong>Yes / No.</strong> Give two reasons.</li>
 </ol>
 </section>
-<section id="part-e---project-connection" class="level2">
-<h2 class="anchored" data-anchor-id="part-e---project-connection">Part E - Project connection</h2>
+<section id="part-e---your-project-idea-5-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-e---your-project-idea-5-minutes">Part E - Your project idea (5 minutes)</h2>
 <ol start="13" type="1">
-<li>Choose one potential project and complete this chain:</li>
+<li>Choose one device you know: an alarm clock, a kettle, a bike light, a parking sensor, anything. Fill the five boxes with one word or a short phrase each.</li>
 </ol>
-<pre class="text"><code>input -&gt; acquisition -&gt; processing -&gt; output -&gt; communication</code></pre>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Input</th>
+<th>Acquisition</th>
+<th>Processing</th>
+<th>Output</th>
+<th>Communication</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
 <ol start="14" type="1">
-<li>Define the <strong>minimum viable version</strong> in no more than three sentences. Then name one optional extension that should only begin after the minimum system works.</li>
+<li>Describe the <strong>smallest version that works</strong> in at most three sentences. Then name <strong>one extra feature</strong> you would add only after the small version works.</li>
 </ol>
 </section>
-<section id="exit-self-assessment" class="level2">
-<h2 class="anchored" data-anchor-id="exit-self-assessment">Exit self-assessment</h2>
+<section id="self-check" class="level2">
+<h2 class="anchored" data-anchor-id="self-check">Self-check</h2>
 <p>Mark one:</p>
 <ul class="task-list">
-<li><label><input type="checkbox">Ready for the L01 lab without additional review</label></li>
-<li><label><input type="checkbox">Need to review the toolchain path</label></li>
-<li><label><input type="checkbox">Need help with C control flow</label></li>
-<li><label><input type="checkbox">Need help with the VS Code / CubeMX setup</label></li>
+<li><label><input type="checkbox">I am ready for Lab 1.</label></li>
+<li><label><input type="checkbox">I need to review the path from code to LED (Part B).</label></li>
+<li><label><input type="checkbox">I need help with C loops and variables (Part C).</label></li>
+<li><label><input type="checkbox">I need help with the VS Code / CubeMX setup.</label></li>
 </ul>
 
 
