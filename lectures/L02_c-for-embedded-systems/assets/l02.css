@@ -285,3 +285,8 @@
   max-height: 540px;
   margin-top: 0.45em;
 }
+
+/* built-in types reference (L02) */
+.reveal section.types-table table { font-size: 0.66em; margin-top: 0.3em; line-height: 1.25; }
+.reveal section.types-table table th, .reveal section.types-table table td { padding: 0.28em 0.55em; }
+.reveal section.types-table .caption { font-size: 0.72em; margin-top: 0.5em; }

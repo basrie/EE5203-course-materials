@@ -6,8 +6,8 @@
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.42">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.43">
 
   <meta name="author" content="Basri Erdogan">
   <title>EE5203 Microprocessors</title>
@@ -284,6 +284,90 @@ Basri Erdogan
 </div>
 <div class="source-note">
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=307">C11 draft N1570, §7.20 <em>Integer types</em> <code>&lt;stdint.h&gt;</code> — p.&nbsp;307</a>.</p>
+</div>
+</section>
+<section id="built-in-types-on-the-stm32f401re" class="slide level2 types-table">
+<h2>Built-in types on the STM32F401RE</h2>
+<div class="stage-strip" aria-hidden="true">
+<span class="s1 on">Data</span><span class="s2">Loop</span><span class="s3">Body</span><span class="s4">Verdict</span><span class="s5">Proof</span>
+</div>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Bytes</th>
+<th>Range on our board</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>char</code></td>
+<td>1</td>
+<td><code>0…255</code> — <strong>unsigned on ARM</strong>, signed on a PC</td>
+<td>text, raw bytes</td>
+</tr>
+<tr class="even">
+<td><code>short</code></td>
+<td>2</td>
+<td><code>±32 767</code></td>
+<td>rarely; write <code>int16_t</code></td>
+</tr>
+<tr class="odd">
+<td><code>int</code></td>
+<td>4</td>
+<td><code>±2.1 × 10⁹</code></td>
+<td>counters, sums, results</td>
+</tr>
+<tr class="even">
+<td><code>long</code></td>
+<td>4</td>
+<td><code>= int</code> here, 8 bytes on a 64-bit PC</td>
+<td>avoid in embedded code</td>
+</tr>
+<tr class="odd">
+<td><code>long long</code></td>
+<td>8</td>
+<td><code>±9.2 × 10¹⁸</code></td>
+<td>timestamps, big products</td>
+</tr>
+<tr class="even">
+<td><code>float</code></td>
+<td>4</td>
+<td>~7 digits · <strong>hardware FPU</strong></td>
+<td>sensor maths</td>
+</tr>
+<tr class="odd">
+<td><code>double</code></td>
+<td>8</td>
+<td>~16 digits · <strong>software</strong> on this M4F</td>
+<td>avoid unless needed</td>
+</tr>
+<tr class="even">
+<td><code>bool</code></td>
+<td>1</td>
+<td><code>true</code> / <code>false</code> · <code>&lt;stdbool.h&gt;</code></td>
+<td>flags, status</td>
+</tr>
+<tr class="odd">
+<td><code>uint8_t</code> … <code>uint32_t</code></td>
+<td>1 · 2 · 4</td>
+<td>exactly what the name says · <code>&lt;stdint.h&gt;</code></td>
+<td>ADC samples, registers, bytes</td>
+</tr>
+</tbody>
+</table>
+<div class="caption">
+<p>Sizes are <strong>toolchain facts</strong> (<code>arm-none-eabi-gcc</code>, ILP32), not C rules — C only promises <code>char ≤ short ≤ int ≤ long</code>. That is why embedded code names the size: <code>&lt;stdint.h&gt;</code>. Unsigned arithmetic <strong>wraps</strong>: <code>(uint8_t)255 + 1 == 0</code>.</p>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=39">C11 draft N1570, §6.2.5 <em>Types</em> — p.&nbsp;39</a> · sizes per the Arm AAPCS32 ABI.</p>
 </div>
 </section>
 <section id="selecting-one-element" class="slide level2">

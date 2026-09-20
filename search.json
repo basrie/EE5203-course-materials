@@ -3374,6 +3374,13 @@
     "text": "Why uint16_t\n\nDataLoopBodyVerdictProof\n\n\n\nuint unsigned: no negative side · 16 sixteen bits: 0 to 65535 · _t a standard type name. The sensor band 0…4095 fits with room to spare; use plain int for counters and results — eight clamped samples total at most 8 × 4095 = 32760, well inside int.\n\n\nDeep dive: C11 draft N1570, §7.20 Integer types &lt;stdint.h&gt; — p. 307."
   },
   {
+    "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#built-in-types-on-the-stm32f401re",
+    "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#built-in-types-on-the-stm32f401re",
+    "title": "EE5203 Microprocessors",
+    "section": "Built-in types on the STM32F401RE",
+    "text": "Built-in types on the STM32F401RE\n\nDataLoopBodyVerdictProof\n\n\n\n\n\n\n\n\n\n\nType\nBytes\nRange on our board\nUse it for\n\n\n\n\nchar\n1\n0…255 — unsigned on ARM, signed on a PC\ntext, raw bytes\n\n\nshort\n2\n±32 767\nrarely; write int16_t\n\n\nint\n4\n±2.1 × 10⁹\ncounters, sums, results\n\n\nlong\n4\n= int here, 8 bytes on a 64-bit PC\navoid in embedded code\n\n\nlong long\n8\n±9.2 × 10¹⁸\ntimestamps, big products\n\n\nfloat\n4\n~7 digits · hardware FPU\nsensor maths\n\n\ndouble\n8\n~16 digits · software on this M4F\navoid unless needed\n\n\nbool\n1\ntrue / false · &lt;stdbool.h&gt;\nflags, status\n\n\nuint8_t … uint32_t\n1 · 2 · 4\nexactly what the name says · &lt;stdint.h&gt;\nADC samples, registers, bytes\n\n\n\n\nSizes are toolchain facts (arm-none-eabi-gcc, ILP32), not C rules — C only promises char ≤ short ≤ int ≤ long. That is why embedded code names the size: &lt;stdint.h&gt;. Unsigned arithmetic wraps: (uint8_t)255 + 1 == 0.\n\n\nDeep dive: C11 draft N1570, §6.2.5 Types — p. 39 · sizes per the Arm AAPCS32 ABI."
+  },
+  {
     "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#selecting-one-element",
     "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#selecting-one-element",
     "title": "EE5203 Microprocessors",
