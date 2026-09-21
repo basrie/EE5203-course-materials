@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aliasing Interactive Lab</title>
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --sample-red: #dc3545;
+            --recon-magenta: #e83e8c;
+            --text-dark: #212529;
+            --bg-light: #f8f9fa;
+            --accent-green: #28a745;
+        }
+
+        body {
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-dark);
+            background-color: #fff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        h1 { color: #1a5c91; margin-bottom: 5px; }
+        .subtitle { color: #666; margin-bottom: 20px; }
+
+        .card {
+            background: var(--bg-light);
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        /* Controls Grid */
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .control-group label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .slider-row { display: flex; align-items: center; gap: 15px; }
+        input[type=range] { flex-grow: 1; cursor: pointer; height: 6px; }
+        .val-box { 
+            background: #eee; padding: 4px 8px; border-radius: 4px; 
+            font-family: monospace; font-weight: bold; min-width: 70px; text-align: center;
+        }
+
+        /* Visualization Area */
+        .canvas-wrapper {
+            background: white;
+            border: 1px solid #ccc;
+            position: relative;
+            cursor: crosshair;
+            border-radius: 4px;
+        }
+        canvas { width: 100%; height: 400px; display: block; }
+
+        .axis-label {
+            position: absolute;
+            font-size: 0.75rem;
+            color: #888;
+            pointer-events: none;
+            background: rgba(255,255,255,0.8);
+            padding: 2px;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .btn-primary { background: var(--primary-blue); color: white; }
+        .btn-primary:hover { background: #0056b3; }
+        
+        .btn-outline { background: transparent; border: 1px solid #aaa; color: #555; }
+        .btn-outline:hover { background: #eee; }
+        .btn-outline.active { background: #555; color: white; border-color: #555; }
+
+        .legend { display: flex; gap: 20px; font-size: 0.9rem; margin-left: auto; }
+        .legend-item { display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;}
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .legend-item.muted { opacity: 0.4; text-decoration: line-through; }
+
+        /* Status Panel */
+        .status-panel {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 5px solid #ccc;
+            background: #fff;
+        }
+        .status-ok { border-color: var(--accent-green); background: #f0fff4; }
+        .status-bad { border-color: var(--sample-red); background: #fff5f5; }
+        
+        .math-highlight { font-family: monospace; font-weight: bold; }
+        .alias-freq { font-size: 1.2rem; font-weight: bold; color: var(--recon-magenta); }
+
+        /* Preset Buttons */
+        .presets {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .preset-label { font-weight: bold; margin-right: 10px; align-self: center; }
+        .btn-sm { font-size: 0.8rem; padding: 5px 10px; background: #e2e6ea; color: #333; }
+        .btn-sm:hover { background: #dbe0e5; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Aliasing Interactive Lab</h1>
+    <div class="subtitle">Explore how Sampling Rate (f<sub>s</sub>) affects signal reconstruction.</div>
+
+    <div class="card">
+        
+        <!-- Visualization Controls -->
+        <div class="toolbar">
+            <button id="btnPlayPause" class="btn-primary">▶ Animate Signal</button>
+            
+            <div class="legend">
+                <div class="legend-item" id="toggleAnalog" title="Click to toggle">
+                    <div class="dot" style="background: var(--primary-blue);"></div> <span>Input (Analog)</span>
+                </div>
+                <div class="legend-item" id="toggleSamples" title="Click to toggle">
+                    <div class="dot" style="background: var(--sample-red);"></div> <span>Samples</span>
+                </div>
+                <div class="legend-item" id="toggleRecon" title="Click to toggle">
+                    <div class="dot" style="background: var(--recon-magenta);"></div> <span>Digital Reconstruction</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="canvas-wrapper">
+            <div class="axis-label" style="top: 5px; left: 5px;">Amplitude</div>
+            <div class="axis-label" style="bottom: 5px; right: 5px;">Time (1.0s)</div>
+            <canvas id="simCanvas"></canvas>
+        </div>
+
+        <!-- Status & Math -->
+        <div id="statusPanel" class="status-panel status-ok">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div>
+                    <div id="statusTitle" style="font-weight:bold; font-size:1.1rem; margin-bottom:5px;">Nyquist Satisfied</div>
+                    <div id="statusDesc" style="font-size:0.95rem;">The Digital Reconstruction perfectly matches the Input.</div>
+                </div>
+                <div style="text-align:right;">
+                    <div>Apparent Frequency:</div>
+                    <div class="alias-freq" id="aliasDisplay">10.0 Hz</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sliders -->
+        <div class="controls">
+            <div class="control-group">
+                <label>
+                    <span>Input Signal Freq (f<sub>signal</sub>)</span>
+                    <span class="math-highlight" id="valSignal">10.0 Hz</span>
+                </label>
+                <div class="slider-row">
+                    <span style="font-size:0.8rem">1Hz</span>
+                    <input type="range" id="freqSignal" min="1" max="50" step="0.5" value="10">
+                    <span style="font-size:0.8rem">50Hz</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label>
+                    <span>Sampling Rate (f<sub>s</sub>)</span>
+                    <span class="math-highlight" id="valSample">30.0 Hz</span>
+                </label>
+                <div class="slider-row">
+                    <span style="font-size:0.8rem">1Hz</span>
+                    <input type="range" id="freqSample" min="1" max="60" step="1" value="30">
+                    <span style="font-size:0.8rem">60Hz</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Educational Presets -->
+        <div class="presets">
+            <span class="preset-label">Load Scenario:</span>
+            <button class="btn-sm" onclick="setScenario(5, 20)">Perfect Sampling</button>
+            <button class="btn-sm" onclick="setScenario(19, 20)">Beating (Almost Aliased)</button>
+            <button class="btn-sm" onclick="setScenario(20, 20)">Critical Limit (Flatline)</button>
+            <button class="btn-sm" onclick="setScenario(29, 30)">Wagon Wheel (Reverse 1Hz)</button>
+            <button class="btn-sm" onclick="setScenario(40, 10)">Heavy Aliasing (Input 40, Looks like DC)</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Configuration ---
+    const canvas = document.getElementById('simCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // State Variables
+    let fSignal = 10.0;
+    let fSample = 30.0;
+    let isAnimating = false;
+    let timeOffset = 0; // For animation
+    let lastFrameTime = 0;
+
+    // Toggles
+    let showAnalog = true;
+    let showSamples = true;
+    let showRecon = true;
+
+    // Elements
+    const sliderSignal = document.getElementById('freqSignal');
+    const sliderSample = document.getElementById('freqSample');
+    const valSignal = document.getElementById('valSignal');
+    const valSample = document.getElementById('valSample');
+    const btnPlayPause = document.getElementById('btnPlayPause');
+    const statusPanel = document.getElementById('statusPanel');
+    const statusTitle = document.getElementById('statusTitle');
+    const statusDesc = document.getElementById('statusDesc');
+    const aliasDisplay = document.getElementById('aliasDisplay');
+
+    // Constants
+    const TIME_WINDOW = 1.0; // Seconds shown on x-axis
+    const AMPLITUDE = 0.8;   // Visual vertical scaling
+
+    // --- Sinc Math ---
+    // Normalized sinc: sin(pi*x)/(pi*x)
+    function sinc(x) {
+        if (Math.abs(x) < 0.0001) return 1.0;
+        const piX = Math.PI * x;
+        return Math.sin(piX) / piX;
+    }
+
+    // --- Drawing Logic ---
+    function resize() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width * window.devicePixelRatio;
+        canvas.height = 400 * window.devicePixelRatio;
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        // CSS scaling
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = '400px';
+        draw();
+    }
+
+    function draw() {
+        const w = canvas.width / window.devicePixelRatio;
+        const h = canvas.height / window.devicePixelRatio;
+        const midY = h / 2;
+        const scaleY = midY * AMPLITUDE;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // 1. Draw Grid
+        drawGrid(w, h, midY);
+
+        // 2. Calculate Samples (We calculate them first because Recon needs them)
+        // We pad the range to ensure Sinc summation is accurate at the edges
+        const padding = 0.5; // seconds
+        const startT = -padding;
+        const endT = TIME_WINDOW + padding;
+        
+        // Samples array: stores { t_display, val }
+        // t_display is relative to the canvas window (0 to 1.0)
+        const samples = [];
+        const totalSamples = Math.ceil((endT - startT) * fSample);
+        
+        // Align grid of samples to absolute time 0
+        const startK = Math.floor(startT * fSample); 
+        
+        for (let i = 0; i < totalSamples; i++) {
+            let k = startK + i;
+            let t_absolute = k / fSample; // The absolute time of this sample
+            
+            // Value depends on fSignal and the current animation timeOffset
+            let val = Math.sin(2 * Math.PI * fSignal * (t_absolute + timeOffset));
+            samples.push({ t: t_absolute, val: val });
+        }
+
+        // 3. Draw Analog Signal (Blue)
+        if (showAnalog) {
+            ctx.beginPath();
+            ctx.strokeStyle = "rgba(0, 123, 255, 0.6)";
+            ctx.lineWidth = 2;
+            ctx.setLineDash([]);
+            
+            let first = true;
+            // Use a fixed step for drawing the analog curve
+            const step = w / 400; 
+            for (let x = 0; x <= w; x += step) {
+                const t_local = (x / w) * TIME_WINDOW;
+                const val = Math.sin(2 * Math.PI * fSignal * (t_local + timeOffset));
+                const y = midY - val * scaleY;
+                if (first) { ctx.moveTo(x, y); first = false; }
+                else { ctx.lineTo(x, y); }
+            }
+            ctx.stroke();
+        }
+
+        // 4. Draw Reconstruction (Magenta Dashed)
+        if (showRecon) {
+            ctx.beginPath();
+            ctx.strokeStyle = "#e83e8c";
+            ctx.lineWidth = 3;
+            ctx.setLineDash([8, 6]); // dashed
+
+            let first = true;
+            const step = w / 200; // optimization
+            for (let x = 0; x <= w; x += step) {
+                const t_local = (x / w) * TIME_WINDOW;
+                let reconVal = 0;
+
+                // Sum sincs
+                for (let s of samples) {
+                    // Normalized time difference
+                    // x in sinc is (t - t_sample) * fSample
+                    const sincArg = (t_local - s.t) * fSample;
+                    // Optimization: Sinc decays fast. 
+                    if (Math.abs(sincArg) < 10) {
+                        reconVal += s.val * sinc(sincArg);
+                    }
+                }
+
+                const y = midY - reconVal * scaleY;
+                if (first) { ctx.moveTo(x, y); first = false; }
+                else { ctx.lineTo(x, y); }
+            }
+            ctx.stroke();
+        }
+
+        // 5. Draw Samples (Red Dots)
+        if (showSamples) {
+            ctx.fillStyle = "#dc3545";
+            for (let s of samples) {
+                if (s.t >= 0 && s.t <= TIME_WINDOW) {
+                    const x = (s.t / TIME_WINDOW) * w;
+                    const y = midY - s.val * scaleY;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 5, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+            }
+        }
+    }
+
+    function drawGrid(w, h, midY) {
+        ctx.beginPath();
+        ctx.strokeStyle = "#f0f0f0";
+        ctx.lineWidth = 1;
+        // Horizontal center
+        ctx.moveTo(0, midY); ctx.lineTo(w, midY);
+        // Vertical ticks
+        for(let i=0; i<=10; i++) {
+            let x = (i/10)*w;
+            ctx.moveTo(x, 0); ctx.lineTo(x, h);
+        }
+        ctx.stroke();
+    }
+
+    // --- Logic & Updates ---
+
+    function updateStatus() {
+        const nyquist = fSignal * 2;
+        const ratio = fSample / fSignal;
+        
+        // Calculate Aliased Frequency
+        // Formula: f_alias = | f_signal - N * f_sample |
+        // We find the N that brings the result closest to 0
+        let k = Math.round(fSignal / fSample);
+        let fAlias = Math.abs(fSignal - k * fSample);
+        
+        // Direction detection for educational text
+        // If k * fSample > fSignal, the alias is "negative" (reversed phase)
+        let isReversed = (k * fSample > fSignal);
+
+        if (fSample >= nyquist) {
+            statusPanel.className = "status-panel status-ok";
+            statusTitle.textContent = "✔ Nyquist Satisfied (Accurate Reconstruction)";
+            statusDesc.innerHTML = `Since f<sub>s</sub> (${fSample}Hz) > 2·f<sub>signal</sub>, the reconstruction is perfect.`;
+            aliasDisplay.style.color = "#28a745";
+            aliasDisplay.textContent = fSignal.toFixed(1) + " Hz (Match)";
+        } else {
+            statusPanel.className = "status-panel status-bad";
+            statusTitle.textContent = "⚠ Aliasing Detected!";
+            
+            let desc = `Sampling is too slow. The digital system 'sees' a ${fAlias.toFixed(1)} Hz signal instead of ${fSignal} Hz.`;
+            
+            if (fAlias < 0.01) desc += " (Appears as DC / Flat line)";
+            else if (isReversed) desc += " <strong>(Phase Reversed / Moving Backwards)</strong>";
+            
+            statusDesc.innerHTML = desc;
+            aliasDisplay.style.color = "#dc3545";
+            aliasDisplay.textContent = fAlias.toFixed(1) + " Hz";
+        }
+
+        valSignal.textContent = fSignal.toFixed(1) + " Hz";
+        valSample.textContent = fSample.toFixed(1) + " Hz";
+    }
+
+    function animate(timestamp) {
+        if (!isAnimating) return;
+        if (!lastFrameTime) lastFrameTime = timestamp;
+        const dt = (timestamp - lastFrameTime) / 1000;
+        lastFrameTime = timestamp;
+
+        // Advance time
+        timeOffset += dt;
+        
+        draw();
+        requestAnimationFrame(animate);
+    }
+
+    function toggleAnimation() {
+        isAnimating = !isAnimating;
+        btnPlayPause.textContent = isAnimating ? "⏸ Stop Animation" : "▶ Animate Signal";
+        if (isAnimating) {
+            lastFrameTime = 0;
+            requestAnimationFrame(animate);
+        }
+    }
+
+    // --- Event Listeners ---
+
+    sliderSignal.addEventListener('input', (e) => {
+        fSignal = parseFloat(e.target.value);
+        updateStatus();
+        if(!isAnimating) draw();
+    });
+
+    sliderSample.addEventListener('input', (e) => {
+        fSample = parseFloat(e.target.value);
+        updateStatus();
+        if(!isAnimating) draw();
+    });
+
+    btnPlayPause.addEventListener('click', toggleAnimation);
+
+    // Layer Toggles
+    function setupToggle(id, flagVar, setFlag) {
+        const el = document.getElementById(id);
+        el.addEventListener('click', () => {
+            setFlag(!flagVar);
+            flagVar = !flagVar; // update local closure
+            el.classList.toggle('muted', !flagVar);
+            if(!isAnimating) draw();
+        });
+    }
+    setupToggle('toggleAnalog', showAnalog, (v) => showAnalog = v);
+    setupToggle('toggleSamples', showSamples, (v) => showSamples = v);
+    setupToggle('toggleRecon', showRecon, (v) => showRecon = v);
+
+    window.addEventListener('resize', resize);
+
+    // Helper for preset buttons
+    window.setScenario = function(sig, samp) {
+        fSignal = sig;
+        fSample = samp;
+        sliderSignal.value = sig;
+        sliderSample.value = samp;
+        updateStatus();
+        // Reset animation time to 0 for clarity
+        timeOffset = 0; 
+        draw();
+        
+        // Auto start animation for Wagon Wheel scenarios
+        if (!isAnimating && (sig === 29 || sig === 19)) {
+            toggleAnimation();
+        }
+    };
+
+    // Init
+    resize();
+    updateStatus();
+    // Optional: Start animated to grab attention?
+    // toggleAnimation(); 
+
+</script>
+
+</body>
+</html>

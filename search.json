@@ -3350,7 +3350,7 @@
     "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#l01-exit-ticket-the-answers",
     "title": "EE5203 Microprocessors",
     "section": "L01 exit ticket — the answers",
-    "text": "L01 exit ticket — the answers\n\n\nEVIDENCE\nWhat observation proves new firmware reached the board?\nA successful download report and behaviour that matches the changed code. A blinking LED alone proves nothing: the old firmware blinked too.\n\n\nPREDICTION\nWhat changes when 500 becomes 100?\nThe LED toggles every 100 ms — five times faster — and toggle_count climbs five times faster. Everything else stays the same.\n\n\nQUESTION\nWhich part of the workflow was least clear?\nTop answer from your forms goes here before class — we open the lab brief with it."
+    "text": "L01 exit ticket — the answers\n\n\nEVIDENCE\nWhat observation proves new firmware reached the board?\nA successful download report and behaviour that matches the changed code. A blinking LED alone proves nothing: the old firmware blinked too.\n\n\nPREDICTION\nWhat changes when 500 becomes 100?\nThe LED toggles every 100 ms — five times faster — and toggle_count climbs five times faster. Everything else stays the same.\n\n\nQUESTION\nWhich part of the workflow was least clear?\nMost of you: nothing — 10 of 18 wrote that everything was clear. The other 8 split three ways: C itself, as beginners (3) · HAL_Delay and timing (3) · “Download OK” versus proving it runs (2). The last one is where today starts."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#todays-route",
@@ -3511,7 +3511,7 @@
     "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#laboratory-mission",
     "title": "EE5203 Microprocessors",
     "section": "Laboratory mission",
-    "text": "Laboratory mission\n\n\nA COPY\nL01 project → EE5203_L02_&lt;no&gt;, builds clean\n\n\nB DECLARE\neight uint16_t values, five int results\n\n\nC LOOP\nclamp · add · count, single-stepped\n\n\nD VERDICT\naverage, status, prediction table\n\n\nE CHANGE\nyour rule variant: predict, prove, explain\n\n\n\nRules: values above 4095 become 4095 · high means above 2500 · status -1 below 1500, 1 above 3000, else 0. Prediction table before debugging. Homework (10 pts) on CATS after the lab, due before Lab 3. Project track: write down what your project’s input data will be and what processing it needs."
+    "text": "Laboratory mission\n\n\nA COPY\nL01 project → EE5203_L02_&lt;no&gt;, builds clean\n\n\nB DECLARE\neight uint16_t values, five int results\n\n\nC LOOP\nclamp · add · count, single-stepped\n\n\nD VERDICT\naverage, status, prediction table\n\n\nE CHANGE\nyour rule variant: predict, prove, explain\n\n\n\nTomorrow is Lab 1 (Blinky) — the L01 mission: do the L01 pre-lab quiz in CATS (Tests & Quizzes) and bring your entry ticket. This mission is Lab 2, 29/30 September, and it starts from the project you build tomorrow. Before Lab 2: its pre-lab quiz in CATS.Rules: values above 4095 become 4095 · high means above 2500 · status -1 below 1500, 1 above 3000, else 0. Prediction table before debugging. Homework (10 pts) on CATS after the lab, due before Lab 3. Project track: write down what your project’s input data will be and what processing it needs."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#exit-ticket",
