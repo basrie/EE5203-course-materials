@@ -3518,7 +3518,7 @@
     "href": "lectures/L02_c-for-embedded-systems/theory/EE5203_Microprocessors_Lecture2_Theory.html#exit-ticket",
     "title": "EE5203 Microprocessors",
     "section": "Exit ticket",
-    "text": "Exit ticket\n\n\nint values[4] = {3, 7, 2, 8};\nint total = 0;\n\nfor (int i = 0; i &lt; 4; i++) {\n    if (values[i] &gt; 4) {\n        total += values[i];\n    }\n}\n\nWhich elements are added?\nWhat is the final value of total?\nWhat invalid access would occur if the condition were i &lt;= 4?\n\n\n\nScan — or open the form — and answer before you leave; sign in with your Google account. Ungraded; your answers open the next lecture.\n\n\nNext: functions, arrays, strings, and modular C.  ·  Every concept in this lecture, with page-linked sources: academic references."
+    "text": "Exit ticket\n\n\nint values[4] = {3, 7, 2, 8};\nint total = 0;\n\nfor (int i = 0; i &lt; 4; i++) {\n    if (values[i] &gt; 4) {\n        total += values[i];\n    }\n}\n\nWhich elements are added?\nWhat is the final value of total?\nWhat invalid access would occur if the condition were i &lt;= 4?\nWhich part of today’s lecture is least clear to you? One sentence.\n\n\n\nScan — or open the form — and answer before you leave; sign in with your Google account. Ungraded; your answers open the next lecture.\n\n\nNext: functions, arrays, strings, and modular C.  ·  Every concept in this lecture, with page-linked sources: academic references."
   },
   {
     "objectID": "lectures/L02_c-for-embedded-systems/practice/EE5203_Microprocessors_Lecture2_Study_Sheet.html",
