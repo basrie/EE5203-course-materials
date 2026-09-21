@@ -168,7 +168,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul class="task-list">
 <li><label><input type="checkbox">Complete the five-question <strong>pre-lab quiz</strong> in CATS (<strong>Tests &amp; Quizzes</strong>). Two attempts; the higher score counts.</label></li>
 <li><label><input type="checkbox">Bring the Question 5 entry ticket.</label></li>
-<li><label><input type="checkbox">Confirm VS Code + STM32CubeMX are installed (see the Reference page’s toolchain table) or identify that you need a laboratory PC.</label></li>
+<li><label><input type="checkbox">Lab PCs have everything installed: log in with your own student account. On your own laptop, install the tools named in the Reference page first.</label></li>
 <li><label><input type="checkbox">Bring a USB <strong>data</strong> cable if using your own equipment.</label></li>
 </ul>
 </section>
@@ -253,9 +253,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Connect the board through the ST-LINK USB connector.</li>
 <li>In <strong>STM32CubeMX</strong>: create a project for <strong>NUCLEO-F401RE</strong> (Board Selector) and accept the board’s default peripheral initialization.</li>
 <li>Confirm that PA5/LD2 is configured as a GPIO output.</li>
-<li>In Project Manager set the name, the location, and <strong>Toolchain/IDE = CMake</strong>; generate code.</li>
-<li>Open the generated folder in <strong>VS Code</strong> and locate the protected <code>USER CODE</code> regions in <code>main.c</code>.</li>
-<li>Build the unchanged project with zero errors.</li>
+<li>In Project Manager set the name (no spaces), the location <code>C:\Work\&lt;studentnumber&gt;</code>, and <strong>Toolchain/IDE = CMake</strong>; generate code.</li>
+<li>Copy the folder <code>C:\Users\Public\EE5203_template\.vscode</code> into the generated project folder, next to the <code>.ioc</code> file (Reference page → Workflow, <em>Template</em> row). Without it VS Code cannot build or debug.</li>
+<li>Open the generated folder in <strong>VS Code</strong> (File → Open Folder → the folder that contains the <code>.ioc</code>; choose preset <strong>Debug</strong> if asked) and locate the protected <code>USER CODE</code> regions in <code>main.c</code>.</li>
+<li>Build the unchanged project with <strong>Ctrl+Shift+B</strong>: zero errors, and a <code>Linking C executable</code> line at the end.</li>
 </ol>
 <p><strong>Evidence for Checkpoint A:</strong> Show the selected board, PA5 configuration, and a successful build message.</p>
 </section>
@@ -264,7 +265,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Inside the <strong>existing generated</strong> <code>while (1)</code>, between <code>/* USER CODE BEGIN 3 */</code> and <code>/* USER CODE END 3 */</code>, add these statements. Do not create a second infinite loop.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Build, flash, and verify a stable blink. Explain why the physical observation is stronger evidence than the build message alone.</p>
+<p>Build with <strong>Ctrl+Shift+B</strong>, flash with <strong>F5</strong> (Debug (ST-LINK)), press Continue, and verify a stable blink. Explain why the physical observation is stronger evidence than the build message alone.</p>
 </section>
 <section id="checkpoint-c---observe-breakpoint-and-variable" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-c---observe-breakpoint-and-variable">Checkpoint C - Observe: breakpoint and variable</h2>

@@ -182,7 +182,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>select the board, configure pins, generate the C project</td>
 </tr>
 <tr class="even">
-<td><strong>VS Code</strong> (STM32 profile)</td>
+<td><strong>VS Code</strong> (lab shortcut <strong>VS Code - EE Labs</strong>)</td>
 <td>edit, build, flash, and debug that project</td>
 </tr>
 <tr class="odd">
@@ -191,7 +191,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>On laboratory PCs, open VS Code through the <strong>EE5203</strong> desktop shortcut — it selects the course profile with the correct extensions.</p>
+<p>On laboratory PCs open VS Code through the <strong>VS Code - EE Labs</strong> desktop shortcut. Every extension the course needs is preinstalled and shared; you cannot add or remove extensions there, and you do not need to. The built-in terminal is Command Prompt.</p>
 </section>
 <section id="workflow-reference" class="level2">
 <h2 class="anchored" data-anchor-id="workflow-reference">Workflow reference</h2>
@@ -221,30 +221,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td>Generate</td>
-<td>Project Manager: name, location (your <code>C:\Work</code> folder), <strong>Toolchain/IDE = CMake</strong> → Generate Code</td>
-<td>project folder with <code>Core/Inc</code>, <code>Core/Src</code>, <code>main.c</code>, <code>CMakeLists.txt</code></td>
+<td>Project Manager: name (no spaces), location <strong><code>C:\Work\&lt;studentnumber&gt;</code></strong>, <strong>Toolchain/IDE = CMake</strong> → Generate Code</td>
+<td>project folder with <code>Core/Inc</code>, <code>Core/Src</code>, <code>main.c</code>, <code>CMakeLists.txt</code>, <code>&lt;name&gt;.ioc</code></td>
 </tr>
 <tr class="even">
-<td>Open</td>
-<td>VS Code → File → Open Folder → the generated folder</td>
-<td>STM32/CMake extension picks up the project (accept the default preset if asked)</td>
+<td>Template</td>
+<td>copy the <strong>folder</strong> <code>C:\Users\Public\EE5203_template\.vscode</code> into the generated project folder, next to the <code>.ioc</code> (once per project)</td>
+<td><code>&lt;project&gt;\.vscode</code> with five files: <code>tasks.json</code>, <code>launch.json</code>, <code>settings.json</code>, <code>fix_ld.cmake</code>, <code>STM32F401RETx_FLASH.ld</code></td>
 </tr>
 <tr class="odd">
+<td>Open</td>
+<td>VS Code → File → Open Folder → the generated folder (the one that contains the <code>.ioc</code>). If CMake Tools asks for a preset choose <strong>Debug</strong>; if C/C++ offers to configure IntelliSense or create a build task, choose <strong>No</strong></td>
+<td>folder name in the title bar; <code>.vscode</code> visible in the Explorer</td>
+</tr>
+<tr class="even">
 <td>Edit</td>
 <td><code>Core/Src/main.c</code>, inside protected <code>USER CODE</code> regions</td>
 <td>application statements preserved on regeneration</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Build</td>
-<td><strong>Build</strong> button in the status bar (or Terminal → Run Build Task)</td>
-<td><code>Build finished</code> with <strong>0 errors</strong> in the terminal; <code>.elf</code> in <code>build/</code></td>
+<td><strong>Ctrl+Shift+B</strong> (Terminal → Run Build Task). Not the status-bar <em>Build</em> button: it skips the linker-script repair, see troubleshooting</td>
+<td><code>[N/N] Linking C executable &lt;name&gt;.elf</code> with no <code>FAILED</code> line; <code>.elf</code> in <code>build/Debug/</code></td>
+</tr>
+<tr class="even">
+<td>Flash + run</td>
+<td>press <strong>F5</strong> (or Run and Debug view → ▷ <strong>Debug (ST-LINK)</strong>). The ▷ in the editor’s title bar is <em>not</em> the debugger</td>
+<td>ST-LINK GDB server lines in the Debug Console; execution stops at <code>main</code></td>
 </tr>
 <tr class="odd">
-<td>Flash + run</td>
-<td>press <strong>F5</strong> (Run → Start Debugging)</td>
-<td>firmware downloads over ST-LINK; execution stops at <code>main</code></td>
-</tr>
-<tr class="even">
 <td>Debug</td>
 <td>debug toolbar + side panels</td>
 <td>execution marker, breakpoints, variables</td>
@@ -367,7 +372,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Confirm the board’s power LED.</li>
 <li>Use the ST-LINK USB connector and a known <strong>data</strong> cable and port.</li>
 <li>Close other software that may hold ST-LINK (CubeMX programmer window, a second debug session).</li>
-<li>Reconnect the board, then press F5 again.</li>
+<li>Reconnect the board, then press F5 again. The first F5 after plugging the board in sometimes fails on its own; a second F5 usually succeeds.</li>
 </ul>
 </section>
 <section id="build-fails" class="level3">
@@ -387,6 +392,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Inspect <code>toggle_count</code> to determine whether the loop executes.</li>
 </ul>
 </section>
+<section id="linker-error-stm32f401retx_flash.ld56-syntax-error" class="level3">
+<h3 class="anchored" data-anchor-id="linker-error-stm32f401retx_flash.ld56-syntax-error">Linker error: <code>STM32F401RETx_FLASH.ld:56: syntax error</code></h3>
+<ul>
+<li>Known STM32CubeMX bug: the generated linker script loses its memory-region names (<code>ORIGIN() + LENGTH()</code>, <code>} &gt;</code> with nothing after it).</li>
+<li>Build with <strong>Ctrl+Shift+B</strong>: the template’s first task repairs the file before compiling. The status-bar <em>Build</em> button skips that step.</li>
+<li>Manual fix: copy <code>C:\Users\Public\EE5203_template\.vscode\STM32F401RETx_FLASH.ld</code> over the one in your project folder. CubeMX breaks it again on every regeneration, so keep building with Ctrl+Shift+B.</li>
+</ul>
+</section>
+<section id="vs-code-asks-you-to-choose-a-debugger-or-f5-does-nothing" class="level3">
+<h3 class="anchored" data-anchor-id="vs-code-asks-you-to-choose-a-debugger-or-f5-does-nothing">VS Code asks you to “choose a debugger”, or F5 does nothing</h3>
+<ul>
+<li>The <code>.vscode</code> folder is missing from the project, or you opened the wrong folder. Check that <code>&lt;project&gt;\.vscode\launch.json</code> exists and that the title bar shows the project folder, then Ctrl+Shift+P → <strong>Reload Window</strong>.</li>
+<li>Use F5 or the ▷ next to <strong>Debug (ST-LINK)</strong> in the Run and Debug view, not the ▷ in the editor’s title bar.</li>
+</ul>
+</section>
+<section id="cubemx-offers-to-download-the-stm32cubef4-package" class="level3">
+<h3 class="anchored" data-anchor-id="cubemx-offers-to-download-the-stm32cubef4-package">CubeMX offers to download the STM32CubeF4 package</h3>
+<ul>
+<li>The package is already on the lab PC. Help → <strong>Updater Settings</strong> → Repository Folder: type <code>C:/Users/Public/STM32Cube/Repository</code> (do not browse into the package folder), OK, restart CubeMX.</li>
+<li>A notification in VS Code about installing “cube bundle(s)”: answer <strong>No</strong>.</li>
+</ul>
+</section>
 <section id="code-disappears-after-regeneration" class="level3">
 <h3 class="anchored" data-anchor-id="code-disappears-after-regeneration">Code disappears after regeneration</h3>
 <ul>
@@ -396,7 +423,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="working-on-lab-pcs" class="level3">
 <h3 class="anchored" data-anchor-id="working-on-lab-pcs">Working on lab PCs</h3>
-<p>Work in your local <code>C:\Work\&lt;studentnumber&gt;</code> folder, never directly on the network drive. At the end of the session run the desktop <strong>Save to H:</strong> shortcut — it copies your project (without <code>build/</code>) to your student folder.</p>
+<ul>
+<li>Log in with your own student account. Your folder <code>C:\Work\&lt;studentnumber&gt;</code> is created at login; generate every project there, never on the network drive and never on the Desktop.</li>
+<li>Project names: letters, digits and underscores only. No spaces, no Turkish characters. The build names its output after the folder.</li>
+<li>Every new project needs the <code>.vscode</code> template copied in once (Workflow reference, <em>Template</em> row). When you copy a whole project, the folder comes with it.</li>
+<li>End of session: run the desktop <strong>Save to H</strong> shortcut. It copies <code>C:\Work\&lt;studentnumber&gt;</code> (without <code>build/</code>) to <code>H:\EE_Labs</code>.</li>
+<li>Next session, possibly on another PC: copy the project back from <code>H:\EE_Labs</code> into <code>C:\Work\&lt;studentnumber&gt;</code> <strong>before</strong> opening it. Building and debugging directly on <code>H:</code> is not supported.</li>
+</ul>
 </section>
 </section>
 <section id="help-request-format" class="level2">
