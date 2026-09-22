@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Basri Erdogan — 2026-2027 Fall">
 
-<title>EE5203 L01 Lab Guide – EE5203 Microprocessors</title>
+<title>Component Kit – EE5203 Microprocessors</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,59 +21,25 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
-<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../../">
-<script src="../../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -102,7 +69,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<link rel="stylesheet" href="../assets/materials.css">
 </head>
 
 <body class="nav-fixed">
@@ -112,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../../../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">EE5203 Microprocessors</span>
     </a>
   </div>
@@ -123,19 +89,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../SYLLABUS.html"> 
+    <a class="nav-link" href="../../SYLLABUS.html"> 
 <span class="menu-text">Syllabus</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../resources/companions/EE5203_Toolchain_Boot_Companion.html"> 
+    <a class="nav-link" href="../../resources/companions/EE5203_Toolchain_Boot_Companion.html"> 
 <span class="menu-text">From C to Silicon</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../resources/references/academic_references.html"> 
+    <a class="nav-link" href="../../resources/references/academic_references.html"> 
 <span class="menu-text">References</span></a>
   </li>  
 </ul>
@@ -150,232 +116,114 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="EE5203_Microprocessors_Lecture1_Lab.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+    <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="EE5203_Component_Kit_List.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
 
-
-
-
-<section id="ee5203-l01-lab-guide" class="level1">
-<h1>EE5203 L01 Lab Guide</h1>
-<p><em>Build, flash, debug, and modify Blinky - Basri Erdogan</em></p>
-<div class="mission">
-<p><strong>Mission:</strong> Create a Nucleo-F401RE project, make LD2 blink, prove that the program executes in the debugger, and independently change its timing.</p>
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Component Kit</h1>
+<p class="subtitle lead">EE5203 Microprocessors — what to buy for the semester</p>
 </div>
-<section id="prepare-before-class" class="level2">
-<h2 class="anchored" data-anchor-id="prepare-before-class">Prepare before class</h2>
-<ul class="task-list">
-<li><label><input type="checkbox">Complete the <strong>pre-lab quiz</strong> in CATS (<strong>Tests &amp; Quizzes</strong>): <em>L01 Pre-Lab Quiz (Lab 1)</em>, <strong>due Tuesday 22 September at 13:00</strong>. Two attempts; the higher score counts. Allow about 15 minutes. Part A comes from this guide and the Reference page; Parts B and D check the C background the course builds on. <strong>Part C is binary and hexadecimal, which we have not covered or reviewed yet</strong> - look it up and use your second attempt to learn it. Answers are released on Wednesday 23 September at 13:00, after the last lab session.</label></li>
-<li><label><input type="checkbox">Write out the <strong>entry ticket</strong> and bring it on paper: what observable change you expect after modifying the delay, what evidence shows the new firmware actually reached the board, and what you would check first if VS Code cannot detect ST-LINK. You will be asked about these at checkoff.</label></li>
-<li><label><input type="checkbox">Lab PCs have everything installed: log in with your own student account. On your own laptop, install the tools named in the Reference page first.</label></li>
-<li><label><input type="checkbox">Bring a USB <strong>data</strong> cable if using your own equipment.</label></li>
-</ul>
-</section>
-<section id="learning-objectives" class="level2">
-<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
-<p>By checkoff time, you can:</p>
-<ol type="1">
-<li>build, flash, run, and debug a Nucleo-F401RE project;</li>
-<li>distinguish build evidence from hardware evidence;</li>
-<li>set a breakpoint and inspect a variable;</li>
-<li>make and explain one controlled code modification.</li>
-</ol>
-</section>
-<section id="hardware-and-files" class="level2">
-<h2 class="anchored" data-anchor-id="hardware-and-files">Hardware and files</h2>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Basri Erdogan — 2026-2027 Fall </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Buy this once, in the first week. You need it for homework and for practising before each laboratory session.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
+<col style="width: 34%">
+<col style="width: 14%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Item</th>
-<th>Required value</th>
+<th>Quantity</th>
+<th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Board</td>
-<td>Nucleo-F401RE</td>
+<td><strong>ST Nucleo-F401RE</strong> board</td>
+<td>1</td>
+<td>Nucleo-64, STM32F401RE. Not the F411, not a “Blue Pill”.</td>
 </tr>
 <tr class="even">
-<td>Programmer/debugger</td>
-<td>On-board ST-LINK USB connection</td>
+<td><strong>USB Mini-B data cable</strong></td>
+<td>1</td>
+<td>Mini-B, not Micro-B and not USB-C. Must carry data, not only power.</td>
 </tr>
 <tr class="odd">
-<td>Output</td>
-<td>LD2, connected to PA5</td>
+<td><strong>Solderless breadboard</strong></td>
+<td>1</td>
+<td>Half-size, about 400 tie points.</td>
 </tr>
 <tr class="even">
-<td>Tools</td>
-<td>STM32CubeMX (configure/generate) + VS Code (edit/build/debug)</td>
+<td><strong>Jumper wires</strong>, 40-way</td>
+<td>1 set of each</td>
+<td>Male/male, male/female, female/female. Swap a suspect wire before you debug the code.</td>
 </tr>
 <tr class="odd">
-<td>Project name</td>
-<td><code>EE5203_L01_&lt;studentnumber&gt;</code></td>
+<td><strong>LEDs</strong>, any colour</td>
+<td>10</td>
+<td>5 mm.</td>
+</tr>
+<tr class="even">
+<td><strong>Resistors, 330 Ω</strong></td>
+<td>10</td>
+<td>LED current limiting.</td>
+</tr>
+<tr class="odd">
+<td><strong>Resistors, 10 kΩ</strong></td>
+<td>2</td>
+<td>Pull-ups and dividers.</td>
+</tr>
+<tr class="even">
+<td><strong>Push buttons</strong>, 2-pin</td>
+<td>5</td>
+<td>Two-pin parts sit on a breadboard more reliably than four-pin ones.</td>
+</tr>
+<tr class="odd">
+<td><strong>Potentiometer, 10 kΩ</strong></td>
+<td>2</td>
+<td>Linear taper. The analogue knob from Lab 9.</td>
+</tr>
+<tr class="even">
+<td><strong>Digital multimeter</strong></td>
+<td>1</td>
+<td>Nothing fancy. The cheapest one that reads DC volts, continuity and resistance is fine.</td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="session-plan" class="level2">
-<h2 class="anchored" data-anchor-id="session-plan">Session plan</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Time</th>
-<th>What happens</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>0:00 – 0:15</td>
-<td><strong>Opening demonstration</strong> — one live pass through the complete workflow.</td>
-</tr>
-<tr class="even">
-<td>0:15 →</td>
-<td><strong>Checkpoints A–D</strong> below at your own pace; the oral check happens when you reach D.</td>
-</tr>
-</tbody>
-</table>
-<p>The demonstration follows this path once:</p>
-<pre class="text"><code>create -&gt; configure -&gt; generate -&gt; edit -&gt; build -&gt; flash -&gt; debug -&gt; verify</code></pre>
-<p>Observe which tool owns each stage: the <code>.ioc</code> configuration lives in STM32CubeMX; <code>main.c</code>, the build terminal, debug controls, and the variable panels live in VS Code. Record questions; do not copy menu clicks without understanding the stage they belong to.</p>
-</section>
-<section id="checkpoint-a---orient-board-and-tools" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-a---orient-board-and-tools">Checkpoint A - Orient: board and tools</h2>
-<ol type="1">
-<li>Connect the board through the ST-LINK USB connector.</li>
-<li>In <strong>STM32CubeMX</strong>: create a project for <strong>NUCLEO-F401RE</strong> (Board Selector) and accept the board’s default peripheral initialization.</li>
-<li>Confirm that PA5/LD2 is configured as a GPIO output.</li>
-<li>In Project Manager set the name (no spaces), the location <code>C:\Work\&lt;studentnumber&gt;</code>, and <strong>Toolchain/IDE = CMake</strong>; generate code.</li>
-<li>Copy the folder <code>C:\Users\Public\EE5203_template\.vscode</code> into the generated project folder, next to the <code>.ioc</code> file (Reference page → Workflow, <em>Template</em> row). Without it VS Code cannot build or debug.</li>
-<li>Open the generated folder in <strong>VS Code</strong> (File → Open Folder → the folder that contains the <code>.ioc</code>; choose preset <strong>Debug</strong> if asked) and locate the protected <code>USER CODE</code> regions in <code>main.c</code>.</li>
-<li>Build the unchanged project with <strong>Ctrl+Shift+B</strong>: zero errors, and a <code>Linking C executable</code> line at the end.</li>
-</ol>
-<p><strong>Evidence for Checkpoint A:</strong> Show the selected board, PA5 configuration, and a successful build message.</p>
-</section>
-<section id="checkpoint-b---prove-build-and-flash" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-b---prove-build-and-flash">Checkpoint B - Prove: build and flash</h2>
-<p>Inside the <strong>existing generated</strong> <code>while (1)</code>, between <code>/* USER CODE BEGIN 3 */</code> and <code>/* USER CODE END 3 */</code>, add these statements. Do not create a second infinite loop.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Build with <strong>Ctrl+Shift+B</strong>, flash with <strong>F5</strong> (Debug (ST-LINK)), press Continue, and verify a stable blink. Explain why the physical observation is stronger evidence than the build message alone.</p>
-</section>
-<section id="checkpoint-c---observe-breakpoint-and-variable" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-c---observe-breakpoint-and-variable">Checkpoint C - Observe: breakpoint and variable</h2>
-<p>Add before the loop, between <code>/* USER CODE BEGIN 2 */</code> and <code>/* USER CODE END 2 */</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> toggle_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Increment it after every toggle:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>toggle_count <span class="op">=</span> toggle_count <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ol type="1">
-<li>Place a breakpoint on or immediately after the increment — and <strong>write down which</strong>: a breakpoint <em>on</em> the increment pauses before it runs, so the first value you see is <code>0</code>; on the line <em>after</em> it, the first value is <code>1</code>. Predict for the line you chose.</li>
-<li>Start a debug session.</li>
-<li>Predict the value before pressing <strong>Resume</strong>.</li>
-<li>Resume twice and record the observed values.</li>
-</ol>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Observation</th>
-<th style="text-align: right;">Predicted</th>
-<th style="text-align: right;">Observed</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>First pause</td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-</tr>
-<tr class="even">
-<td>Second pause</td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-</tr>
-<tr class="odd">
-<td>Third pause</td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Evidence for Checkpoint C:</strong> Show the breakpoint, execution marker, and changing <code>toggle_count</code> value.</p>
-</section>
-<section id="checkpoint-d---own-modify-and-justify" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-d---own-modify-and-justify">Checkpoint D - Own: modify and justify</h2>
-<p>Each student must make one assigned change and demonstrate it individually.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Variant</th>
-<th>Requirement</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>A</td>
-<td>Change the delay to 100 ms</td>
-</tr>
-<tr class="even">
-<td>B</td>
-<td>Change the delay to 250 ms</td>
-</tr>
-<tr class="odd">
-<td>C</td>
-<td>Change the delay to 750 ms</td>
-</tr>
-<tr class="even">
-<td>D (stretch)</td>
-<td>Blink three times quickly, then pause for 1 s — write the three toggle pairs out; the loop that shortens this arrives in L02</td>
-</tr>
-</tbody>
-</table>
-<p>Before flashing, state the predicted behavior. Change only what is necessary, then collect physical or debugger evidence.</p>
-</section>
-<section id="acceptance-checklist" class="level2">
-<h2 class="anchored" data-anchor-id="acceptance-checklist">Acceptance checklist</h2>
-<ul class="task-list">
-<li><label><input type="checkbox">Correct Nucleo-F401RE project selected.</label></li>
-<li><label><input type="checkbox">Project builds without errors.</label></li>
-<li><label><input type="checkbox">LD2 exhibits the required core behavior.</label></li>
-<li><label><input type="checkbox">Breakpoint is reached and <code>toggle_count</code> changes as predicted.</label></li>
-<li><label><input type="checkbox">Individual timing variant is demonstrated.</label></li>
-<li><label><input type="checkbox">Student explains build versus flash versus run evidence.</label></li>
-<li><label><input type="checkbox">Code remains inside protected user-code regions.</label></li>
-</ul>
-<p><strong>Marks (10):</strong> pre-lab quiz + entry ticket 2 · Blinky 3 · debugger evidence 1 · modification 2 · oral check 2.</p>
-</section>
-<section id="individual-oral-check" class="level2">
-<h2 class="anchored" data-anchor-id="individual-oral-check">Individual oral check</h2>
-<p>Be prepared for one question and one live change:</p>
+<p>Order the <strong>board and cable first</strong>. They are the only items you cannot substitute, and the most likely to arrive late.</p>
+<p>Labs 1 to 7 need the board alone; LD2 and B1 are already on it. Breadboard wiring starts at Lab 8.</p>
+<section id="two-mistakes-that-cost-a-week" class="level2">
+<h2 class="anchored" data-anchor-id="two-mistakes-that-cost-a-week">Two mistakes that cost a week</h2>
 <ul>
-<li>What does a successful build prove?</li>
-<li>What does ST-LINK do?</li>
-<li>Why does the breakpoint pause before or after a particular statement?</li>
-<li>Where should application code be placed, and why?</li>
-<li>What evidence proves your modified firmware is running?</li>
+<li><strong>A charge-only USB cable.</strong> It powers the board but carries no data, so the programmer never sees it. The most common cause of “my board does not work”.</li>
+<li><strong>The wrong plug.</strong> Micro-B and USB-C will not fit the Nucleo. Check the photograph of the connector before ordering.</li>
 </ul>
-</section>
-<section id="submit" class="level2">
-<h2 class="anchored" data-anchor-id="submit">Submit</h2>
-<p>Submit the requested source/project, one debugger screenshot, the completed prediction table, and a two-sentence debugging report if a failure occurred.</p>
-</section>
-<section id="if-you-are-stuck" class="level2">
-<h2 class="anchored" data-anchor-id="if-you-are-stuck">If you are stuck</h2>
-<p>Report expected and observed behavior; read the <strong>first relevant</strong> error; confirm the project, board, ST-LINK, build, and flash; test whether a breakpoint reaches the loop; then show the TA your evidence and smallest next test.</p>
+<p>An assorted resistor pack covers both resistor values for about the same price. Come and talk to me if cost is the obstacle, rather than arriving without the parts.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
