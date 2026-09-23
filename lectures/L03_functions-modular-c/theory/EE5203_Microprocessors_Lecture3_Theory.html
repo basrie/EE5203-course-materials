@@ -208,8 +208,8 @@ Basri Erdogan
 </div>
 
 </section>
-<section id="one-job-per-function" class="slide level2">
-<h2>One job per function</h2>
+<section id="today-split-main-into-functions" class="slide level2">
+<h2>Today: split main() into functions</h2>
 <div class="big-question">
 <p>Last week, one <code>main()</code> processed eight sensor values. Today we will give each job its own function.</p>
 </div>
@@ -235,8 +235,8 @@ Basri Erdogan
 </div>
 <p>By the end of today, <code>main()</code> will call these functions in order. Each function will have a clear name, inputs, and result.</p>
 </section>
-<section id="why-small-functions" class="slide level2">
-<h2>Why small functions</h2>
+<section id="four-reasons-to-use-small-functions" class="slide level2">
+<h2>Four reasons to use small functions</h2>
 <div class="vertical-list">
 <div class="vertical-item">
 <p><span>01</span> <strong>READ</strong> The function name says what the code does.</p>
@@ -252,7 +252,7 @@ Basri Erdogan
 </div>
 </div>
 <div class="relationship-strip">
-<p>For L03, use one clear job per function.</p>
+<p>In L03, each function does one job.</p>
 </div>
 </section>
 <section id="todays-objectives" class="slide level2">
@@ -299,8 +299,8 @@ Basri Erdogan
 </div>
 </div>
 </section>
-<section id="l02-recap-array-loop" class="slide level2">
-<h2>L02 recap: array loop</h2>
+<section id="review-counting-values-above-2500" class="slide level2">
+<h2>Review: counting values above 2500</h2>
 <div class="columns">
 <div class="column" style="width:55%;">
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a></a><span class="dt">uint16_t</span> samples<span class="op">[</span><span class="dv">8</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
@@ -332,8 +332,8 @@ Basri Erdogan
 <p>L02 built this work directly in <code>main()</code>. L03 will move a job like this into a named function.</p>
 </div>
 </section>
-<section id="the-long-main-problem" class="slide level2">
-<h2>The long-<code>main()</code> problem</h2>
+<section id="when-main-does-every-job" class="slide level2">
+<h2>When <code>main()</code> does every job</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb3-2"><a></a>    <span class="co">/* configure hardware */</span></span>
 <span id="cb3-3"><a></a>    <span class="co">/* acquire eight samples */</span></span>
@@ -346,10 +346,10 @@ Basri Erdogan
 <div class="debug-anti-pattern">
 <p>If every job lives in one function, changing one job can accidentally affect another.</p>
 </div>
-<p>Our first move is to put each job in a <strong>named function</strong>.</p>
+<p>First step: put each job in its own <strong>named function</strong>.</p>
 </section>
-<section id="the-function-declaration" class="slide level2">
-<h2>The function declaration</h2>
+<section id="the-three-parts-of-a-declaration" class="slide level2">
+<h2>The three parts of a declaration</h2>
 <div class="contract-grid">
 <div class="contract-card return-card">
 <p><strong>RETURN TYPE</strong></p>
@@ -372,8 +372,8 @@ Basri Erdogan
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=174">C11 draft N1570, §6.9.1 <em>Function definitions</em> — p.&nbsp;174</a>.</p>
 </div>
 </section>
-<section id="reading-a-function" class="slide level2">
-<h2>Reading a function</h2>
+<section id="four-questions-for-any-function" class="slide level2">
+<h2>Four questions for any function</h2>
 <div class="columns">
 <div class="column" style="width:56%;">
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a></a><span class="dt">int</span> clamp<span class="op">(</span><span class="dt">int</span> value<span class="op">,</span> <span class="dt">int</span> low<span class="op">,</span> <span class="dt">int</span> high<span class="op">)</span></span>
@@ -472,8 +472,8 @@ Basri Erdogan
 </div>
 </div>
 </section>
-<section id="pass-by-value" class="slide level2">
-<h2>Pass by value</h2>
+<section id="the-function-gets-a-copy-pass-by-value" class="slide level2">
+<h2>The function gets a copy (pass by value)</h2>
 <div class="columns">
 <div class="column" style="width:53%;">
 <div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a><span class="dt">void</span> raise_to_minimum<span class="op">(</span><span class="dt">int</span> value<span class="op">)</span></span>
@@ -511,8 +511,8 @@ Basri Erdogan
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=99">C11 draft N1570, §6.5.2.2 <em>Function calls</em> — p.&nbsp;99</a>.</p>
 </div>
 </section>
-<section id="example-clamp" class="slide level2">
-<h2>Example: <code>clamp()</code></h2>
+<section id="clamp-below-inside-and-above-the-range" class="slide level2">
+<h2><code>clamp()</code> below, inside, and above the range</h2>
 <div class="columns">
 <div class="column" style="width:62%;">
 <div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a></a><span class="dt">int</span> clamp<span class="op">(</span><span class="dt">int</span> value<span class="op">,</span> <span class="dt">int</span> low<span class="op">,</span> <span class="dt">int</span> high<span class="op">)</span></span>
@@ -547,8 +547,8 @@ Basri Erdogan
 </div></div>
 <p>The same function handles values below, inside, and above the valid range.</p>
 </section>
-<section id="anatomy-of-a-call" class="slide level2">
-<h2>Anatomy of a call</h2>
+<section id="what-happens-during-one-call" class="slide level2">
+<h2>What happens during one call</h2>
 <div class="call-trace">
 <div class="trace-stage">
 <p><strong>1 · ARGUMENTS COPIED</strong></p>
@@ -570,11 +570,11 @@ Basri Erdogan
 </div>
 </div>
 <div class="evidence-strip">
-<p>Debugger plan: break at entry → inspect parameters → step → inspect return destination.</p>
+<p>In the debugger: stop on the first line of <code>clamp()</code> → look at <code>value</code>, <code>low</code>, <code>high</code> → step to <code>return</code> → step out and look at <code>safe</code>.</p>
 </div>
 </section>
-<section id="practice-predict-a-function-call" class="slide level2">
-<h2>Practice: predict a function call</h2>
+<section id="practice-what-does-scale6-4-return" class="slide level2">
+<h2>Practice: what does <code>scale(6, 4)</code> return?</h2>
 <div class="sourceCode" id="cb11"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a></a><span class="dt">int</span> scale<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> gain<span class="op">)</span></span>
 <span id="cb11-2"><a></a><span class="op">{</span></span>
 <span id="cb11-3"><a></a>    <span class="cf">return</span> x <span class="op">*</span> gain<span class="op">;</span></span>
@@ -596,8 +596,8 @@ Basri Erdogan
 <p>Answer: arguments <code>6</code>, <code>4</code>; parameters <code>x = 6</code>, <code>gain = 4</code>; result <code>24</code>.</p>
 </div>
 </section>
-<section id="common-function-mistakes" class="slide level2">
-<h2>Common function mistakes</h2>
+<section id="three-common-function-mistakes" class="slide level2">
+<h2>Three common function mistakes</h2>
 <div class="vertical-list bug-list">
 <div class="vertical-item">
 <p><span>01</span> <strong>MISMATCH</strong> The declaration and definition use different types.</p>
@@ -609,12 +609,12 @@ Basri Erdogan
 <p><span>03</span> <strong>WRONG ARGUMENTS</strong> A call uses the wrong type, order, or number of arguments.</p>
 </div>
 </div>
-<p>Compiler warnings are evidence. Read them before debugging logic.</p>
+<p>Read the compiler warnings first. Each of these mistakes shows up there.</p>
 </section>
-<section id="include-and-headers" class="slide level2">
-<h2><code>#include</code> and headers</h2>
+<section id="header-files-one-declaration-shared-by-every-.c-file" class="slide level2">
+<h2>Header files: one declaration, shared by every <code>.c</code> file</h2>
 <div class="relationship-strip">
-<p><code>#include "sensor_math.h"</code> is a <strong>preprocessor directive</strong>, not a function call. Before C compilation, a useful mental model is: replace that line with the header’s processed contents.</p>
+<p><code>#include "sensor_math.h"</code> is <strong>not a function call</strong>. Before compiling, the preprocessor pastes the text of the header in place of this line.</p>
 </div>
 <div class="module-grid">
 <div class="module-card header-module">
@@ -645,19 +645,44 @@ Basri Erdogan
 <span id="cb14-7"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<p>Both <code>.c</code> files now see the same declaration. The header publishes it; <code>sensor_math.c</code> defines it.</p>
+<p>Both <code>.c</code> files now see the same declaration. The header declares <code>clamp()</code>; <code>sensor_math.c</code> defines it.</p>
 <div class="source-note">
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=54">C11 draft N1570, §6.2.2 <em>Linkages of identifiers</em> — p.&nbsp;54</a>; <code>#define</code> and <code>#include</code> are §6.10 <em>Preprocessing directives</em> — <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=184">p.&nbsp;184</a>.</p>
 </div>
 </section>
-<section id="choosing-integer-widths" class="slide level2">
-<h2>Choosing integer widths</h2>
+<section id="adding-a-new-.c-file-to-the-build" class="slide level2">
+<h2>Adding a new <code>.c</code> file to the build</h2>
+<p>A new <code>.c</code> file is compiled only when <code>CMakeLists.txt</code> lists it. Open <code>CMakeLists.txt</code> in the project folder:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource cmake number-lines code-with-copy"><code class="sourceCode cmake"><span id="cb15-1"><a></a><span class="co"># Add sources to executable</span></span>
+<span id="cb15-2"><a></a><span class="kw">target_sources</span>(<span class="dv">${CMAKE_PROJECT_NAME}</span> <span class="bn">PRIVATE</span></span>
+<span id="cb15-3"><a></a>    <span class="co"># Add user sources here</span></span>
+<span id="cb15-4"><a></a>    Core/Src/sensor_math.c</span>
+<span id="cb15-5"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>Forget this line and the build stops at the link step: <code>undefined reference to 'clamp'</code>. The compiler saw the declaration in the header. The linker found no definition.</p>
+</div>
+</div>
+</div>
+<div class="relationship-strip">
+<p>Header files need no change: <code>Core/Inc</code> is already on the include path. CubeMX never rewrites this part of <code>CMakeLists.txt</code>, so your lines stay.</p>
+</div>
+</section>
+<section id="why-the-sum-needs-32-bits" class="slide level2">
+<h2>Why the sum needs 32 bits</h2>
 <div class="columns">
 <div class="column" style="width:48%;">
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a></a><span class="dt">uint16_t</span> sample <span class="op">=</span> <span class="dv">4095</span><span class="bu">U</span><span class="op">;</span></span>
-<span id="cb15-2"><a></a><span class="dt">uint32_t</span> sum <span class="op">=</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span>
-<span id="cb15-3"><a></a></span>
-<span id="cb15-4"><a></a>sum <span class="op">=</span> sum <span class="op">+</span> sample<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a></a><span class="dt">uint16_t</span> sample <span class="op">=</span> <span class="dv">4095</span><span class="bu">U</span><span class="op">;</span></span>
+<span id="cb16-2"><a></a><span class="dt">uint32_t</span> sum <span class="op">=</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span>
+<span id="cb16-3"><a></a></span>
+<span id="cb16-4"><a></a>sum <span class="op">=</span> sum <span class="op">+</span> sample<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:48%;">
 <div class="check-grid single-column">
 <div class="check-item">
@@ -672,16 +697,16 @@ Basri Erdogan
 </div>
 </div></div>
 <div class="relationship-strip">
-<p>Choose a type for the largest value the variable may hold—not only the size of one input.</p>
+<p><code>uint16_t</code> holds at most 65,535. Eight samples of 4095 add up to 32,760: that fits. Twenty samples add up to 81,900: that does not. Choose the type for the largest value the variable can reach.</p>
 </div>
 </section>
-<section id="define-constants" class="slide level2">
-<h2><code>#define</code> constants</h2>
+<section id="define-a-name-for-a-number" class="slide level2">
+<h2><code>#define</code>: a name for a number</h2>
 <div class="columns">
 <div class="column" style="width:51%;">
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a></a><span class="pp">#define SAMPLE_COUNT </span><span class="dv">8</span></span>
-<span id="cb16-2"><a></a></span>
-<span id="cb16-3"><a></a><span class="dt">uint16_t</span> samples<span class="op">[</span>SAMPLE_COUNT<span class="op">];</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a></a><span class="pp">#define SAMPLE_COUNT </span><span class="dv">8</span></span>
+<span id="cb17-2"><a></a></span>
+<span id="cb17-3"><a></a><span class="dt">uint16_t</span> samples<span class="op">[</span>SAMPLE_COUNT<span class="op">];</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:45%;">
 <div class="check-grid single-column">
 <div class="check-item">
@@ -696,11 +721,11 @@ Basri Erdogan
 </div>
 </div></div>
 <div class="relationship-strip">
-<p>Use one readable name so the array size and loop count cannot accidentally use different numbers.</p>
+<p>The array size and the loop count use the same name, so they cannot become two different numbers.</p>
 </div>
 </section>
-<section id="the-main-pipeline" class="slide level2">
-<h2>The <code>main()</code> pipeline</h2>
+<section id="main-calls-the-functions-in-order" class="slide level2">
+<h2><code>main()</code> calls the functions in order</h2>
 <div class="pipeline-grid wide-pipeline">
 <div class="pipeline-card">
 <p><span>A</span> <code>acquire_samples()</code></p>
@@ -721,23 +746,23 @@ Basri Erdogan
 <p>value → string</p>
 </div>
 </div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
-<span id="cb17-2"><a></a><span class="op">{</span></span>
-<span id="cb17-3"><a></a>    acquire_samples<span class="op">(</span>samples<span class="op">,</span> SAMPLE_COUNT<span class="op">);</span></span>
-<span id="cb17-4"><a></a>    <span class="dt">uint16_t</span> mean <span class="op">=</span> average_samples<span class="op">(</span>samples<span class="op">,</span> SAMPLE_COUNT<span class="op">);</span></span>
-<span id="cb17-5"><a></a>    make_status<span class="op">(</span>message<span class="op">,</span> MESSAGE_CAPACITY<span class="op">,</span> mean<span class="op">);</span></span>
-<span id="cb17-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb18-2"><a></a><span class="op">{</span></span>
+<span id="cb18-3"><a></a>    acquire_samples<span class="op">(</span>samples<span class="op">,</span> SAMPLE_COUNT<span class="op">);</span></span>
+<span id="cb18-4"><a></a>    <span class="dt">uint16_t</span> mean <span class="op">=</span> average_samples<span class="op">(</span>samples<span class="op">,</span> SAMPLE_COUNT<span class="op">);</span></span>
+<span id="cb18-5"><a></a>    make_status<span class="op">(</span>message<span class="op">,</span> MESSAGE_CAPACITY<span class="op">,</span> mean<span class="op">);</span></span>
+<span id="cb18-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Keep the short list of steps in <code>main()</code>; put the detailed work inside the functions.</p>
 </section>
-<section id="arrays-as-parameters" class="slide level2">
-<h2>Arrays as parameters</h2>
+<section id="passing-an-array-also-pass-its-count" class="slide level2">
+<h2>Passing an array: also pass its count</h2>
 <div class="columns">
 <div class="column" style="width:52%;">
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a></a><span class="dt">uint16_t</span> average_samples<span class="op">(</span></span>
-<span id="cb18-2"><a></a>    <span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">);</span></span>
-<span id="cb18-3"><a></a></span>
-<span id="cb18-4"><a></a><span class="dt">uint16_t</span> mean <span class="op">=</span></span>
-<span id="cb18-5"><a></a>    average_samples<span class="op">(</span>samples<span class="op">,</span> <span class="dv">8</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb19-1"><a></a><span class="dt">uint16_t</span> average_samples<span class="op">(</span></span>
+<span id="cb19-2"><a></a>    <span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">);</span></span>
+<span id="cb19-3"><a></a></span>
+<span id="cb19-4"><a></a><span class="dt">uint16_t</span> mean <span class="op">=</span></span>
+<span id="cb19-5"><a></a>    average_samples<span class="op">(</span>samples<span class="op">,</span> <span class="dv">8</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:44%;">
 <div class="check-grid single-column">
 <div class="check-item">
@@ -767,32 +792,32 @@ Basri Erdogan
 </section>
 <section id="example-average_samples" class="slide level2">
 <h2>Example: <code>average_samples()</code></h2>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb19-1"><a></a><span class="dt">uint16_t</span> average_samples<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">)</span></span>
-<span id="cb19-2"><a></a><span class="op">{</span></span>
-<span id="cb19-3"><a></a>    <span class="cf">if</span> <span class="op">(</span>count <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb19-4"><a></a>        <span class="cf">return</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span>
-<span id="cb19-5"><a></a>    <span class="op">}</span></span>
-<span id="cb19-6"><a></a></span>
-<span id="cb19-7"><a></a>    <span class="dt">uint32_t</span> sum <span class="op">=</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span>
-<span id="cb19-8"><a></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> count<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb19-9"><a></a>        sum <span class="op">+=</span> values<span class="op">[</span>i<span class="op">];</span></span>
-<span id="cb19-10"><a></a>    <span class="op">}</span></span>
-<span id="cb19-11"><a></a></span>
-<span id="cb19-12"><a></a>    <span class="cf">return</span> sum <span class="op">/</span> count<span class="op">;</span></span>
-<span id="cb19-13"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb20-1"><a></a><span class="dt">uint16_t</span> average_samples<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">)</span></span>
+<span id="cb20-2"><a></a><span class="op">{</span></span>
+<span id="cb20-3"><a></a>    <span class="cf">if</span> <span class="op">(</span>count <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-4"><a></a>        <span class="cf">return</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span>
+<span id="cb20-5"><a></a>    <span class="op">}</span></span>
+<span id="cb20-6"><a></a></span>
+<span id="cb20-7"><a></a>    <span class="dt">uint32_t</span> sum <span class="op">=</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span>
+<span id="cb20-8"><a></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> count<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-9"><a></a>        sum <span class="op">+=</span> values<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb20-10"><a></a>    <span class="op">}</span></span>
+<span id="cb20-11"><a></a></span>
+<span id="cb20-12"><a></a>    <span class="cf">return</span> sum <span class="op">/</span> count<span class="op">;</span></span>
+<span id="cb20-13"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="evidence-strip">
-<p>Use a 32-bit sum, handle <code>count == 0</code>, loop with <code>i &lt; count</code>, and divide once at the end.</p>
+<p>Four rules: return <code>0U</code> when <code>count == 0</code> · add into a 32-bit sum · loop with <code>i &lt; count</code> · divide once, at the end.</p>
 </div>
 </section>
 <section id="practice-maximum_sample" class="slide level2">
 <h2>Practice: <code>maximum_sample()</code></h2>
 <p>Given:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb20-1"><a></a><span class="dt">uint16_t</span> values<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">18</span><span class="op">,</span> <span class="dv">24</span><span class="op">,</span> <span class="dv">17</span><span class="op">,</span> <span class="dv">31</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">19</span><span class="op">};</span></span>
-<span id="cb20-2"><a></a></span>
-<span id="cb20-3"><a></a><span class="dt">uint16_t</span> maximum_sample<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">)</span></span>
-<span id="cb20-4"><a></a><span class="op">{</span></span>
-<span id="cb20-5"><a></a>    <span class="co">/* complete this function */</span></span>
-<span id="cb20-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb21-1"><a></a><span class="dt">uint16_t</span> values<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">18</span><span class="op">,</span> <span class="dv">24</span><span class="op">,</span> <span class="dv">17</span><span class="op">,</span> <span class="dv">31</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">19</span><span class="op">};</span></span>
+<span id="cb21-2"><a></a></span>
+<span id="cb21-3"><a></a><span class="dt">uint16_t</span> maximum_sample<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">)</span></span>
+<span id="cb21-4"><a></a><span class="op">{</span></span>
+<span id="cb21-5"><a></a>    <span class="co">/* complete this function */</span></span>
+<span id="cb21-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="prompt-list compact-prompts">
 <div class="prompt-item">
 <p><span>1</span> What initial value should <code>maximum</code> receive?</p>
@@ -808,9 +833,9 @@ Basri Erdogan
 <p>Initialize <code>maximum</code> from <code>values[0]</code>, begin at index <code>1</code>, and decide what to return when <code>count == 0</code>.</p>
 </div>
 </section>
-<section id="c-strings" class="slide level2">
-<h2>C strings</h2>
-<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb21-1"><a></a><span class="dt">char</span> status<span class="op">[</span><span class="dv">8</span><span class="op">]</span> <span class="op">=</span> <span class="st">"READY"</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="c-strings-text-in-a-char-array" class="slide level2">
+<h2>C strings: text in a <code>char</code> array</h2>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb22-1"><a></a><span class="dt">char</span> status<span class="op">[</span><span class="dv">8</span><span class="op">]</span> <span class="op">=</span> <span class="st">"READY"</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="string-strip">
 <div class="string-cell">
 <p><span>0</span><code>R</code></p>
@@ -839,8 +864,8 @@ Basri Erdogan
 </div>
 <p>The array capacity is <strong>8</strong>; the text length is <strong>5</strong>; the terminator occupies one element.</p>
 </section>
-<section id="the-0-terminator" class="slide level2">
-<h2>The <code>\0</code> terminator</h2>
+<section id="with-and-without-0" class="slide level2">
+<h2>With and without <code>\0</code></h2>
 <div class="compare-grid">
 <div class="compare-card c-card">
 <p><strong>VALID STRING</strong></p>
@@ -854,23 +879,23 @@ Basri Erdogan
 </div>
 </div>
 <div class="relationship-strip">
-<p>The array size limits where we may write; <code>\0</code> tells string code where the text stops.</p>
+<p>The array size says where you may write. The <code>\0</code> says where the text stops.</p>
 </div>
 </section>
-<section id="walking-a-string" class="slide level2">
-<h2>Walking a string</h2>
+<section id="counting-characters-up-to-0" class="slide level2">
+<h2>Counting characters up to <code>\0</code></h2>
 <div class="columns">
 <div class="column" style="width:58%;">
-<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb22-1"><a></a><span class="dt">int</span> text_length<span class="op">(</span><span class="dt">char</span> text<span class="op">[])</span></span>
-<span id="cb22-2"><a></a><span class="op">{</span></span>
-<span id="cb22-3"><a></a>    <span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb22-4"><a></a></span>
-<span id="cb22-5"><a></a>    <span class="cf">while</span> <span class="op">(</span>text<span class="op">[</span>i<span class="op">]</span> <span class="op">!=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb22-6"><a></a>        <span class="op">++</span>i<span class="op">;</span></span>
-<span id="cb22-7"><a></a>    <span class="op">}</span></span>
-<span id="cb22-8"><a></a></span>
-<span id="cb22-9"><a></a>    <span class="cf">return</span> i<span class="op">;</span></span>
-<span id="cb22-10"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb23-1"><a></a><span class="dt">int</span> text_length<span class="op">(</span><span class="dt">char</span> text<span class="op">[])</span></span>
+<span id="cb23-2"><a></a><span class="op">{</span></span>
+<span id="cb23-3"><a></a>    <span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb23-4"><a></a></span>
+<span id="cb23-5"><a></a>    <span class="cf">while</span> <span class="op">(</span>text<span class="op">[</span>i<span class="op">]</span> <span class="op">!=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb23-6"><a></a>        <span class="op">++</span>i<span class="op">;</span></span>
+<span id="cb23-7"><a></a>    <span class="op">}</span></span>
+<span id="cb23-8"><a></a></span>
+<span id="cb23-9"><a></a>    <span class="cf">return</span> i<span class="op">;</span></span>
+<span id="cb23-10"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:38%;">
 <div class="check-grid single-column">
 <div class="check-item">
@@ -892,17 +917,17 @@ Basri Erdogan
 <div class="column" style="width:48%;">
 <div class="compare-card danger-card">
 <p><strong>DO NOT USE <code>==</code></strong></p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb23-1"><a></a><span class="cf">if</span> <span class="op">(</span>command <span class="op">==</span> <span class="st">"START"</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb23-2"><a></a>    <span class="co">/* ... */</span></span>
-<span id="cb23-3"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb24-1"><a></a><span class="cf">if</span> <span class="op">(</span>command <span class="op">==</span> <span class="st">"START"</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb24-2"><a></a>    <span class="co">/* ... */</span></span>
+<span id="cb24-3"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This does not compare the characters.</p>
 </div>
 </div><div class="column" style="width:48%;">
 <div class="compare-card c-card">
 <p><strong>USE <code>strcmp()</code></strong></p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb24-1"><a></a><span class="cf">if</span> <span class="op">(</span>strcmp<span class="op">(</span>command<span class="op">,</span> <span class="st">"START"</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb24-2"><a></a>    <span class="co">/* ... */</span></span>
-<span id="cb24-3"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb25-1"><a></a><span class="cf">if</span> <span class="op">(</span>strcmp<span class="op">(</span>command<span class="op">,</span> <span class="st">"START"</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb25-2"><a></a>    <span class="co">/* ... */</span></span>
+<span id="cb25-3"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Zero means every character matched.</p>
 </div>
 </div></div>
@@ -911,11 +936,11 @@ Basri Erdogan
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=380">C11 draft N1570, §7.24 <em>String handling</em> <code>&lt;string.h&gt;</code> — p.&nbsp;380</a>.</p>
 </div>
 </section>
-<section id="strings-as-outputs" class="slide level2">
-<h2>Strings as outputs</h2>
-<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb25-1"><a></a><span class="dt">bool</span> make_status<span class="op">(</span><span class="dt">char</span> destination<span class="op">[],</span></span>
-<span id="cb25-2"><a></a>                 <span class="dt">int</span> capacity<span class="op">,</span></span>
-<span id="cb25-3"><a></a>                 <span class="dt">uint16_t</span> mean<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="a-function-that-writes-a-string" class="slide level2">
+<h2>A function that writes a string</h2>
+<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb26-1"><a></a><span class="dt">bool</span> make_status<span class="op">(</span><span class="dt">char</span> destination<span class="op">[],</span></span>
+<span id="cb26-2"><a></a>                 <span class="dt">int</span> capacity<span class="op">,</span></span>
+<span id="cb26-3"><a></a>                 <span class="dt">uint16_t</span> mean<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="contract-grid">
 <div class="contract-card parameter-card">
 <p><strong><code>mean</code></strong></p>
@@ -932,57 +957,63 @@ Basri Erdogan
 </div>
 <p><code>bool</code> stores <code>true</code> or <code>false</code> and is provided by <code>&lt;stdbool.h&gt;</code>.</p>
 </section>
-<section id="the-lab-interfaces" class="slide level2">
-<h2>The lab interfaces</h2>
+<section id="the-four-functions-you-write-in-lab-3" class="slide level2">
+<h2>The four functions you write in Lab 3</h2>
 <div class="pipeline-grid wide-pipeline">
 <div class="pipeline-card">
-<p><span>A</span> <strong>ACQUIRE</strong></p>
+<p><span>A</span> <strong>CLAMP</strong></p>
 <div class="interface-signature">
-<p><code>void acquire_samples(</code><br> <code>uint16_t out[],</code><br> <code>int count);</code></p>
+<p><code>uint16_t clamp_u16(</code><br> <code>uint16_t value,</code><br> <code>uint16_t low,</code><br> <code>uint16_t high);</code></p>
 </div>
 </div>
 <div class="pipeline-arrow">
 <p>→</p>
 </div>
 <div class="pipeline-card">
-<p><span>B</span> <strong>PROCESS</strong></p>
+<p><span>B</span> <strong>AVERAGE · COUNT</strong></p>
 <div class="interface-signature">
-<p><code>uint16_t average_samples(</code><br> <code>uint16_t in[],</code><br> <code>int count);</code></p>
+<p><code>uint16_t average_samples(</code><br> <code>uint16_t values[], int count);</code><br><br> <code>int count_above(</code><br> <code>uint16_t values[], int count,</code><br> <code>uint16_t threshold);</code></p>
 </div>
 </div>
 <div class="pipeline-arrow">
 <p>→</p>
 </div>
 <div class="pipeline-card">
-<p><span>C</span> <strong>REPORT</strong></p>
+<p><span>C</span> <strong>STATUS TEXT</strong></p>
 <div class="interface-signature">
-<p><code>bool make_status(</code><br> <code>char out[],</code><br> <code>int capacity,</code><br> <code>uint16_t mean);</code></p>
+<p><code>bool make_status(</code><br> <code>char destination[],</code><br> <code>int capacity,</code><br> <code>uint16_t average);</code></p>
 </div>
 </div>
 </div>
-<p><code>main()</code> calls these functions in order. Each function receives only the information it needs.</p>
+<p>The declarations are already in <code>sensor_math.h</code> and <code>status_text.h</code>. You write the bodies in the two <code>.c</code> files; <code>main()</code> calls them in this order.</p>
 </section>
 <section id="laboratory-mission" class="slide level2">
 <h2>Laboratory mission</h2>
 <div class="lab-track">
 <div class="lab-step">
-<p><span>A</span> <strong>REFACTOR</strong></p>
-<p>Move arithmetic into functions</p>
+<p><span>A</span> <strong>COPY + ADD</strong></p>
+<p>L02 project → <code>EE5203_L03_&lt;no&gt;</code>, four starter files, two lines in <code>CMakeLists.txt</code></p>
 </div>
 <div class="lab-step">
-<p><span>B</span> <strong>PROCESS</strong></p>
-<p>Traverse a sample array safely</p>
+<p><span>B</span> <strong>CLAMP + AVERAGE</strong></p>
+<p><code>clamp_u16</code>, <code>average_samples</code>, <code>count_above</code></p>
 </div>
 <div class="lab-step">
-<p><span>C</span> <strong>REPORT</strong></p>
-<p>Write a status string that fits in its array</p>
+<p><span>C</span> <strong>STATUS TEXT</strong></p>
+<p><code>"LOW"</code>, <code>"OK"</code> or <code>"HIGH"</code>, ending with <code>\0</code></p>
 </div>
 <div class="lab-step">
-<p><span>D</span> <strong>DEFEND</strong></p>
-<p>Change one condition and explain the evidence</p>
+<p><span>D</span> <strong>CHECK</strong></p>
+<p>final values in the debugger, against your predictions</p>
+</div>
+<div class="lab-step">
+<p><span>E</span> <strong>CHANGE</strong></p>
+<p>your variant: predict, change one line, explain</p>
 </div>
 </div>
-<p>Checkpoint evidence: build result, watched variables, boundary test, and individual modification.</p>
+<div class="caption">
+<p><strong>This week’s lab (29/30 September) is Lab 2</strong> — the L02 mission, in one <code>main.c</code>. <strong>This mission is Lab 3, 6/7 October</strong>, and it starts from your Lab 2 project. Before Lab 3: download the starter zip and do its pre-lab quiz in CATS.</p>
+</div>
 </section>
 <section id="mastery-checklist" class="slide level2">
 <h2>Mastery checklist</h2>
@@ -995,6 +1026,9 @@ Basri Erdogan
 </div>
 <div class="check-row">
 <p><span>✓</span> Separate declarations from definitions</p>
+</div>
+<div class="check-row">
+<p><span>✓</span> Add a new <code>.c</code> file to <code>CMakeLists.txt</code></p>
 </div>
 <div class="check-row">
 <p><span>✓</span> Pass an array and its valid element count to a function</p>
@@ -1012,20 +1046,15 @@ Basri Erdogan
 <h2>Exit ticket</h2>
 <div class="columns">
 <div class="column" style="width:62%;">
-<div class="vertical-list ticket-list">
-<div class="vertical-item">
-<p><span>01</span> <strong>DESIGN</strong> Write one function declaration for acquiring eight ADC samples.</p>
-</div>
-<div class="vertical-item">
-<p><span>02</span> <strong>ARRAY INPUT</strong> Why must an array function also receive <code>count</code>?</p>
-</div>
-<div class="vertical-item">
-<p><span>03</span> <strong>EVIDENCE</strong> What debugger observation would prove your average function is correct?</p>
-</div>
-</div>
+<ol type="1">
+<li>Write <strong>one declaration</strong>: the function receives an array of <code>uint16_t</code> values and its count, and returns the largest value.</li>
+<li>Why does <code>average_samples()</code> also need <code>count</code>? Choose one answer in the form.</li>
+<li><code>average_samples()</code> gets <code>{1000, 2000, 3000, 4000}</code> and <code>count = 4</code>. What is <code>sum</code> after the loop? What does it return? Two numbers.</li>
+<li>Which part of today’s lecture is least clear to you? One sentence.</li>
+</ol>
 </div><div class="column" style="width:38%;">
-<p><img data-src="../assets/exit_ticket_qr.svg" width="340"></p>
-<p>Scan and answer before you leave — sign in with your Google account. Ungraded; your answers open the next lecture.</p>
+<p><img data-src="../assets/exit_ticket_qr.svg" width="300"></p>
+<p>Scan — or <a href="https://docs.google.com/forms/d/e/1FAIpQLScXDPsQa8Um9Wg1bI2W0M4LHWRXOKKFqYQj0nlRjG-x_i4TvQ/viewform">open the form</a> — and answer before you leave; sign in with your Google account. Ungraded; your answers open the next lecture.</p>
 </div></div>
 <div class="source-note">
 <p>Every concept in this lecture, with page-linked sources: <a href="../../../resources/references/academic_references.html">academic references</a>.</p>

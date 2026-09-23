@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -133,7 +167,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#m4" id="toc-m4" class="nav-link" data-scroll-target="#m4">4. You copied the five files instead of the folder</a></li>
   <li><a href="#m5" id="toc-m5" class="nav-link" data-scroll-target="#m5">5. The <code>.vscode</code> folder is in the wrong place</a></li>
   <li><a href="#m6" id="toc-m6" class="nav-link" data-scroll-target="#m6">6. You renamed <code>.vscode</code></a></li>
-  <li><a href="#m7" id="toc-m7" class="nav-link" data-scroll-target="#m7">7. You renamed the project folder after generating it</a></li>
+  <li><a href="#m7" id="toc-m7" class="nav-link" data-scroll-target="#m7">7. You renamed or copied a project folder and changed nothing else</a></li>
   </ul></li>
   <li><a href="#creating-the-project-in-cubemx" id="toc-creating-the-project-in-cubemx" class="nav-link" data-scroll-target="#creating-the-project-in-cubemx">Creating the project in CubeMX</a>
   <ul class="collapse">
@@ -149,11 +183,12 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#m14" id="toc-m14" class="nav-link" data-scroll-target="#m14">14. You pressed the ▷ in the editor title bar</a></li>
   <li><a href="#m15" id="toc-m15" class="nav-link" data-scroll-target="#m15">15. Something else is holding the ST-LINK</a></li>
   <li><a href="#m16" id="toc-m16" class="nav-link" data-scroll-target="#m16">16. You answered the “install cube bundle(s)” notification</a></li>
+  <li><a href="#m17" id="toc-m17" class="nav-link" data-scroll-target="#m17">17. You added a <code>.c</code> file but not to <code>CMakeLists.txt</code></a></li>
   </ul></li>
   <li><a href="#keeping-your-work" id="toc-keeping-your-work" class="nav-link" data-scroll-target="#keeping-your-work">Keeping your work</a>
   <ul class="collapse">
-  <li><a href="#m17" id="toc-m17" class="nav-link" data-scroll-target="#m17">17. You wrote code outside the USER CODE regions</a></li>
-  <li><a href="#m18" id="toc-m18" class="nav-link" data-scroll-target="#m18">18. You worked directly on <code>H:</code></a></li>
+  <li><a href="#m18" id="toc-m18" class="nav-link" data-scroll-target="#m18">18. You wrote code outside the USER CODE regions</a></li>
+  <li><a href="#m19" id="toc-m19" class="nav-link" data-scroll-target="#m19">19. You worked directly on <code>H:</code></a></li>
   <li><a href="#when-you-still-need-help" id="toc-when-you-still-need-help" class="nav-link" data-scroll-target="#when-you-still-need-help">When you still need help</a></li>
   </ul></li>
   </ul>
@@ -231,6 +266,14 @@ ul.task-list li input[type="checkbox"] {
 <td><a href="#m7">7</a>, <a href="#m13">13</a></td>
 </tr>
 <tr class="even">
+<td><code>CMake Error: The current CMakeCache.txt directory ... is different</code></td>
+<td><a href="#m7">7</a></td>
+</tr>
+<tr class="odd">
+<td><code>undefined reference to '...'</code></td>
+<td><a href="#m17">17</a></td>
+</tr>
+<tr class="even">
 <td><code>cmake -P ... fix_ld.cmake</code> → file not found</td>
 <td><a href="#m4">4</a>, <a href="#m5">5</a></td>
 </tr>
@@ -248,7 +291,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="even">
 <td>Your code is gone after you changed a pin in CubeMX</td>
-<td><a href="#m17">17</a></td>
+<td><a href="#m18">18</a></td>
 </tr>
 </tbody>
 </table>
@@ -306,11 +349,21 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>Fix:</strong> The name must be exactly <code>.vscode</code>, with the dot, no space, no number.</p>
 </section>
 <section id="m7" class="level2">
-<h2 class="anchored" data-anchor-id="m7">7. You renamed the project folder after generating it</h2>
-<p><strong>What you did:</strong> CubeMX generated <code>Blink</code>, and you renamed the folder to <code>Lab1</code>.</p>
-<p><strong>What you see:</strong> The build succeeds, then debugging fails with <strong>“Program file does not exist”</strong> — it is looking for <code>build\Debug\Lab1.elf</code> while the build produced <code>Blink.elf</code>.</p>
-<p><strong>Why:</strong> The debug configuration takes the executable name from the <strong>folder name</strong>; CMake takes it from the <strong>CubeMX project name</strong>. Renaming breaks the match.</p>
-<p><strong>Fix:</strong> Choose the name in CubeMX, before generating, and do not rename afterwards. If you already did, rename the folder back.</p>
+<h2 class="anchored" data-anchor-id="m7">7. You renamed or copied a project folder and changed nothing else</h2>
+<p><strong>What you did:</strong> Copied <code>EE5203_L01_2400001234</code> and renamed the copy <code>EE5203_L02_2400001234</code> — or renamed a CubeMX project folder by hand.</p>
+<p><strong>What you see:</strong> One of two errors:</p>
+<ul>
+<li><code>CMake Error: The current CMakeCache.txt directory ... is different than the   directory ... where CMakeCache.txt was created</code> — the copied <code>build</code> folder still points to the old folder.</li>
+<li>The build succeeds, then F5 fails with <strong>“Program file does not exist”</strong> — it is looking for <code>build\Debug\EE5203_L02_2400001234.elf</code> while the build produced <code>EE5203_L01_2400001234.elf</code>.</li>
+</ul>
+<p><strong>Why:</strong> The debug configuration takes the program name from the <strong>folder name</strong>. CMake takes it from one line in <code>CMakeLists.txt</code>. Renaming the folder changes only the first.</p>
+<p><strong>Fix:</strong> After every copy and rename:</p>
+<ol type="1">
+<li>delete the <code>build</code> folder in the new copy;</li>
+<li>in <code>CMakeLists.txt</code>, set the project name to the new folder name:</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cmake code-with-copy"><code class="sourceCode cmake"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span>(<span class="dv">CMAKE_PROJECT_NAME</span> EE5203_L02_2400001234)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The Lab 2 and Lab 3 guides show these steps in Checkpoint A.</p>
 </section>
 </section>
 <section id="creating-the-project-in-cubemx" class="level1">
@@ -379,18 +432,30 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>Why:</strong> The extension blocks debugging until the question is answered, and the lab PCs already have everything.</p>
 <p><strong>Fix:</strong> Answer <strong>No</strong>, or dismiss it. If F5 is stuck, check the bell icon in the bottom right for an unanswered question.</p>
 </section>
+<section id="m17" class="level2">
+<h2 class="anchored" data-anchor-id="m17">17. You added a <code>.c</code> file but not to <code>CMakeLists.txt</code></h2>
+<p><strong>What you did:</strong> Put a new file such as <code>sensor_math.c</code> in <code>Core\Src</code> and called its functions from <code>main.c</code>.</p>
+<p><strong>What you see:</strong> The build stops at the link step with <code>undefined reference to 'clamp_u16'</code>.</p>
+<p><strong>Why:</strong> A CubeMX CMake project compiles only the files listed for it. CubeMX lists its own files; your new files are not on any list yet. The compiler saw the declaration in the header, but the linker found no definition.</p>
+<p><strong>Fix:</strong> Add the file to <code>target_sources</code> in <code>CMakeLists.txt</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cmake code-with-copy"><code class="sourceCode cmake"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">target_sources</span>(<span class="dv">${CMAKE_PROJECT_NAME}</span> <span class="bn">PRIVATE</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add user sources here</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    Core/Src/sensor_math.c</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>New header files in <code>Core\Inc</code> need no change. CubeMX never rewrites this part of <code>CMakeLists.txt</code>, so your lines stay after regeneration.</p>
+</section>
 </section>
 <section id="keeping-your-work" class="level1">
 <h1>Keeping your work</h1>
-<section id="m17" class="level2">
-<h2 class="anchored" data-anchor-id="m17">17. You wrote code outside the USER CODE regions</h2>
+<section id="m18" class="level2">
+<h2 class="anchored" data-anchor-id="m18">18. You wrote code outside the USER CODE regions</h2>
 <p><strong>What you did:</strong> Typed statements between <code>/* USER CODE END WHILE */</code> and <code>/* USER CODE BEGIN 3 */</code>, or anywhere outside a marked region.</p>
 <p><strong>What you see:</strong> The code works, until you change a pin in CubeMX and regenerate — then it is gone.</p>
 <p><strong>Why:</strong> Regeneration rewrites every line except those inside <code>USER CODE BEGIN … END</code> pairs.</p>
 <p><strong>Fix:</strong> Keep every statement you write inside a region. <code>BEGIN 2</code> for variables before the loop, <code>BEGIN 3</code> for the loop body.</p>
 </section>
-<section id="m18" class="level2">
-<h2 class="anchored" data-anchor-id="m18">18. You worked directly on <code>H:</code></h2>
+<section id="m19" class="level2">
+<h2 class="anchored" data-anchor-id="m19">19. You worked directly on <code>H:</code></h2>
 <p><strong>What you did:</strong> Opened the project from <code>H:\EE_Labs</code> and built it there.</p>
 <p><strong>What you see:</strong> Very slow builds, strange path errors, and sometimes a corrupted <code>build</code> folder.</p>
 <p><strong>Fix:</strong> Copy the project from <code>H:\EE_Labs</code> into <code>C:\Work\&lt;studentnumber&gt;</code> first, work there, and at the end of the session run the <strong>Save to H</strong> desktop shortcut. Anything left only on <code>C:</code> may be gone next week.</p>

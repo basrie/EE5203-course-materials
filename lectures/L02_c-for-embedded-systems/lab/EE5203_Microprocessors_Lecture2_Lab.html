@@ -4968,43 +4968,49 @@ pre { font-size: 8.7pt; }
 <section id="checkpoint-a---copy-and-build-the-project" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-a---copy-and-build-the-project">Checkpoint A - Copy and build the project</h2>
 <ol type="1">
-<li>Copy the L01 project and rename it <code>EE5203_L02_&lt;studentnumber&gt;</code> (the <code>.vscode</code> folder must come with it; if it is missing, copy it again from <code>C:\Users\Public\EE5203_template</code>).</li>
-<li>Build the unchanged copy; confirm zero errors.</li>
-<li>Locate <code>USER CODE BEGIN 2</code> in <code>main.c</code>.</li>
+<li><p>In <code>C:\Work\&lt;studentnumber&gt;</code>, copy the folder <code>EE5203_L01_&lt;studentnumber&gt;</code> and rename the copy <code>EE5203_L02_&lt;studentnumber&gt;</code>. Check that <code>.vscode</code> came with it; if it is missing, copy it again from <code>C:\Users\Public\EE5203_template</code>.</p></li>
+<li><p>In the new folder, <strong>delete the <code>build</code> folder</strong>. It still points to the L01 folder, and CMake stops with an error if you keep it.</p></li>
+<li><p>Open <code>CMakeLists.txt</code> in the new folder. Change the project name to the new folder name:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cmake code-with-copy"><code class="sourceCode cmake"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the project name</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span>(<span class="dv">CMAKE_PROJECT_NAME</span> EE5203_L02_&lt;studentnumber&gt;)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>F5 looks for <code>build\Debug\&lt;folder name&gt;.elf</code>. If this line keeps the old name, the build works but F5 reports that the program file does not exist.</p></li>
+<li><p>VS Code → File → Open Folder → <code>EE5203_L02_&lt;studentnumber&gt;</code>. Choose the <strong>Debug</strong> preset if asked. Build with <strong>Ctrl+Shift+B</strong>: zero errors.</p></li>
+<li><p>Find <code>USER CODE BEGIN 2</code> in <code>main.c</code>.</p></li>
 </ol>
-<p><strong>Evidence:</strong> Show the copied project name and the successful build.</p>
+<p>You do not need CubeMX in this lab.</p>
+<p><strong>Evidence:</strong> Show the title bar with <code>EE5203_L02_&lt;studentnumber&gt;</code> and the build line <code>Linking C executable EE5203_L02_&lt;studentnumber&gt;.elf</code>.</p>
 </section>
 <section id="checkpoint-b---declare-the-data-and-result-variables" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-b---declare-the-data-and-result-variables">Checkpoint B - Declare the data and result variables</h2>
 <p>Inside <code>USER CODE BEGIN 2</code>, before the generated <code>while (1)</code>, add:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> samples<span class="op">[</span><span class="dv">8</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">850</span><span class="op">,</span> <span class="dv">1250</span><span class="op">,</span> <span class="dv">4095</span><span class="op">,</span> <span class="dv">4200</span><span class="op">,</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2050</span><span class="op">,</span> <span class="dv">900</span><span class="op">,</span> <span class="dv">3100</span><span class="op">,</span> <span class="dv">2800</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> average <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> high_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> invalid_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> samples<span class="op">[</span><span class="dv">8</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">850</span><span class="op">,</span> <span class="dv">1250</span><span class="op">,</span> <span class="dv">4095</span><span class="op">,</span> <span class="dv">4200</span><span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2050</span><span class="op">,</span> <span class="dv">900</span><span class="op">,</span> <span class="dv">3100</span><span class="op">,</span> <span class="dv">2800</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> average <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> high_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> invalid_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>For each declaration, be able to name the type, the starting value, and the valid array indices.</p>
 <p><strong>Evidence:</strong> Build with zero errors and show the declarations.</p>
 </section>
 <section id="checkpoint-c---process-every-array-element" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-c---process-every-array-element">Checkpoint C - Process every array element</h2>
 <p>Add this loop after the declarations:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">8</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>samples<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> <span class="dv">4095</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        samples<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="dv">4095</span><span class="op">;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        invalid_count<span class="op">++;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    sum <span class="op">+=</span> samples<span class="op">[</span>i<span class="op">];</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>samples<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> <span class="dv">2500</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        high_count<span class="op">++;</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">8</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>samples<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> <span class="dv">4095</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        samples<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="dv">4095</span><span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        invalid_count<span class="op">++;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    sum <span class="op">+=</span> samples<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>samples<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> <span class="dv">2500</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        high_count<span class="op">++;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Before running, answer:</p>
 <ol type="1">
 <li>Which input value will be changed?</li>
@@ -5017,15 +5023,15 @@ pre { font-size: 8.7pt; }
 <section id="checkpoint-d---calculate-and-classify-the-result" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-d---calculate-and-classify-the-result">Checkpoint D - Calculate and classify the result</h2>
 <p>After the loop, add:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>average <span class="op">=</span> sum <span class="op">/</span> <span class="dv">8</span><span class="op">;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>average <span class="op">&lt;</span> <span class="dv">1500</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    status_code <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>average <span class="op">&gt;</span> <span class="dv">3000</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    status_code <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>average <span class="op">=</span> sum <span class="op">/</span> <span class="dv">8</span><span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>average <span class="op">&lt;</span> <span class="dv">1500</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    status_code <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>average <span class="op">&gt;</span> <span class="dv">3000</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    status_code <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The numeric status is deliberate. C strings and character arrays are introduced in Lecture 3.</p>
 <p>Before debugging, calculate the expected:</p>
 <table class="caption-top table">
@@ -5108,13 +5114,13 @@ pre { font-size: 8.7pt; }
 <section id="stretch---make-the-board-show-the-result-optional" class="level2">
 <h2 class="anchored" data-anchor-id="stretch---make-the-board-show-the-result-optional">Stretch - make the board show the result (optional)</h2>
 <p>For students who finish early. Inside the generated <code>while (1)</code>, after the status chain has run once, blink LD2 <code>high_count</code> times, wait one second, and repeat:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> high_count<span class="op">;</span> k<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">150</span><span class="op">);</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">150</span><span class="op">);</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>HAL_Delay<span class="op">(</span><span class="dv">1000</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> high_count<span class="op">;</span> k<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">150</span><span class="op">);</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">150</span><span class="op">);</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>HAL_Delay<span class="op">(</span><span class="dv">1000</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Count the blinks. They must agree with <code>high_count</code> in the debugger — two independent pieces of evidence for one number. Then let the status choose the speed: set an <code>int period</code> to <code>100</code> for HIGH and <code>500</code> otherwise with an <code>if/else</code>, and use it in both delays. Show the TA both versions.</p>
 </section>
 <section id="common-problems" class="level2">
@@ -5146,6 +5152,14 @@ pre { font-size: 8.7pt; }
 <tr class="even">
 <td>Change has no effect</td>
 <td>rebuild and restart the debug session</td>
+</tr>
+<tr class="odd">
+<td><code>CMake Error: The current CMakeCache.txt directory ... is different</code></td>
+<td>delete the copied <code>build</code> folder (Checkpoint A, step 2)</td>
+</tr>
+<tr class="even">
+<td>F5: program file <code>...EE5203_L02_&lt;studentnumber&gt;.elf</code> does not exist</td>
+<td>the <code>set(CMAKE_PROJECT_NAME ...)</code> line matches the folder name (step 3)</td>
 </tr>
 </tbody>
 </table>

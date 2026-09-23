@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -125,24 +159,42 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="ee5203-l03-starter-files" class="level1">
 <h1>EE5203 L03 Starter Files</h1>
-<p>Copy these files into a working copy of the completed L02 Nucleo-F401RE project:</p>
+<p>Download <a href="EE5203_L03_starter.zip"><code>EE5203_L03_starter.zip</code></a>. It holds four files:</p>
 <ul>
-<li><code>Core/Inc/sensor_math.h</code> -&gt; project <code>Core/Inc</code></li>
-<li><code>Core/Inc/status_text.h</code> -&gt; project <code>Core/Inc</code></li>
-<li><code>Core/Src/sensor_math.c</code> -&gt; project <code>Core/Src</code></li>
-<li><code>Core/Src/status_text.c</code> -&gt; project <code>Core/Src</code></li>
+<li><code>Core/Inc/sensor_math.h</code></li>
+<li><code>Core/Inc/status_text.h</code></li>
+<li><code>Core/Src/sensor_math.c</code></li>
+<li><code>Core/Src/status_text.c</code></li>
 </ul>
-<p>The starter implementations compile but intentionally return placeholder results. Complete every <code>TODO</code> using the L03 lab guide. Add the fixed arrays, debugger-visible result variables, and pipeline calls to generated <code>main.c</code> only inside its <code>USER CODE</code> regions.</p>
-<p>Before copying the <code>main.c</code> declarations, be able to explain them:</p>
+<section id="add-them-to-your-project" class="level2">
+<h2 class="anchored" data-anchor-id="add-them-to-your-project">Add them to your project</h2>
+<ol type="1">
+<li>Copy your <code>EE5203_L02_&lt;studentnumber&gt;</code> project, rename the copy <code>EE5203_L03_&lt;studentnumber&gt;</code>, and delete its <code>build</code> folder.</li>
+<li>Double-click the zip. Copy the <code>Core</code> folder inside and paste it into your project folder. Windows adds the files to your <code>Core\Inc</code> and <code>Core\Src</code>.</li>
+<li>In <code>CMakeLists.txt</code>, set the project name to the folder name and add the two <code>.c</code> files to <code>target_sources</code>:</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cmake code-with-copy"><code class="sourceCode cmake"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span>(<span class="dv">CMAKE_PROJECT_NAME</span> EE5203_L03_&lt;studentnumber&gt;)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">target_sources</span>(<span class="dv">${CMAKE_PROJECT_NAME}</span> <span class="bn">PRIVATE</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add user sources here</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    Core/Src/sensor_math.c</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    Core/Src/status_text.c</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Without step 3 the build stops with <code>undefined reference to 'clamp_u16'</code>. The L03 lab guide, Checkpoint A, has every step.</p>
+</section>
+<section id="what-the-starter-does" class="level2">
+<h2 class="anchored" data-anchor-id="what-the-starter-does">What the starter does</h2>
+<p>The functions compile, but they return placeholder results. Complete every <code>TODO</code> using the L03 lab guide. Add the arrays, the result variables, and the function calls to <code>main.c</code> only inside its <code>USER CODE</code> regions.</p>
+<p>Before you copy the <code>main.c</code> declarations, be able to explain them:</p>
 <ul>
-<li><code>uint16_t</code> is an unsigned 16-bit whole-number type; it can hold 0 through 65,535 and comes from <code>&lt;stdint.h&gt;</code>.</li>
-<li>ordinary <code>int</code> is used for the lab’s small counts, indices, and capacities.</li>
-<li><code>bool</code> stores <code>true</code> or <code>false</code> and comes from <code>&lt;stdbool.h&gt;</code>.</li>
-<li><code>#define SAMPLE_COUNT 8</code> gives the preprocessor a readable name to replace before C compilation; it is not a variable.</li>
+<li><code>uint16_t</code> is an unsigned 16-bit whole number: 0 to 65,535. It comes from <code>&lt;stdint.h&gt;</code>.</li>
+<li>Plain <code>int</code> is used for the small counts, indices, and capacities.</li>
+<li><code>bool</code> stores <code>true</code> or <code>false</code>. It comes from <code>&lt;stdbool.h&gt;</code>.</li>
+<li><code>#define SAMPLE_COUNT 8</code> is not a variable. The preprocessor replaces every <code>SAMPLE_COUNT</code> with <code>8</code> before the compiler runs.</li>
 </ul>
-<p>Do not add these files to a different project without checking its include paths and source folders.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

@@ -4870,37 +4870,41 @@ pre { font-size: 8.7pt; }
 <h1>EE5203 L03 Lab Guide</h1>
 <p><em>Process eight sensor values with small C functions - Basri Erdogan</em></p>
 <div class="mission">
-<p><strong>Mission:</strong> Copy your completed L02 project, add four C files, clamp eight sensor values, calculate their average, and write <code>&quot;LOW&quot;</code>, <code>&quot;OK&quot;</code>, or <code>&quot;HIGH&quot;</code>. Prove the result with compiler output and debugger evidence.</p>
+<p><strong>Mission:</strong> Copy your working L02 project and add four C files. Clamp eight sensor values, calculate their average, and write <code>&quot;LOW&quot;</code>, <code>&quot;OK&quot;</code>, or <code>&quot;HIGH&quot;</code>. Check every result in the debugger.</p>
 </div>
 <section id="prepare-before-class" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-before-class">Prepare before class</h2>
 <ul class="task-list">
-<li><label><input type="checkbox">Bring your working L02 Nucleo-F401RE project and USB data cable.</label></li>
-<li><label><input type="checkbox">Review function declarations, definitions, calls, array bounds, and <code>\0</code>.</label></li>
-<li><label><input type="checkbox">Download the L03 <code>starter/</code> folder from the course materials.</label></li>
-<li><label><input type="checkbox">Complete this entry ticket before the session warm-up:</label></li>
+<li><label><input type="checkbox">Bring your working <code>EE5203_L02_&lt;studentnumber&gt;</code> project and a USB data cable.</label></li>
+<li><label><input type="checkbox">Review function declarations, definitions, calls, array indices, and <code>\0</code>.</label></li>
+<li><label><input type="checkbox">Download the starter files: <a href="starter/EE5203_L03_starter.zip"><code>EE5203_L03_starter.zip</code></a>.</label></li>
+<li><label><input type="checkbox">Write the answers to this entry ticket on paper before the lab:</label></li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> average_samples<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
-<li>Circle the return type, function name, and two parameters.</li>
-<li>Explain why <code>count</code> is required.</li>
-<li>State the valid indices when <code>count == 8</code>.</li>
+<li>Circle the return type, the function name, and the two parameters.</li>
+<li>Why does the function need <code>count</code>? One sentence.</li>
+<li>Write the valid indices when <code>count == 8</code>.</li>
 </ol>
 </section>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
 <p>By checkoff time, you can:</p>
 <ol type="1">
-<li>read the types, names, and parameters in a C declaration;</li>
-<li>connect a declaration, definition, and call across C files;</li>
+<li>name the return type, name, and parameters in a C declaration;</li>
+<li>find the declaration, definition, and call of one function in three files;</li>
 <li>loop through an array without using an invalid index;</li>
 <li>write a C string that fits in its array and ends with <code>\0</code>;</li>
-<li>use debugger evidence to justify a result and one controlled change.</li>
+<li>check a result in the debugger, then change one input and predict the new result.</li>
 </ol>
 </section>
 <section id="hardware-and-files" class="level2">
 <h2 class="anchored" data-anchor-id="hardware-and-files">Hardware and files</h2>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Item</th>
@@ -4914,11 +4918,11 @@ pre { font-size: 8.7pt; }
 </tr>
 <tr class="even">
 <td>Tools</td>
-<td>STM32CubeMX + VS Code</td>
+<td>VS Code (no CubeMX in this lab)</td>
 </tr>
 <tr class="odd">
 <td>Starting point</td>
-<td>A working copy of the L02 project</td>
+<td>A copy of your L02 project</td>
 </tr>
 <tr class="even">
 <td>Project name</td>
@@ -4933,89 +4937,107 @@ pre { font-size: 8.7pt; }
 <td><code>sensor_math.c</code>, <code>status_text.c</code></td>
 </tr>
 <tr class="odd">
+<td>Files you edit</td>
+<td><code>CMakeLists.txt</code>, <code>main.c</code>, <code>sensor_math.c</code>, <code>status_text.c</code></td>
+</tr>
+<tr class="even">
 <td>Input</td>
 <td>Eight fixed <code>uint16_t</code> samples; no ADC yet</td>
 </tr>
-<tr class="even">
-<td>Evidence</td>
-<td>Build console, breakpoint, Watch/Expressions, Memory view</td>
+<tr class="odd">
+<td>What you show</td>
+<td>Build output, breakpoint, VARIABLES / WATCH, MEMORY panel</td>
 </tr>
 </tbody>
 </table>
-<p>Keep all edits to generated <code>main.c</code> inside the appropriate <code>USER CODE</code> regions.</p>
+<p>Keep all edits to <code>main.c</code> inside the <code>USER CODE</code> regions.</p>
 </section>
-<section id="checkpoint-a---add-the-four-starter-files" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-a---add-the-four-starter-files">Checkpoint A - Add the four starter files</h2>
+<section id="checkpoint-a---copy-the-project-and-add-the-four-starter-files" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-a---copy-the-project-and-add-the-four-starter-files">Checkpoint A - Copy the project and add the four starter files</h2>
 <ol type="1">
-<li>Copy the L02 project and rename the copy <code>EE5203_L03_&lt;studentnumber&gt;</code>.</li>
-<li>Copy the starter headers into <code>Core/Inc</code> and sources into <code>Core/Src</code>; confirm each <code>.c</code> includes its own <code>.h</code>.</li>
-<li>Add these includes inside <code>USER CODE BEGIN Includes</code> in <code>main.c</code>:</li>
+<li><p>Put your <code>EE5203_L02_&lt;studentnumber&gt;</code> folder in <code>C:\Work\&lt;studentnumber&gt;</code>. Copy it, and rename the copy <code>EE5203_L03_&lt;studentnumber&gt;</code>. Check that the <code>.vscode</code> folder came with it.</p></li>
+<li><p>In the new folder, <strong>delete the <code>build</code> folder</strong>. It still points to the L02 folder, and CMake stops with an error if you keep it.</p></li>
+<li><p>Double-click <code>EE5203_L03_starter.zip</code>. Copy the <code>Core</code> folder you see inside and paste it into your project folder. Windows adds two files to <code>Core\Inc</code> and two files to <code>Core\Src</code>.</p></li>
+<li><p>Open <code>CMakeLists.txt</code> in the project folder and make two changes.</p>
+<p>Change the project name to the new folder name:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cmake code-with-copy"><code class="sourceCode cmake"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the project name</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span>(<span class="dv">CMAKE_PROJECT_NAME</span> EE5203_L03_&lt;studentnumber&gt;)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Add the two new <code>.c</code> files to the build:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cmake code-with-copy"><code class="sourceCode cmake"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add sources to executable</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">target_sources</span>(<span class="dv">${CMAKE_PROJECT_NAME}</span> <span class="bn">PRIVATE</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add user sources here</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    Core/Src/sensor_math.c</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    Core/Src/status_text.c</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The header files need no change: <code>Core/Inc</code> is already on the include path.</p></li>
+<li><p>In <code>main.c</code>, add these includes inside <code>USER CODE BEGIN Includes</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdbool.h&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdint.h&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;sensor_math.h&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;status_text.h&quot;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>VS Code → File → Open Folder → <code>EE5203_L03_&lt;studentnumber&gt;</code>. Choose the <strong>Debug</strong> preset if asked. Build with <strong>Ctrl+Shift+B</strong>: zero errors.</p></li>
+<li><p>Find the declaration of <code>clamp_u16</code> (file and line) and its definition (file and line).</p></li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdbool.h&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdint.h&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;sensor_math.h&quot;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;status_text.h&quot;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ol start="4" type="1">
-<li>Build the unmodified starter with zero errors, then identify where <code>clamp_u16</code> is declared, defined, and called.</li>
-</ol>
-<p><strong>Evidence for Checkpoint A:</strong> Show the four module files, a successful build, and the declaration/definition/call locations for one function.</p>
+<p><strong>Show:</strong> the four new files in the Explorer, the two new lines in <code>CMakeLists.txt</code>, and the build line <code>Linking C executable EE5203_L03_&lt;studentnumber&gt;.elf</code>.</p>
 </section>
 <section id="call-the-new-functions-from-main.c" class="level2">
 <h2 class="anchored" data-anchor-id="call-the-new-functions-from-main.c">Call the new functions from <code>main.c</code></h2>
 <p>Inside <code>USER CODE BEGIN PV</code> in <code>main.c</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SAMPLE_COUNT       </span><span class="dv">8</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define STATUS_CAPACITY    </span><span class="dv">8</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SAMPLE_LIMIT       </span><span class="dv">4095</span><span class="bu">U</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define HIGH_THRESHOLD     </span><span class="dv">2500</span><span class="bu">U</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> raw_samples<span class="op">[</span>SAMPLE_COUNT<span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">850</span><span class="bu">U</span><span class="op">,</span> <span class="dv">1250</span><span class="bu">U</span><span class="op">,</span> <span class="dv">4095</span><span class="bu">U</span><span class="op">,</span> <span class="dv">4200</span><span class="bu">U</span><span class="op">,</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2050</span><span class="bu">U</span><span class="op">,</span> <span class="dv">90</span><span class="bu">U</span><span class="op">,</span> <span class="dv">3100</span><span class="bu">U</span><span class="op">,</span> <span class="dv">2800</span><span class="bu">U</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> bounded_samples<span class="op">[</span>SAMPLE_COUNT<span class="op">];</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> status_text<span class="op">[</span>STATUS_CAPACITY<span class="op">];</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> sample_average <span class="op">=</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> samples_above <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> status_valid <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> lab_done <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SAMPLE_COUNT       </span><span class="dv">8</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define STATUS_CAPACITY    </span><span class="dv">8</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SAMPLE_LIMIT       </span><span class="dv">4095</span><span class="bu">U</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define HIGH_THRESHOLD     </span><span class="dv">2500</span><span class="bu">U</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> raw_samples<span class="op">[</span>SAMPLE_COUNT<span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">850</span><span class="bu">U</span><span class="op">,</span> <span class="dv">1250</span><span class="bu">U</span><span class="op">,</span> <span class="dv">4095</span><span class="bu">U</span><span class="op">,</span> <span class="dv">4200</span><span class="bu">U</span><span class="op">,</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2050</span><span class="bu">U</span><span class="op">,</span> <span class="dv">90</span><span class="bu">U</span><span class="op">,</span> <span class="dv">3100</span><span class="bu">U</span><span class="op">,</span> <span class="dv">2800</span><span class="bu">U</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> bounded_samples<span class="op">[</span>SAMPLE_COUNT<span class="op">];</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> status_text<span class="op">[</span>STATUS_CAPACITY<span class="op">];</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> sample_average <span class="op">=</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> samples_above <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> status_valid <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> lab_done <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Inside <code>USER CODE BEGIN 2</code>, before the generated <code>while (1)</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> SAMPLE_COUNT<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    bounded_samples<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        clamp_u16<span class="op">(</span>raw_samples<span class="op">[</span>i<span class="op">],</span> <span class="dv">0</span><span class="bu">U</span><span class="op">,</span> SAMPLE_LIMIT<span class="op">);</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>sample_average <span class="op">=</span> average_samples<span class="op">(</span>bounded_samples<span class="op">,</span> SAMPLE_COUNT<span class="op">);</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>samples_above <span class="op">=</span> count_above<span class="op">(</span>bounded_samples<span class="op">,</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                            SAMPLE_COUNT<span class="op">,</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                            HIGH_THRESHOLD<span class="op">);</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>status_valid <span class="op">=</span> make_status<span class="op">(</span>status_text<span class="op">,</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                           STATUS_CAPACITY<span class="op">,</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                           sample_average<span class="op">);</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>lab_done <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> SAMPLE_COUNT<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    bounded_samples<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        clamp_u16<span class="op">(</span>raw_samples<span class="op">[</span>i<span class="op">],</span> <span class="dv">0</span><span class="bu">U</span><span class="op">,</span> SAMPLE_LIMIT<span class="op">);</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>sample_average <span class="op">=</span> average_samples<span class="op">(</span>bounded_samples<span class="op">,</span> SAMPLE_COUNT<span class="op">);</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>samples_above <span class="op">=</span> count_above<span class="op">(</span>bounded_samples<span class="op">,</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                            SAMPLE_COUNT<span class="op">,</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                            HIGH_THRESHOLD<span class="op">);</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>status_valid <span class="op">=</span> make_status<span class="op">(</span>status_text<span class="op">,</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                           STATUS_CAPACITY<span class="op">,</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                           sample_average<span class="op">);</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>lab_done <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Do not add a second infinite loop. Leave the generated <code>while (1)</code> in place.</p>
+<p>Build again with Ctrl+Shift+B. Now <code>clamp_u16</code> is also <strong>called</strong>: find the call. If the build stops with <code>undefined reference to &#39;clamp_u16&#39;</code>, the two <code>.c</code> files are missing from <code>target_sources</code> (Checkpoint A, step 4).</p>
 </section>
 <section id="checkpoint-b---clamp-and-average-the-array-safely" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-b---clamp-and-average-the-array-safely">Checkpoint B - Clamp and average the array safely</h2>
 <p>Complete these functions in <code>sensor_math.c</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> clamp_u16<span class="op">(</span><span class="dt">uint16_t</span> value<span class="op">,</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                   <span class="dt">uint16_t</span> low<span class="op">,</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                   <span class="dt">uint16_t</span> high<span class="op">);</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> average_samples<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                         <span class="dt">int</span> count<span class="op">);</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> count_above<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                <span class="dt">int</span> count<span class="op">,</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                <span class="dt">uint16_t</span> threshold<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Requirements:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> clamp_u16<span class="op">(</span><span class="dt">uint16_t</span> value<span class="op">,</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                   <span class="dt">uint16_t</span> low<span class="op">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                   <span class="dt">uint16_t</span> high<span class="op">);</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> average_samples<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                         <span class="dt">int</span> count<span class="op">);</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> count_above<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                <span class="dt">int</span> count<span class="op">,</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                <span class="dt">uint16_t</span> threshold<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Rules:</p>
 <ul>
-<li><code>clamp_u16</code> bounds every value into <code>0U…4095U</code>.</li>
-<li>Array loops use <code>i &lt; count</code>; <code>average_samples</code> returns <code>0U</code> when <code>count == 0</code> and sums into a <code>uint32_t</code> so the total fits before division.</li>
-<li><code>count_above</code> is strict: <code>values[i] &gt; threshold</code> with <code>HIGH_THRESHOLD = 2500U</code>.</li>
+<li><code>clamp_u16</code> returns <code>low</code> for values below <code>low</code>, <code>high</code> for values above <code>high</code>, and the value itself otherwise. Here the range is <code>0U</code> to <code>4095U</code>.</li>
+<li>Every array loop uses <code>i &lt; count</code>.</li>
+<li><code>average_samples</code> returns <code>0U</code> when <code>count == 0</code>. It adds the values into a <code>uint32_t</code> sum, then divides once at the end.</li>
+<li><code>count_above</code> counts values strictly greater than the threshold: <code>values[i] &gt; threshold</code>, with <code>HIGH_THRESHOLD = 2500U</code>.</li>
 </ul>
-<p>Before debugging, calculate the expected results:</p>
+<p>Before debugging, calculate the expected results on paper:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -5042,32 +5064,103 @@ pre { font-size: 8.7pt; }
 </tr>
 </tbody>
 </table>
-<p><strong>Evidence for Checkpoint B:</strong> Show a breakpoint inside <code>average_samples</code>, the changing index and accumulator, and the final three observed values.</p>
+<p><strong>Show:</strong> a breakpoint inside the loop of <code>average_samples</code>, with <code>i</code> and the sum changing as you step, and the three observed values in the table.</p>
 </section>
 <section id="checkpoint-c---write-low-ok-or-high-and-add-0" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-c---write-low-ok-or-high-and-add-0">Checkpoint C - Write <code>LOW</code>, <code>OK</code>, or <code>HIGH</code> and add <code>\0</code></h2>
 <p>Complete this function in <code>status_text.c</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> make_status<span class="op">(</span><span class="dt">char</span> destination<span class="op">[],</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                 <span class="dt">int</span> capacity<span class="op">,</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                 <span class="dt">uint16_t</span> average<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Requirements:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> make_status<span class="op">(</span><span class="dt">char</span> destination<span class="op">[],</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                 <span class="dt">int</span> capacity<span class="op">,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                 <span class="dt">uint16_t</span> average<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Rules:</p>
 <ul>
-<li>Thresholds: <code>&quot;LOW&quot;</code> below <code>1500U</code>, <code>&quot;HIGH&quot;</code> above <code>3000U</code>, otherwise <code>&quot;OK&quot;</code>; capacity is eight characters including the terminator.</li>
-<li>Check the required capacity before writing; write the <code>\0</code> explicitly.</li>
-<li>Return <code>true</code> only after a complete string is written; on insufficient capacity write an empty string when possible and return <code>false</code>.</li>
+<li><code>&quot;LOW&quot;</code> when the average is below <code>1500U</code>, <code>&quot;HIGH&quot;</code> when it is above <code>3000U</code>, otherwise <code>&quot;OK&quot;</code>. The capacity is eight characters, including <code>\0</code>.</li>
+<li>Check that the text and its <code>\0</code> fit in <code>capacity</code> <strong>before</strong> you write. Write the <code>\0</code> yourself.</li>
+<li>Return <code>true</code> only after the whole string is written. If it does not fit, write an empty string (only <code>\0</code>) when <code>capacity &gt; 0</code> and return <code>false</code>.</li>
 </ul>
-<p>Inspect <code>status_text</code> in both the Watch panel and the Memory view, and record the character and hexadecimal byte at indices 0 through 4.</p>
-<p><strong>Evidence for Checkpoint C:</strong> Show the readable string, the terminator byte, and <code>status_valid</code>.</p>
+<p>Look at <code>status_text</code> in the WATCH panel and in the MEMORY panel. Fill in the character and its hexadecimal byte for indices 0 to 4:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Index</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Character</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Byte (hex)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Show:</strong> the string, the <code>0x00</code> byte after the last letter, and <code>status_valid</code>.</p>
 </section>
-<section id="checkpoint-d---debugger-evidence" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-d---debugger-evidence">Checkpoint D - Debugger evidence</h2>
-<p>Use a breakpoint at or immediately before <code>lab_done = true;</code>.</p>
-<p>Predict the final values first, then inspect every result variable and confirm <code>lab_done</code> flips to <code>true</code> on resume. Collect evidence for each claim:</p>
-<p>no index exceeded 7; the <code>4200</code> sample became <code>4095</code>; the average used all eight clamped samples; the status text is null-terminated.</p>
+<section id="checkpoint-d---check-the-final-values-in-the-debugger" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-d---check-the-final-values-in-the-debugger">Checkpoint D - Check the final values in the debugger</h2>
+<p>Set a breakpoint on the line <code>lab_done = true;</code>. Write every prediction first. Then press <strong>F5</strong> and fill in the table.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Check</th>
+<th>Where to look</th>
+<th>Prediction</th>
+<th>Observed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>The last index used is 7</td>
+<td><code>i</code> at the last loop step inside <code>average_samples</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>The <code>4200</code> sample became <code>4095</code></td>
+<td><code>bounded_samples[3]</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>The average used all eight clamped samples</td>
+<td><code>sample_average</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>The status text ends with <code>\0</code></td>
+<td><code>status_text</code> in the MEMORY panel</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Press <strong>Step over</strong> (F10) once: <code>lab_done</code> changes to <code>true</code>.</p>
 </section>
 <section id="checkpoint-e---individual-modification" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-e---individual-modification">Checkpoint E - Individual modification</h2>
-<p>Each student receives one variant. State the prediction before editing, change only what is necessary, then collect fresh evidence.</p>
+<p>Each student gets one variant. Write your prediction first. Change only that one thing. Build, run, and compare.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -5082,53 +5175,95 @@ pre { font-size: 8.7pt; }
 <tbody>
 <tr class="odd">
 <td>A</td>
-<td>Change the <code>90U</code> sample to <code>5000U</code>; predict the clamped value and new average.</td>
+<td>Change the <code>90U</code> sample to <code>5000U</code>. Predict the clamped value and the new average.</td>
 </tr>
 <tr class="even">
 <td>B</td>
-<td>Change <code>HIGH_THRESHOLD</code> from <code>2500U</code> to <code>2000U</code>; predict <code>samples_above</code>.</td>
+<td>Change <code>HIGH_THRESHOLD</code> from <code>2500U</code> to <code>2000U</code>. Predict <code>samples_above</code>.</td>
 </tr>
 <tr class="odd">
 <td>C</td>
-<td>Change the <code>HIGH</code> status boundary from <code>3000U</code> to <code>2200U</code>; predict the string.</td>
+<td>Change the <code>HIGH</code> status boundary from <code>3000U</code> to <code>2200U</code>. Predict the string.</td>
 </tr>
 <tr class="even">
 <td>D</td>
-<td>Call the array functions with <code>SAMPLE_COUNT - 1</code>; predict which sample is excluded and the new results.</td>
+<td>Call the array functions with <code>SAMPLE_COUNT - 1</code>. Predict which sample is left out and the new results.</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Evidence for Checkpoint E:</strong> Demonstrate the new result and explain how the changed input or function call produced the observed output.</p>
+<p><strong>Show:</strong> the new values in the debugger. Explain in two sentences why they changed.</p>
+</section>
+<section id="common-problems" class="level2">
+<h2 class="anchored" data-anchor-id="common-problems">Common problems</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>What you see</th>
+<th>First check</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>undefined reference to &#39;clamp_u16&#39;</code></td>
+<td>Both <code>.c</code> files are listed in <code>target_sources</code> in <code>CMakeLists.txt</code>. The function name in the <code>.c</code> file matches the <code>.h</code> file.</td>
+</tr>
+<tr class="even">
+<td><code>sensor_math.h: No such file or directory</code></td>
+<td>The header is in <code>Core\Inc</code> — not in <code>Core\Src</code>, and not in <code>Core\Core\Inc</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>CMake Error: The current CMakeCache.txt directory ... is different</code></td>
+<td>You kept the copied <code>build</code> folder. Delete it and build again.</td>
+</tr>
+<tr class="even">
+<td>F5: program file <code>...EE5203_L03_&lt;studentnumber&gt;.elf</code> does not exist</td>
+<td>The <code>set(CMAKE_PROJECT_NAME ...)</code> line matches the folder name exactly.</td>
+</tr>
+<tr class="odd">
+<td><code>conflicting types for &#39;average_samples&#39;</code></td>
+<td>The declaration in the <code>.h</code> file and the definition in the <code>.c</code> file use the same types.</td>
+</tr>
+<tr class="even">
+<td>Build is clean, but the average is wrong</td>
+<td>Stop inside the loop and watch <code>i</code>, <code>count</code>, and the sum.</td>
+</tr>
+<tr class="odd">
+<td>The status string shows extra characters</td>
+<td>The <code>\0</code> is written right after the last letter.</td>
+</tr>
+</tbody>
+</table>
+<p>More setup problems: see <em>Common Lab Mistakes</em> on CATS Lessons.</p>
 </section>
 <section id="acceptance-checklist" class="level2">
 <h2 class="anchored" data-anchor-id="acceptance-checklist">Acceptance checklist</h2>
 <ul class="task-list">
-<li><label><input type="checkbox">Build is clean; declarations and definitions match exactly.</label></li>
-<li><label><input type="checkbox">Array loops use explicit length and valid indices; the sum uses <code>uint32_t</code>.</label></li>
-<li><label><input type="checkbox">The status string fits, ends with <code>\0</code>, and reports success.</label></li>
-<li><label><input type="checkbox">Predictions, observations, and Checkpoint D evidence are recorded.</label></li>
-<li><label><input type="checkbox">The assigned individual modification is demonstrated.</label></li>
-<li><label><input type="checkbox">All <code>main.c</code> edits stay inside protected user-code regions.</label></li>
+<li><label><input type="checkbox">The build is clean. Each declaration matches its definition exactly.</label></li>
+<li><label><input type="checkbox">Every array loop uses <code>i &lt; count</code>. The sum is a <code>uint32_t</code>.</label></li>
+<li><label><input type="checkbox">The status string fits in its array, ends with <code>\0</code>, and <code>status_valid</code> is <code>true</code>.</label></li>
+<li><label><input type="checkbox">The prediction tables and the Checkpoint D table are filled in.</label></li>
+<li><label><input type="checkbox">Your individual modification works and you can explain it.</label></li>
+<li><label><input type="checkbox">All <code>main.c</code> edits are inside the <code>USER CODE</code> regions.</label></li>
 </ul>
 </section>
 <section id="individual-oral-check" class="level2">
 <h2 class="anchored" data-anchor-id="individual-oral-check">Individual oral check</h2>
-<p>Be prepared for one question and one live change:</p>
+<p>Be ready for one question and one live change:</p>
 <ul>
 <li>What is the difference between declaring and defining a function?</li>
-<li>Why can <code>average_samples</code> not discover the caller’s array length?</li>
-<li>Why <code>uint32_t</code> for the sum, and where is the <code>\0</code> byte in your status array?</li>
-<li>What does a successful build prove, and what does the debugger prove?</li>
-<li>If the linker reports <code>undefined reference</code>, which stage do you inspect?</li>
+<li>Why can <code>average_samples</code> not find the length of the array by itself?</li>
+<li>Why is the sum a <code>uint32_t</code>? Where is the <code>\0</code> byte in your status array?</li>
+<li>The build has 0 errors. Does that mean the average is correct? How do you check it?</li>
+<li>You see <code>undefined reference to &#39;count_above&#39;</code>. Which file do you check first?</li>
 </ul>
 </section>
 <section id="submit" class="level2">
 <h2 class="anchored" data-anchor-id="submit">Submit</h2>
-<p>Submit the four module files, the <code>main.c</code> user-code sections, one debugger screenshot of the final arrays and results, the completed tables, and a three-sentence explanation of your modification.</p>
-</section>
-<section id="if-you-are-stuck" class="level2">
-<h2 class="anchored" data-anchor-id="if-you-are-stuck">If you are stuck</h2>
-<p>Read the <strong>first</strong> compiler or linker message and compare the declaration with its definition; test one small input while watching <code>i</code>, <code>count</code>, and the accumulator (or the string’s capacity and <code>\0</code> byte); record expected result, observed result, and the smallest next test.</p>
+<p>Submit the four module files, <code>CMakeLists.txt</code>, the <code>main.c</code> user-code sections, one debugger screenshot of the final arrays and results, the completed tables, and a three-sentence explanation of your modification.</p>
 
 
 </section>

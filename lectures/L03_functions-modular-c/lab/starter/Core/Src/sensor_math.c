@@ -4,7 +4,7 @@ uint16_t clamp_u16(uint16_t value,
                    uint16_t low,
                    uint16_t high)
 {
-    /* TODO: return low, high, or the original value. */
+    /* TODO: return low if value < low, high if value > high, else value. */
     (void)low;
     (void)high;
     return value;
@@ -13,7 +13,8 @@ uint16_t clamp_u16(uint16_t value,
 uint16_t average_samples(uint16_t values[],
                          int count)
 {
-    /* TODO: handle count == 0, accumulate safely, and return the average. */
+    /* TODO: return 0U if count == 0. Add every value into a uint32_t sum.
+       Return sum / count. */
     (void)values;
     (void)count;
     return 0U;
@@ -23,7 +24,7 @@ int count_above(uint16_t values[],
                 int count,
                 uint16_t threshold)
 {
-    /* TODO: count elements strictly greater than threshold. */
+    /* TODO: count the values greater than threshold (use >, not >=). */
     (void)values;
     (void)count;
     (void)threshold;
