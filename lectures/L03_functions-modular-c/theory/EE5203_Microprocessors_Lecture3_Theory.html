@@ -375,8 +375,9 @@ Basri Erdogan
 </section>
 <section id="reading-a-function-definition-four-questions" class="slide level2">
 <h2>Reading a function definition: four questions</h2>
+<p>A function definition is the declaration line plus the body in <code>{ }</code>. Ask these four questions about any definition.</p>
 <div class="columns">
-<div class="column" style="width:56%;">
+<div class="column" style="width:49%;">
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a></a><span class="dt">int</span> clamp<span class="op">(</span><span class="dt">int</span> value<span class="op">,</span> <span class="dt">int</span> low<span class="op">,</span> <span class="dt">int</span> high<span class="op">)</span></span>
 <span id="cb5-2"><a></a><span class="op">{</span></span>
 <span id="cb5-3"><a></a>    <span class="cf">if</span> <span class="op">(</span>value <span class="op">&lt;</span> low<span class="op">)</span> <span class="op">{</span></span>
@@ -387,19 +388,19 @@ Basri Erdogan
 <span id="cb5-8"><a></a>    <span class="op">}</span></span>
 <span id="cb5-9"><a></a>    <span class="cf">return</span> value<span class="op">;</span></span>
 <span id="cb5-10"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column" style="width:40%;">
+</div><div class="column" style="width:49%;">
 <div class="check-grid single-column">
 <div class="check-item">
-<p><strong>Inputs:</strong> value, low, high</p>
+<p><strong>1 · What goes in?</strong> Three <code>int</code> parameters: <code>value</code>, <code>low</code>, <code>high</code>.</p>
 </div>
 <div class="check-item">
-<p><strong>Output:</strong> bounded value</p>
+<p><strong>2 · What comes back?</strong> One <code>int</code>: <code>low</code>, <code>high</code>, or <code>value</code>.</p>
 </div>
 <div class="check-item">
-<p><strong>Changes outside the function?</strong> No</p>
+<p><strong>3 · Does it change anything outside?</strong> No.&nbsp;It only returns a result.</p>
 </div>
 <div class="check-item">
-<p><strong>Boundary cases:</strong> below, inside, above</p>
+<p><strong>4 · Which calls should you test?</strong> One below <code>low</code>, one inside, one above <code>high</code>.</p>
 </div>
 </div>
 </div></div>
@@ -958,62 +959,33 @@ Basri Erdogan
 </div>
 <p><code>bool</code> stores <code>true</code> or <code>false</code> and is provided by <code>&lt;stdbool.h&gt;</code>.</p>
 </section>
-<section id="the-four-functions-you-write-in-lab-3" class="slide level2">
-<h2>The four functions you write in Lab 3</h2>
-<div class="pipeline-grid wide-pipeline">
-<div class="pipeline-card">
-<p><span>A</span> <strong>CLAMP</strong></p>
-<div class="interface-signature">
-<p><code>uint16_t clamp_u16(</code><br> <code>uint16_t value,</code><br> <code>uint16_t low,</code><br> <code>uint16_t high);</code></p>
-</div>
-</div>
-<div class="pipeline-arrow">
-<p>→</p>
-</div>
-<div class="pipeline-card">
-<p><span>B</span> <strong>AVERAGE · COUNT</strong></p>
-<div class="interface-signature">
-<p><code>uint16_t average_samples(</code><br> <code>uint16_t values[], int count);</code><br><br> <code>int count_above(</code><br> <code>uint16_t values[], int count,</code><br> <code>uint16_t threshold);</code></p>
-</div>
-</div>
-<div class="pipeline-arrow">
-<p>→</p>
-</div>
-<div class="pipeline-card">
-<p><span>C</span> <strong>STATUS TEXT</strong></p>
-<div class="interface-signature">
-<p><code>bool make_status(</code><br> <code>char destination[],</code><br> <code>int capacity,</code><br> <code>uint16_t average);</code></p>
-</div>
-</div>
-</div>
-<p>The declarations are already in <code>sensor_math.h</code> and <code>status_text.h</code>. You write the bodies in the two <code>.c</code> files; <code>main()</code> calls them in this order.</p>
-</section>
-<section id="laboratory-mission" class="slide level2">
-<h2>Laboratory mission</h2>
+<section id="this-weeks-lab-lab-2-2930-september" class="slide level2">
+<h2>This week’s lab: Lab 2 (29/30 September)</h2>
+<p>This week’s lab is <strong>Lab 2</strong>: the <strong>L02 mission</strong>, all in one <code>main.c</code>.</p>
 <div class="lab-track">
 <div class="lab-step">
-<p><span>A</span> <strong>COPY + ADD</strong></p>
-<p>L02 project → <code>EE5203_L03_&lt;no&gt;</code>, four starter files, two lines in <code>CMakeLists.txt</code></p>
+<p><span>A</span> <strong>COPY</strong></p>
+<p>L01 project → <code>EE5203_L02_&lt;no&gt;</code>, builds clean</p>
 </div>
 <div class="lab-step">
-<p><span>B</span> <strong>CLAMP + AVERAGE</strong></p>
-<p><code>clamp_u16</code>, <code>average_samples</code>, <code>count_above</code></p>
+<p><span>B</span> <strong>DECLARE</strong></p>
+<p>eight <code>uint16_t</code> values, five <code>int</code> results</p>
 </div>
 <div class="lab-step">
-<p><span>C</span> <strong>STATUS TEXT</strong></p>
-<p><code>"LOW"</code>, <code>"OK"</code> or <code>"HIGH"</code>, ending with <code>\0</code></p>
+<p><span>C</span> <strong>LOOP</strong></p>
+<p>clamp · add · count, single-stepped</p>
 </div>
 <div class="lab-step">
-<p><span>D</span> <strong>CHECK</strong></p>
-<p>final values in the debugger, against your predictions</p>
+<p><span>D</span> <strong>VERDICT</strong></p>
+<p>average, status, prediction table</p>
 </div>
 <div class="lab-step">
 <p><span>E</span> <strong>CHANGE</strong></p>
-<p>your variant: predict, change one line, explain</p>
+<p>your rule variant: predict, prove, explain</p>
 </div>
 </div>
 <div class="caption">
-<p><strong>This week’s lab (29/30 September) is Lab 2</strong> — the L02 mission, in one <code>main.c</code>. <strong>This mission is Lab 3, 6/7 October</strong>, and it starts from your Lab 2 project. Before Lab 3: download the starter zip and do its pre-lab quiz in CATS.</p>
+<p><strong>Before Lab 2:</strong> do the Lab 2 pre-lab quiz in CATS. Fill in the prediction table <strong>before</strong> you debug. <strong>Homework</strong> (10 pts) on CATS after the lab, due before the next lab.</p>
 </div>
 </section>
 <section id="mastery-checklist" class="slide level2">
