@@ -299,8 +299,8 @@ Basri Erdogan
 <p>L03 gives the job a name. L04 explains the register statement inside that job.</p>
 </div>
 </section>
-<section id="memory-addresses" class="slide level2">
-<h2>Memory addresses</h2>
+<section id="before-pointers-memory-addresses" class="slide level2">
+<h2>Before pointers: memory addresses</h2>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -331,8 +331,8 @@ Basri Erdogan
 <p>Where these addresses live—flash, SRAM, and peripherals on one 32-bit map: <a href="../../../resources/companions/EE5203_Toolchain_Boot_Companion.html#sec-memory"><em>From C to Silicon</em>, §2 <em>The memory your program lives in</em></a>.</p>
 </div>
 </section>
-<section id="taking-an-address" class="slide level2">
-<h2>Taking an address: <code>&amp;</code></h2>
+<section id="pointers-take-an-address-with" class="slide level2">
+<h2>Pointers: take an address with <code>&amp;</code></h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a></a><span class="dt">int</span> temperature <span class="op">=</span> <span class="dv">24</span><span class="op">;</span></span>
 <span id="cb3-2"><a></a><span class="dt">int</span> <span class="op">*</span>address <span class="op">=</span> <span class="op">&amp;</span>temperature<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="vertical-list compact-list">
@@ -348,8 +348,8 @@ Basri Erdogan
 </div>
 <p>Read the declaration aloud: “<code>address</code> is a pointer to an <code>int</code>.”</p>
 </section>
-<section id="following-a-pointer" class="slide level2">
-<h2>Following a pointer: <code>*</code></h2>
+<section id="pointers-follow-an-address-with" class="slide level2">
+<h2>Pointers: follow an address with <code>*</code></h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a></a><span class="dt">int</span> temperature <span class="op">=</span> <span class="dv">24</span><span class="op">;</span></span>
 <span id="cb4-2"><a></a><span class="dt">int</span> <span class="op">*</span>address <span class="op">=</span> <span class="op">&amp;</span>temperature<span class="op">;</span></span>
 <span id="cb4-3"><a></a></span>
@@ -383,8 +383,8 @@ Basri Erdogan
 <p><code>p</code> stores <code>&amp;x</code>; <code>*p</code> first produces <code>5</code>; the assignment stores <code>8</code> in <code>x</code>.</p>
 </div>
 </section>
-<section id="structures" class="slide level2">
-<h2>Structures</h2>
+<section id="structures-related-values-under-one-name" class="slide level2">
+<h2>Structures: related values under one name</h2>
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a><span class="kw">struct</span> Point <span class="op">{</span></span>
 <span id="cb6-2"><a></a>    <span class="dt">int</span> x<span class="op">;</span></span>
 <span id="cb6-3"><a></a>    <span class="dt">int</span> y<span class="op">;</span></span>
@@ -399,8 +399,8 @@ Basri Erdogan
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=130">C11 draft N1570, §6.7.2.1 <em>Structure and union specifiers</em> — p.&nbsp;130</a>.</p>
 </div>
 </section>
-<section id="member-access-.-and--" class="slide level2">
-<h2>Member access: <code>.</code> and <code>-&gt;</code></h2>
+<section id="structure-members-.-and--" class="slide level2">
+<h2>Structure members: <code>.</code> and <code>-&gt;</code></h2>
 <div class="columns">
 <div class="column" style="width:48%;">
 <p><strong>STRUCTURE VALUE</strong></p>
@@ -417,8 +417,8 @@ Basri Erdogan
 </div></div>
 <p><code>p-&gt;x</code> is a shorter form of <code>(*p).x</code>.</p>
 </section>
-<section id="reading-gpioa-moder" class="slide level2">
-<h2>Reading <code>GPIOA-&gt;MODER</code></h2>
+<section id="a-register-through-a-pointer-gpioa-moder" class="slide level2">
+<h2>A register through a pointer: <code>GPIOA-&gt;MODER</code></h2>
 <div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a>GPIOA<span class="op">-&gt;</span>MODER</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
@@ -433,8 +433,8 @@ Basri Erdogan
 </div>
 <p>The device header supplies this definition; your program uses the readable name.</p>
 </section>
-<section id="the-32-bit-register" class="slide level2">
-<h2>The 32-bit register</h2>
+<section id="a-hardware-register-has-32-bits" class="slide level2">
+<h2>A hardware register has 32 bits</h2>
 <svg class="story-visual" viewbox="0 0 1440 190" role="img" aria-labelledby="reg32-title">
 <title id="reg32-title">
 A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the right; every bit is 0 except bit 5, so the value is 0x00000020
@@ -445,8 +445,8 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 <div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a></a><span class="dt">uint32_t</span> register_value <span class="op">=</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>uint32_t</code> matches the width of an STM32 peripheral register.</p>
 </section>
-<section id="hexadecimal" class="slide level2">
-<h2>Hexadecimal</h2>
+<section id="hexadecimal-a-short-way-to-write-bits" class="slide level2">
+<h2>Hexadecimal: a short way to write bits</h2>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -481,8 +481,8 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 <div class="sourceCode" id="cb11"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1"><a></a>0x00000020 = 0000 0000 0000 0000 0000 0000 0010 0000</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>A 32-bit register can be written with eight hexadecimal digits.</p>
 </section>
-<section id="bitwise-operators" class="slide level2">
-<h2>Bitwise operators</h2>
+<section id="bitwise-operators-in-c" class="slide level2">
+<h2>Bitwise operators in C</h2>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -522,24 +522,24 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=112">C11 draft N1570, §6.5.7 <em>Bitwise shift operators</em> — p.&nbsp;112</a> (then §6.5.10–6.5.12 for <code>&amp;</code>, <code>^</code>, <code>|</code>).</p>
 </div>
 </section>
-<section id="building-a-mask" class="slide level2">
-<h2>Building a mask</h2>
+<section id="a-bit-mask-selects-bits" class="slide level2">
+<h2>A bit mask selects bits</h2>
 <div class="sourceCode" id="cb12"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a></a><span class="dt">uint32_t</span> mask <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb13"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb13-1"><a></a>1U          0000 0001</span>
 <span id="cb13-2"><a></a>1U &lt;&lt; 5     0010 0000</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The result has only bit 5 set. This is called a <strong>mask</strong> because it selects a specific bit position.</p>
 <p>The <code>U</code> suffix marks the number as unsigned.</p>
 </section>
-<section id="set-a-bit-or" class="slide level2">
-<h2>Set a bit: OR</h2>
+<section id="bit-operations-set-a-bit-with-or" class="slide level2">
+<h2>Bit operations: set a bit with OR</h2>
 <div class="sourceCode" id="cb14"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a></a>register_value <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb15"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb15-1"><a></a>old value     0000 0001</span>
 <span id="cb15-2"><a></a>mask          0010 0000</span>
 <span id="cb15-3"><a></a>OR result     0010 0001</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Bit 5 becomes <code>1</code>; the other bits keep their previous values.</p>
 </section>
-<section id="clear-a-bit-and-not" class="slide level2">
-<h2>Clear a bit: AND + NOT</h2>
+<section id="bit-operations-clear-a-bit-with-and-not" class="slide level2">
+<h2>Bit operations: clear a bit with AND + NOT</h2>
 <div class="sourceCode" id="cb16"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a></a>register_value <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
@@ -553,8 +553,8 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 </div>
 </div>
 </section>
-<section id="replacing-a-bit-field" class="slide level2">
-<h2>Replacing a bit field</h2>
+<section id="bit-operations-replace-a-bit-field" class="slide level2">
+<h2>Bit operations: replace a bit field</h2>
 <p>Suppose bits <code>11:10</code> must become <code>01</code>.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a></a>register_value <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>  <span class="co">// clear bits 11:10</span></span>
 <span id="cb17-2"><a></a>register_value <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>  <span class="co">// write 01</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -563,8 +563,8 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 </div>
 <p><code>3U</code> is binary <code>11</code>, so <code>3U &lt;&lt; 10</code> selects both field bits.</p>
 </section>
-<section id="toggle-and-test" class="slide level2">
-<h2>Toggle and test</h2>
+<section id="bit-operations-toggle-and-test-a-bit" class="slide level2">
+<h2>Bit operations: toggle and test a bit</h2>
 <div class="columns">
 <div class="column" style="width:48%;">
 <p><strong>TOGGLE BIT 5</strong></p>
@@ -578,8 +578,8 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 <p>A nonzero result means bit 5 was set.</p>
 </div></div>
 </section>
-<section id="practice-which-bits-change" class="slide level2">
-<h2>Practice: which bits change?</h2>
+<section id="practice-which-register-bits-change" class="slide level2">
+<h2>Practice: which register bits change?</h2>
 <div class="sourceCode" id="cb20"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb20-1"><a></a>value <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">3</span><span class="op">);</span></span>
 <span id="cb20-2"><a></a>value <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">7</span><span class="op">);</span></span>
 <span id="cb20-3"><a></a>value <span class="op">^=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">2</span><span class="op">);</span></span>
@@ -599,8 +599,8 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 </div>
 </div>
 </section>
-<section id="cmsis-register-names" class="slide level2">
-<h2>CMSIS register names</h2>
+<section id="cmsis-names-for-hardware-registers" class="slide level2">
+<h2>CMSIS names for hardware registers</h2>
 <div class="columns">
 <div class="column" style="width:48%;">
 <p><strong>REFERENCE MANUAL</strong></p>
@@ -644,8 +644,8 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 <p>The definitions live in <a href="https://github.com/STMicroelectronics/cmsis-device-f4/blob/master/Include/stm32f401xe.h"><code>stm32f401xe.h</code></a> — every generated STM32 project includes this file.</p>
 </div>
 </section>
-<section id="volatile-registers" class="slide level2">
-<h2><code>volatile</code> registers</h2>
+<section id="why-registers-are-volatile" class="slide level2">
+<h2>Why registers are <code>volatile</code></h2>
 <div class="sourceCode" id="cb22"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb22-1"><a></a><span class="kw">typedef</span> <span class="kw">struct</span></span>
 <span id="cb22-2"><a></a><span class="op">{</span></span>
 <span id="cb22-3"><a></a>    <span class="dt">volatile</span> <span class="dt">uint32_t</span> MODER<span class="op">;</span></span>
@@ -660,8 +660,8 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=140">C11 draft N1570, §6.7.3 — p.&nbsp;140</a> · M. Barr, <a href="https://barrgroup.com/blog/how-use-cs-volatile-keyword"><em>How to Use C’s volatile Keyword</em></a>.</p>
 </div>
 </section>
-<section id="the-gpioa-clock" class="slide level2">
-<h2>The GPIOA clock</h2>
+<section id="gpio-step-1-enable-the-gpioa-clock" class="slide level2">
+<h2>GPIO step 1: enable the GPIOA clock</h2>
 <div class="sourceCode" id="cb23"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb23-1"><a></a>RCC<span class="op">-&gt;</span>AHB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Bit 0 of <code>AHB1ENR</code> enables the clock for GPIOA.</p>
 <div class="vertical-list compact-list">
@@ -680,8 +680,8 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 <p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=118">RM0368 Rev 6, <code>RCC_AHB1ENR</code> — p.&nbsp;118</a>.</p>
 </div>
 </section>
-<section id="pa5s-mode-field" class="slide level2">
-<h2>PA5’s mode field</h2>
+<section id="gpio-step-2-the-pa5-mode-field" class="slide level2">
+<h2>GPIO step 2: the PA5 mode field</h2>
 <p>Every GPIO pin uses two mode bits. Pin 5 therefore begins at bit <code>5 × 2 = 10</code>.</p>
 <table class="caption-top">
 <thead>
@@ -716,8 +716,8 @@ MODER bits 15 down to 0 drawn as eight two-bit fields, one per pin; the pin 5 fi
 <rect x="312" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="334" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">15</text> <rect x="356" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="378" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">14</text> <text x="356" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 7</text> <rect x="416" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="438" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">13</text> <rect x="460" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="482" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">12</text> <text x="460" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 6</text> <rect x="520" y="60" width="44" height="52" fill="#f8e2c8" stroke="#d47b28" stroke-width="3"></rect> <text x="542" y="51" text-anchor="middle" fill="#d47b28" font-size="14" font-weight="700">11</text> <text x="542" y="96" text-anchor="middle" fill="#d47b28" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="564" y="60" width="44" height="52" fill="#f8e2c8" stroke="#d47b28" stroke-width="3"></rect> <text x="586" y="51" text-anchor="middle" fill="#d47b28" font-size="14" font-weight="700">10</text> <text x="586" y="96" text-anchor="middle" fill="#d47b28" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="564" y="140" text-anchor="middle" fill="#d47b28" font-size="17" font-weight="700">pin 5</text> <rect x="624" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="646" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">9</text> <rect x="668" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="690" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">8</text> <text x="668" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 4</text> <rect x="728" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="750" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">7</text> <rect x="772" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="794" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">6</text> <text x="772" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 3</text> <rect x="832" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="854" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">5</text> <rect x="876" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="898" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">4</text> <text x="876" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 2</text> <rect x="936" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="958" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">3</text> <rect x="980" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1002" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">2</text> <text x="980" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 1</text> <rect x="1040" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1062" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">1</text> <rect x="1084" y="60" width="44" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1106" y="51" text-anchor="middle" fill="#8aa0ac" font-size="14">0</text> <text x="1084" y="140" text-anchor="middle" fill="#5a6b76" font-size="17">pin 0</text> <text x="720" y="188" text-anchor="middle" fill="#5a6b76" font-size="19">pin <tspan font-style="italic">n</tspan> uses bits 2<tspan font-style="italic">n</tspan>+1 : 2<tspan font-style="italic">n</tspan> — pin 5 → bits 11:10 = <tspan fill="#d47b28" font-weight="700" font-family="ui-monospace, Menlo, monospace">01</tspan> (output). Pins 15–8 continue in bits 31:16.</text>
 </svg>
 </section>
-<section id="pa5-as-output" class="slide level2">
-<h2>PA5 as output</h2>
+<section id="gpio-step-2-make-pa5-an-output" class="slide level2">
+<h2>GPIO step 2: make PA5 an output</h2>
 <div class="sourceCode" id="cb24"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb24-1"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
 <span id="cb24-2"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="vertical-list compact-list">
@@ -736,8 +736,8 @@ MODER bits 15 down to 0 drawn as eight two-bit fields, one per pin; the pin 5 fi
 <p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=158">RM0368 Rev 6, <code>GPIOx_MODER</code> — p.&nbsp;158</a>.</p>
 </div>
 </section>
-<section id="driving-pa5-with-bsrr" class="slide level2">
-<h2>Driving PA5 with <code>BSRR</code></h2>
+<section id="gpio-step-3-drive-pa5-with-bsrr" class="slide level2">
+<h2>GPIO step 3: drive PA5 with <code>BSRR</code></h2>
 <div class="sourceCode" id="cb25"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb25-1"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span>       <span class="co">// PA5 high: LD2 on</span></span>
 <span id="cb25-2"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">21</span><span class="op">);</span>      <span class="co">// PA5 low:  LD2 off</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <svg class="story-visual" viewbox="0 0 1440 215" role="img" aria-labelledby="bsrr-title">
@@ -751,8 +751,8 @@ BSRR drawn as 32 cells split into a reset half, bits 31 to 16, and a set half, b
 <p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=161">RM0368 Rev 6, <code>GPIOx_BSRR</code> — p.&nbsp;161</a>.</p>
 </div>
 </section>
-<section id="the-bare-metal-blink" class="slide level2">
-<h2>The bare-metal blink</h2>
+<section id="bare-metal-blink-the-three-gpio-steps" class="slide level2">
+<h2>Bare-metal blink: the three GPIO steps</h2>
 <div class="sourceCode" id="cb26"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb26-1"><a></a>RCC<span class="op">-&gt;</span>AHB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span></span>
 <span id="cb26-2"><a></a></span>
 <span id="cb26-3"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>

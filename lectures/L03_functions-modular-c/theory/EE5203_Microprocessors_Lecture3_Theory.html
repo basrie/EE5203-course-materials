@@ -332,8 +332,8 @@ Basri Erdogan
 <p>L02 built this work directly in <code>main()</code>. L03 will move a job like this into a named function.</p>
 </div>
 </section>
-<section id="when-main-does-every-job" class="slide level2">
-<h2>When <code>main()</code> does every job</h2>
+<section id="why-we-need-functions-main-does-every-job" class="slide level2">
+<h2>Why we need functions: <code>main()</code> does every job</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb3-2"><a></a>    <span class="co">/* configure hardware */</span></span>
 <span id="cb3-3"><a></a>    <span class="co">/* acquire eight samples */</span></span>
@@ -348,8 +348,9 @@ Basri Erdogan
 </div>
 <p>First step: put each job in its own <strong>named function</strong>.</p>
 </section>
-<section id="the-three-parts-of-a-declaration" class="slide level2">
-<h2>The three parts of a declaration</h2>
+<section id="a-function-declaration-has-three-parts" class="slide level2">
+<h2>A function declaration has three parts</h2>
+<p>A function declaration tells the compiler the function’s name, what goes in, and what comes back.</p>
 <div class="contract-grid">
 <div class="contract-card return-card">
 <p><strong>RETURN TYPE</strong></p>
@@ -372,8 +373,8 @@ Basri Erdogan
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=174">C11 draft N1570, §6.9.1 <em>Function definitions</em> — p.&nbsp;174</a>.</p>
 </div>
 </section>
-<section id="four-questions-for-any-function" class="slide level2">
-<h2>Four questions for any function</h2>
+<section id="reading-a-function-definition-four-questions" class="slide level2">
+<h2>Reading a function definition: four questions</h2>
 <div class="columns">
 <div class="column" style="width:56%;">
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a></a><span class="dt">int</span> clamp<span class="op">(</span><span class="dt">int</span> value<span class="op">,</span> <span class="dt">int</span> low<span class="op">,</span> <span class="dt">int</span> high<span class="op">)</span></span>
@@ -404,7 +405,7 @@ Basri Erdogan
 </div></div>
 </section>
 <section id="declare-define-call" class="slide level2">
-<h2>Declare, define, call</h2>
+<h2>A function in three steps: declare, define, call</h2>
 <div class="ddc-flow">
 <div class="ddc-card declare-card">
 <div class="ddc-kicker">
@@ -472,8 +473,8 @@ Basri Erdogan
 </div>
 </div>
 </section>
-<section id="the-function-gets-a-copy-pass-by-value" class="slide level2">
-<h2>The function gets a copy (pass by value)</h2>
+<section id="function-parameters-get-a-copy-pass-by-value" class="slide level2">
+<h2>Function parameters get a copy (pass by value)</h2>
 <div class="columns">
 <div class="column" style="width:53%;">
 <div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a><span class="dt">void</span> raise_to_minimum<span class="op">(</span><span class="dt">int</span> value<span class="op">)</span></span>
@@ -511,8 +512,8 @@ Basri Erdogan
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=99">C11 draft N1570, §6.5.2.2 <em>Function calls</em> — p.&nbsp;99</a>.</p>
 </div>
 </section>
-<section id="clamp-below-inside-and-above-the-range" class="slide level2">
-<h2><code>clamp()</code> below, inside, and above the range</h2>
+<section id="testing-the-function-clamp" class="slide level2">
+<h2>Testing the function <code>clamp()</code></h2>
 <div class="columns">
 <div class="column" style="width:62%;">
 <div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a></a><span class="dt">int</span> clamp<span class="op">(</span><span class="dt">int</span> value<span class="op">,</span> <span class="dt">int</span> low<span class="op">,</span> <span class="dt">int</span> high<span class="op">)</span></span>
@@ -547,8 +548,8 @@ Basri Erdogan
 </div></div>
 <p>The same function handles values below, inside, and above the valid range.</p>
 </section>
-<section id="what-happens-during-one-call" class="slide level2">
-<h2>What happens during one call</h2>
+<section id="what-happens-during-one-function-call" class="slide level2">
+<h2>What happens during one function call</h2>
 <div class="call-trace">
 <div class="trace-stage">
 <p><strong>1 · ARGUMENTS COPIED</strong></p>
@@ -611,8 +612,8 @@ Basri Erdogan
 </div>
 <p>Read the compiler warnings first. Each of these mistakes shows up there.</p>
 </section>
-<section id="header-files-one-declaration-shared-by-every-.c-file" class="slide level2">
-<h2>Header files: one declaration, shared by every <code>.c</code> file</h2>
+<section id="functions-in-several-files-the-header-file" class="slide level2">
+<h2>Functions in several files: the header file</h2>
 <div class="relationship-strip">
 <p><code>#include "sensor_math.h"</code> is <strong>not a function call</strong>. Before compiling, the preprocessor pastes the text of the header in place of this line.</p>
 </div>
@@ -650,8 +651,8 @@ Basri Erdogan
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=54">C11 draft N1570, §6.2.2 <em>Linkages of identifiers</em> — p.&nbsp;54</a>; <code>#define</code> and <code>#include</code> are §6.10 <em>Preprocessing directives</em> — <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=184">p.&nbsp;184</a>.</p>
 </div>
 </section>
-<section id="adding-a-new-.c-file-to-the-build" class="slide level2">
-<h2>Adding a new <code>.c</code> file to the build</h2>
+<section id="functions-in-several-files-add-the-.c-file-to-the-build" class="slide level2">
+<h2>Functions in several files: add the <code>.c</code> file to the build</h2>
 <p>A new <code>.c</code> file is compiled only when <code>CMakeLists.txt</code> lists it. Open <code>CMakeLists.txt</code> in the project folder:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode numberSource cmake number-lines code-with-copy"><code class="sourceCode cmake"><span id="cb15-1"><a></a><span class="co"># Add sources to executable</span></span>
 <span id="cb15-2"><a></a><span class="kw">target_sources</span>(<span class="dv">${CMAKE_PROJECT_NAME}</span> <span class="bn">PRIVATE</span></span>
@@ -675,8 +676,8 @@ Basri Erdogan
 <p>Header files need no change: <code>Core/Inc</code> is already on the include path. CubeMX never rewrites this part of <code>CMakeLists.txt</code>, so your lines stay.</p>
 </div>
 </section>
-<section id="why-the-sum-needs-32-bits" class="slide level2">
-<h2>Why the sum needs 32 bits</h2>
+<section id="why-average_samples-needs-a-32-bit-sum" class="slide level2">
+<h2>Why <code>average_samples()</code> needs a 32-bit sum</h2>
 <div class="columns">
 <div class="column" style="width:48%;">
 <div class="sourceCode" id="cb16"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a></a><span class="dt">uint16_t</span> sample <span class="op">=</span> <span class="dv">4095</span><span class="bu">U</span><span class="op">;</span></span>
@@ -700,8 +701,8 @@ Basri Erdogan
 <p><code>uint16_t</code> holds at most 65,535. Eight samples of 4095 add up to 32,760: that fits. Twenty samples add up to 81,900: that does not. Choose the type for the largest value the variable can reach.</p>
 </div>
 </section>
-<section id="define-a-name-for-a-number" class="slide level2">
-<h2><code>#define</code>: a name for a number</h2>
+<section id="define-one-name-for-the-array-size" class="slide level2">
+<h2><code>#define</code>: one name for the array size</h2>
 <div class="columns">
 <div class="column" style="width:51%;">
 <div class="sourceCode" id="cb17"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a></a><span class="pp">#define SAMPLE_COUNT </span><span class="dv">8</span></span>
@@ -754,8 +755,8 @@ Basri Erdogan
 <span id="cb18-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Keep the short list of steps in <code>main()</code>; put the detailed work inside the functions.</p>
 </section>
-<section id="passing-an-array-also-pass-its-count" class="slide level2">
-<h2>Passing an array: also pass its count</h2>
+<section id="passing-an-array-to-a-function-also-pass-its-count" class="slide level2">
+<h2>Passing an array to a function: also pass its count</h2>
 <div class="columns">
 <div class="column" style="width:52%;">
 <div class="sourceCode" id="cb19"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb19-1"><a></a><span class="dt">uint16_t</span> average_samples<span class="op">(</span></span>
@@ -790,8 +791,8 @@ Basri Erdogan
 </div>
 </div>
 </section>
-<section id="example-average_samples" class="slide level2">
-<h2>Example: <code>average_samples()</code></h2>
+<section id="an-array-function-average_samples" class="slide level2">
+<h2>An array function: <code>average_samples()</code></h2>
 <div class="sourceCode" id="cb20"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb20-1"><a></a><span class="dt">uint16_t</span> average_samples<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">)</span></span>
 <span id="cb20-2"><a></a><span class="op">{</span></span>
 <span id="cb20-3"><a></a>    <span class="cf">if</span> <span class="op">(</span>count <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
@@ -809,8 +810,8 @@ Basri Erdogan
 <p>Four rules: return <code>0U</code> when <code>count == 0</code> · add into a 32-bit sum · loop with <code>i &lt; count</code> · divide once, at the end.</p>
 </div>
 </section>
-<section id="practice-maximum_sample" class="slide level2">
-<h2>Practice: <code>maximum_sample()</code></h2>
+<section id="practice-write-the-array-function-maximum_sample" class="slide level2">
+<h2>Practice: write the array function <code>maximum_sample()</code></h2>
 <p>Given:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb21-1"><a></a><span class="dt">uint16_t</span> values<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">18</span><span class="op">,</span> <span class="dv">24</span><span class="op">,</span> <span class="dv">17</span><span class="op">,</span> <span class="dv">31</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">19</span><span class="op">};</span></span>
 <span id="cb21-2"><a></a></span>
@@ -864,8 +865,8 @@ Basri Erdogan
 </div>
 <p>The array capacity is <strong>8</strong>; the text length is <strong>5</strong>; the terminator occupies one element.</p>
 </section>
-<section id="with-and-without-0" class="slide level2">
-<h2>With and without <code>\0</code></h2>
+<section id="a-c-string-must-end-with-0" class="slide level2">
+<h2>A C string must end with <code>\0</code></h2>
 <div class="compare-grid">
 <div class="compare-card c-card">
 <p><strong>VALID STRING</strong></p>
@@ -882,8 +883,8 @@ Basri Erdogan
 <p>The array size says where you may write. The <code>\0</code> says where the text stops.</p>
 </div>
 </section>
-<section id="counting-characters-up-to-0" class="slide level2">
-<h2>Counting characters up to <code>\0</code></h2>
+<section id="a-string-function-count-characters-up-to-0" class="slide level2">
+<h2>A string function: count characters up to <code>\0</code></h2>
 <div class="columns">
 <div class="column" style="width:58%;">
 <div class="sourceCode" id="cb23"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb23-1"><a></a><span class="dt">int</span> text_length<span class="op">(</span><span class="dt">char</span> text<span class="op">[])</span></span>

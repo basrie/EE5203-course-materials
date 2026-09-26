@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Basri Erdogan">
+
+<title>EE5203 L02 Coding Practice – EE5203 Microprocessors</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../assets/materials.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">EE5203 Microprocessors</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../SYLLABUS.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../resources/companions/EE5203_Toolchain_Boot_Companion.html"> 
+<span class="menu-text">From C to Silicon</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../resources/references/academic_references.html"> 
+<span class="menu-text">References</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-to-work-on-onlinegdb" id="toc-how-to-work-on-onlinegdb" class="nav-link active" data-scroll-target="#how-to-work-on-onlinegdb">How to work on OnlineGDB</a></li>
+  <li><a href="#what-to-submit" id="toc-what-to-submit" class="nav-link" data-scroll-target="#what-to-submit">What to submit</a></li>
+  <li><a href="#part-a---arithmetic" id="toc-part-a---arithmetic" class="nav-link" data-scroll-target="#part-a---arithmetic">Part A - Arithmetic</a>
+  <ul class="collapse">
+  <li><a href="#p1.-split-seconds-into-hours-minutes-and-seconds" id="toc-p1.-split-seconds-into-hours-minutes-and-seconds" class="nav-link" data-scroll-target="#p1.-split-seconds-into-hours-minutes-and-seconds">P1. Split seconds into hours, minutes, and seconds</a></li>
+  <li><a href="#p2.-take-a-number-apart-digit-by-digit" id="toc-p2.-take-a-number-apart-digit-by-digit" class="nav-link" data-scroll-target="#p2.-take-a-number-apart-digit-by-digit">P2. Take a number apart, digit by digit</a></li>
+  </ul></li>
+  <li><a href="#part-b---decisions" id="toc-part-b---decisions" class="nav-link" data-scroll-target="#part-b---decisions">Part B - Decisions</a>
+  <ul class="collapse">
+  <li><a href="#p3.-battery-level-from-the-voltage" id="toc-p3.-battery-level-from-the-voltage" class="nav-link" data-scroll-target="#p3.-battery-level-from-the-voltage">P3. Battery level from the voltage</a></li>
+  <li><a href="#p4.-fan-on-or-off" id="toc-p4.-fan-on-or-off" class="nav-link" data-scroll-target="#p4.-fan-on-or-off">P4. Fan on or off</a></li>
+  </ul></li>
+  <li><a href="#part-c---loops" id="toc-part-c---loops" class="nav-link" data-scroll-target="#part-c---loops">Part C - Loops</a>
+  <ul class="collapse">
+  <li><a href="#p5.-how-many-numbers-until-the-sum-is-over-1000" id="toc-p5.-how-many-numbers-until-the-sum-is-over-1000" class="nav-link" data-scroll-target="#p5.-how-many-numbers-until-the-sum-is-over-1000">P5. How many numbers until the sum is over 1000?</a></li>
+  <li><a href="#p6.-powers-of-two-in-uint16_t" id="toc-p6.-powers-of-two-in-uint16_t" class="nav-link" data-scroll-target="#p6.-powers-of-two-in-uint16_t">P6. Powers of two in <code>uint16_t</code></a></li>
+  </ul></li>
+  <li><a href="#part-d---arrays" id="toc-part-d---arrays" class="nav-link" data-scroll-target="#part-d---arrays">Part D - Arrays</a>
+  <ul class="collapse">
+  <li><a href="#p7.-fastest-slowest-and-where-they-are" id="toc-p7.-fastest-slowest-and-where-they-are" class="nav-link" data-scroll-target="#p7.-fastest-slowest-and-where-they-are">P7. Fastest, slowest, and where they are</a></li>
+  <li><a href="#p8.-average-of-the-good-readings-only" id="toc-p8.-average-of-the-good-readings-only" class="nav-link" data-scroll-target="#p8.-average-of-the-good-readings-only">P8. Average of the good readings only</a></li>
+  <li><a href="#p9.-reverse-an-array-in-place" id="toc-p9.-reverse-an-array-in-place" class="nav-link" data-scroll-target="#p9.-reverse-an-array-in-place">P9. Reverse an array in place</a></li>
+  <li><a href="#p10.-is-the-array-in-order" id="toc-p10.-is-the-array-in-order" class="nav-link" data-scroll-target="#p10.-is-the-array-in-order">P10. Is the array in order?</a></li>
+  </ul></li>
+  <li><a href="#part-e---on-the-board" id="toc-part-e---on-the-board" class="nav-link" data-scroll-target="#part-e---on-the-board">Part E - On the board</a>
+  <ul class="collapse">
+  <li><a href="#p11.-a-seconds-counter-in-the-forever-loop" id="toc-p11.-a-seconds-counter-in-the-forever-loop" class="nav-link" data-scroll-target="#p11.-a-seconds-counter-in-the-forever-loop">P11. A seconds counter in the forever loop</a></li>
+  </ul></li>
+  <li><a href="#check-your-results" id="toc-check-your-results" class="nav-link" data-scroll-target="#check-your-results">Check your results</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="EE5203_Microprocessors_Lecture2_Coding_Practice.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">EE5203 L02 Coding Practice</h1>
+<p class="subtitle lead">Write your own programs with values, decisions, loops, and arrays</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Basri Erdogan </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="mission">
+<p><strong>Ungraded practice, but you submit it on CATS.</strong> Your instructor checks who worked on it. Eleven small programs. You write every one yourself, starting from empty code. You only need what L02 taught: <code>int</code>, <code>uint16_t</code>, arrays, <code>for</code>, <code>while</code>, <code>if</code> / <code>else if</code> / <code>else</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>/</code> and <code>%</code>. You do not need <code>printf</code>.</p>
+<p><strong>You do not need the board.</strong> Problems P1 to P10 run in your web browser on <strong>OnlineGDB</strong>. Only P11 needs the Nucleo board.</p>
+<p><strong>Expected time:</strong> about 2 hours. Do a few problems at a time.</p>
+</div>
+<section id="how-to-work-on-onlinegdb" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-work-on-onlinegdb">How to work on OnlineGDB</h2>
+<p>OnlineGDB is a free C compiler with a debugger. It runs in the browser. You do not need to install anything or create an account.</p>
+<ol type="1">
+<li><p>Open <strong>onlinegdb.com</strong>.</p></li>
+<li><p>Set the <strong>Language</strong> menu at the top of the page to <strong>C</strong>.</p></li>
+<li><p>Delete the example code. Type this template:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdint.h&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* your program here */</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>#include &lt;stdint.h&gt;</code> is needed for <code>uint16_t</code>. <code>main</code> is where every C program starts. On the board, the same place is <code>USER CODE BEGIN 2</code>.</p></li>
+<li><p>Read the task. Write your program between the braces, above <code>return 0;</code>. Write the code yourself. Do not copy code from the lecture.</p></li>
+<li><p>Click to the left of the line number of <code>return 0;</code>. A red dot appears. This is your breakpoint.</p></li>
+<li><p>Press <strong>Debug</strong> (not <strong>Run</strong>). In the debug panel at the bottom, press <strong>start</strong>.</p></li>
+<li><p>The program stops at the red dot. Read your variables in the <strong>Local Variables</strong> panel. Click an array to see its elements.</p></li>
+<li><p>Compare them with the table in <a href="#check-your-results">Check your results</a> at the end.</p></li>
+<li><p>If a value is wrong, set the breakpoint on the first line of your program instead. Press <strong>step over</strong> again and again. Watch the variables change after each line. Find the first variable that goes wrong.</p></li>
+</ol>
+<p><strong>Tips</strong></p>
+<ul>
+<li>Before each new problem, delete the previous problem or put it inside <code>/* ... */</code>. Two problems can use the same variable name, such as <code>sum</code>.</li>
+<li>A variable shows a strange number before your program stores a value in it. This is normal. It is whatever was in that memory before.</li>
+<li>OnlineGDB does not keep your code after you close the page. Copy each finished program into a text file on your computer.</li>
+<li>When you have your board, you can run the same programs in your L02 project. Put them inside <code>USER CODE BEGIN 2</code> in <code>main.c</code>, before <code>while (1)</code>.</li>
+</ul>
+</section>
+<section id="what-to-submit" class="level2">
+<h2 class="anchored" data-anchor-id="what-to-submit">What to submit</h2>
+<p>Submit <strong>one PDF file</strong> on CATS. Name it <code>L02_Practice_&lt;student number&gt;.pdf</code>. Check CATS for the due date.</p>
+<p>For each problem from P1 to P10, put these in the PDF:</p>
+<ol type="1">
+<li><strong>Your code</strong>, copied as text. Do not use a photo of the screen.</li>
+<li><strong>One screenshot</strong> of OnlineGDB, stopped at your breakpoint. The screenshot must show your code and the <strong>Local Variables</strong> panel.</li>
+<li><strong>Your answer</strong> to the <em>Think about it</em> or <em>Test it again</em> part, if the problem has one. One or two sentences are enough.</li>
+</ol>
+<p>P11 is not submitted. The challenge in P10 is optional.</p>
+<p>It is fine if some of your values are wrong. Submit what you have and write one sentence about what went wrong. You may discuss ideas with classmates, but write your own code. Copied code is easy to see.</p>
+</section>
+<section id="part-a---arithmetic" class="level2">
+<h2 class="anchored" data-anchor-id="part-a---arithmetic">Part A - Arithmetic</h2>
+<section id="p1.-split-seconds-into-hours-minutes-and-seconds" class="level3">
+<h3 class="anchored" data-anchor-id="p1.-split-seconds-into-hours-minutes-and-seconds">P1. Split seconds into hours, minutes, and seconds</h3>
+<p>A timer shows <code>7385</code> seconds. Write a program that splits this number into hours, minutes, and seconds. Use only <code>/</code> and <code>%</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> total_s <span class="op">=</span> <span class="dv">7385</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Your program must end with these variables: <code>hours</code>, <code>minutes</code>, <code>seconds</code>.</p>
+<p><strong>Test it again</strong> with <code>total_s</code> equal to <code>59</code>, <code>3600</code>, and <code>86399</code>.</p>
+</section>
+<section id="p2.-take-a-number-apart-digit-by-digit" class="level3">
+<h3 class="anchored" data-anchor-id="p2.-take-a-number-apart-digit-by-digit">P2. Take a number apart, digit by digit</h3>
+<p>Write a program that looks at the digits of <code>n</code> one at a time, from the right. Use a <code>while</code> loop. <code>n % 10</code> gives the last digit. <code>n / 10</code> removes the last digit.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> n <span class="op">=</span> <span class="dv">40718</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Your program must end with these variables:</p>
+<ul>
+<li><code>digit_sum</code>: all the digits added together</li>
+<li><code>digit_count</code>: how many digits <code>n</code> has</li>
+<li><code>reversed</code>: the digits in the opposite order</li>
+</ul>
+<p><strong>Think about it:</strong> Set <code>n = 0</code>. What does your program give for <code>digit_count</code>? The number <code>0</code> has one digit. Add one <code>if</code> after the loop to fix this case.</p>
+</section>
+</section>
+<section id="part-b---decisions" class="level2">
+<h2 class="anchored" data-anchor-id="part-b---decisions">Part B - Decisions</h2>
+<section id="p3.-battery-level-from-the-voltage" class="level3">
+<h3 class="anchored" data-anchor-id="p3.-battery-level-from-the-voltage">P3. Battery level from the voltage</h3>
+<p>A battery voltage is measured in millivolts (mV). Give it a level from 0 to 3:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Voltage</th>
+<th style="text-align: right;">Level</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>below 3300 mV</td>
+<td style="text-align: right;">0 (empty)</td>
+</tr>
+<tr class="even">
+<td>3300 to 3599 mV</td>
+<td style="text-align: right;">1 (low)</td>
+</tr>
+<tr class="odd">
+<td>3600 to 3999 mV</td>
+<td style="text-align: right;">2 (OK)</td>
+</tr>
+<tr class="even">
+<td>4000 mV or more</td>
+<td style="text-align: right;">3 (full)</td>
+</tr>
+</tbody>
+</table>
+<p>Six test voltages are stored in an array. Use one <code>for</code> loop and one <code>if</code> / <code>else if</code> / <code>else</code> chain. Store each answer in <code>level</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> mv<span class="op">[</span><span class="dv">6</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">3299</span><span class="op">,</span> <span class="dv">3300</span><span class="op">,</span> <span class="dv">3599</span><span class="op">,</span> <span class="dv">3600</span><span class="op">,</span> <span class="dv">3999</span><span class="op">,</span> <span class="dv">4000</span><span class="op">};</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> level<span class="op">[</span><span class="dv">6</span><span class="op">];</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Your program must end with the array <code>level</code> filled.</p>
+<p>These test values sit on the boundaries on purpose. Check every one.</p>
+</section>
+<section id="p4.-fan-on-or-off" class="level3">
+<h3 class="anchored" data-anchor-id="p4.-fan-on-or-off">P4. Fan on or off</h3>
+<p>A fan turns on in two cases:</p>
+<ul>
+<li>the temperature is above 30 °C, <strong>or</strong></li>
+<li>the temperature is above 25 °C <strong>and</strong> the humidity is above 70 %.</li>
+</ul>
+<p>Write a program that sets <code>fan[i]</code> to <code>1</code> (on) or <code>0</code> (off) for each measurement. Also count how many times the fan is on.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> temp<span class="op">[</span><span class="dv">6</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">32</span><span class="op">,</span> <span class="dv">28</span><span class="op">,</span> <span class="dv">28</span><span class="op">,</span> <span class="dv">24</span><span class="op">,</span> <span class="dv">26</span><span class="op">,</span> <span class="dv">31</span><span class="op">};</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> hum<span class="op">[</span><span class="dv">6</span><span class="op">]</span>  <span class="op">=</span> <span class="op">{</span><span class="dv">40</span><span class="op">,</span> <span class="dv">75</span><span class="op">,</span> <span class="dv">60</span><span class="op">,</span> <span class="dv">90</span><span class="op">,</span> <span class="dv">71</span><span class="op">,</span> <span class="dv">20</span><span class="op">};</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> fan<span class="op">[</span><span class="dv">6</span><span class="op">];</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Your program must end with these variables: the array <code>fan</code>, and <code>fan_on_count</code>.</p>
+</section>
+</section>
+<section id="part-c---loops" class="level2">
+<h2 class="anchored" data-anchor-id="part-c---loops">Part C - Loops</h2>
+<section id="p5.-how-many-numbers-until-the-sum-is-over-1000" class="level3">
+<h3 class="anchored" data-anchor-id="p5.-how-many-numbers-until-the-sum-is-over-1000">P5. How many numbers until the sum is over 1000?</h3>
+<p>Add <code>1 + 2 + 3 + ...</code> until the sum is <strong>greater than</strong> <code>1000</code>. Use a <code>while</code> loop. You do not know the number of repetitions before you start. This is why <code>while</code> fits better than <code>for</code> here.</p>
+<p>Your program must end with these variables:</p>
+<ul>
+<li><code>n</code>: the last number you added</li>
+<li><code>sum</code>: the sum at that moment</li>
+</ul>
+<p><strong>Test it again</strong> with <code>5000</code> in place of <code>1000</code>.</p>
+</section>
+<section id="p6.-powers-of-two-in-uint16_t" class="level3">
+<h3 class="anchored" data-anchor-id="p6.-powers-of-two-in-uint16_t">P6. Powers of two in <code>uint16_t</code></h3>
+<p>Fill an array with the powers of two: <code>1, 2, 4, 8, ...</code>. Use a <code>for</code> loop. Each element is two times the element before it.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> power<span class="op">[</span><span class="dv">16</span><span class="op">];</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Your program must end with the array <code>power</code> filled, from <code>power[0]</code> to <code>power[15]</code>.</p>
+<p><strong>Think about it:</strong> after the loop, add this line:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> next <span class="op">=</span> power<span class="op">[</span><span class="dv">15</span><span class="op">]</span> <span class="op">*</span> <span class="dv">2</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Predict the value of <code>next</code> before you run. Then check it in the debugger. Explain the result in one sentence. Hint: what is the largest value a <code>uint16_t</code> can hold?</p>
+</section>
+</section>
+<section id="part-d---arrays" class="level2">
+<h2 class="anchored" data-anchor-id="part-d---arrays">Part D - Arrays</h2>
+<section id="p7.-fastest-slowest-and-where-they-are" class="level3">
+<h3 class="anchored" data-anchor-id="p7.-fastest-slowest-and-where-they-are">P7. Fastest, slowest, and where they are</h3>
+<p>Ten speed readings are stored in an array. Write one loop that finds:</p>
+<ul>
+<li>the largest value and its index</li>
+<li>the smallest value and its index</li>
+<li>the sum of all values</li>
+</ul>
+<p>The largest value appears two times. Keep the <strong>first</strong> index.</p>
+<p>Then compute the average <strong>after</strong> the loop. Write a second loop that counts the readings above the average.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> speed<span class="op">[</span><span class="dv">10</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">42</span><span class="op">,</span> <span class="dv">57</span><span class="op">,</span> <span class="dv">39</span><span class="op">,</span> <span class="dv">61</span><span class="op">,</span> <span class="dv">58</span><span class="op">,</span> <span class="dv">61</span><span class="op">,</span> <span class="dv">35</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">50</span><span class="op">,</span> <span class="dv">47</span><span class="op">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Your program must end with these variables: <code>max_value</code>, <code>max_index</code>, <code>min_value</code>, <code>min_index</code>, <code>sum</code>, <code>average</code>, <code>above_average</code>.</p>
+<p><strong>Think about it:</strong> what should <code>max_value</code> start at? Try <code>0</code>, then try <code>speed[0]</code>. Both work here. Which one still works if all speeds are negative?</p>
+</section>
+<section id="p8.-average-of-the-good-readings-only" class="level3">
+<h3 class="anchored" data-anchor-id="p8.-average-of-the-good-readings-only">P8. Average of the good readings only</h3>
+<p>A distance sensor sends 10 readings in millimetres. Some readings are bad:</p>
+<ul>
+<li><code>0</code> means the sensor did not get an echo.</li>
+<li>Anything above <code>1500</code> is out of range.</li>
+</ul>
+<p>Only readings from <code>1</code> to <code>1500</code> are good. Compute the average of the good readings only.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> dist_mm<span class="op">[</span><span class="dv">10</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">412</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">398</span><span class="op">,</span> <span class="dv">405</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">2000</span><span class="op">,</span> <span class="dv">401</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">398</span><span class="op">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Your program must end with these variables:</p>
+<ul>
+<li><code>good_count</code> and <code>bad_count</code></li>
+<li><code>good_sum</code>: the sum of the good readings</li>
+<li><code>average</code>: <code>good_sum / good_count</code></li>
+<li><code>average_rounded</code>: the average rounded to the nearest whole number</li>
+</ul>
+<p>Integer division always rounds down. To round to the nearest number, use <code>(good_sum + good_count / 2) / good_count</code>.</p>
+<p><strong>Think about it:</strong> what happens if <strong>all</strong> readings are bad? Add an <code>if</code> so your program never divides by zero.</p>
+</section>
+<section id="p9.-reverse-an-array-in-place" class="level3">
+<h3 class="anchored" data-anchor-id="p9.-reverse-an-array-in-place">P9. Reverse an array in place</h3>
+<p>Reverse the order of the elements <strong>inside the same array</strong>. Swap the first and the last element, then the second and the second-to-last, and so on. A swap needs a third variable to hold one value for a moment.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">7</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">6</span><span class="op">,</span> <span class="dv">7</span><span class="op">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Your program must end with <code>a</code> reversed.</p>
+<p><strong>Think about it:</strong> how many swaps do you need for 7 elements? Run your loop for all 7 indexes instead. What does the array look like at the end, and why?</p>
+</section>
+<section id="p10.-is-the-array-in-order" class="level3">
+<h3 class="anchored" data-anchor-id="p10.-is-the-array-in-order">P10. Is the array in order?</h3>
+<p>Check if every element is greater than or equal to the element before it.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b<span class="op">[</span><span class="dv">8</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">5</span><span class="op">,</span> <span class="dv">9</span><span class="op">,</span> <span class="dv">12</span><span class="op">,</span> <span class="dv">12</span><span class="op">,</span> <span class="dv">20</span><span class="op">,</span> <span class="dv">18</span><span class="op">,</span> <span class="dv">25</span><span class="op">,</span> <span class="dv">30</span><span class="op">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Your program must end with these variables:</p>
+<ul>
+<li><code>in_order</code>: <code>1</code> if the array is in order, <code>0</code> if it is not</li>
+<li><code>first_problem</code>: the first index <code>i</code> where <code>b[i]</code> is smaller than <code>b[i - 1]</code>, or <code>-1</code> if there is no problem</li>
+</ul>
+<p>Start the loop at <code>i = 1</code>. Only record the <strong>first</strong> problem. The <code>&amp;&amp;</code> operator helps here.</p>
+<p><strong>Challenge (optional):</strong> put the array in order. Walk through the array and swap two neighbours when they are in the wrong order. Repeat the walk until no swap happens. You will need one loop inside another loop.</p>
+</section>
+</section>
+<section id="part-e---on-the-board" class="level2">
+<h2 class="anchored" data-anchor-id="part-e---on-the-board">Part E - On the board</h2>
+<section id="p11.-a-seconds-counter-in-the-forever-loop" class="level3">
+<h3 class="anchored" data-anchor-id="p11.-a-seconds-counter-in-the-forever-loop">P11. A seconds counter in the forever loop</h3>
+<p><strong>Do this problem when you have your Nucleo board.</strong> It uses <code>HAL_Delay</code> and the LED. These do not exist on OnlineGDB.</p>
+<p>This problem uses <code>while (1)</code>. Put your code <strong>inside</strong> the generated <code>while (1)</code> loop, in <code>USER CODE BEGIN 3</code>.</p>
+<p>Every pass through the loop:</p>
+<ol type="1">
+<li>waits one second with <code>HAL_Delay(1000);</code></li>
+<li>adds one to <code>elapsed_s</code></li>
+<li>computes <code>minutes</code> and <code>seconds</code> from <code>elapsed_s</code></li>
+<li>toggles the green LED <strong>only</strong> when <code>elapsed_s</code> is a multiple of 5, and adds one to <code>toggle_count</code> when it does</li>
+</ol>
+<p>Use the toggle line from Lab 1: <code>HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);</code></p>
+<p>Declare <code>elapsed_s</code> and <code>toggle_count</code> in <code>USER CODE BEGIN 2</code>, with the value <code>0</code>. Do not declare them inside the loop. Run the program without breakpoints. The LED should change every 5 seconds. After a little more than one minute, press <strong>Pause</strong> and read the variables.</p>
+<p><strong>Think about it:</strong> what happens to <code>elapsed_s</code> if you declare it inside <code>while (1)</code>? Try it and look at the debugger.</p>
+</section>
+</section>
+<section id="check-your-results" class="level2">
+<h2 class="anchored" data-anchor-id="check-your-results">Check your results</h2>
+<p>Check only after you run your own program.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 91%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Problem</th>
+<th>Correct final values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>P1</td>
+<td><code>hours = 2</code>, <code>minutes = 3</code>, <code>seconds = 5</code>. Tests: <code>59</code> → 0, 0, 59 · <code>3600</code> → 1, 0, 0 · <code>86399</code> → 23, 59, 59</td>
+</tr>
+<tr class="even">
+<td>P2</td>
+<td><code>digit_sum = 20</code>, <code>digit_count = 5</code>, <code>reversed = 81704</code>, and <code>n = 0</code> after the loop. With <code>n = 0</code>, the loop never runs, so <code>digit_count</code> is <code>0</code> until you add the fix</td>
+</tr>
+<tr class="odd">
+<td>P3</td>
+<td><code>level = {0, 1, 1, 2, 2, 3}</code></td>
+</tr>
+<tr class="even">
+<td>P4</td>
+<td><code>fan = {1, 1, 0, 0, 1, 1}</code>, <code>fan_on_count = 4</code></td>
+</tr>
+<tr class="odd">
+<td>P5</td>
+<td><code>n = 45</code>, <code>sum = 1035</code> (at <code>n = 44</code> the sum is only 990). With <code>5000</code>: <code>n = 100</code>, <code>sum = 5050</code></td>
+</tr>
+<tr class="even">
+<td>P6</td>
+<td><code>power[10] = 1024</code>, <code>power[15] = 32768</code>, <code>next = 0</code>. <code>65536</code> does not fit in <code>uint16_t</code>; the largest value is <code>65535</code></td>
+</tr>
+<tr class="odd">
+<td>P7</td>
+<td><code>max_value = 61</code>, <code>max_index = 3</code>, <code>min_value = 35</code>, <code>min_index = 6</code>, <code>sum = 494</code>, <code>average = 49</code>, <code>above_average = 5</code>. If you get <code>max_index = 5</code>, you used <code>&gt;=</code> instead of <code>&gt;</code></td>
+</tr>
+<tr class="even">
+<td>P8</td>
+<td><code>good_count = 5</code>, <code>bad_count = 5</code>, <code>good_sum = 2014</code>, <code>average = 402</code>, <code>average_rounded = 403</code></td>
+</tr>
+<tr class="odd">
+<td>P9</td>
+<td><code>a = {7, 6, 5, 4, 3, 2, 1}</code> with 3 swaps. With 7 swaps, every pair is swapped two times, so the array is back to <code>{1, 2, 3, 4, 5, 6, 7}</code></td>
+</tr>
+<tr class="even">
+<td>P10</td>
+<td><code>in_order = 0</code>, <code>first_problem = 5</code> (<code>18</code> comes after <code>20</code>). Challenge: <code>{5, 9, 12, 12, 18, 20, 25, 30}</code></td>
+</tr>
+<tr class="odd">
+<td>P11</td>
+<td>Your numbers depend on when you press Pause. For example, at <code>elapsed_s = 75</code>: <code>minutes = 1</code>, <code>seconds = 15</code>, <code>toggle_count = 15</code>. Inside <code>while (1)</code>, <code>elapsed_s</code> starts from <code>0</code> again on every pass, so it never grows past <code>1</code></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
