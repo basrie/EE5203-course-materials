@@ -6,8 +6,8 @@
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.42">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.43">
 
   <meta name="author" content="Basri Erdogan">
   <title>EE5203 Microprocessors</title>
@@ -685,6 +685,7 @@ Basri Erdogan
 <span id="cb16-2"><a></a><span class="dt">uint32_t</span> sum <span class="op">=</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span>
 <span id="cb16-3"><a></a></span>
 <span id="cb16-4"><a></a>sum <span class="op">=</span> sum <span class="op">+</span> sample<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>U</code> makes a number <strong>unsigned</strong>, like the variables it goes into: <code>4095U</code>, <code>0U</code>. L04 shows where it matters: <code>1U &lt;&lt; 31</code>.</p>
 </div><div class="column" style="width:48%;">
 <div class="check-grid single-column">
 <div class="check-item">
