@@ -4975,7 +4975,7 @@ pre { font-size: 8.7pt; }
 <div class="sourceCode" id="cb3"><pre class="sourceCode cmake code-with-copy"><code class="sourceCode cmake"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the project name</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span>(<span class="dv">CMAKE_PROJECT_NAME</span> EE5203_L02_&lt;studentnumber&gt;)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>F5 looks for <code>build\Debug\&lt;folder name&gt;.elf</code>. If this line keeps the old name, the build works but F5 reports that the program file does not exist.</p></li>
-<li><p>VS Code → File → Open Folder → <code>EE5203_L02_&lt;studentnumber&gt;</code>. Choose the <strong>Debug</strong> preset if asked. Build with <strong>Ctrl+Shift+B</strong>: zero errors.</p></li>
+<li><p>VS Code → File → Open Folder → <code>EE5203_L02_&lt;studentnumber&gt;</code>. Choose the <strong>Debug</strong> preset if asked. Build with <strong>Ctrl+Shift+B</strong>: zero errors. Read errors and warnings in the <strong>Problems</strong> panel (<strong>Ctrl+Shift+M</strong>), not in the terminal: click a row to jump to its line.</p></li>
 <li><p>Find <code>USER CODE BEGIN 2</code> in <code>main.c</code>.</p></li>
 </ol>
 <p>You do not need CubeMX in this lab.</p>
@@ -5114,7 +5114,7 @@ pre { font-size: 8.7pt; }
 </section>
 <section id="stretch---make-the-board-show-the-result-optional" class="level2">
 <h2 class="anchored" data-anchor-id="stretch---make-the-board-show-the-result-optional">Stretch - make the board show the result (optional)</h2>
-<p>For students who finish early. Inside the generated <code>while (1)</code>, after the status chain has run once, blink LD2 <code>high_count</code> times, wait one second, and repeat:</p>
+<p>For students who finish early. First <strong>delete the L01 blink</strong> (the <code>HAL_GPIO_TogglePin</code>, <code>HAL_Delay(500)</code> and <code>toggle_count</code> lines in <code>USER CODE BEGIN 3</code>); otherwise the two blinks mix and cannot be counted. Then, inside the generated <code>while (1)</code>, blink LD2 <code>high_count</code> times, wait one second, and repeat:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> high_count<span class="op">;</span> k<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">150</span><span class="op">);</span></span>
@@ -5155,10 +5155,14 @@ pre { font-size: 8.7pt; }
 <td>rebuild and restart the debug session</td>
 </tr>
 <tr class="odd">
+<td>Warnings disappeared, but nothing was fixed</td>
+<td>only changed files are compiled again: save <code>main.c</code> and build again</td>
+</tr>
+<tr class="even">
 <td><code>CMake Error: The current CMakeCache.txt directory ... is different</code></td>
 <td>delete the copied <code>build</code> folder (Checkpoint A, step 2)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>F5: program file <code>...EE5203_L02_&lt;studentnumber&gt;.elf</code> does not exist</td>
 <td>the <code>set(CMAKE_PROJECT_NAME ...)</code> line matches the folder name (step 3)</td>
 </tr>

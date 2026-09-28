@@ -476,6 +476,8 @@
 .reveal .header-module { border-top-color: #d47b28; }
 .reveal .source-module { border-top-color: #4a8b62; }
 .reveal .main-module { border-top-color: #2b789f; }
+/* L03 header-file slide: cards sized to their code so a sentence fits below */
+.reveal section.compact-modules .module-card { min-height: 0; }
 
 .reveal .array-strip,
 .reveal .string-strip {

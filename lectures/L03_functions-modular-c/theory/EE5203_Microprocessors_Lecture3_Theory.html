@@ -6,8 +6,8 @@
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.43">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.42">
 
   <meta name="author" content="Basri Erdogan">
   <title>EE5203 Microprocessors</title>
@@ -613,7 +613,7 @@ Basri Erdogan
 </div>
 <p>Read the compiler warnings first. Each of these mistakes shows up there.</p>
 </section>
-<section id="functions-in-several-files-the-header-file" class="slide level2">
+<section id="functions-in-several-files-the-header-file" class="slide level2 compact-modules">
 <h2>Functions in several files: the header file</h2>
 <div class="relationship-strip">
 <p><code>#include "sensor_math.h"</code> is <strong>not a function call</strong>. Before compiling, the preprocessor pastes the text of the header in place of this line.</p>
@@ -647,9 +647,9 @@ Basri Erdogan
 <span id="cb14-7"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<p>Both <code>.c</code> files now see the same declaration. The header declares <code>clamp()</code>; <code>sensor_math.c</code> defines it.</p>
+<p><strong>Why a header?</strong> The compiler reads one <code>.c</code> file at a time, so every file that calls <code>clamp()</code> needs its declaration. The header is the one shared copy; the linker then finds the single definition in <code>sensor_math.c</code>.</p>
 <div class="source-note">
-<p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=54">C11 draft N1570, §6.2.2 <em>Linkages of identifiers</em> — p.&nbsp;54</a>; <code>#define</code> and <code>#include</code> are §6.10 <em>Preprocessing directives</em> — <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=184">p.&nbsp;184</a>.</p>
+<p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=54">C11 draft N1570, §6.2.2 <em>Linkages</em> — p.&nbsp;54</a> · <code>#include</code>: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=184">§6.10 — p.&nbsp;184</a>.</p>
 </div>
 </section>
 <section id="functions-in-several-files-add-the-.c-file-to-the-build" class="slide level2">
@@ -866,6 +866,10 @@ Basri Erdogan
 </div>
 </div>
 <p>The array capacity is <strong>8</strong>; the text length is <strong>5</strong>; the terminator occupies one element.</p>
+<p>Each <code>char</code> is stored as a number: <code>'R'</code> is 82 and <code>'\0'</code> is 0.</p>
+<div class="source-note">
+<p>ASCII table, the number for every character: <a href="https://man7.org/linux/man-pages/man7/ascii.7.html">man7.org — ascii(7)</a>.</p>
+</div>
 </section>
 <section id="a-c-string-must-end-with-0" class="slide level2">
 <h2>A C string must end with <code>\0</code></h2>
