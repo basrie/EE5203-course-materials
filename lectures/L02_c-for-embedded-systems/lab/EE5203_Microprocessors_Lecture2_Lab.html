@@ -4967,7 +4967,8 @@ pre { font-size: 8.7pt; }
 </section>
 <section id="checkpoint-a---copy-and-build-the-project" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-a---copy-and-build-the-project">Checkpoint A - Copy and build the project</h2>
-<p><strong>If your L01 project does not build:</strong> download <a href="reference/EE5203_L01_reference.zip"><code>EE5203_L01_reference.zip</code></a>, unzip it into <code>C:\Work\&lt;studentnumber&gt;</code>, and use the folder <code>EE5203_L01_reference</code> in step 1 instead of your L01 folder. Then continue with the same steps.</p>
+<p><strong>Start of the session - get your projects back from <code>H:</code>.</strong> <code>C:\Work</code> is cleaned on the lab PCs, and you may sit at a different PC than last week. If <code>C:\Work\&lt;studentnumber&gt;</code> does not contain <code>EE5203_L01_&lt;studentnumber&gt;</code>, copy <strong>all</strong> your project folders from <code>H:\EE_Labs</code> into <code>C:\Work\&lt;studentnumber&gt;</code> first. Do not run <em>Save to H</em> now: it makes <code>H:\EE_Labs</code> an exact copy of <code>C:\Work\&lt;studentnumber&gt;</code>, so running it on an empty folder deletes your saved projects. Do not build or debug directly on <code>H:</code>.</p>
+<p><strong>If your L01 project does not build</strong> (or it is not on <code>H:</code> either): download <a href="reference/EE5203_L01_reference.zip"><code>EE5203_L01_reference.zip</code></a>, unzip it into <code>C:\Work\&lt;studentnumber&gt;</code>, and use the folder <code>EE5203_L01_reference</code> in step 1 instead of your L01 folder. Then continue with the same steps.</p>
 <ol type="1">
 <li><p>In <code>C:\Work\&lt;studentnumber&gt;</code>, copy the folder <code>EE5203_L01_&lt;studentnumber&gt;</code> and rename the copy <code>EE5203_L02_&lt;studentnumber&gt;</code>. Check that <code>.vscode</code> came with it; if it is missing, copy it again from <code>C:\Users\Public\EE5203_template</code>.</p></li>
 <li><p>In the new folder, <strong>delete the <code>build</code> folder</strong>. It still points to the L01 folder, and CMake stops with an error if you keep it.</p></li>
@@ -5159,10 +5160,14 @@ pre { font-size: 8.7pt; }
 <td>only changed files are compiled again: save <code>main.c</code> and build again</td>
 </tr>
 <tr class="even">
+<td><code>EE5203_L01_&lt;studentnumber&gt;</code> is not in <code>C:\Work</code></td>
+<td>copy your projects from <code>H:\EE_Labs</code> first (start of Checkpoint A); never run <em>Save to H</em> on an empty folder</td>
+</tr>
+<tr class="odd">
 <td><code>CMake Error: The current CMakeCache.txt directory ... is different</code></td>
 <td>delete the copied <code>build</code> folder (Checkpoint A, step 2)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>F5: program file <code>...EE5203_L02_&lt;studentnumber&gt;.elf</code> does not exist</td>
 <td>the <code>set(CMAKE_PROJECT_NAME ...)</code> line matches the folder name (step 3)</td>
 </tr>
@@ -5180,6 +5185,7 @@ pre { font-size: 8.7pt; }
 <li><label><input type="checkbox">Your Checkpoint E variant is predicted, demonstrated and explained.</label></li>
 <li><label><input type="checkbox">(Stretch) blink count on the board equals <code>high_count</code> in the debugger.</label></li>
 <li><label><input type="checkbox">Every submitted screenshot shows readable variables.</label></li>
+<li><label><input type="checkbox"><em>Save to H</em> has run and <code>H:\EE_Labs\EE5203_L02_&lt;studentnumber&gt;</code> exists.</label></li>
 </ul>
 </section>
 <section id="individual-oral-check" class="level2">
@@ -5192,6 +5198,14 @@ pre { font-size: 8.7pt; }
 <li>Why must <code>sum</code> start at zero?</li>
 <li>Change one threshold and predict the result before running.</li>
 </ul>
+</section>
+<section id="end-of-the-session---save-to-h" class="level2">
+<h2 class="anchored" data-anchor-id="end-of-the-session---save-to-h">End of the session - Save to H</h2>
+<ol type="1">
+<li>Close VS Code.</li>
+<li>Run the desktop <strong>Save to H</strong> shortcut. It copies <code>C:\Work\&lt;studentnumber&gt;</code> (without the <code>build</code> folders) to <code>H:\EE_Labs</code>.</li>
+<li>Check that <code>H:\EE_Labs\EE5203_L02_&lt;studentnumber&gt;</code> exists before you log out. You need this project next week.</li>
+</ol>
 </section>
 <section id="submit" class="level2">
 <h2 class="anchored" data-anchor-id="submit">Submit</h2>
