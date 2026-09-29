@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" font-family="Segoe UI, Helvetica, Arial, sans-serif" role="img" aria-label="Schematic of the VS Code Extensions view: (1) click the Extensions icon, (2) search for STM32CubeIDE for Visual Studio Code, (3) click Install on the result published by STMicroelectronics">
+  <rect width="900" height="430" fill="#ffffff"/>
+  <rect x="20" y="15" width="860" height="400" rx="8" fill="#1e1e1e" stroke="#555"/>
+  <rect x="20" y="15" width="860" height="30" rx="8" fill="#323233"/>
+  <text x="450" y="35" text-anchor="middle" font-size="13" fill="#cccccc">Extensions — Visual Studio Code</text>
+  <!-- activity bar -->
+  <rect x="20" y="45" width="48" height="340" fill="#333333"/>
+  <!-- explorer -->
+  <rect x="33" y="60" width="22" height="26" rx="2" fill="none" stroke="#858585" stroke-width="2"/>
+  <!-- search -->
+  <circle cx="42" cy="112" r="8" fill="none" stroke="#858585" stroke-width="2"/><line x1="48" y1="118" x2="55" y2="125" stroke="#858585" stroke-width="2"/>
+  <!-- source control -->
+  <circle cx="36" cy="148" r="3" fill="#858585"/><circle cx="52" cy="148" r="3" fill="#858585"/><circle cx="36" cy="166" r="3" fill="#858585"/><line x1="36" y1="151" x2="36" y2="163" stroke="#858585" stroke-width="2"/>
+  <!-- run and debug -->
+  <text x="44" y="206" text-anchor="middle" font-size="18" fill="#858585">▷</text>
+  <!-- extensions icon highlighted -->
+  <rect x="24" y="226" width="40" height="40" rx="5" fill="#3a3d41" stroke="#e8a317" stroke-width="3"/>
+  <rect x="33" y="235" width="10" height="10" fill="#ffffff"/><rect x="45" y="235" width="10" height="10" fill="#ffffff"/>
+  <rect x="33" y="247" width="10" height="10" fill="#ffffff"/><rect x="47" y="231" width="10" height="10" fill="#ffffff" transform="rotate(45 52 236)"/>
+  
+  <text x="44" y="288" text-anchor="middle" font-size="9" fill="#e8a317">Ctrl+</text><text x="44" y="300" text-anchor="middle" font-size="9" fill="#e8a317">Shift+X</text>
+  <!-- side panel -->
+  <rect x="68" y="45" width="330" height="340" fill="#252526"/>
+  <text x="104" y="70" font-size="12" font-weight="700" fill="#bbbbbb">EXTENSIONS: MARKETPLACE</text>
+  <rect x="104" y="82" width="275" height="28" fill="#3c3c3c" stroke="#e8a317" stroke-width="3"/>
+  <text x="112" y="101" font-size="12" fill="#ffffff">STM32CubeIDE for Visual Studio Code</text>
+  <circle cx="392" cy="96" r="13" fill="#e8a317"/><text x="392" y="101" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">2</text>
+  <!-- result item -->
+  <rect x="104" y="124" width="280" height="92" rx="4" fill="#37373d" stroke="#e8a317" stroke-width="3"/>
+  <rect x="114" y="136" width="42" height="42" rx="4" fill="#03234b"/>
+  <text x="135" y="163" text-anchor="middle" font-size="14" font-weight="700" fill="#ffd200">ST</text>
+  <text x="166" y="148" font-size="12" font-weight="700" fill="#ffffff">STM32CubeIDE for Visual</text>
+  <text x="166" y="164" font-size="12" font-weight="700" fill="#ffffff">Studio Code</text>
+  <text x="166" y="182" font-size="11" fill="#9d9d9d">STMicroelectronics ✓</text>
+  <rect x="314" y="188" width="60" height="22" rx="3" fill="#0e639c"/>
+  <text x="344" y="204" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">Install</text>
+  <!-- other (wrong) results -->
+  <text x="114" y="240" font-size="11" fill="#9d9d9d">Other results (community extensions,</text>
+  <text x="114" y="256" font-size="11" fill="#9d9d9d">Cortex-Debug, …) — do not install them</text>
+  <line x1="104" y1="268" x2="384" y2="268" stroke="#3c3c3c"/>
+  <rect x="114" y="278" width="32" height="32" rx="4" fill="#555"/>
+  <text x="156" y="292" font-size="11" fill="#777">some other STM32 extension</text>
+  <text x="156" y="306" font-size="10" fill="#666">another publisher</text>
+  <!-- detail pane -->
+  <rect x="398" y="45" width="482" height="340" fill="#1e1e1e"/>
+  <rect x="420" y="65" width="70" height="70" rx="6" fill="#03234b"/>
+  <text x="455" y="108" text-anchor="middle" font-size="22" font-weight="700" fill="#ffd200">ST</text>
+  <text x="505" y="85" font-size="16" font-weight="700" fill="#ffffff">STM32CubeIDE for Visual Studio Code</text>
+  <text x="505" y="106" font-size="12" fill="#9d9d9d">STMicroelectronics  ✓  stmicroelectronics.stm32-vscode-extension</text>
+  <rect x="505" y="116" width="70" height="24" rx="3" fill="#0e639c" stroke="#e8a317" stroke-width="3"/>
+  <text x="540" y="133" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">Install</text>
+  <circle cx="595" cy="128" r="13" fill="#e8a317"/><text x="595" y="133" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">3</text>
+  <text x="420" y="170" font-size="12" font-weight="700" fill="#cccccc">Extension Pack — installed together with it:</text>
+  <text x="432" y="192" font-size="12" fill="#cccccc">• STM32Cube core, build (CMake), debug (ST-LINK)</text>
+  <text x="432" y="212" font-size="12" fill="#cccccc">• clangd code indexer, registers and RTOS views</text>
+  <text x="432" y="232" font-size="12" fill="#cccccc">• CMake Tools, Memory Inspector, Serial Monitor</text>
+  <text x="420" y="266" font-size="12" fill="#89d185">After installing, the ST icon appears in the activity bar.</text>
+  <!-- ST icon appears -->
+  <rect x="420" y="282" width="40" height="36" rx="5" fill="#03234b" stroke="#89d185" stroke-width="2"/>
+  <text x="440" y="306" text-anchor="middle" font-size="13" font-weight="700" fill="#ffd200">ST</text>
+  <text x="472" y="305" font-size="12" fill="#cccccc">= the STM32 panel used in steps 4 and 6</text>
+  <!-- status bar -->
+  <rect x="20" y="385" width="860" height="30" fill="#007acc"/>
+  <text x="450" y="428" text-anchor="middle" font-size="11" fill="#4a5968">Schematic drawing — icons and layout may differ slightly between VS Code versions.</text>
+<circle cx="84" cy="246" r="13" fill="#e8a317"/><text x="84" y="251" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">1</text>
+</svg>

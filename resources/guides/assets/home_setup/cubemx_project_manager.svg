@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" font-family="Segoe UI, Helvetica, Arial, sans-serif" role="img" aria-label="Schematic of the STM32CubeMX Project Manager tab with Project Name, Project Location and Toolchain/IDE set to CMake, and the Generate Code button">
+  <rect width="900" height="430" fill="#ffffff"/>
+  <!-- window -->
+  <rect x="20" y="15" width="860" height="400" rx="8" fill="#f5f7fa" stroke="#9aa7b4"/>
+  <rect x="20" y="15" width="860" height="36" rx="8" fill="#1f3b57"/>
+  <text x="40" y="39" font-size="14" fill="#ffffff">STM32CubeMX   EE5203_Home_Blink.ioc : STM32F401RETx  NUCLEO-F401RE</text>
+  <!-- generate button -->
+  <rect x="720" y="60" width="145" height="34" rx="5" fill="#0b7a3e" stroke="#e8a317" stroke-width="3"/>
+  <text x="792" y="82" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">GENERATE CODE</text>
+  <circle cx="705" cy="77" r="13" fill="#e8a317"/><text x="705" y="82" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">4</text>
+  <!-- tabs -->
+  <rect x="35" y="60" width="210" height="34" fill="#dfe5eb" stroke="#9aa7b4"/>
+  <text x="140" y="82" text-anchor="middle" font-size="13" fill="#202b38">Pinout &amp; Configuration</text>
+  <rect x="245" y="60" width="170" height="34" fill="#dfe5eb" stroke="#9aa7b4"/>
+  <text x="330" y="82" text-anchor="middle" font-size="13" fill="#202b38">Clock Configuration</text>
+  <rect x="415" y="60" width="160" height="34" fill="#ffffff" stroke="#2f6db5" stroke-width="2"/>
+  <text x="495" y="82" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4f8a">Project Manager</text>
+  <!-- left menu -->
+  <rect x="35" y="104" width="150" height="296" fill="#ffffff" stroke="#c9d1da"/>
+  <rect x="35" y="104" width="150" height="34" fill="#e8f1fb"/>
+  <text x="50" y="126" font-size="13" font-weight="700" fill="#1d4f8a">Project</text>
+  <text x="50" y="160" font-size="13" fill="#4a5968">Code Generator</text>
+  <text x="50" y="192" font-size="13" fill="#4a5968">Advanced Settings</text>
+  <!-- fields -->
+  <text x="210" y="130" font-size="13" font-weight="700" fill="#202b38">Project Settings</text>
+  <text x="210" y="165" font-size="13" fill="#202b38">Project Name</text>
+  <rect x="380" y="148" width="300" height="26" fill="#ffffff" stroke="#e8a317" stroke-width="3"/>
+  <text x="390" y="166" font-size="13" font-family="Consolas, Menlo, monospace" fill="#202b38">EE5203_Home_Blink</text>
+  <circle cx="700" cy="161" r="13" fill="#e8a317"/><text x="700" y="166" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">1</text>
+  <text x="720" y="166" font-size="12" fill="#8a5200">letters, digits, _ only</text>
+  <text x="210" y="205" font-size="13" fill="#202b38">Project Location</text>
+  <rect x="380" y="188" width="300" height="26" fill="#ffffff" stroke="#e8a317" stroke-width="3"/>
+  <text x="390" y="206" font-size="13" font-family="Consolas, Menlo, monospace" fill="#202b38">C:\STM32\EE5203</text>
+  <circle cx="700" cy="201" r="13" fill="#e8a317"/><text x="700" y="206" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">2</text>
+  <text x="720" y="206" font-size="12" fill="#8a5200">no spaces, no ç ğ ı ö ş ü</text>
+  <text x="210" y="245" font-size="13" fill="#202b38">Application Structure</text>
+  <rect x="380" y="228" width="300" height="26" fill="#ffffff" stroke="#c9d1da"/>
+  <text x="390" y="246" font-size="13" fill="#4a5968">Advanced   (leave as is)</text>
+  <text x="210" y="285" font-size="13" fill="#202b38">Toolchain / IDE</text>
+  <rect x="380" y="268" width="300" height="26" fill="#ffffff" stroke="#e8a317" stroke-width="3"/>
+  <text x="390" y="286" font-size="13" font-weight="700" fill="#202b38">CMake</text>
+  <text x="668" y="286" font-size="12" fill="#4a5968">▾</text>
+  <circle cx="700" cy="281" r="13" fill="#e8a317"/><text x="700" y="286" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">3</text>
+  <text x="720" y="286" font-size="12" fill="#8a5200">not STM32CubeIDE</text>
+  <text x="210" y="325" font-size="13" fill="#202b38">Compiler</text>
+  <rect x="380" y="308" width="300" height="26" fill="#ffffff" stroke="#c9d1da"/>
+  <text x="390" y="326" font-size="13" fill="#4a5968">GCC   (leave as is)</text>
+  <text x="210" y="375" font-size="12" fill="#4a5968">Schematic drawing — labels on your screen may differ slightly between CubeMX versions.</text>
+</svg>

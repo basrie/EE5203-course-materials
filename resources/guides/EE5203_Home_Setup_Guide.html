@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Basri Erdogan — 2026-2027 Fall">
+
+<title>Home Setup: STM32CubeMX + VS Code – EE5203 Microprocessors</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">EE5203 Microprocessors</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../SYLLABUS.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resources/companions/EE5203_Toolchain_Boot_Companion.html"> 
+<span class="menu-text">From C to Silicon</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resources/references/academic_references.html"> 
+<span class="menu-text">References</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#install-vs-code" id="toc-install-vs-code" class="nav-link active" data-scroll-target="#install-vs-code">1. Install VS Code</a></li>
+  <li><a href="#install-stm32cubemx" id="toc-install-stm32cubemx" class="nav-link" data-scroll-target="#install-stm32cubemx">2. Install STM32CubeMX</a></li>
+  <li><a href="#install-the-stm32-extension" id="toc-install-the-stm32-extension" class="nav-link" data-scroll-target="#install-the-stm32-extension">3. Install the STM32 extension</a></li>
+  <li><a href="#create-the-project-in-cubemx" id="toc-create-the-project-in-cubemx" class="nav-link" data-scroll-target="#create-the-project-in-cubemx">4. Create the project in CubeMX</a></li>
+  <li><a href="#open-the-project-in-vs-code" id="toc-open-the-project-in-vs-code" class="nav-link" data-scroll-target="#open-the-project-in-vs-code">5. Open the project in VS Code</a></li>
+  <li><a href="#add-the-code-and-build" id="toc-add-the-code-and-build" class="nav-link" data-scroll-target="#add-the-code-and-build">6. Add the code and build</a></li>
+  <li><a href="#with-a-board-run-and-debug" id="toc-with-a-board-run-and-debug" class="nav-link" data-scroll-target="#with-a-board-run-and-debug">7. With a board: run and debug</a></li>
+  <li><a href="#if-something-goes-wrong" id="toc-if-something-goes-wrong" class="nav-link" data-scroll-target="#if-something-goes-wrong">If something goes wrong</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="EE5203_Home_Setup_Guide.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Home Setup: STM32CubeMX + VS Code</h1>
+<p class="subtitle lead">EE5203 Microprocessors — set up your own computer in seven steps</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Basri Erdogan — 2026-2027 Fall </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>With these tools you can do labs and homework on your own computer. Plan about <strong>one hour</strong>. Most of it is waiting for downloads.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/home_setup/overview.svg" class="img-fluid figure-img" alt="Toolchain overview: STM32CubeMX, VS Code with the STM32 extension, Nucleo board"></p>
+<figcaption>CubeMX makes the project, VS Code builds it, the board runs it.</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+No board yet? No problem.
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Do <strong>steps 1–6</strong>. They end with a successful build, and that is enough for now. When you have your board, do <strong>step 7</strong> to run and debug the program.</p>
+</div>
+</div>
+<p><strong>Before you start</strong></p>
+<ul>
+<li>You need a Windows 10/11 (64-bit) or macOS computer, <strong>10 GB</strong> free disk, and an internet connection.</li>
+<li>Create a free <strong>myST account</strong> at <a href="https://www.st.com">st.com</a> (top right, <em>myST</em>). You need it to download CubeMX.</li>
+<li>Keep your projects in <strong><code>C:\STM32\EE5203</code></strong> (macOS: <code>~/STM32/EE5203</code>). Never use a folder with <strong>spaces</strong> or <strong>Turkish characters</strong> (ç ğ ı İ ö ş ü).</li>
+</ul>
+<section id="install-vs-code" class="level2">
+<h2 class="anchored" data-anchor-id="install-vs-code">1. Install VS Code</h2>
+<p>Download it from <a href="https://code.visualstudio.com">code.visualstudio.com</a> and install it with the default options.</p>
+</section>
+<section id="install-stm32cubemx" class="level2">
+<h2 class="anchored" data-anchor-id="install-stm32cubemx">2. Install STM32CubeMX</h2>
+<p>Go to <a href="https://www.st.com/en/development-tools/stm32cubemx.html">st.com → STM32CubeMX</a> → <em>Get Software</em>, log in, and download the package for your computer:</p>
+<ul>
+<li><strong>Windows:</strong> <em>STM32CubeMX-Win</em>. Unzip it and run <code>SetupSTM32CubeMX-6.18.1.exe</code>.</li>
+<li><strong>Mac with Apple chip (M1–M4):</strong> the <strong>Arm64</strong> package.</li>
+<li><strong>Mac with Intel chip:</strong> the macOS package.</li>
+</ul>
+<p>Accept the defaults. You do not need to install Java.</p>
+</section>
+<section id="install-the-stm32-extension" class="level2">
+<h2 class="anchored" data-anchor-id="install-the-stm32-extension">3. Install the STM32 extension</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/home_setup/vscode_extension_install.svg" class="img-fluid figure-img" alt="Schematic of the VS Code Extensions view with the STM32CubeIDE for Visual Studio Code search result"></p>
+<figcaption>(1) Extensions, (2) search, (3) Install the one from STMicroelectronics.</figcaption>
+</figure>
+</div>
+<ol type="1">
+<li>In VS Code, open <strong>Extensions</strong> (Ctrl+Shift+X).</li>
+<li>Search <strong>STM32CubeIDE for Visual Studio Code</strong>.</li>
+<li>Click <strong>Install</strong> on the one by <strong>STMicroelectronics</strong>.</li>
+</ol>
+<p>A new <strong>ST</strong> icon appears on the left. <strong>This one extension is all you need.</strong> It also installs its helpers and downloads the compiler later. Do not install Cortex-Debug or other STM32 extensions.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Windows: does your user name have a space or a Turkish character? (click)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Open <strong>Command Prompt</strong> and type <code>echo %USERPROFILE%</code>. If you see something like <code>C:\Users\Ayşe Yılmaz</code>, do this once:</p>
+<ol type="1">
+<li>Create the folders <code>C:\ST\bundles</code> and <code>C:\ST\packs</code>.</li>
+<li>Start → type <strong>environment</strong> → <em>Edit environment variables for your account</em>.</li>
+<li>Add two variables: <code>CUBE_BUNDLE_PATH</code> = <code>C:\ST\bundles</code> and <code>CMSIS_PACK_ROOT</code> = <code>C:\ST\packs</code>.</li>
+<li>Close and reopen VS Code.</li>
+</ol>
+</div>
+</div>
+</div>
+<p><strong>Mac:</strong> also run <code>brew install zstd</code> in Terminal (needs <a href="https://brew.sh">Homebrew</a>).</p>
+</section>
+<section id="create-the-project-in-cubemx" class="level2">
+<h2 class="anchored" data-anchor-id="create-the-project-in-cubemx">4. Create the project in CubeMX</h2>
+<ol type="1">
+<li><strong>File → New Project → Board Selector</strong> → type <strong>NUCLEO-F401RE</strong> → select it → <strong>Start Project</strong>.</li>
+<li><em>Initialize all peripherals with their default mode?</em> → <strong>Yes</strong>.</li>
+<li>If CubeMX asks to download the <strong>STM32CubeF4</strong> package → <strong>Yes</strong> (large download, one time only).</li>
+<li>In the <strong>Project Manager</strong> tab, fill in three fields and click <strong>GENERATE CODE</strong>:</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/home_setup/cubemx_project_manager.svg" class="img-fluid figure-img" alt="Schematic of the CubeMX Project Manager tab"></p>
+<figcaption>(1) Name, (2) Location, (3) Toolchain = CMake, (4) Generate Code.</figcaption>
+</figure>
+</div>
+<ol start="5" type="1">
+<li>When CubeMX asks <em>Open Project?</em>, click <strong>Close</strong>.</li>
+</ol>
+</section>
+<section id="open-the-project-in-vs-code" class="level2">
+<h2 class="anchored" data-anchor-id="open-the-project-in-vs-code">5. Open the project in VS Code</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/home_setup/vscode_open_project.svg" class="img-fluid figure-img" alt="Schematic of VS Code with the preset picker, the bundle notification and the STM32 panel"></p>
+<figcaption>(1) Debug, (2) Yes, (3) Discover STM32Cube project.</figcaption>
+</figure>
+</div>
+<ol type="1">
+<li><strong>File → Open Folder…</strong> → select <code>EE5203_Home_Blink</code> (the folder with the <code>.ioc</code> file).</li>
+<li><strong>(1)</strong> Choose the preset <strong>Debug</strong>.</li>
+<li><strong>(2)</strong> <em>Install cube bundle(s)?</em> → <strong>Yes</strong>. The first download takes a few minutes.</li>
+<li><strong>(3)</strong> ST icon → <strong>Discover STM32Cube project</strong> → <strong>Save and close</strong>.</li>
+</ol>
+</section>
+<section id="add-the-code-and-build" class="level2">
+<h2 class="anchored" data-anchor-id="add-the-code-and-build">6. Add the code and build</h2>
+<p>Open <code>Core/Src/main.c</code>. Add one line between <code>/* USER CODE BEGIN 2 */</code> and <code>/* USER CODE END 2 */</code>, and three lines between <code>/* USER CODE BEGIN 3 */</code> and <code>/* USER CODE END 3 */</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* USER CODE </span><span class="re">BEGIN</span><span class="co"> 2 */</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> toggle_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* USER CODE </span><span class="re">END</span><span class="co"> 2 */</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* USER CODE </span><span class="re">BEGIN</span><span class="co"> 3 */</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    toggle_count <span class="op">=</span> toggle_count <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* USER CODE </span><span class="re">END</span><span class="co"> 3 */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Save (Ctrl+S) and press <strong>F7</strong> to build.</p>
+<p><strong>Success looks like this:</strong> the last line says <code>Linking C executable EE5203_Home_Blink.elf</code> and there is no <code>error</code>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Build error <code>...FLASH.ld: syntax error</code>?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is a known CubeMX bug. Download <a href="files/STM32F401RETx_FLASH.ld">STM32F401RETx_FLASH.ld</a>, copy it into your project folder to <strong>replace</strong> the old one, and press F7 again. (Repeat this after every <em>Generate Code</em>.)</p>
+</div>
+</div>
+<p><strong>No board yet? You are done — your computer is ready.</strong></p>
+</section>
+<section id="with-a-board-run-and-debug" class="level2">
+<h2 class="anchored" data-anchor-id="with-a-board-run-and-debug">7. With a board: run and debug</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/home_setup/nucleo_usb.svg" class="img-fluid figure-img" style="width:70.0%" alt="Nucleo-F401RE with the USB connector, LD1, LD2, LD3 and the buttons marked"></p>
+<figcaption>Plug the cable into the USB connector at the top (ST-LINK side). LD2 is the LED that will blink.</figcaption>
+</figure>
+</div>
+<ol type="1">
+<li><strong>Windows only, once:</strong> ST icon → <strong>STM32CUBE RESOURCES</strong> → <strong>ST-Link USB Drivers</strong> → install.</li>
+<li>Plug in the board with a <strong>data</strong> cable. If VS Code offers an <strong>ST-LINK firmware update</strong>, accept it.</li>
+<li>Open <strong>Run and Debug</strong> (Ctrl+Shift+D) → <strong>Run and Debug</strong> → choose <strong>STM32Cube: STM32 Launch ST-Link GDB Server</strong>.</li>
+<li>The program stops at <code>main</code>. Press <strong>Continue</strong> (F5): <strong>LD2 blinks.</strong></li>
+<li>Click left of the <code>toggle_count</code> line to set a <strong>breakpoint</strong> (red dot). Each Continue stops there again; watch <code>toggle_count</code> grow in <strong>VARIABLES</strong>.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/home_setup/vscode_build_debug.svg" class="img-fluid figure-img" alt="Schematic of VS Code build output and Run and Debug view"></p>
+<figcaption>The debug configuration to choose (2), next to the build output (1).</figcaption>
+</figure>
+</div>
+</section>
+<section id="if-something-goes-wrong" class="level2">
+<h2 class="anchored" data-anchor-id="if-something-goes-wrong">If something goes wrong</h2>
+<ul>
+<li><strong>Board not found:</strong> try another USB cable (many are charge-only), install the driver (step 7.1), close CubeMX, unplug and replug.</li>
+<li><strong>Red lines under <code>#include</code> but the build works:</strong> open the Windows user-name box in step 3 (Mac: <code>brew install zstd</code>).</li>
+<li><strong>Bundle download never finishes:</strong> check your internet; some dorm or company networks block it — try another network.</li>
+<li><strong>My code disappeared after <em>Generate Code</em>:</strong> it was outside the <code>USER CODE</code> comments. Always write inside them.</li>
+</ul>
+<p>Still stuck? Send your lab assistant the <strong>step number</strong> and the <strong>first error line</strong> (as text, not a photo), or bring your laptop to the lab.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Lab PC or home? (click)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>At home you do not need STM32CubeCLT or the lab’s <code>.vscode</code> template. At home you build with <strong>F7</strong> and debug with the <strong>STM32Cube</strong> configuration; in the lab you use <strong>Ctrl+Shift+B</strong> and <strong>F5</strong>, as in the lab guides. To continue a lab project at home, copy its folder to <code>C:\STM32\EE5203</code>, delete its <code>build</code> folder, and start from step 5.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

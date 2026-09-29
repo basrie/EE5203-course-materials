@@ -3875,7 +3875,7 @@
     "href": "index.html",
     "title": "EE5203 Microprocessors",
     "section": "",
-    "text": "Slides, study sheets, worksheets and lab guides. Graded work and the weekly calendar are in CATS.\n\nEmbedded C\n\n  \n    L01\n    \n      Embedded Systems, the C Toolchain, and Debugging\n      \n        Lab reference\n        Common lab mistakes\n      \n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L02\n    \n      Values, Decisions, Loops, and Arrays\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L03\n    \n      Functions, Arrays, Strings, and Multiple C Files\n      \n        Starter files\n      \n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nRegisters and GPIO\n\n  \n    L04\n    \n      Pointers, Structures, Bits, Registers, and GPIO\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L05\n    \n      GPIO and Hardware Abstraction\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nEvents and Time\n\n  \n    L06\n    \n      Interrupts and the NVIC\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n    L07\n    \n      Timers and Non-Blocking Time\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  Week 8 · Midterm examination\n\n\n\nPeripherals\n\n  \n    L08\n    \n      PWM, Output Compare, and Input Capture\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L09\n    \n      ADC and Sensor Acquisition\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L10\n    \n      UART and PC Communication\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L11\n    \n      I2C and SPI\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nIntegration and Project\n\n  \n    L12\n    \n      System Integration and Project Clinic\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Clinic\n    \n  \n  \n    L13\n    \n      Demonstration, Oral Defence, and Reflection\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Demo"
+    "text": "Slides, study sheets, worksheets and lab guides. Graded work and the weekly calendar are in CATS.\n\nEmbedded C\n\n  \n    L01\n    \n      Embedded Systems, the C Toolchain, and Debugging\n      \n        Lab reference\n        Common lab mistakes\n        Home setup\n      \n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L02\n    \n      Values, Decisions, Loops, and Arrays\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L03\n    \n      Functions, Arrays, Strings, and Multiple C Files\n      \n        Starter files\n      \n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nRegisters and GPIO\n\n  \n    L04\n    \n      Pointers, Structures, Bits, Registers, and GPIO\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L05\n    \n      GPIO and Hardware Abstraction\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nEvents and Time\n\n  \n    L06\n    \n      Interrupts and the NVIC\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n    L07\n    \n      Timers and Non-Blocking Time\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  Week 8 · Midterm examination\n\n\n\nPeripherals\n\n  \n    L08\n    \n      PWM, Output Compare, and Input Capture\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L09\n    \n      ADC and Sensor Acquisition\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L10\n    \n      UART and PC Communication\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n  \n    L11\n    \n      I2C and SPI\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Lab\n    \n  \n\n\nIntegration and Project\n\n  \n    L12\n    \n      System Integration and Project Clinic\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Clinic\n    \n  \n  \n    L13\n    \n      Demonstration, Oral Defence, and Reflection\n    \n    \n        Theory\n        Study sheet\n        Worksheet\n        Demo"
   },
   {
     "objectID": "SYLLABUS.html",
@@ -6291,5 +6291,131 @@
     "title": "Common Lab Mistakes",
     "section": "When you still need help",
     "text": "When you still need help\nBring these four lines, written down:\nExpected:\nObserved:\nEvidence collected:\nSmallest next test:"
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "",
+    "text": "With these tools you can do labs and homework on your own computer. Plan about one hour. Most of it is waiting for downloads.\nBefore you start"
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#before-you-start",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#before-you-start",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "0. Before you start",
+    "text": "0. Before you start\nYou need:\n\n\n\nItem\nDetail\n\n\n\n\nComputer\nWindows 10/11 64-bit, or macOS 15 or newer (Intel or Apple Silicon). Linux works too (Ubuntu 22.04+).\n\n\nFree disk\nat least 10 GB\n\n\nInternet\nrequired during setup — the extension downloads its tools\n\n\nAdmin rights\nWindows only, once, for the ST-LINK USB driver\n\n\nmyST account\nfree, needed to download STM32CubeMX — create it at st.com (top right, myST → Create account)\n\n\nBoard + cable\nNucleo-F401RE and a USB data cable (charge-only cables do not work)\n\n\n\nOne rule that prevents most problems — use a simple folder:\n\nKeep all STM32 projects in C:\\STM32\\EE5203 (Windows) or ~/STM32/EE5203 (macOS).\nNever use a folder with spaces or Turkish characters (ç ğ ı İ ö ş ü) in its path.\nDo not put projects in OneDrive, Desktop or Documents folders that sync to the cloud.\n\n\n\n\n\n\n\nWindows: check your user name first\n\n\n\nOpen Command Prompt and type echo %USERPROFILE%. If the result contains a space or a Turkish character (for example C:\\Users\\Ayşe Yılmaz), do step 3b before you open any project. Otherwise the editor cannot find the header files."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#install-vs-code",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#install-vs-code",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "1. Install VS Code",
+    "text": "1. Install VS Code\nDownload it from code.visualstudio.com and install it with the default options."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#install-stm32cubemx",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#install-stm32cubemx",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "2. Install STM32CubeMX",
+    "text": "2. Install STM32CubeMX\nGo to st.com → STM32CubeMX → Get Software, log in, and download the package for your computer:\n\nWindows: STM32CubeMX-Win. Unzip it and run SetupSTM32CubeMX-6.18.1.exe.\nMac with Apple chip (M1–M4): the Arm64 package.\nMac with Intel chip: the macOS package.\n\nAccept the defaults. You do not need to install Java."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#install-the-stm32-extension-in-vs-code",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#install-the-stm32-extension-in-vs-code",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "3. Install the STM32 extension in VS Code",
+    "text": "3. Install the STM32 extension in VS Code\n\n\n\n(1) Extensions view, (2) search, (3) Install — the one published by STMicroelectronics.\n\n\n\n(1) Open VS Code → Extensions (the four-squares icon, or Ctrl+Shift+X).\n(2) Type STM32CubeIDE for Visual Studio Code in the search box.\n(3) Pick the result published by STMicroelectronics (blue check mark) and click Install.\nA new ST icon appears in the left activity bar. That is the STM32 panel.\nIf the C/C++ extension from Microsoft is installed, VS Code may ask which one should provide IntelliSense. Choose the STM32 (clangd) option, or disable C/C++ for this workspace.\n\n\n\n\n\n\n\nOne extension is enough\n\n\n\nThis single extension is all you need. It is an extension pack: it also installs CMake Tools, a code indexer (clangd), a memory view and a serial monitor. Do not install Cortex-Debug, STM32CubeCLT or other STM32 extensions.\n\n\nmacOS only: open Terminal and run brew install zstd (needs Homebrew). The code indexer needs it.\n\n3b. Only if your Windows user name has spaces or Turkish characters\nThe extension stores its tools under your user folder. Move that location to a simple path before the first project:\n\nCreate the folders C:\\ST\\bundles and C:\\ST\\packs.\nStart → type environment → Edit environment variables for your account.\nAdd two user variables:\n\nCUBE_BUNDLE_PATH = C:\\ST\\bundles\nCMSIS_PACK_ROOT = C:\\ST\\packs\n\nClose and reopen VS Code."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#connect-the-board-windows-install-the-usb-driver",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#connect-the-board-windows-install-the-usb-driver",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "4. Connect the board (Windows: install the USB driver)",
+    "text": "4. Connect the board (Windows: install the USB driver)\n\n\n\nPlug the cable into the ST-LINK connector at the top of the board. LD2 is the LED your program will blink.\n\n\n\nWindows: STM32 panel → STM32CUBE RESOURCES → ST-Link USB Drivers. Run the installer as administrator. (macOS and Linux need no driver.)\nPlug the board in. LD3 (power) turns on, and a drive called NODE_F401RE appears. Ignore that drive.\nSTM32 panel → STM32CUBE DEVICES AND BOARDS should list your board. If it offers an ST-LINK firmware update, accept it and wait until it finishes. An outdated ST-LINK firmware is the most common first-day problem."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#create-the-first-project-in-cubemx",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#create-the-first-project-in-cubemx",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "5. Create the first project in CubeMX",
+    "text": "5. Create the first project in CubeMX\n\nFile → New Project → Board Selector. Type NUCLEO-F401RE, select it, click Start Project.\nInitialize all peripherals with their default mode? → Yes. The pin PA5 is already set up as LD2 (the green LED). You change nothing on the pinout.\nThe first time, CubeMX asks to download the STM32CubeF4 firmware package (a large download, needs your myST login). Answer Yes and wait.\nOpen the Project Manager tab and fill in three fields:\n\n\n\n\nProject Manager: (1) name, (2) location, (3) Toolchain/IDE = CMake, (4) Generate Code.\n\n\n\n\n\n\n\n\n\n\n#\nField\nValue\n\n\n\n\n1\nProject Name\nEE5203_Home_Blink (letters, digits and _ only)\n\n\n2\nProject Location\nC:\\STM32\\EE5203 (macOS: ~/STM32/EE5203)\n\n\n3\nToolchain / IDE\nCMake\n\n\n\n\nClick GENERATE CODE (4). When CubeMX asks Open Project?, choose Close. You open it in VS Code instead.\n\nYou now have the folder C:\\STM32\\EE5203\\EE5203_Home_Blink with Core\\, Drivers\\, CMakeLists.txt and EE5203_Home_Blink.ioc."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#open-the-project-in-vs-code",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#open-the-project-in-vs-code",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "5. Open the project in VS Code",
+    "text": "5. Open the project in VS Code\n\n\n\n(1) Debug, (2) Yes, (3) Discover STM32Cube project.\n\n\n\nFile → Open Folder… → select EE5203_Home_Blink (the folder with the .ioc file).\n(1) Choose the preset Debug.\n(2) Install cube bundle(s)? → Yes. The first download takes a few minutes.\n(3) ST icon → Discover STM32Cube project → Save and close."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#add-the-blink-code",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#add-the-blink-code",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "7. Add the blink code",
+    "text": "7. Add the blink code\nOpen Core/Src/main.c. Find the infinite loop and put the three statements inside USER CODE BEGIN 3 … END 3:\n  /* USER CODE BEGIN 2 */\n  int toggle_count = 0;\n  /* USER CODE END 2 */\n\n  /* Infinite loop */\n  /* USER CODE BEGIN WHILE */\n  while (1)\n  {\n    /* USER CODE END WHILE */\n\n    /* USER CODE BEGIN 3 */\n    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n    toggle_count = toggle_count + 1;\n    HAL_Delay(500);\n  }\n  /* USER CODE END 3 */\nCode outside the USER CODE regions is deleted when you regenerate from CubeMX. Save the file (Ctrl+S)."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#build",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#build",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "8. Build",
+    "text": "8. Build\nPress F7 (or click Build in the blue status bar).\n\n\n\nBuild output (1) and the debug configuration (2).\n\n\nA successful build ends with Linking C executable EE5203_Home_Blink.elf and a memory usage table, with no line containing FAILED or error.\n\n\n\n\n\n\nIf the build stops with ...FLASH.ld: syntax error\n\n\n\nThis is a known CubeMX bug. The generated linker script loses its memory names (ORIGIN() + LENGTH()). Fix it once per generation:\n\nDownload the correct file: STM32F401RETx_FLASH.ld.\nCopy it into your project folder (next to CMakeLists.txt) and replace the existing STM32F401RETx_FLASH.ld.\nBuild again (F7).\n\nCubeMX breaks the file again every time you click Generate Code, so repeat this after each regeneration. (The lab template does this automatically when you build with Ctrl+Shift+B.)"
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#flash-run-and-debug",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#flash-run-and-debug",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "9. Flash, run and debug",
+    "text": "9. Flash, run and debug\n\nOpen Run and Debug (Ctrl+Shift+D) and click Run and Debug. If VS Code offers a list, choose STM32Cube: STM32 Launch ST-Link GDB Server.\nVS Code builds, flashes the board and stops at main (yellow arrow).\nPress Continue (F5). LD2 blinks twice per second.\nClick in the margin next to toggle_count = toggle_count + 1; to set a breakpoint (red dot). Execution stops there; hover over toggle_count or look in VARIABLES to see its value grow each time you press Continue.\nStop the session with Stop (Shift+F5).\n\nTo keep this debug configuration for next time: Run and Debug → create a launch.json file → choose the STM32Cube configuration. After that, F5 starts it directly.\nYou are done. This is the same edit → build → flash → debug loop as in the lab."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#lab-pc-versus-home",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#lab-pc-versus-home",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "Lab PC versus home",
+    "text": "Lab PC versus home\n\n\n\n\n\n\n\n\n\nLab PC\nHome\n\n\n\n\nTools\nCubeCLT + prepared .vscode template\nSTM32 extension (downloads its tools)\n\n\nBundle question\nanswer No\nanswer Yes\n\n\nBuild\nCtrl+Shift+B\nF7 / status-bar Build\n\n\nStart debugging\nF5 → Debug (ST-LINK)\nRun and Debug → STM32Cube: STM32 Launch ST-Link GDB Server (F5 after saving launch.json)\n\n\nLinker-script bug\nfixed automatically by Ctrl+Shift+B\nreplace the .ld by hand (step 8)\n\n\nRegister (SFR) view\nPERIPHERALS panel\nthe extension’s peripheral/register view in the debug side bar\n\n\n\nTaking a lab project home. Copy the whole project folder (for example from H:\\EE_Labs) to C:\\STM32\\EE5203. Delete its build folder. Then follow steps 6, 8 and 9. At home, ignore the lab’s Debug (ST-LINK) configuration and the Ctrl+Shift+B task — they point to lab-only paths. Do not delete the .vscode folder; you still need it when you take the project back to the lab."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#troubleshooting",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#troubleshooting",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "Troubleshooting",
+    "text": "Troubleshooting\n\n\n\n\n\n\n\nSymptom\nWhat to check\n\n\n\n\nBoard not listed / “no ST-LINK detected”\ndata cable (try another), ST-LINK USB driver (Windows, step 4), close CubeMX or CubeProgrammer windows that may hold the ST-LINK, unplug and replug\n\n\nDebug starts but fails to connect\nupdate the ST-LINK firmware (STM32 panel → DEVICES AND BOARDS)\n\n\n...FLASH.ld: syntax error\nreplace the linker script (step 8)\n\n\nRed squiggles under #include \"main.h\" but the build works\nthe code indexer: check step 3b (Windows user name), brew install zstd (macOS), and that only one C/C++ language server is active\n\n\nCMake error: CMakeCache.txt directory ... is different\nyou copied a project: delete its build folder and build again\n\n\nNothing happens when you choose the preset / bundles never finish\ncheck the internet connection; the first download needs it. A company or dorm network with a proxy can block it — try another network\n\n\nChanged code has no effect\nsave the file, build (F7), then start a new debug session\n\n\nMy code disappeared after Generate Code\nit was outside the USER CODE regions — keep your code inside them\n\n\n\nStill stuck? Post the first error line (copy it as text, not a photo) and the step number to your lab assistant, or bring the laptop to the lab.\n\n\n\n\n\n\nStatus of this guide\n\n\n\nWritten for STM32CubeMX 6.18.1 and STM32CubeIDE for VS Code 3.11 (September 2026). The drawings are schematic; button names can change slightly between versions."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#install-the-stm32-extension",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#install-the-stm32-extension",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "3. Install the STM32 extension",
+    "text": "3. Install the STM32 extension\n\n\n\n(1) Extensions, (2) search, (3) Install the one from STMicroelectronics.\n\n\n\nIn VS Code, open Extensions (Ctrl+Shift+X).\nSearch STM32CubeIDE for Visual Studio Code.\nClick Install on the one by STMicroelectronics.\n\nA new ST icon appears on the left. This one extension is all you need. It also installs its helpers and downloads the compiler later. Do not install Cortex-Debug or other STM32 extensions.\n\n\n\n\n\n\nWindows: does your user name have a space or a Turkish character? (click)\n\n\n\n\n\nOpen Command Prompt and type echo %USERPROFILE%. If you see something like C:\\Users\\Ayşe Yılmaz, do this once:\n\nCreate the folders C:\\ST\\bundles and C:\\ST\\packs.\nStart → type environment → Edit environment variables for your account.\nAdd two variables: CUBE_BUNDLE_PATH = C:\\ST\\bundles and CMSIS_PACK_ROOT = C:\\ST\\packs.\nClose and reopen VS Code.\n\n\n\n\nMac: also run brew install zstd in Terminal (needs Homebrew)."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#create-the-project-in-cubemx",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#create-the-project-in-cubemx",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "4. Create the project in CubeMX",
+    "text": "4. Create the project in CubeMX\n\nFile → New Project → Board Selector → type NUCLEO-F401RE → select it → Start Project.\nInitialize all peripherals with their default mode? → Yes.\nIf CubeMX asks to download the STM32CubeF4 package → Yes (large download, one time only).\nIn the Project Manager tab, fill in three fields and click GENERATE CODE:\n\n\n\n\n(1) Name, (2) Location, (3) Toolchain = CMake, (4) Generate Code.\n\n\n\nWhen CubeMX asks Open Project?, click Close."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#add-the-code-and-build",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#add-the-code-and-build",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "6. Add the code and build",
+    "text": "6. Add the code and build\nOpen Core/Src/main.c. Add one line between /* USER CODE BEGIN 2 */ and /* USER CODE END 2 */, and three lines between /* USER CODE BEGIN 3 */ and /* USER CODE END 3 */:\n  /* USER CODE BEGIN 2 */\n  int toggle_count = 0;\n  /* USER CODE END 2 */\n  ...\n    /* USER CODE BEGIN 3 */\n    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);\n    toggle_count = toggle_count + 1;\n    HAL_Delay(500);\n  }\n  /* USER CODE END 3 */\nSave (Ctrl+S) and press F7 to build.\nSuccess looks like this: the last line says Linking C executable EE5203_Home_Blink.elf and there is no error.\n\n\n\n\n\n\nBuild error ...FLASH.ld: syntax error?\n\n\n\nThis is a known CubeMX bug. Download STM32F401RETx_FLASH.ld, copy it into your project folder to replace the old one, and press F7 again. (Repeat this after every Generate Code.)\n\n\nNo board yet? You are done — your computer is ready."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#with-a-board-run-and-debug",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#with-a-board-run-and-debug",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "7. With a board: run and debug",
+    "text": "7. With a board: run and debug\n\n\n\nPlug the cable into the USB connector at the top (ST-LINK side). LD2 is the LED that will blink.\n\n\n\nWindows only, once: ST icon → STM32CUBE RESOURCES → ST-Link USB Drivers → install.\nPlug in the board with a data cable. If VS Code offers an ST-LINK firmware update, accept it.\nOpen Run and Debug (Ctrl+Shift+D) → Run and Debug → choose STM32Cube: STM32 Launch ST-Link GDB Server.\nThe program stops at main. Press Continue (F5): LD2 blinks.\nClick left of the toggle_count line to set a breakpoint (red dot). Each Continue stops there again; watch toggle_count grow in VARIABLES.\n\n\n\n\nThe debug configuration to choose (2), next to the build output (1)."
+  },
+  {
+    "objectID": "resources/guides/EE5203_Home_Setup_Guide.html#if-something-goes-wrong",
+    "href": "resources/guides/EE5203_Home_Setup_Guide.html#if-something-goes-wrong",
+    "title": "Home Setup: STM32CubeMX + VS Code",
+    "section": "If something goes wrong",
+    "text": "If something goes wrong\n\nBoard not found: try another USB cable (many are charge-only), install the driver (step 7.1), close CubeMX, unplug and replug.\nRed lines under #include but the build works: open the Windows user-name box in step 3 (Mac: brew install zstd).\nBundle download never finishes: check your internet; some dorm or company networks block it — try another network.\nMy code disappeared after Generate Code: it was outside the USER CODE comments. Always write inside them.\n\nStill stuck? Send your lab assistant the step number and the first error line (as text, not a photo), or bring your laptop to the lab.\n\n\n\n\n\n\nLab PC or home? (click)\n\n\n\n\n\nAt home you do not need STM32CubeCLT or the lab’s .vscode template. At home you build with F7 and debug with the STM32Cube configuration; in the lab you use Ctrl+Shift+B and F5, as in the lab guides. To continue a lab project at home, copy its folder to C:\\STM32\\EE5203, delete its build folder, and start from step 5."
   }
 ]

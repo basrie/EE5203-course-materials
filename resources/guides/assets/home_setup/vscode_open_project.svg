@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" font-family="Segoe UI, Helvetica, Arial, sans-serif" role="img" aria-label="Schematic of VS Code after opening the project: select the Debug preset, answer Yes to install bundles, and click Discover STM32Cube project in the STM32 panel">
+  <rect width="900" height="460" fill="#ffffff"/>
+  <rect x="20" y="15" width="860" height="430" rx="8" fill="#1e1e1e" stroke="#555"/>
+  <rect x="20" y="15" width="860" height="30" rx="8" fill="#323233"/>
+  <text x="450" y="35" text-anchor="middle" font-size="13" fill="#cccccc">EE5203_Home_Blink — Visual Studio Code</text>
+  <!-- activity bar -->
+  <rect x="20" y="45" width="48" height="370" fill="#333333"/>
+  <rect x="30" y="60" width="28" height="22" rx="3" fill="#858585"/>
+  <rect x="30" y="100" width="28" height="22" rx="3" fill="#858585"/>
+  <rect x="30" y="140" width="28" height="22" rx="3" fill="#858585"/>
+  <!-- STM32 icon highlighted -->
+  <rect x="24" y="176" width="40" height="36" rx="5" fill="#03234b" stroke="#e8a317" stroke-width="3"/>
+  <text x="44" y="200" text-anchor="middle" font-size="13" font-weight="700" fill="#ffd200">ST</text>
+  <circle cx="84" cy="194" r="13" fill="#e8a317"/><text x="84" y="199" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">3</text>
+  <!-- side panel -->
+  <rect x="68" y="45" width="270" height="370" fill="#252526"/>
+  <text x="104" y="70" font-size="12" font-weight="700" fill="#bbbbbb">STM32CUBE</text>
+  <text x="104" y="100" font-size="12" fill="#cccccc">▸ STM32CUBE PROJECTS</text>
+  <rect x="104" y="112" width="215" height="30" rx="4" fill="#0e639c" stroke="#e8a317" stroke-width="3"/>
+  <text x="211" y="132" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">Discover STM32Cube project</text>
+  <text x="104" y="170" font-size="12" fill="#cccccc">▸ STM32CUBE DEVICES AND BOARDS</text>
+  <text x="120" y="192" font-size="11" fill="#9d9d9d">NUCLEO-F401RE  (ST-LINK)</text>
+  <text x="104" y="222" font-size="12" fill="#cccccc">▸ STM32CUBE RESOURCES</text>
+  <text x="120" y="244" font-size="11" fill="#9d9d9d">ST-Link USB Drivers  (Windows)</text>
+  <text x="104" y="274" font-size="12" fill="#cccccc">▸ BUNDLES</text>
+  <!-- editor area -->
+  <rect x="338" y="45" width="542" height="370" fill="#1e1e1e"/>
+  <!-- command palette preset -->
+  <rect x="400" y="58" width="420" height="92" rx="6" fill="#252526" stroke="#e8a317" stroke-width="3"/>
+  <text x="415" y="80" font-size="12" fill="#cccccc">Select a configure preset for EE5203_Home_Blink</text>
+  <rect x="410" y="90" width="400" height="24" fill="#04395e"/>
+  <text x="420" y="107" font-size="13" font-weight="700" fill="#ffffff">Debug</text>
+  <text x="420" y="136" font-size="13" fill="#9d9d9d">Release</text>
+  <circle cx="835" cy="75" r="13" fill="#e8a317"/><text x="835" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">1</text>
+  <!-- notification -->
+  <rect x="470" y="300" width="400" height="98" rx="6" fill="#252526" stroke="#e8a317" stroke-width="3"/>
+  <text x="485" y="325" font-size="12" fill="#cccccc">ⓘ  Some cube bundle(s) are required for this</text>
+  <text x="485" y="343" font-size="12" fill="#cccccc">project. Do you want to install them?</text>
+  <rect x="690" y="358" width="70" height="26" rx="3" fill="#0e639c"/>
+  <text x="725" y="376" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Yes</text>
+  <rect x="770" y="358" width="70" height="26" rx="3" fill="#3a3d41"/>
+  <text x="805" y="376" text-anchor="middle" font-size="12" fill="#ccc">No</text>
+  <circle cx="455" cy="315" r="13" fill="#e8a317"/><text x="455" y="320" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">2</text>
+  <!-- status bar -->
+  <rect x="20" y="415" width="860" height="30" fill="#007acc"/>
+  <text x="40" y="435" font-size="12" fill="#ffffff">⚙ Debug   ⟳ Build   ▷ Debug</text>
+  <text x="460" y="455" text-anchor="middle" font-size="11" fill="#4a5968">Schematic drawing — the real notification text and panel titles may differ slightly between extension versions.</text>
+</svg>

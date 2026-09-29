@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" font-family="Segoe UI, Helvetica, Arial, sans-serif" role="img" aria-label="Schematic of building with F7 and debugging from the Run and Debug view with the STM32Cube ST-Link configuration; execution stops at main">
+  <rect width="900" height="430" fill="#ffffff"/>
+  <rect x="20" y="15" width="860" height="400" rx="8" fill="#1e1e1e" stroke="#555"/>
+  <rect x="20" y="15" width="860" height="30" rx="8" fill="#323233"/>
+  <!-- debug toolbar -->
+  <rect x="520" y="52" width="230" height="30" rx="4" fill="#333333" stroke="#e8a317" stroke-width="2"/>
+  <text x="535" y="72" font-size="14" fill="#89d185">▶</text><text x="565" y="72" font-size="14" fill="#cccccc">⏸</text>
+  <text x="595" y="72" font-size="14" fill="#75beff">↷</text><text x="625" y="72" font-size="14" fill="#75beff">↓</text>
+  <text x="655" y="72" font-size="14" fill="#75beff">↑</text><text x="685" y="72" font-size="14" fill="#89d185">⟲</text>
+  <text x="715" y="72" font-size="14" fill="#f48771">■</text>
+  <text x="760" y="72" font-size="11" fill="#8a5200">debug toolbar</text>
+  <!-- activity bar -->
+  <rect x="20" y="45" width="48" height="340" fill="#333333"/>
+  <rect x="24" y="96" width="40" height="36" rx="5" fill="#3a3d41" stroke="#e8a317" stroke-width="3"/>
+  <text x="44" y="120" text-anchor="middle" font-size="16" fill="#cccccc">▷</text>
+  <!-- run and debug panel -->
+  <rect x="68" y="45" width="300" height="340" fill="#252526"/>
+  <text x="84" y="70" font-size="12" font-weight="700" fill="#bbbbbb">RUN AND DEBUG</text>
+  <rect x="84" y="82" width="270" height="44" rx="4" fill="#3a3d41" stroke="#e8a317" stroke-width="3"/>
+  <text x="96" y="100" font-size="12" fill="#89d185">▷</text>
+  <text x="112" y="100" font-size="11" fill="#ffffff">STM32Cube: STM32 Launch</text>
+  <text x="112" y="116" font-size="11" fill="#ffffff">ST-Link GDB Server</text>
+  
+  <text x="84" y="152" font-size="11" fill="#bbbbbb">▾ VARIABLES</text>
+  <text x="100" y="172" font-size="11" fill="#9cdcfe">toggle_count: 7</text>
+  <text x="84" y="198" font-size="11" fill="#bbbbbb">▸ WATCH</text>
+  <text x="84" y="222" font-size="11" fill="#bbbbbb">▸ CALL STACK</text>
+  <text x="84" y="246" font-size="11" fill="#bbbbbb">▸ BREAKPOINTS</text>
+  <text x="84" y="270" font-size="11" fill="#bbbbbb">▸ PERIPHERALS / REGISTERS</text>
+  <!-- editor -->
+  <rect x="368" y="90" width="512" height="295" fill="#1e1e1e"/>
+  <text x="385" y="115" font-size="12" font-family="Consolas, Menlo, monospace" fill="#6a9955">/* USER CODE BEGIN 3 */</text>
+  <rect x="372" y="124" width="505" height="20" fill="#4b4b18"/>
+  <text x="378" y="139" font-size="12" fill="#ffcc00">➜</text>
+  <text x="400" y="139" font-size="12" font-family="Consolas, Menlo, monospace" fill="#dcdcaa">HAL_GPIO_TogglePin<tspan fill="#d4d4d4">(LD2_GPIO_Port, LD2_Pin);</tspan></text>
+  <circle cx="390" cy="160" r="5" fill="#e51400"/>
+  <text x="400" y="164" font-size="12" font-family="Consolas, Menlo, monospace" fill="#d4d4d4">toggle_count = toggle_count + 1;</text>
+  <text x="400" y="189" font-size="12" font-family="Consolas, Menlo, monospace" fill="#dcdcaa">HAL_Delay<tspan fill="#d4d4d4">(500);</tspan></text>
+  <text x="385" y="214" font-size="12" font-family="Consolas, Menlo, monospace" fill="#6a9955">/* USER CODE END 3 */</text>
+  <!-- terminal build -->
+  <rect x="368" y="250" width="512" height="135" fill="#181818" stroke="#e8a317" stroke-width="2"/>
+  <text x="380" y="270" font-size="11" fill="#bbbbbb">TERMINAL / OUTPUT (CMake/Build)</text>
+  <text x="380" y="292" font-size="11" font-family="Consolas, Menlo, monospace" fill="#cccccc">[27/28] Building C object ... main.c.obj</text>
+  <text x="380" y="310" font-size="11" font-family="Consolas, Menlo, monospace" fill="#89d185">[28/28] Linking C executable EE5203_Home_Blink.elf</text>
+  <text x="380" y="332" font-size="11" fill="#cccccc">Memory region  Used Size  Region Size  %age Used</text>
+  <text x="380" y="350" font-size="11" fill="#cccccc">  RAM: 1.6 KB / 96 KB     FLASH: 6 KB / 512 KB</text>
+  <circle cx="860" cy="272" r="13" fill="#e8a317"/><text x="860" y="277" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">1</text>
+  <!-- status bar -->
+  <rect x="20" y="385" width="860" height="30" fill="#cc6633"/>
+  <text x="40" y="405" font-size="12" fill="#ffffff">⚙ Debug   ⟳ Build (F7)   — debugging: STM32Cube ST-Link</text>
+  <text x="450" y="428" text-anchor="middle" font-size="11" fill="#4a5968">Schematic drawing. 1 = build output after F7, 2 = the debug configuration to start. Numbers in the output are examples.</text>
+<circle cx="373" cy="104" r="13" fill="#e8a317"/><text x="373" y="109" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">2</text>
+</svg>
