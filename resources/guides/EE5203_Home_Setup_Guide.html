@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,7 +70,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -247,7 +247,7 @@ No board yet? No problem.
 <li>Search <strong>STM32CubeIDE for Visual Studio Code</strong>.</li>
 <li>Click <strong>Install</strong> on the one by <strong>STMicroelectronics</strong>.</li>
 </ol>
-<p>A new <strong>ST</strong> icon appears on the left. <strong>This one extension is all you need.</strong> It also installs its helpers and downloads the compiler later. Do not install Cortex-Debug or other STM32 extensions.</p>
+<p>The <strong>ST</strong> icon appears on the left. This extension installs its helpers and downloads the compiler later. Do not add Cortex-Debug or other STM32 extensions.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -270,7 +270,26 @@ Windows: does your user name have a space or a Turkish character? (click)
 </div>
 </div>
 </div>
-<p><strong>Mac:</strong> also run <code>brew install zstd</code> in Terminal (needs <a href="https://brew.sh">Homebrew</a>).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mac: Terminal setup and shortcuts (click)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>In <strong>Terminal</strong>, run <code>brew --version</code>. If it is missing, install <a href="https://brew.sh">Homebrew</a> and follow its <strong>Next steps</strong> to set up your PATH.</li>
+<li>Run <code>brew install zstd</code>, then restart VS Code.</li>
+</ol>
+<p>For the Ctrl shortcuts below, use <strong>Cmd</strong> on Mac. F7/F5 may need <strong>Fn</strong>.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="create-the-project-in-cubemx" class="level2">
 <h2 class="anchored" data-anchor-id="create-the-project-in-cubemx">4. Create the project in CubeMX</h2>
@@ -278,7 +297,7 @@ Windows: does your user name have a space or a Turkish character? (click)
 <li><strong>File → New Project → Board Selector</strong> → type <strong>NUCLEO-F401RE</strong> → select it → <strong>Start Project</strong>.</li>
 <li><em>Initialize all peripherals with their default mode?</em> → <strong>Yes</strong>.</li>
 <li>If CubeMX asks to download the <strong>STM32CubeF4</strong> package → <strong>Yes</strong> (large download, one time only).</li>
-<li>In the <strong>Project Manager</strong> tab, fill in three fields and click <strong>GENERATE CODE</strong>:</li>
+<li><strong>Project Manager:</strong> Name = <code>EE5203_Home_Blink</code>, Location = <code>C:\STM32\EE5203</code> (Mac: <code>~/STM32/EE5203</code>), Toolchain = <strong>CMake</strong>. Click <strong>GENERATE CODE</strong>.</li>
 </ol>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -302,24 +321,19 @@ Windows: does your user name have a space or a Turkish character? (click)
 <li><strong>File → Open Folder…</strong> → select <code>EE5203_Home_Blink</code> (the folder with the <code>.ioc</code> file).</li>
 <li><strong>(1)</strong> Choose the preset <strong>Debug</strong>.</li>
 <li><strong>(2)</strong> <em>Install cube bundle(s)?</em> → <strong>Yes</strong>. The first download takes a few minutes.</li>
-<li><strong>(3)</strong> ST icon → <strong>Discover STM32Cube project</strong> → <strong>Save and close</strong>.</li>
+<li><strong>(3)</strong> ST icon → <strong>Discover STM32Cube project</strong>. If prompted, select <strong>NUCLEO-F401RE / STM32F401RE</strong>, <strong>GCC</strong>, and the <strong>main project</strong> → <strong>Save and close</strong>.</li>
 </ol>
 </section>
 <section id="add-the-code-and-build" class="level2">
 <h2 class="anchored" data-anchor-id="add-the-code-and-build">6. Add the code and build</h2>
-<p>Open <code>Core/Src/main.c</code>. Add one line between <code>/* USER CODE BEGIN 2 */</code> and <code>/* USER CODE END 2 */</code>, and three lines between <code>/* USER CODE BEGIN 3 */</code> and <code>/* USER CODE END 3 */</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* USER CODE </span><span class="re">BEGIN</span><span class="co"> 2 */</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> toggle_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* USER CODE </span><span class="re">END</span><span class="co"> 2 */</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* USER CODE </span><span class="re">BEGIN</span><span class="co"> 3 */</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    toggle_count <span class="op">=</span> toggle_count <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* USER CODE </span><span class="re">END</span><span class="co"> 3 */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In <code>Core/Src/main.c</code>, add this between <code>USER CODE BEGIN 2</code> and <code>USER CODE END 2</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> toggle_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Inside <code>USER CODE BEGIN 3</code>, before the existing <code>}</code>, add:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_TogglePin<span class="op">(</span>LD2_GPIO_Port<span class="op">,</span> LD2_Pin<span class="op">);</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>toggle_count <span class="op">=</span> toggle_count <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Save (Ctrl+S) and press <strong>F7</strong> to build.</p>
-<p><strong>Success looks like this:</strong> the last line says <code>Linking C executable EE5203_Home_Blink.elf</code> and there is no <code>error</code>.</p>
+<p><strong>Success:</strong> <code>Linking C executable EE5203_Home_Blink.elf</code>, followed by <code>Build finished with exit code 0</code>.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -348,7 +362,7 @@ Build error <code>...FLASH.ld: syntax error</code>?
 <li>Plug in the board with a <strong>data</strong> cable. If VS Code offers an <strong>ST-LINK firmware update</strong>, accept it.</li>
 <li>Open <strong>Run and Debug</strong> (Ctrl+Shift+D) → <strong>Run and Debug</strong> → choose <strong>STM32Cube: STM32 Launch ST-Link GDB Server</strong>.</li>
 <li>The program stops at <code>main</code>. Press <strong>Continue</strong> (F5): <strong>LD2 blinks.</strong></li>
-<li>Click left of the <code>toggle_count</code> line to set a <strong>breakpoint</strong> (red dot). Each Continue stops there again; watch <code>toggle_count</code> grow in <strong>VARIABLES</strong>.</li>
+<li>Click left of <code>toggle_count = toggle_count + 1;</code> to set a <strong>breakpoint</strong> (red dot). Each Continue stops there again; watch <code>toggle_count</code> grow in <strong>VARIABLES</strong>.</li>
 </ol>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -361,13 +375,13 @@ Build error <code>...FLASH.ld: syntax error</code>?
 <h2 class="anchored" data-anchor-id="if-something-goes-wrong">If something goes wrong</h2>
 <ul>
 <li><strong>Board not found:</strong> try another USB cable (many are charge-only), install the driver (step 7.1), close CubeMX, unplug and replug.</li>
-<li><strong>Red lines under <code>#include</code> but the build works:</strong> open the Windows user-name box in step 3 (Mac: <code>brew install zstd</code>).</li>
+<li><strong>Red lines under <code>#include</code> but the build works:</strong> see your Windows or Mac box in step 3.</li>
 <li><strong>Bundle download never finishes:</strong> check your internet; some dorm or company networks block it — try another network.</li>
 <li><strong>My code disappeared after <em>Generate Code</em>:</strong> it was outside the <code>USER CODE</code> comments. Always write inside them.</li>
 </ul>
 <p>Still stuck? Send your lab assistant the <strong>step number</strong> and the <strong>first error line</strong> (as text, not a photo), or bring your laptop to the lab.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -376,9 +390,9 @@ Lab PC or home? (click)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>At home you do not need STM32CubeCLT or the lab’s <code>.vscode</code> template. At home you build with <strong>F7</strong> and debug with the <strong>STM32Cube</strong> configuration; in the lab you use <strong>Ctrl+Shift+B</strong> and <strong>F5</strong>, as in the lab guides. To continue a lab project at home, copy its folder to <code>C:\STM32\EE5203</code>, delete its <code>build</code> folder, and start from step 5.</p>
+<p>At home use <strong>F7</strong> and the <strong>STM32Cube</strong> debug configuration; the lab uses <strong>Ctrl+Shift+B</strong> and <strong>F5</strong>. No separate CubeCLT install is needed at home. To bring a lab project home, copy its folder to your EE5203 folder, remove <code>build</code>, rename <code>.vscode</code> to <code>.vscode_lab_backup</code>, then follow step 5.</p>
 </div>
 </div>
 </div>
