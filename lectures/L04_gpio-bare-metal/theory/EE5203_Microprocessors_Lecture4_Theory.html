@@ -208,96 +208,57 @@ Basri Erdogan
 </div>
 
 </section>
-<section id="todays-target-statement" class="slide level2">
-<h2>Today’s target statement</h2>
-<div class="big-question">
-<p>This statement writes one bit to a GPIO register and turns the on-board LED on.</p>
+<section id="todays-target-the-body-of-led_on" class="slide level2">
+<h2>Today’s target: the body of <code>led_on()</code></h2>
+<p>In L03 you gave jobs a name. Today you write the one statement inside this function:</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a><span class="dt">void</span> led_on<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb1-2"><a></a><span class="op">{</span></span>
+<span id="cb1-3"><a></a>    <span class="co">/* ??? turns LD2 on */</span></span>
+<span id="cb1-4"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:46%;">
+<div class="fragment">
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>By the end you can explain every part: <code>GPIOA</code>, <code>-&gt;</code>, <code>BSRR</code>, <code>1U &lt;&lt; 5</code>, and <code>=</code>.</p>
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>By the end, you will explain <code>GPIOA</code>, <code>-&gt;</code>, <code>BSRR</code>, <code>1U &lt;&lt; 5</code>, and <code>=</code>—then verify the result on the board.</p>
-</section>
-<section id="the-story-so-far" class="slide level2">
-<h2>The story so far</h2>
-<div class="vertical-list">
-<div class="vertical-item">
-<p><span>01</span> <strong>L01:</strong> read statements, build, flash, and debug.</p>
-</div>
-<div class="vertical-item">
-<p><span>02</span> <strong>L02:</strong> store values, calculate, decide, loop, and process arrays.</p>
-</div>
-<div class="vertical-item">
-<p><span>03</span> <strong>L03:</strong> move jobs into functions and separate C files.</p>
-</div>
-<div class="vertical-item">
-<p><span>04</span> <strong>TODAY:</strong> use addresses and bits to control a hardware register.</p>
-</div>
+</div></div>
+<div class="relationship-strip">
+<p>L01 build and debug · L02 values, loops, arrays · L03 functions and files · <strong>L04 addresses and bits → hardware</strong></p>
 </div>
 </section>
-<section id="todays-objectives" class="slide level2">
-<h2>Today’s objectives</h2>
+<section id="todays-route-four-steps-to-the-register" class="slide level2">
+<h2>Today’s route: four steps to the register</h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> Distinguish a stored value from the address where it is stored.</p>
+<p><span>01</span> <strong>ADDRESSES:</strong> a value and the address where it is stored; <code>&amp;</code> and <code>*</code>.</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> Read <code>*</code>, <code>&amp;</code>, <code>.</code>, and <code>-&gt;</code> in small C examples.</p>
+<p><span>02</span> <strong>REGISTERS:</strong> a pointer reaches a hardware register; <code>volatile</code>, structures, <code>-&gt;</code>.</p>
 </div>
 <div class="vertical-item">
-<p><span>03</span> Create masks that set, clear, toggle, and test selected bits.</p>
+<p><span>03</span> <strong>BITS:</strong> masks that set, clear, and replace selected bits.</p>
 </div>
 <div class="vertical-item">
-<p><span>04</span> Explain why hardware register definitions use <code>volatile</code>.</p>
-</div>
-<div class="vertical-item">
-<p><span>05</span> Enable GPIOA, configure PA5, and control LD2 through CMSIS registers.</p>
+<p><span>04</span> <strong>GPIO:</strong> enable GPIOA, make PA5 an output, drive LD2: <code>led_init()</code>, <code>led_on()</code>, <code>led_off()</code>.</p>
 </div>
 </div>
+<p>Each step uses the one before it. In Lab 3 you write all three LED functions.</p>
 </section>
 <section id="l03-exit-ticket---the-answers" class="slide level2">
 <h2>L03 exit ticket - the answers</h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> <strong>DESIGN</strong> — one clean contract: <code>void acquire_samples(uint16_t out[], int count);</code> (any correct types/name accepted).</p>
+<p><span>01</span> <strong>DECLARATION</strong> — <code>uint16_t max_sample(uint16_t values[], int count);</code> (any correct name accepted).</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> <strong>ARRAY INPUT</strong> — arrays in C do not carry their length; the parameter cannot reveal it, so the caller must pass <code>count</code>.</p>
+<p><span>02</span> <strong>COUNT</strong> — an array in C does not carry its length, so the caller must pass <code>count</code>.</p>
 </div>
 <div class="vertical-item">
-<p><span>03</span> <strong>EVIDENCE</strong> — a breakpoint inside the loop hits exactly 8 times with <code>i</code> covering <code>0…7</code>, and the sum reads <code>18330</code> before the division.</p>
+<p><span>03</span> <strong>TRACE</strong> — <code>sum</code> is <code>10000</code> after the loop; the function returns <code>2500</code>.</p>
 </div>
 </div>
-<p>Most common slip in your submissions: declarations with a body attached — a declaration ends at the <code>;</code>.</p>
-</section>
-<section id="l03-recap-functions" class="slide level2">
-<h2>L03 recap: functions</h2>
-<p>In L03 you wrapped jobs in functions such as <code>clamp()</code>. Today’s new content is the one statement inside this function:</p>
-<div class="columns">
-<div class="column" style="width:54%;">
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a></a><span class="dt">void</span> led_on<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
-<span id="cb2-2"><a></a><span class="op">{</span></span>
-<span id="cb2-3"><a></a>    GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span>
-<span id="cb2-4"><a></a><span class="op">}</span></span>
-<span id="cb2-5"><a></a></span>
-<span id="cb2-6"><a></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
-<span id="cb2-7"><a></a><span class="op">{</span></span>
-<span id="cb2-8"><a></a>    led_on<span class="op">();</span></span>
-<span id="cb2-9"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column" style="width:42%;">
-<div class="prompt-list compact-prompts">
-<div class="prompt-item">
-<p><span>1</span> Which line declares the function’s return type and name?</p>
-</div>
-<div class="prompt-item">
-<p><span>2</span> Which statement calls the function?</p>
-</div>
-<div class="prompt-item">
-<p><span>3</span> Which statement actually changes the hardware?</p>
-</div>
-</div>
-</div></div>
-<div class="relationship-strip">
-<p>L03 gives the job a name. L04 explains the register statement inside that job.</p>
-</div>
+<p>Watch for: a declaration ends at the <code>;</code>. It has no body.</p>
 </section>
 <section id="before-pointers-memory-addresses" class="slide level2">
 <h2>Before pointers: memory addresses</h2>
@@ -383,18 +344,71 @@ Basri Erdogan
 <p><code>p</code> stores <code>&amp;x</code>; <code>*p</code> first produces <code>5</code>; the assignment stores <code>8</code> in <code>x</code>.</p>
 </div>
 </section>
+<section id="memory-map-registers-have-addresses-too" class="slide level2">
+<h2>Memory map: registers have addresses too</h2>
+<svg class="story-visual" viewbox="0 0 1440 380" role="img" aria-labelledby="memmap-title">
+<title id="memmap-title">
+The STM32F401 address space as three regions: flash at 0x0800 0000 holds the program, SRAM at 0x2000 0000 holds variables, and the peripheral region at 0x4000 0000 holds hardware registers. A zoom shows GPIOA at 0x4002 0000 with MODER at offset 0x00, ODR at 0x14 and BSRR at 0x18, and RCC at 0x4002 3800 with AHB1ENR at offset 0x30.
+</title>
+<rect x="60" y="40" width="400" height="120" rx="10" fill="#f8fbfd" stroke="#c8d8e2" stroke-width="2"></rect> <text x="260" y="78" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700">FLASH</text> <text x="260" y="112" text-anchor="middle" fill="#174f73" font-size="22" font-family="ui-monospace, Menlo, monospace">0x0800 0000</text> <text x="260" y="142" text-anchor="middle" fill="#5a6b76" font-size="19">your program</text> <rect x="520" y="40" width="400" height="120" rx="10" fill="#f8fbfd" stroke="#c8d8e2" stroke-width="2"></rect> <text x="720" y="78" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700">SRAM</text> <text x="720" y="112" text-anchor="middle" fill="#174f73" font-size="22" font-family="ui-monospace, Menlo, monospace">0x2000 0000</text> <text x="720" y="142" text-anchor="middle" fill="#5a6b76" font-size="19">your variables, e.g.&nbsp;<tspan font-family="ui-monospace, Menlo, monospace">temperature</tspan></text> <rect x="980" y="40" width="400" height="120" rx="10" fill="#f8e2c8" stroke="#d47b28" stroke-width="3"></rect> <text x="1180" y="78" text-anchor="middle" fill="#d47b28" font-size="24" font-weight="700">PERIPHERALS</text> <text x="1180" y="112" text-anchor="middle" fill="#d47b28" font-size="22" font-family="ui-monospace, Menlo, monospace">0x4000 0000</text> <text x="1180" y="142" text-anchor="middle" fill="#5a6b76" font-size="19">hardware registers</text> <line x1="980" y1="160" x2="720" y2="210" stroke="#d47b28" stroke-width="2" stroke-dasharray="6 5"></line> <line x1="1380" y1="160" x2="1380" y2="210" stroke="#d47b28" stroke-width="2" stroke-dasharray="6 5"></line> <rect x="720" y="210" width="660" height="160" rx="10" fill="#ffffff" stroke="#d47b28" stroke-width="2"></rect> <text x="760" y="248" fill="#174f73" font-size="21" font-weight="700">GPIOA <tspan font-family="ui-monospace, Menlo, monospace" font-weight="400">0x4002 0000</tspan></text> <text x="760" y="284" fill="#5a6b76" font-size="19" font-family="ui-monospace, Menlo, monospace">+0x00 MODER</text> <text x="760" y="316" fill="#5a6b76" font-size="19" font-family="ui-monospace, Menlo, monospace">+0x14 ODR</text> <text x="760" y="348" fill="#d47b28" font-size="19" font-weight="700" font-family="ui-monospace, Menlo, monospace">+0x18 BSRR</text> <text x="1080" y="248" fill="#174f73" font-size="21" font-weight="700">RCC <tspan font-family="ui-monospace, Menlo, monospace" font-weight="400">0x4002 3800</tspan></text> <text x="1080" y="284" fill="#5a6b76" font-size="19" font-family="ui-monospace, Menlo, monospace">+0x30 AHB1ENR</text> <text x="60" y="240" fill="#5a6b76" font-size="21">One 32-bit address space.</text> <text x="60" y="276" fill="#5a6b76" font-size="21">A pointer can hold <tspan font-weight="700">any</tspan> of these addresses.</text> <text x="60" y="312" fill="#5a6b76" font-size="21">A write to a peripheral address</text> <text x="60" y="348" fill="#5a6b76" font-size="21">changes the hardware.</text>
+</svg>
+<p>Register address = peripheral base address + register offset. BSRR: <code>0x40020000 + 0x18 = 0x40020018</code>.</p>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf">RM0368 Rev 6, §2.3 <em>Memory map</em>, Table 1 <em>Register boundary addresses</em></a> · <a href="../../../resources/companions/EE5203_Toolchain_Boot_Companion.html#sec-memory"><em>From C to Silicon</em>, §2</a>.</p>
+</div>
+</section>
+<section id="a-register-through-a-pointer-the-address-written-out" class="slide level2">
+<h2>A register through a pointer: the address written out</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a><span class="dt">volatile</span> <span class="dt">uint32_t</span> <span class="op">*</span>bsrr <span class="op">=</span> <span class="op">(</span><span class="dt">volatile</span> <span class="dt">uint32_t</span> <span class="op">*)</span><span class="bn">0x40020018</span><span class="bu">U</span><span class="op">;</span></span>
+<span id="cb6-2"><a></a></span>
+<span id="cb6-3"><a></a><span class="op">*</span>bsrr <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span>    <span class="co">// LD2 on</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <code>0x40020018U</code> is only a number: the address of GPIOA <code>BSRR</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> The cast <code>(volatile uint32_t *)</code> turns it into a pointer to a 32-bit register.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <code>*bsrr = ...</code> follows the address and writes there, exactly like <code>*address = 18;</code>.</p>
+</div>
+</div>
+<div class="relationship-strip">
+<p>Same <code>*</code> as in the pointer trace. The only new thing: the address belongs to a peripheral, not to SRAM.</p>
+</div>
+</section>
+<section id="volatile-every-register-access-must-happen" class="slide level2">
+<h2><code>volatile</code>: every register access must happen</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a></a><span class="op">*</span>bsrr <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span>     <span class="co">// LD2 on</span></span>
+<span id="cb7-2"><a></a><span class="op">*</span>bsrr <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">21</span><span class="op">);</span>    <span class="co">// LD2 off</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> <strong>WITHOUT IT:</strong> the compiler sees two writes to the same place and may keep only the last one. LD2 never turns on.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <strong>WITH IT:</strong> every read and write is done, in program order.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> <strong>WHY:</strong> hardware reacts to each write, and hardware can change a register outside the normal C program flow.</p>
+</div>
+</div>
+<div class="relationship-strip">
+<p>Use <code>volatile</code> for hardware-controlled data—not for every ordinary variable.</p>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=140">C11 draft N1570, §6.7.3 — p.&nbsp;140</a> · M. Barr, <a href="https://barrgroup.com/blog/how-use-cs-volatile-keyword"><em>How to Use C’s volatile Keyword</em></a>.</p>
+</div>
+</section>
 <section id="structures-related-values-under-one-name" class="slide level2">
 <h2>Structures: related values under one name</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a><span class="kw">struct</span> Point <span class="op">{</span></span>
-<span id="cb6-2"><a></a>    <span class="dt">int</span> x<span class="op">;</span></span>
-<span id="cb6-3"><a></a>    <span class="dt">int</span> y<span class="op">;</span></span>
-<span id="cb6-4"><a></a><span class="op">};</span></span>
-<span id="cb6-5"><a></a></span>
-<span id="cb6-6"><a></a><span class="kw">struct</span> Point target <span class="op">=</span> <span class="op">{</span><span class="dv">4</span><span class="op">,</span> <span class="dv">7</span><span class="op">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>x</code> and <code>y</code> are <strong>members</strong> of the same <code>struct Point</code> value.</p>
-<div class="relationship-strip">
-<p>A peripheral definition uses the same idea: one structure groups all registers belonging to that peripheral.</p>
-</div>
+<p>GPIOA has ten registers at fixed offsets: <code>0x00</code>, <code>0x04</code>, <code>0x08</code>, … Writing ten addresses by hand is slow and error-prone. A <strong>structure</strong> describes such a group once.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a><span class="kw">struct</span> Point <span class="op">{</span></span>
+<span id="cb8-2"><a></a>    <span class="dt">int</span> x<span class="op">;</span></span>
+<span id="cb8-3"><a></a>    <span class="dt">int</span> y<span class="op">;</span></span>
+<span id="cb8-4"><a></a><span class="op">};</span></span>
+<span id="cb8-5"><a></a></span>
+<span id="cb8-6"><a></a><span class="kw">struct</span> Point target <span class="op">=</span> <span class="op">{</span><span class="dv">4</span><span class="op">,</span> <span class="dv">7</span><span class="op">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>x</code> and <code>y</code> are <strong>members</strong> of the same <code>struct Point</code> value. Members are stored one after another, in the order they are declared.</p>
 <div class="source-note">
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=130">C11 draft N1570, §6.7.2.1 <em>Structure and union specifiers</em> — p.&nbsp;130</a>.</p>
 </div>
@@ -404,34 +418,118 @@ Basri Erdogan
 <div class="columns">
 <div class="column" style="width:48%;">
 <p><strong>STRUCTURE VALUE</strong></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a></a><span class="kw">struct</span> Point target<span class="op">;</span></span>
-<span id="cb7-2"><a></a></span>
-<span id="cb7-3"><a></a>target<span class="op">.</span>x <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a><span class="kw">struct</span> Point target<span class="op">;</span></span>
+<span id="cb9-2"><a></a></span>
+<span id="cb9-3"><a></a>target<span class="op">.</span>x <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Read: “the <code>x</code> member of <code>target</code>.”</p>
 </div><div class="column" style="width:48%;">
 <p><strong>POINTER TO A STRUCTURE</strong></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a><span class="kw">struct</span> Point <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>target<span class="op">;</span></span>
-<span id="cb8-2"><a></a></span>
-<span id="cb8-3"><a></a>p<span class="op">-&gt;</span>x <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a></a><span class="kw">struct</span> Point <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>target<span class="op">;</span></span>
+<span id="cb10-2"><a></a></span>
+<span id="cb10-3"><a></a>p<span class="op">-&gt;</span>x <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Read: “the <code>x</code> member reached through <code>p</code>.”</p>
 </div></div>
 <p><code>p-&gt;x</code> is a shorter form of <code>(*p).x</code>.</p>
 </section>
-<section id="a-register-through-a-pointer-gpioa-moder" class="slide level2">
-<h2>A register through a pointer: <code>GPIOA-&gt;MODER</code></h2>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a>GPIOA<span class="op">-&gt;</span>MODER</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="cmsis-gpioa-is-a-pointer-to-a-structure" class="slide level2">
+<h2>CMSIS: <code>GPIOA</code> is a pointer to a structure</h2>
+<div class="columns">
+<div class="column" style="width:56%;">
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a></a><span class="kw">typedef</span> <span class="kw">struct</span></span>
+<span id="cb11-2"><a></a><span class="op">{</span></span>
+<span id="cb11-3"><a></a>    <span class="dt">volatile</span> <span class="dt">uint32_t</span> MODER<span class="op">;</span>    <span class="co">// +0x00</span></span>
+<span id="cb11-4"><a></a>    <span class="dt">volatile</span> <span class="dt">uint32_t</span> OTYPER<span class="op">;</span>   <span class="co">// +0x04</span></span>
+<span id="cb11-5"><a></a>    <span class="dt">volatile</span> <span class="dt">uint32_t</span> OSPEEDR<span class="op">;</span>  <span class="co">// +0x08</span></span>
+<span id="cb11-6"><a></a>    <span class="dt">volatile</span> <span class="dt">uint32_t</span> PUPDR<span class="op">;</span>    <span class="co">// +0x0C</span></span>
+<span id="cb11-7"><a></a>    <span class="dt">volatile</span> <span class="dt">uint32_t</span> IDR<span class="op">;</span>      <span class="co">// +0x10</span></span>
+<span id="cb11-8"><a></a>    <span class="dt">volatile</span> <span class="dt">uint32_t</span> ODR<span class="op">;</span>      <span class="co">// +0x14</span></span>
+<span id="cb11-9"><a></a>    <span class="dt">volatile</span> <span class="dt">uint32_t</span> BSRR<span class="op">;</span>     <span class="co">// +0x18</span></span>
+<span id="cb11-10"><a></a>    <span class="co">/* ... */</span></span>
+<span id="cb11-11"><a></a><span class="op">}</span> GPIO_TypeDef<span class="op">;</span></span>
+<span id="cb11-12"><a></a></span>
+<span id="cb11-13"><a></a><span class="pp">#define GPIOA </span><span class="op">((</span><span class="pp">GPIO_TypeDef </span><span class="op">*)</span><span class="bn">0x40020000</span><span class="bu">UL</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:40%;">
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> <strong><code>GPIOA</code></strong> is a CMSIS-provided pointer to the GPIOA register structure.</p>
+<p><span>01</span> The structure gives each register a name and an offset.</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> <strong><code>-&gt;</code></strong> selects a member through that pointer.</p>
+<p><span>02</span> <code>GPIOA</code> is the base address, cast to a pointer to that structure.</p>
 </div>
 <div class="vertical-item">
-<p><span>03</span> <strong><code>MODER</code></strong> is the 32-bit mode register inside GPIOA.</p>
+<p><span>03</span> <code>GPIOA-&gt;BSRR</code> is the member at <code>+0x18</code>: address <code>0x40020018</code>.</p>
 </div>
 </div>
-<p>The device header supplies this definition; your program uses the readable name.</p>
+</div></div>
+<div class="relationship-strip">
+<p><code>GPIOA-&gt;BSRR = ...</code> and <code>*bsrr = ...</code> write the same register. The CMSIS name is just easier to read.</p>
+</div>
+<div class="source-note">
+<p>Simplified from <a href="https://github.com/STMicroelectronics/cmsis-device-f4/blob/master/Include/stm32f401xe.h"><code>stm32f401xe.h</code></a> (it writes <code>__IO</code> for <code>volatile</code>). Every generated STM32 project includes this file.</p>
+</div>
+</section>
+<section id="cmsis-names-for-hardware-registers" class="slide level2">
+<h2>CMSIS names for hardware registers</h2>
+<div class="columns">
+<div class="column" style="width:48%;">
+<p><strong>REFERENCE MANUAL</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Peripheral</th>
+<th>Register</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>RCC</td>
+<td><code>AHB1ENR</code></td>
+<td>enable GPIO clocks</td>
+</tr>
+<tr class="even">
+<td>GPIOA</td>
+<td><code>MODER</code></td>
+<td>choose each pin’s mode</td>
+</tr>
+<tr class="odd">
+<td>GPIOA</td>
+<td><code>BSRR</code></td>
+<td>set or reset output pins</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:48%;">
+<p><strong>C CODE</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a></a>RCC<span class="op">-&gt;</span>AHB1ENR</span>
+<span id="cb12-2"><a></a>GPIOA<span class="op">-&gt;</span>MODER</span>
+<span id="cb12-3"><a></a>GPIOA<span class="op">-&gt;</span>BSRR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The device header supplies these names and their addresses.</p>
+</div></div>
+<div class="relationship-strip">
+<p>This is direct register access: CMSIS provides the names, but your C statement still reads or writes the hardware register.</p>
+</div>
+</section>
+<section id="practice-which-address-does---reach" class="slide level2">
+<h2>Practice: which address does <code>-&gt;</code> reach?</h2>
+<p>GPIOA starts at <code>0x40020000</code>. RCC starts at <code>0x40023800</code>.</p>
+<div class="prompt-list compact-prompts">
+<div class="prompt-item">
+<p><span>1</span> Which address does <code>GPIOA-&gt;MODER</code> name? (offset <code>0x00</code>)</p>
+</div>
+<div class="prompt-item">
+<p><span>2</span> Which address does <code>GPIOA-&gt;ODR</code> name? (offset <code>0x14</code>)</p>
+</div>
+<div class="prompt-item">
+<p><span>3</span> Which address does <code>RCC-&gt;AHB1ENR</code> name? (offset <code>0x30</code>)</p>
+</div>
+<div class="prompt-item">
+<p><span>4</span> Why do we write <code>GPIOA-&gt;MODER</code> and not <code>GPIOA.MODER</code>?</p>
+</div>
+</div>
+<div class="fragment relationship-strip">
+<p><code>0x40020000</code> · <code>0x40020014</code> · <code>0x40023830</code> · <code>GPIOA</code> is a pointer, so its members are reached with <code>-&gt;</code>.</p>
+</div>
 </section>
 <section id="a-hardware-register-has-32-bits" class="slide level2">
 <h2>A hardware register has 32 bits</h2>
@@ -442,7 +540,7 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 <rect x="48" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="69" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">31</text> <text x="69" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="90" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="111" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">30</text> <text x="111" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="132" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="153" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">29</text> <text x="153" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="174" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="195" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">28</text> <text x="195" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="216" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="237" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">27</text> <text x="237" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="258" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="279" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">26</text> <text x="279" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="300" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="321" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">25</text> <text x="321" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="342" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="363" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">24</text> <text x="363" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="384" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="405" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">23</text> <text x="405" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="426" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="447" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">22</text> <text x="447" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="468" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="489" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">21</text> <text x="489" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="510" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="531" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">20</text> <text x="531" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="552" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="573" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">19</text> <text x="573" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="594" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="615" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">18</text> <text x="615" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="636" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="657" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">17</text> <text x="657" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="678" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="699" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">16</text> <text x="699" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="720" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="741" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">15</text> <text x="741" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="762" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="783" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">14</text> <text x="783" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="804" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="825" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">13</text> <text x="825" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="846" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="867" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">12</text> <text x="867" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="888" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="909" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">11</text> <text x="909" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="930" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="951" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">10</text> <text x="951" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="972" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="993" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">9</text> <text x="993" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="1014" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1035" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">8</text> <text x="1035" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="1056" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1077" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">7</text> <text x="1077" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="1098" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1119" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">6</text> <text x="1119" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="1140" y="46" width="42" height="56" fill="#f8e2c8" stroke="#d47b28" stroke-width="3"></rect> <text x="1161" y="36" text-anchor="middle" fill="#d47b28" font-size="14" font-weight="700">5</text> <text x="1161" y="84" text-anchor="middle" fill="#d47b28" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <rect x="1182" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1203" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">4</text> <text x="1203" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="1224" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1245" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">3</text> <text x="1245" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="1266" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1287" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">2</text> <text x="1287" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="1308" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1329" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">1</text> <text x="1329" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="1350" y="46" width="42" height="56" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1371" y="36" text-anchor="middle" fill="#8aa0ac" font-size="14">0</text> <text x="1371" y="84" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <line x1="216" y1="42" x2="216" y2="106" stroke="#5a6b76" stroke-width="2"></line> <line x1="384" y1="42" x2="384" y2="106" stroke="#5a6b76" stroke-width="2"></line> <line x1="552" y1="42" x2="552" y2="106" stroke="#5a6b76" stroke-width="2"></line> <line x1="720" y1="42" x2="720" y2="106" stroke="#5a6b76" stroke-width="2"></line> <line x1="888" y1="42" x2="888" y2="106" stroke="#5a6b76" stroke-width="2"></line> <line x1="1056" y1="42" x2="1056" y2="106" stroke="#5a6b76" stroke-width="2"></line> <line x1="1224" y1="42" x2="1224" y2="106" stroke="#5a6b76" stroke-width="2"></line> <text x="720" y="160" text-anchor="middle" fill="#5a6b76" font-size="21">value = <tspan fill="#174f73" font-weight="700" font-family="ui-monospace, Menlo, monospace">0x0000 0020</tspan> — only bit 5 is <tspan fill="#d47b28" font-weight="700">1</tspan></text>
 </svg>
 <p>Each bit can be <code>0</code> or <code>1</code>. The reference manual assigns a meaning to each bit or group of bits.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a></a><span class="dt">uint32_t</span> register_value <span class="op">=</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb13-1"><a></a><span class="dt">uint32_t</span> register_value <span class="op">=</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>uint32_t</code> matches the width of an STM32 peripheral register.</p>
 </section>
 <section id="hexadecimal-a-short-way-to-write-bits" class="slide level2">
@@ -478,7 +576,7 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1"><a></a>0x00000020 = 0000 0000 0000 0000 0000 0000 0010 0000</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb14-1"><a></a>0x00000020 = 0000 0000 0000 0000 0000 0000 0010 0000</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>A 32-bit register can be written with eight hexadecimal digits.</p>
 </section>
 <section id="bitwise-operators-in-c" class="slide level2">
@@ -524,23 +622,23 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 </section>
 <section id="a-bit-mask-selects-bits" class="slide level2">
 <h2>A bit mask selects bits</h2>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a></a><span class="dt">uint32_t</span> mask <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb13-1"><a></a>1U          0000 0001</span>
-<span id="cb13-2"><a></a>1U &lt;&lt; 5     0010 0000</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a></a><span class="dt">uint32_t</span> mask <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb16-1"><a></a>1U          0000 0001</span>
+<span id="cb16-2"><a></a>1U &lt;&lt; 5     0010 0000</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The result has only bit 5 set. This is called a <strong>mask</strong> because it selects a specific bit position.</p>
 <p>The <code>U</code> suffix marks the number as unsigned.</p>
 </section>
 <section id="bit-operations-set-a-bit-with-or" class="slide level2">
 <h2>Bit operations: set a bit with OR</h2>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a></a>register_value <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb15-1"><a></a>old value     0000 0001</span>
-<span id="cb15-2"><a></a>mask          0010 0000</span>
-<span id="cb15-3"><a></a>OR result     0010 0001</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a></a>register_value <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb18-1"><a></a>old value     0000 0001</span>
+<span id="cb18-2"><a></a>mask          0010 0000</span>
+<span id="cb18-3"><a></a>OR result     0010 0001</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Bit 5 becomes <code>1</code>; the other bits keep their previous values.</p>
 </section>
 <section id="bit-operations-clear-a-bit-with-and-not" class="slide level2">
 <h2>Bit operations: clear a bit with AND + NOT</h2>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a></a>register_value <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb19-1"><a></a>register_value <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
 <p><span>01</span> <code>1U &lt;&lt; 5</code> selects bit 5.</p>
@@ -556,34 +654,19 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 <section id="bit-operations-replace-a-bit-field" class="slide level2">
 <h2>Bit operations: replace a bit field</h2>
 <p>Suppose bits <code>11:10</code> must become <code>01</code>.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a></a>register_value <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>  <span class="co">// clear bits 11:10</span></span>
-<span id="cb17-2"><a></a>register_value <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>  <span class="co">// write 01</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb20-1"><a></a>register_value <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>  <span class="co">// clear bits 11:10</span></span>
+<span id="cb20-2"><a></a>register_value <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>  <span class="co">// write 01</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="relationship-strip">
 <p>Clear the whole field first. Then set only the bits required by the new pattern.</p>
 </div>
 <p><code>3U</code> is binary <code>11</code>, so <code>3U &lt;&lt; 10</code> selects both field bits.</p>
 </section>
-<section id="bit-operations-toggle-and-test-a-bit" class="slide level2">
-<h2>Bit operations: toggle and test a bit</h2>
-<div class="columns">
-<div class="column" style="width:48%;">
-<p><strong>TOGGLE BIT 5</strong></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a></a>register_value <span class="op">^=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Zero becomes one; one becomes zero.</p>
-</div><div class="column" style="width:48%;">
-<p><strong>TEST BIT 5</strong></p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb19-1"><a></a><span class="cf">if</span> <span class="op">((</span>register_value <span class="op">&amp;</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">))</span> <span class="op">!=</span> <span class="dv">0</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb19-2"><a></a>    bit_is_set <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb19-3"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>A nonzero result means bit 5 was set.</p>
-</div></div>
-</section>
 <section id="practice-which-register-bits-change" class="slide level2">
 <h2>Practice: which register bits change?</h2>
-<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb20-1"><a></a>value <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">3</span><span class="op">);</span></span>
-<span id="cb20-2"><a></a>value <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">7</span><span class="op">);</span></span>
-<span id="cb20-3"><a></a>value <span class="op">^=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">2</span><span class="op">);</span></span>
-<span id="cb20-4"><a></a>value <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb21-1"><a></a>value <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">3</span><span class="op">);</span></span>
+<span id="cb21-2"><a></a>value <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">7</span><span class="op">);</span></span>
+<span id="cb21-3"><a></a>value <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">12</span><span class="op">);</span></span>
+<span id="cb21-4"><a></a>value <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">12</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="prompt-list compact-prompts">
 <div class="prompt-item">
 <p><span>1</span> Which bit is set?</p>
@@ -592,77 +675,32 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 <p><span>2</span> Which bit is cleared?</p>
 </div>
 <div class="prompt-item">
-<p><span>3</span> Which bit is toggled?</p>
+<p><span>3</span> Which two-bit field is replaced, and with which pattern?</p>
 </div>
 <div class="prompt-item">
-<p><span>4</span> Which two-bit field is cleared?</p>
+<p><span>4</span> In <code>MODER</code>, which pin owns that field?</p>
 </div>
 </div>
-</section>
-<section id="cmsis-names-for-hardware-registers" class="slide level2">
-<h2>CMSIS names for hardware registers</h2>
-<div class="columns">
-<div class="column" style="width:48%;">
-<p><strong>REFERENCE MANUAL</strong></p>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Peripheral</th>
-<th>Register</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>RCC</td>
-<td><code>AHB1ENR</code></td>
-<td>enable GPIO clocks</td>
-</tr>
-<tr class="even">
-<td>GPIOA</td>
-<td><code>MODER</code></td>
-<td>choose each pin’s mode</td>
-</tr>
-<tr class="odd">
-<td>GPIOA</td>
-<td><code>BSRR</code></td>
-<td>set or reset output pins</td>
-</tr>
-</tbody>
-</table>
-</div><div class="column" style="width:48%;">
-<p><strong>C CODE</strong></p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb21-1"><a></a>RCC<span class="op">-&gt;</span>AHB1ENR</span>
-<span id="cb21-2"><a></a>GPIOA<span class="op">-&gt;</span>MODER</span>
-<span id="cb21-3"><a></a>GPIOA<span class="op">-&gt;</span>BSRR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The selected STM32 device header supplies these names and their addresses.</p>
-</div></div>
-<div class="relationship-strip">
-<p>This is direct register access: CMSIS provides the names, but your C statement still reads or writes the hardware register.</p>
+<div class="fragment relationship-strip">
+<p>Bit 3 · bit 7 · bits 13:12 become <code>01</code> · pin 6, because <code>6 × 2 = 12</code>.</p>
 </div>
 <div class="source-note">
-<p>The definitions live in <a href="https://github.com/STMicroelectronics/cmsis-device-f4/blob/master/Include/stm32f401xe.h"><code>stm32f401xe.h</code></a> — every generated STM32 project includes this file.</p>
+<p>Practise more: <a href="../assets/htmls/bitwise_lab.html">Bitwise Lab</a> — step through any mask, then try the exercises (<a href="../assets/htmls/bitwise_lab.html#practice">practice mode</a>).</p>
 </div>
 </section>
-<section id="why-registers-are-volatile" class="slide level2">
-<h2>Why registers are <code>volatile</code></h2>
-<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb22-1"><a></a><span class="kw">typedef</span> <span class="kw">struct</span></span>
-<span id="cb22-2"><a></a><span class="op">{</span></span>
-<span id="cb22-3"><a></a>    <span class="dt">volatile</span> <span class="dt">uint32_t</span> MODER<span class="op">;</span></span>
-<span id="cb22-4"><a></a>    <span class="co">/* other GPIO registers */</span></span>
-<span id="cb22-5"><a></a>    <span class="dt">volatile</span> <span class="dt">uint32_t</span> BSRR<span class="op">;</span></span>
-<span id="cb22-6"><a></a><span class="op">}</span> GPIO_TypeDef<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Hardware can change a register outside normal C program flow. <code>volatile</code> tells the compiler that every register read and write must actually happen.</p>
-<div class="relationship-strip">
-<p>Use <code>volatile</code> for hardware-controlled data—not for every ordinary variable.</p>
-</div>
-<div class="source-note">
-<p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=140">C11 draft N1570, §6.7.3 — p.&nbsp;140</a> · M. Barr, <a href="https://barrgroup.com/blog/how-use-cs-volatile-keyword"><em>How to Use C’s volatile Keyword</em></a>.</p>
-</div>
+<section id="clock-gating-rcc-switches-gpioa-on" class="slide level2">
+<h2>Clock gating: RCC switches GPIOA on</h2>
+<svg class="story-visual" viewbox="0 0 1440 290" role="img" aria-labelledby="clock-title">
+<title id="clock-title">
+The AHB1 bus clock passes through a switch controlled by RCC AHB1ENR bit 0 before it reaches the GPIOA registers, which drive pin PA5 and the LED LD2. With bit 0 equal to 0 GPIOA ignores writes; with bit 0 equal to 1 GPIOA works.
+</title>
+<rect x="40" y="90" width="250" height="100" rx="10" fill="#f8fbfd" stroke="#c8d8e2" stroke-width="2"></rect> <text x="165" y="132" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700">AHB1</text> <text x="165" y="164" text-anchor="middle" fill="#5a6b76" font-size="19">bus clock</text> <line x1="290" y1="140" x2="380" y2="140" stroke="#5a6b76" stroke-width="3"></line> <circle cx="384" cy="140" r="6" fill="#d47b28"></circle> <line x1="384" y1="140" x2="470" y2="140" stroke="#d47b28" stroke-width="5"></line> <circle cx="476" cy="140" r="6" fill="#d47b28"></circle> <text x="430" y="70" text-anchor="middle" fill="#d47b28" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">RCC-&gt;AHB1ENR</text> <text x="430" y="104" text-anchor="middle" fill="#d47b28" font-size="20" font-weight="700">bit 0 = 1</text> <line x1="482" y1="140" x2="560" y2="140" stroke="#5a6b76" stroke-width="3"></line> <polygon points="560,130 576,140 560,150" fill="#5a6b76"></polygon> <rect x="580" y="80" width="380" height="120" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="3"></rect> <text x="770" y="126" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700">GPIOA registers</text> <text x="770" y="162" text-anchor="middle" fill="#5a6b76" font-size="19" font-family="ui-monospace, Menlo, monospace">MODER · ODR · BSRR</text> <line x1="960" y1="140" x2="1040" y2="140" stroke="#5a6b76" stroke-width="3"></line> <polygon points="1040,130 1056,140 1040,150" fill="#5a6b76"></polygon> <rect x="1060" y="100" width="140" height="80" rx="10" fill="#f8fbfd" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1130" y="148" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700">PA5</text> <line x1="1200" y1="140" x2="1270" y2="140" stroke="#5a6b76" stroke-width="3"></line> <circle cx="1320" cy="140" r="44" fill="#dff3e4" stroke="#2e8b57" stroke-width="3"></circle> <text x="1320" y="148" text-anchor="middle" fill="#2e8b57" font-size="22" font-weight="700">LD2</text> <text x="720" y="250" text-anchor="middle" fill="#5a6b76" font-size="20">bit 0 = <tspan font-weight="700">0</tspan>: no clock, GPIOA ignores your writes · bit 0 = <tspan font-weight="700" fill="#d47b28">1</tspan>: GPIOA works</text>
+</svg>
+<p>Most peripherals start with their clock <strong>off</strong> to save power. The first job of any driver is to switch its peripheral’s clock on.</p>
 </section>
 <section id="gpio-step-1-enable-the-gpioa-clock" class="slide level2">
 <h2>GPIO step 1: enable the GPIOA clock</h2>
-<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb23-1"><a></a>RCC<span class="op">-&gt;</span>AHB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb22-1"><a></a>RCC<span class="op">-&gt;</span>AHB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Bit 0 of <code>AHB1ENR</code> enables the clock for GPIOA.</p>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
@@ -675,7 +713,7 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 <p><span>03</span> <code>|= (1U &lt;&lt; 0)</code> sets the GPIOA enable bit without changing other clock bits.</p>
 </div>
 </div>
-<p>Enable the clock <strong>first</strong>—an unclocked peripheral ignores register writes.</p>
+<p>Enable the clock <strong>first</strong>—an unclocked peripheral ignores register writes. In Lab 3 this is the first statement of <code>led_init()</code>.</p>
 <div class="source-note">
 <p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=118">RM0368 Rev 6, <code>RCC_AHB1ENR</code> — p.&nbsp;118</a>.</p>
 </div>
@@ -718,8 +756,8 @@ MODER bits 15 down to 0 drawn as eight two-bit fields, one per pin; the pin 5 fi
 </section>
 <section id="gpio-step-2-make-pa5-an-output" class="slide level2">
 <h2>GPIO step 2: make PA5 an output</h2>
-<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb24-1"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
-<span id="cb24-2"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb23-1"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
+<span id="cb23-2"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
 <p><span>01</span> <code>3U &lt;&lt; 10</code> selects bits 11 and 10.</p>
@@ -731,42 +769,50 @@ MODER bits 15 down to 0 drawn as eight two-bit fields, one per pin; the pin 5 fi
 <p><span>03</span> The second statement sets bit 10, producing <code>01</code>.</p>
 </div>
 </div>
-<p>Do not assume the old field value; clear before setting the new pattern.</p>
+<p>Do not assume the old field value; clear before setting the new pattern. In Lab 3 these two statements complete <code>led_init()</code>.</p>
 <div class="source-note">
 <p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=158">RM0368 Rev 6, <code>GPIOx_MODER</code> — p.&nbsp;158</a>.</p>
 </div>
 </section>
 <section id="gpio-step-3-drive-pa5-with-bsrr" class="slide level2">
 <h2>GPIO step 3: drive PA5 with <code>BSRR</code></h2>
-<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb25-1"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span>       <span class="co">// PA5 high: LD2 on</span></span>
-<span id="cb25-2"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">21</span><span class="op">);</span>      <span class="co">// PA5 low:  LD2 off</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb24-1"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span>       <span class="co">// PA5 high: LD2 on</span></span>
+<span id="cb24-2"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">21</span><span class="op">);</span>      <span class="co">// PA5 low:  LD2 off</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <svg class="story-visual" viewbox="0 0 1440 215" role="img" aria-labelledby="bsrr-title">
 <title id="bsrr-title">
 BSRR drawn as 32 cells split into a reset half, bits 31 to 16, and a set half, bits 15 to 0; writing 1 to bit 21 drives PA5 low and writing 1 to bit 5 drives PA5 high
 </title>
 <text x="384" y="30" text-anchor="middle" fill="#d47b28" font-size="19" font-weight="700">RESET half (31–16): write 1 → pin low</text> <text x="1056" y="30" text-anchor="middle" fill="#2b789f" font-size="19" font-weight="700">SET half (15–0): write 1 → pin high</text> <rect x="48" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="69" y="56" text-anchor="middle" fill="#8aa0ac" font-size="14">31</text> <rect x="90" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="132" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="174" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="216" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="258" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="300" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="342" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="384" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="426" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="468" y="64" width="42" height="52" fill="#f8e2c8" stroke="#d47b28" stroke-width="3"></rect> <text x="489" y="56" text-anchor="middle" fill="#d47b28" font-size="14" font-weight="700">21</text> <text x="489" y="100" text-anchor="middle" fill="#d47b28" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <rect x="510" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="552" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="594" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="636" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="678" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="699" y="56" text-anchor="middle" fill="#8aa0ac" font-size="14">16</text> <rect x="720" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="741" y="56" text-anchor="middle" fill="#8aa0ac" font-size="14">15</text> <rect x="762" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="804" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="846" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="888" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="930" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="972" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="1014" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="1056" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="1098" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="1140" y="64" width="42" height="52" fill="#e8f2f7" stroke="#2b789f" stroke-width="3"></rect> <text x="1161" y="56" text-anchor="middle" fill="#2b789f" font-size="14" font-weight="700">5</text> <text x="1161" y="100" text-anchor="middle" fill="#2b789f" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <rect x="1182" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="1224" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="1266" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="1308" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="1350" y="64" width="42" height="52" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1371" y="56" text-anchor="middle" fill="#8aa0ac" font-size="14">0</text> <line x1="720" y1="44" x2="720" y2="126" stroke="#5a6b76" stroke-width="3"></line> <text x="489" y="150" text-anchor="middle" fill="#d47b28" font-size="18" font-weight="700">bit 21 = 5 + 16 → PA5 low</text> <text x="1161" y="150" text-anchor="middle" fill="#2b789f" font-size="18" font-weight="700">bit 5 → PA5 high</text> <text x="720" y="188" text-anchor="middle" fill="#5a6b76" font-size="19">The two highlighted bits belong to two separate write statements.</text>
 </svg>
-<p>Direct assignment is correct because each BSRR write is a command, not a stored configuration field.</p>
+<p><code>=</code> is correct here: each <code>BSRR</code> write is a command, not a stored setting. Bits written as <code>0</code> change nothing. These are the bodies of <code>led_on()</code> and <code>led_off()</code>.</p>
 <div class="source-note">
 <p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=161">RM0368 Rev 6, <code>GPIOx_BSRR</code> — p.&nbsp;161</a>.</p>
 </div>
 </section>
-<section id="bare-metal-blink-the-three-gpio-steps" class="slide level2">
-<h2>Bare-metal blink: the three GPIO steps</h2>
-<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb26-1"><a></a>RCC<span class="op">-&gt;</span>AHB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span></span>
+<section id="your-led-driver-three-functions" class="slide level2">
+<h2>Your LED driver: three functions</h2>
+<div class="columns">
+<div class="column" style="width:48%;">
+<p><strong><code>led_reg.h</code> — the declarations</strong></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb25-1"><a></a><span class="dt">void</span> led_init<span class="op">(</span><span class="dt">void</span><span class="op">);</span>  <span class="co">// steps 1, 2</span></span>
+<span id="cb25-2"><a></a><span class="dt">void</span> led_on<span class="op">(</span><span class="dt">void</span><span class="op">);</span>    <span class="co">// step 3</span></span>
+<span id="cb25-3"><a></a><span class="dt">void</span> led_off<span class="op">(</span><span class="dt">void</span><span class="op">);</span>   <span class="co">// step 3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In Lab 3 you write the bodies. Every statement you need is on the last four slides.</p>
+</div><div class="column" style="width:48%;">
+<p><strong><code>main.c</code> — the calls</strong></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb26-1"><a></a>led_init<span class="op">();</span></span>
 <span id="cb26-2"><a></a></span>
-<span id="cb26-3"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
-<span id="cb26-4"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
-<span id="cb26-5"><a></a></span>
-<span id="cb26-6"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb26-7"><a></a>    GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span>
-<span id="cb26-8"><a></a>    HAL_Delay<span class="op">(</span><span class="dv">250</span><span class="op">);</span></span>
-<span id="cb26-9"><a></a></span>
-<span id="cb26-10"><a></a>    GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">21</span><span class="op">);</span></span>
-<span id="cb26-11"><a></a>    HAL_Delay<span class="op">(</span><span class="dv">250</span><span class="op">);</span></span>
-<span id="cb26-12"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Configuration happens once before the loop; only the <code>BSRR</code> writes repeat.</p>
-<p>The delay still uses a HAL service. GPIO configuration and output control use direct CMSIS register writes.</p>
+<span id="cb26-3"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb26-4"><a></a>    led_on<span class="op">();</span></span>
+<span id="cb26-5"><a></a>    HAL_Delay<span class="op">(</span><span class="dv">200</span><span class="op">);</span></span>
+<span id="cb26-6"><a></a></span>
+<span id="cb26-7"><a></a>    led_off<span class="op">();</span></span>
+<span id="cb26-8"><a></a>    HAL_Delay<span class="op">(</span><span class="dv">200</span><span class="op">);</span></span>
+<span id="cb26-9"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+<div class="relationship-strip">
+<p>Configuration runs once, before the loop. Only <code>led_on()</code> and <code>led_off()</code> repeat. The delay still uses HAL; the LED uses direct register writes.</p>
+</div>
 </section>
 <section id="debugging-register-writes" class="slide level2">
 <h2>Debugging register writes</h2>
@@ -795,35 +841,50 @@ BSRR drawn as 32 cells split into a reset half, bits 31 to 16, and a set half, b
 <h2>Common register mistakes</h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> <strong>WRONG DEVICE:</strong> the project targets a different STM32 model.</p>
+<p><span>01</span> <strong>CLOCK OFF:</strong> GPIOA is used before its clock-enable bit is set.</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> <strong>CLOCK OFF:</strong> GPIOA is used before its clock-enable bit is set.</p>
+<p><span>02</span> <strong>WRONG SHIFT:</strong> the mask selects a different pin or field.</p>
 </div>
 <div class="vertical-item">
-<p><span>03</span> <strong>WRONG SHIFT:</strong> the mask selects a different pin or field.</p>
+<p><span>03</span> <strong>NOT CLEARED:</strong> old mode bits remain in the two-bit field.</p>
 </div>
 <div class="vertical-item">
-<p><span>04</span> <strong>FIELD NOT CLEARED:</strong> old mode bits remain in the two-bit field.</p>
+<p><span>04</span> <strong><code>=</code> ON <code>MODER</code>:</strong> <code>GPIOA-&gt;MODER = (1U &lt;&lt; 10);</code> also clears the other 15 pins. PA13/PA14 carry the debugger, so the debug session can stop.</p>
 </div>
 <div class="vertical-item">
-<p><span>05</span> <strong>WRONG EVIDENCE:</strong> a successful build is treated as proof that the hardware changed.</p>
+<p><span>05</span> <strong><code>|=</code> ON <code>BSRR</code>:</strong> not needed—<code>BSRR</code> is a command, so write it with <code>=</code>.</p>
+</div>
+<div class="vertical-item">
+<p><span>06</span> <strong>WRONG EVIDENCE:</strong> a successful build is treated as proof that the hardware changed.</p>
 </div>
 </div>
 </section>
-<section id="laboratory-mission" class="slide level2">
-<h2>Laboratory mission</h2>
-<div class="big-question">
-<p>Configure PA5 and blink the Nucleo-F401RE on-board LED using direct CMSIS register writes instead of HAL GPIO calls.</p>
+<section id="lab-3-mission-ld2-blinks-your-sensor-status" class="slide level2">
+<h2>Lab 3 mission: LD2 blinks your sensor status</h2>
+<div class="lab-track">
+<div class="lab-step">
+<p><span>A</span> <strong>NEW PROJECT</strong></p>
+<p>CubeMX <code>EE5203_L03_&lt;no&gt;</code>, starter files, two lines in <code>CMakeLists.txt</code></p>
 </div>
-<p>You will show:</p>
-<ol type="1">
-<li>the clock-enable bit in <code>RCC-&gt;AHB1ENR</code>;</li>
-<li>the <code>01</code> mode field in <code>GPIOA-&gt;MODER</code>;</li>
-<li>the set and reset masks written to <code>GPIOA-&gt;BSRR</code>;</li>
-<li>a debugger observation that matches the physical LED;</li>
-<li>one individual mask or timing change.</li>
-</ol>
+<div class="lab-step">
+<p><span>B</span> <strong>FUNCTIONS</strong></p>
+<p><code>clamp_u16</code>, <code>average_samples</code>: same results as Lab 2</p>
+</div>
+<div class="lab-step">
+<p><span>C</span> <strong><code>led_init()</code></strong></p>
+<p>clock + PA5 output; check the registers</p>
+</div>
+<div class="lab-step">
+<p><span>D</span> <strong><code>led_on()</code> / <code>led_off()</code></strong></p>
+<p><code>BSRR</code> writes; LD2 blinks</p>
+</div>
+<div class="lab-step">
+<p><span>E</span> <strong>STATUS BLINK</strong></p>
+<p>1 = LOW, 2 = OK, 3 = HIGH</p>
+</div>
+</div>
+<p><strong>Before Lab 3 (6/7 October):</strong> download the starter zip, do the Lab 3 pre-lab quiz on CATS, and bring the mask table completed on paper.</p>
 </section>
 <section id="mastery-checklist" class="slide level2">
 <h2>Mastery checklist</h2>
@@ -832,13 +893,13 @@ BSRR drawn as 32 cells split into a reset half, bits 31 to 16, and a set half, b
 <p><span>✓</span> Distinguish a value, an address, and a pointer.</p>
 </div>
 <div class="vertical-item">
+<p><span>✓</span> Explain how a pointer reaches a hardware register, and why it is <code>volatile</code>.</p>
+</div>
+<div class="vertical-item">
 <p><span>✓</span> Read structure members with <code>.</code> and pointer members with <code>-&gt;</code>.</p>
 </div>
 <div class="vertical-item">
-<p><span>✓</span> Set, clear, toggle, and test selected bits.</p>
-</div>
-<div class="vertical-item">
-<p><span>✓</span> Explain CMSIS register names and <code>volatile</code>.</p>
+<p><span>✓</span> Set, clear, and replace selected bits with masks.</p>
 </div>
 <div class="vertical-item">
 <p><span>✓</span> Configure PA5 and control LD2 through register writes.</p>
@@ -850,20 +911,18 @@ BSRR drawn as 32 cells split into a reset half, bits 31 to 16, and a set half, b
 <h2>Exit ticket</h2>
 <div class="columns">
 <div class="column" style="width:62%;">
-<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb27-1"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
-<span id="cb27-2"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="vertical-list ticket-list compact-tickets">
 <div class="vertical-item">
-<p><span>01</span> <strong>POINTER MEMBER:</strong> What does <code>GPIOA-&gt;MODER</code> select?</p>
+<p><span>01</span> <strong>ADDRESS:</strong> GPIOA starts at <code>0x40020000</code>; <code>IDR</code> has offset <code>0x10</code>. Which address does <code>GPIOA-&gt;IDR</code> name?</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> <strong>MASK:</strong> Which bits does <code>3U &lt;&lt; 10</code> select?</p>
+<p><span>02</span> <strong>MASK:</strong> Write one statement that sets bit 7 of <code>value</code> and keeps all other bits.</p>
 </div>
 <div class="vertical-item">
-<p><span>03</span> <strong>RESULT:</strong> What pattern remains in bits 11:10?</p>
+<p><span>03</span> <strong>OPERATOR:</strong> Why does <code>led_init()</code> use <code>|=</code> for <code>AHB1ENR</code>, but <code>led_on()</code> uses <code>=</code> for <code>BSRR</code>?</p>
 </div>
 <div class="vertical-item">
-<p><span>04</span> <strong>HARDWARE:</strong> What register observation would prove the statements executed?</p>
+<p><span>04</span> <strong>FEEDBACK:</strong> Which part of today’s lecture is least clear to you? One sentence.</p>
 </div>
 </div>
 </div><div class="column" style="width:38%;">

@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitwise Lab</title>
+<style>
+:root {
+  --bg: #f4f8fb; --card: #ffffff; --ink: #1f2d36; --muted: #5a6b76; --faint: #8aa0ac;
+  --line: #c8d8e2; --brand: #174f73; --blue: #2b789f; --blue-soft: #e8f2f7;
+  --accent: #d47b28; --accent-soft: #f8e2c8; --ok: #2e8b57; --ok-soft: #dff3e4;
+  --bad: #b8402f; --bad-soft: #fbe4df; --one: #174f73; --one-ink: #ffffff;
+  --zero: #ffffff; --zero-ink: #8aa0ac; --btn-ink: #ffffff;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+.wrap { max-width: 1480px; margin: 0 auto; padding: 20px 16px 48px; }
+h1 { color: var(--brand); margin: 0 0 4px; font-size: 1.75rem; }
+.sub { color: var(--muted); margin: 0 0 16px; }
+.tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.tab { border: 2px solid var(--line); background: var(--card); color: var(--ink); padding: 8px 18px;
+  border-radius: 999px; font: inherit; font-weight: 650; cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--brand); border-color: var(--brand); color: var(--btn-ink); }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 16px; align-items: start; }
+@media (max-width: 1100px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; min-width: 0; }
+.card h2 { font-size: 1.05rem; margin: 0 0 10px; color: var(--brand); }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.row + .row { margin-top: 10px; }
+label.inline { display: flex; gap: 8px; align-items: center; color: var(--muted); font-weight: 600; max-width: 100%; min-width: 0; }
+label.inline select { min-width: 0; flex: 1 1 auto; }
+@media (max-width: 520px) { label.inline { width: 100%; } }
+select, input[type="text"], textarea { font: inherit; border: 1px solid var(--line); background: var(--bg);
+  color: var(--ink); border-radius: 8px; padding: 7px 10px; max-width: 100%; }
+textarea, input.code { font-family: var(--mono); font-size: 15px; width: 100%; }
+textarea { resize: vertical; min-height: 84px; }
+.btn { font: inherit; border: 0; background: var(--brand); color: var(--btn-ink); padding: 8px 16px;
+  border-radius: 8px; font-weight: 650; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--brand); border: 1px solid var(--line); }
+.btn:focus-visible, .tab:focus-visible, .bit:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+code { font-family: var(--mono); font-size: 0.92em; }
+.muted { color: var(--muted); }
+small { color: var(--muted); }
+.hidden { display: none !important; }
+
+/* register view */
+.reg { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 22px; }
+@media (max-width: 1240px) and (min-width: 1101px), (max-width: 860px) { .reg { grid-template-columns: 1fr; } }
+.half { display: grid; grid-template-columns: repeat(16, minmax(0, 1fr)); column-gap: 3px; row-gap: 4px; }
+.bn { font-size: 12px; color: var(--faint); text-align: center; font-variant-numeric: tabular-nums; }
+.bit { min-width: 0; height: 42px; padding: 0; border: 1px solid var(--line); border-radius: 4px;
+  background: var(--zero); color: var(--zero-ink); font: 700 18px var(--mono); cursor: pointer; }
+.bit.one { background: var(--one); border-color: var(--one); color: var(--one-ink); }
+.bit.chg { box-shadow: 0 0 0 3px var(--accent) inset; }
+.bit:disabled { cursor: default; }
+.nib { margin-left: 7px; }
+@media (max-width: 520px) { .nib { margin-left: 3px; } .half { column-gap: 2px; } .bit { height: 36px; font-size: 15px; } }
+.fl { font-size: 12px; text-align: center; color: var(--muted); border-top: 2px solid var(--line);
+  padding-top: 1px; white-space: nowrap; overflow: hidden; }
+.fl.hot { color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.hx { font: 700 15px var(--mono); text-align: center; color: var(--brand); background: var(--blue-soft); border-radius: 4px; }
+.cap { grid-column: 1 / -1; font-size: 12px; font-weight: 700; text-align: center; color: var(--muted); min-height: 1em; }
+.readout { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 14px; font-family: var(--mono); }
+.readout span b { font-family: system-ui, sans-serif; color: var(--muted); font-weight: 600; margin-right: 6px; }
+.decode { margin-top: 10px; }
+.decode p { margin: 6px 0; }
+.chips { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px; margin-top: 8px; }
+@media (max-width: 520px) { .chips { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.chip { font-size: 12px; border: 1px solid var(--line); border-radius: 6px; padding: 3px 2px; text-align: center; }
+.chip b { display: block; font-size: 12px; }
+.chip.out { background: var(--ok-soft); border-color: var(--ok); }
+.chip.af { background: var(--blue-soft); }
+.chip.an { background: var(--accent-soft); }
+
+/* step-through */
+.stmt { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 12px; }
+.stmt-head code { font-weight: 700; color: var(--brand); }
+.step { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr) auto; gap: 12px; align-items: center;
+  padding: 5px 0; border-bottom: 1px dashed var(--line); }
+.step:last-child { border-bottom: 0; }
+.step .sc { overflow-wrap: anywhere; }
+.step .sh { font-weight: 700; }
+.step.old .sc, .step.old .sh { color: var(--muted); font-weight: 400; }
+.step.result .sc { font-weight: 700; }
+@media (max-width: 760px) {
+  .step { grid-template-columns: minmax(0, 1fr) auto; }
+  .step .strip { grid-column: 1 / -1; grid-row: 2; }
+}
+.strip { display: grid; grid-template-columns: repeat(32, minmax(0, 1fr)); gap: 1px; }
+.strip span { height: 24px; min-width: 0; background: var(--zero); border: 1px solid var(--line); border-radius: 2px;
+  font: 11px var(--mono); display: flex; align-items: center; justify-content: center; color: var(--zero-ink); }
+.strip span.one { background: var(--one); border-color: var(--one); color: var(--one-ink); }
+.strip span.chg { box-shadow: 0 0 0 2px var(--accent) inset; }
+.strip span.nib { margin-left: 3px; }
+@media (max-width: 520px) { .strip span { font-size: 0; } }
+.legend { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+.legend i { display: inline-block; width: 12px; height: 12px; vertical-align: -1px; border-radius: 2px; margin: 0 4px 0 10px; }
+.legend i.one { background: var(--one); }
+.legend i.chg { box-shadow: 0 0 0 2px var(--accent) inset; background: var(--zero); }
+.note { padding: 8px 12px; border-radius: 8px; margin: 8px 0; }
+.note.bad { background: var(--bad-soft); border-left: 4px solid var(--bad); }
+.note.warn { background: var(--accent-soft); border-left: 4px solid var(--accent); }
+.note.info { background: var(--blue-soft); border-left: 4px solid var(--blue); }
+.note.ok { background: var(--ok-soft); border-left: 4px solid var(--ok); }
+pre.codeblock { font-family: var(--mono); background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 12px; margin: 10px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* board */
+.board { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; }
+.cond { display: grid; grid-template-columns: 1.4em minmax(0, 1fr); margin: 6px 0; }
+.cond .m { font-weight: 800; }
+.cond.y .m { color: var(--ok); }
+.cond.n .m { color: var(--bad); }
+.lamp { width: 74px; height: 74px; border-radius: 50%; border: 3px solid var(--line); display: flex; align-items: center;
+  justify-content: center; font-weight: 800; color: var(--muted); background: var(--bg); transition: all .2s; }
+.lamp.on { background: #3fd27a; border-color: #2e8b57; color: #06301a; box-shadow: 0 0 26px 8px rgba(63, 210, 122, .55); }
+.cheat { margin: 0; padding: 0; list-style: none; font-size: 14px; }
+.cheat li { padding: 5px 0; border-bottom: 1px dashed var(--line); }
+.cheat li:last-child { border-bottom: 0; }
+.cheat code { display: block; color: var(--brand); }
+.score { font-weight: 650; color: var(--muted); }
+.score b { color: var(--ink); }
+#q-prompt { font-size: 1.08rem; }
+#q-input { margin-top: 14px; }
+.names code { white-space: nowrap; }
+footer { color: var(--muted); font-size: 13px; margin-top: 24px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Bitwise Lab</h1>
+    <p class="sub">EE5203 Microprocessors · practise masks, shifts and register writes. Nothing you type is sent or recorded.</p>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-explore" aria-controls="panel-explore" aria-selected="true">Explore</button>
+    <button class="tab" role="tab" id="tab-practice" aria-controls="panel-practice" aria-selected="false">Practice</button>
+  </div>
+
+  <!-- ================= EXPLORE ================= -->
+  <section id="panel-explore" role="tabpanel" aria-labelledby="tab-explore">
+    <div class="layout">
+      <div>
+        <div class="card">
+          <h2>Register</h2>
+          <div class="row">
+            <label class="inline">Show <select id="reg-select"></select></label>
+            <label class="inline">Start from <select id="scen-select"></select></label>
+            <button class="btn ghost" id="btn-clear">Set to 0</button>
+          </div>
+          <p class="muted" id="reg-desc"></p>
+          <div id="reg-view"></div>
+          <div class="readout" id="reg-readout"></div>
+          <div class="decode" id="reg-decode"></div>
+        </div>
+
+        <div class="card">
+          <h2>Statement</h2>
+          <div class="row">
+            <label class="inline">Example <select id="ex-select"></select></label>
+          </div>
+          <div class="row">
+            <textarea id="code" spellcheck="false" aria-label="C statements">value |= (1U << 5);</textarea>
+          </div>
+          <div class="row">
+            <button class="btn" id="btn-run">Run ▶</button>
+            <button class="btn ghost" id="btn-undo">Undo</button>
+            <span class="muted">Predict the result first. Ctrl+Enter also runs.</span>
+          </div>
+          <div id="run-out"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h2>Board: LD2 on PA5</h2>
+          <div id="board"></div>
+        </div>
+        <div class="card">
+          <h2>Patterns</h2>
+          <ul class="cheat">
+            <li><code>x |= (1U &lt;&lt; n);</code>set bit n</li>
+            <li><code>x &amp;= ~(1U &lt;&lt; n);</code>clear bit n</li>
+            <li><code>x ^= (1U &lt;&lt; n);</code>toggle bit n</li>
+            <li><code>x &amp;= ~(3U &lt;&lt; 2n);<br>x |=  (1U &lt;&lt; 2n);</code>pin n mode field = 01 (output)</li>
+            <li><code>GPIOA-&gt;BSRR = (1U &lt;&lt; n);</code>PAn high</li>
+            <li><code>GPIOA-&gt;BSRR = (1U &lt;&lt; (n + 16));</code>PAn low</li>
+          </ul>
+          <p class="muted names" style="font-size:14px;margin:10px 0 0">Names you can use: <code>value</code>, <code>RCC-&gt;AHB1ENR</code>, <code>GPIOA-&gt;MODER</code>, <code>GPIOA-&gt;ODR</code>, <code>GPIOA-&gt;BSRR</code>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PRACTICE ================= -->
+  <section id="panel-practice" role="tabpanel" aria-labelledby="tab-practice" class="hidden">
+    <div class="card">
+      <div class="row">
+        <label class="inline">Level
+          <select id="level">
+            <option value="1">1 · Masks and hex</option>
+            <option value="2">2 · Set and clear bits</option>
+            <option value="3">3 · GPIO registers</option>
+            <option value="mix">Mixed</option>
+          </select>
+        </label>
+        <span class="score" id="score"></span>
+        <button class="btn ghost" id="btn-reset-score">Reset score</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2 id="q-title"></h2>
+      <div id="q-prompt"></div>
+      <div id="q-show"></div>
+      <div class="row" id="q-input"></div>
+      <div class="row">
+        <button class="btn" id="q-check">Check</button>
+        <button class="btn ghost" id="q-hint">Hint</button>
+        <button class="btn ghost" id="q-answer">Show answer</button>
+        <button class="btn ghost" id="q-next">Next question →</button>
+      </div>
+      <div id="q-feedback"></div>
+    </div>
+  </section>
+
+  <footer>Registers follow the STM32F401 reference manual (RM0368): RCC_AHB1ENR, GPIOx_MODER, GPIOx_ODR, GPIOx_BSRR. The register view is a model for practice; values on your board can differ in bits this page does not use.</footer>
+</div>
+
+<!-- ============ ENGINE: no DOM access (tested on its own) ============ -->
+<script id="engine">
+'use strict';
+const u32 = v => v >>> 0;
+const hex8 = v => '0x' + u32(v).toString(16).toUpperCase().padStart(8, '0');
+const bitsOf = v => { const a = []; for (let b = 0; b < 32; b++) if ((v >>> b) & 1) a.push(b); return a; };
+class CErr extends Error {}
+
+const REG_KEYS = ['value', 'RCC->AHB1ENR', 'GPIOA->MODER', 'GPIOA->ODR', 'GPIOA->BSRR'];
+const ALIASES = { value: 'value', register_value: 'value' };
+REG_KEYS.forEach(k => { ALIASES[k] = k; });
+const MODES = ['input', 'output', 'alternate function', 'analog'];
+
+function resolveName(name, allowed) {
+  const k = ALIASES[name];
+  if (k && allowed.includes(k)) return k;
+  if (!allowed.length) throw new CErr('No variable is needed here: write only the expression, for example (1U << 3).');
+  if (k) throw new CErr(`This exercise does not use ${name}. Use ${allowed.join(' or ')}.`);
+  const ci = Object.keys(ALIASES).find(a => a.toLowerCase() === name.toLowerCase());
+  if (ci) throw new CErr(`C is case-sensitive: write ${ci}, not ${name}.`);
+  throw new CErr(`Unknown name "${name}". You can use: ${allowed.join(', ')}.`);
+}
+
+const OPS = ['<<=', '>>=', '&&', '||', '<<', '>>', '==', '!=', '<=', '>=', '|=', '&=', '^=', '+=', '-=',
+  '=', '~', '!', '&', '|', '^', '+', '-', '*', '(', ')', '<', '>'];
+
+function tokenize(src) {
+  const toks = []; let i = 0;
+  while (i < src.length) {
+    const rest = src.slice(i); let m;
+    if ((m = rest.match(/^\s+/))) { i += m[0].length; continue; }
+    if ((m = rest.match(/^(0[xX][0-9a-fA-F]+|0[bB][01]+|\d+)([uUlL]*)(?![\w.])/))) {
+      const body = m[1]; let v;
+      if (/^0[xX]/.test(body)) v = parseInt(body.slice(2), 16);
+      else if (/^0[bB]/.test(body)) v = parseInt(body.slice(2), 2);
+      else v = parseInt(body, 10);
+      if (v > 0xFFFFFFFF) throw new CErr(`${m[0]} does not fit in 32 bits.`);
+      toks.push({ t: 'num', v, suffix: m[2], s: i, e: i + m[0].length }); i += m[0].length; continue;
+    }
+    if (/^\d/.test(rest)) throw new CErr(`"${rest.match(/^[\w.]+/)[0]}" is not a valid number.`);
+    if ((m = rest.match(/^[A-Za-z_]\w*(?:\s*->\s*[A-Za-z_]\w*)?/))) {
+      toks.push({ t: 'id', v: m[0].replace(/\s+/g, ''), s: i, e: i + m[0].length }); i += m[0].length; continue;
+    }
+    if (rest[0] === '.') throw new CErr('GPIOA and RCC are pointers: reach a register with ->, not with a dot.');
+    const op = OPS.find(o => rest.startsWith(o));
+    if (op) { toks.push({ t: 'op', v: op, s: i, e: i + op.length }); i += op.length; continue; }
+    throw new CErr(`This page does not understand "${rest[0]}".`);
+  }
+  toks.push({ t: 'end', s: src.length, e: src.length });
+  return toks;
+}
+
+const ASSIGN = ['=', '|=', '&=', '^=', '<<=', '>>='];
+const BIN = [['|'], ['^'], ['&'], ['==', '!='], ['<', '>', '<=', '>='], ['<<', '>>'], ['+', '-'], ['*']];
+
+function parseStatement(text) {
+  const toks = tokenize(text); let p = 0;
+  const peek = () => toks[p], next = () => toks[p++];
+  const logical = toks.find(t => t.t === 'op' && (t.v === '&&' || t.v === '||'));
+  if (logical) throw new CErr(`${logical.v} is a logical operator (true/false, for conditions). For bits use ${logical.v[0]}.`);
+  const arith = toks.find(t => t.t === 'op' && (t.v === '+=' || t.v === '-='));
+  if (arith) throw new CErr(`${arith.v} adds or subtracts. To change bits use |=, &= or ^=.`);
+
+  function level(l) {
+    if (l === BIN.length) return unary();
+    let a = level(l + 1);
+    while (peek().t === 'op' && BIN[l].includes(peek().v)) {
+      const op = next().v; const b = level(l + 1);
+      a = { k: 'bin', op, a, b, s: a.s, e: b.e };
+    }
+    return a;
+  }
+  function unary() {
+    const t = peek();
+    if (t.t === 'op' && (t.v === '~' || t.v === '-' || t.v === '!')) {
+      next();
+      if (t.v === '!') throw new CErr('! is logical NOT (true/false). To invert every bit, use ~.');
+      const a = unary();
+      return { k: 'un', op: t.v, a, s: t.s, e: a.e };
+    }
+    return primary();
+  }
+  function primary() {
+    const t = next();
+    if (t.t === 'num') return { k: 'num', v: t.v, suffix: t.suffix, s: t.s, e: t.e };
+    if (t.t === 'id') return { k: 'id', name: t.v, s: t.s, e: t.e };
+    if (t.t === 'op' && t.v === '(') {
+      const a = level(0); const r = next();
+      if (!(r.t === 'op' && r.v === ')')) throw new CErr('A closing ")" is missing.');
+      return Object.assign({}, a, { s: t.s, e: r.e });
+    }
+    if (t.t === 'end') throw new CErr('The statement ends too early: something is missing after the last operator.');
+    if (t.t === 'op' && ASSIGN.includes(t.v)) throw new CErr(`"${t.v}" must follow the variable or register name at the start of the statement.`);
+    throw new CErr(`Unexpected "${t.v}".`);
+  }
+
+  let st;
+  if (toks[0].t === 'id' && toks[1].t === 'op' && ASSIGN.includes(toks[1].v)) {
+    p = 2; st = { kind: 'assign', target: toks[0].v, op: toks[1].v, rhs: level(0) };
+  } else {
+    st = { kind: 'expr', expr: level(0) };
+  }
+  const end = peek();
+  if (end.t !== 'end') {
+    if (end.t === 'op' && ASSIGN.includes(end.v)) throw new CErr('An assignment starts with the variable or register name, for example value |= (1U << 3);');
+    if (end.t === 'op' && end.v === ')') throw new CErr('There is one ")" too many.');
+    throw new CErr(`Unexpected "${end.v}" — is an operator missing?`);
+  }
+  return st;
+}
+
+function evalExpr(node, ctx) {
+  if (node.k === 'num') return u32(node.v);
+  if (node.k === 'id') return ctx.read(node.name);
+  let v;
+  if (node.k === 'un') {
+    const a = evalExpr(node.a, ctx);
+    v = node.op === '~' ? u32(~a) : u32(-a);
+  } else {
+    const a = evalExpr(node.a, ctx), b = evalExpr(node.b, ctx);
+    switch (node.op) {
+      case '<<': case '>>':
+        if (b > 31) throw new CErr(`Shifting a 32-bit value by ${b} is undefined in C. Use a shift from 0 to 31.`);
+        v = node.op === '<<' ? u32(a << b) : a >>> b;
+        if (node.op === '<<' && node.a.k === 'num' && !/u/i.test(node.a.suffix))
+          ctx.tips.add('Tip: in register code write unsigned constants such as 1U, not 1. (1 << 31 overflows a signed int.)');
+        break;
+      case '&': v = u32(a & b); break;
+      case '|': v = u32(a | b); break;
+      case '^': v = u32(a ^ b); break;
+      case '+': v = u32(a + b); break;
+      case '-': v = u32(a - b); break;
+      case '*': v = u32(Math.imul(a, b)); break;
+      case '==': v = a === b ? 1 : 0; break;
+      case '!=': v = a !== b ? 1 : 0; break;
+      case '<': v = a < b ? 1 : 0; break;
+      case '>': v = a > b ? 1 : 0; break;
+      case '<=': v = a <= b ? 1 : 0; break;
+      case '>=': v = a >= b ? 1 : 0; break;
+    }
+  }
+  ctx.steps.push({ text: ctx.text.slice(node.s, node.e), value: v });
+  return v;
+}
+
+class Machine {
+  constructor(init, opts) { this.r = Object.assign({}, init); this.hw = !!(opts && opts.hw); }
+  clone() { return new Machine(this.r, { hw: this.hw }); }
+  read(k) { return k === 'GPIOA->BSRR' ? 0 : u32(this.r[k]); }
+  clockOn() { return !('RCC->AHB1ENR' in this.r) || (this.r['RCC->AHB1ENR'] & 1) === 1; }
+  write(k, v, notes) {
+    v = u32(v);
+    if (this.hw && k.startsWith('GPIOA') && !this.clockOn()) {
+      notes.push({ type: 'bad', text: 'The GPIOA clock is off (RCC->AHB1ENR bit 0 = 0), so GPIOA ignores this write. Enable the clock first: RCC->AHB1ENR |= (1U << 0);' });
+      return false;
+    }
+    if (k === 'GPIOA->BSRR') {
+      this.r[k] = v;
+      if ('GPIOA->ODR' in this.r) {
+        const odr = this.r['GPIOA->ODR'];
+        this.r['GPIOA->ODR'] = u32((odr & ~(v >>> 16)) | (v & 0xFFFF)) & 0xFFFF;
+      }
+      const hi = bitsOf(v & 0xFFFF), lo = bitsOf(v >>> 16).filter(n => !hi.includes(n));
+      const parts = [];
+      if (hi.length) parts.push(hi.map(n => 'PA' + n).join(', ') + ' → high');
+      if (lo.length) parts.push(lo.map(n => 'PA' + n).join(', ') + ' → low');
+      notes.push({ type: 'info', text: parts.length ? 'BSRR command: ' + parts.join('; ') + '. Pins written with 0 do not change.' : 'This BSRR write contains no 1 bits, so no pin changes.' });
+      return true;
+    }
+    if (k === 'GPIOA->ODR' && (v >>> 16)) {
+      notes.push({ type: 'warn', text: 'ODR bits 31:16 are reserved; they stay 0.' });
+      v &= 0xFFFF;
+    }
+    if (k === 'GPIOA->MODER') {
+      const old = this.r[k];
+      for (const pin of [13, 14]) {
+        if (((old >>> (2 * pin)) & 3) === 2 && ((v >>> (2 * pin)) & 3) !== 2)
+          notes.push({ type: 'bad', text: `PA${pin} left alternate-function mode. PA13 and PA14 carry the debugger (SWD): on the board the debug session would stop.` });
+      }
+    }
+    this.r[k] = v;
+    return true;
+  }
+}
+
+function stripComments(src) {
+  return src.replace(/\/\*[\s\S]*?\*\//g, m => m.replace(/[^\n]/g, ' '))
+            .replace(/\/\/[^\n]*/g, m => ' '.repeat(m.length));
+}
+function splitStatements(src) {
+  const s = stripComments(src); const out = []; let start = 0;
+  for (let i = 0; i <= s.length; i++) {
+    const c = s[i];
+    if (i === s.length || c === ';' || c === '\n') {
+      const text = s.slice(start, i).trim();
+      if (text) out.push({ text, semi: c === ';' });
+      start = i + 1;
+    }
+  }
+  return out;
+}
+
+function runProgram(src, m, allowed) {
+  const out = { items: [], tips: new Set(), error: null };
+  const stmts = splitStatements(src);
+  if (!stmts.length) { out.error = 'Type a C statement first, for example value |= (1U << 3);'; return out; }
+  if (stmts.some(s => !s.semi)) out.tips.add('Each C statement ends with a semicolon ;');
+  for (const s of stmts) {
+    const item = { text: s.text, steps: [], notes: [] };
+    out.items.push(item);
+    try {
+      const st = parseStatement(s.text);
+      const ctx = { text: s.text, steps: item.steps, tips: out.tips, read: name => m.read(resolveName(name, allowed)) };
+      if (st.kind === 'expr') {
+        const v = evalExpr(st.expr, ctx);
+        if (!item.steps.length) item.steps.push({ text: s.text, value: v });
+        item.steps[item.steps.length - 1].role = 'result';
+        item.kind = 'expr'; item.value = v;
+        if (allowed.length) item.notes.push({ type: 'info', text: 'This is an expression, not an assignment: nothing was stored. To change a register, start with its name, for example value |= ...;' });
+        continue;
+      }
+      const k = resolveName(st.target, allowed);
+      const rhs = evalExpr(st.rhs, ctx);
+      const old = m.read(k);
+      let nv;
+      switch (st.op) {
+        case '=': nv = rhs; break;
+        case '|=': nv = u32(old | rhs); break;
+        case '&=': nv = u32(old & rhs); break;
+        case '^=': nv = u32(old ^ rhs); break;
+        case '<<=': case '>>=':
+          if (rhs > 31) throw new CErr(`Shifting a 32-bit value by ${rhs} is undefined in C.`);
+          nv = st.op === '<<=' ? u32(old << rhs) : old >>> rhs; break;
+      }
+      const rhsText = s.text.slice(st.rhs.s, st.rhs.e);
+      const isBsrr = k === 'GPIOA->BSRR';
+      if (!isBsrr || st.op !== '=')
+        item.steps.push({ text: `${st.target} before${isBsrr ? ' (BSRR always reads 0)' : ''}`, value: old, role: 'old' });
+      item.steps.push({ text: st.op === '=' ? `${st.target} = ${rhsText}` : `${st.target} ${st.op.slice(0, -1)} ${rhsText}`,
+        value: nv, role: 'result', diff: isBsrr ? undefined : old });
+      item.kind = 'assign'; item.target = k; item.op = st.op; item.old = old; item.value = nv;
+
+      if (isBsrr && st.op !== '=') item.notes.push({ type: 'info', text: 'BSRR always reads as 0, so |= writes the same value as =. Write BSRR with =: each write is a command.' });
+      if (st.op === '=' && (k === 'GPIOA->MODER' || k === 'RCC->AHB1ENR')) {
+        const lost = bitsOf(old & ~nv);
+        if (lost.length) item.notes.push({ type: 'warn', text: `= replaced the whole register and cleared ${lost.length === 1 ? 'bit' : 'bits'} ${lost.reverse().join(', ')}. Use |= to set bits and &= ~ to clear them; the other bits then stay as they were.` });
+      }
+      if (k === 'RCC->AHB1ENR' && (old & 1) && !(nv & 1)) item.notes.push({ type: 'warn', text: 'The GPIOA clock is now off: GPIOA will ignore every write.' });
+      if (!isBsrr && nv === old) item.notes.push({ type: 'info', text: 'No bit changed: the register already had this value.' });
+
+      const odrBefore = m.r['GPIOA->ODR'];
+      item.written = m.write(k, nv, item.notes);
+      if (!item.written) item.steps[item.steps.length - 1].text += '  (ignored)';
+      if (isBsrr && item.written && 'GPIOA->ODR' in m.r)
+        item.steps.push({ text: 'GPIOA->ODR after the write', value: m.r['GPIOA->ODR'], role: 'after', diff: odrBefore });
+    } catch (e) {
+      if (!(e instanceof CErr)) throw e;
+      item.error = e.message; out.error = e.message; break;
+    }
+  }
+  return out;
+}
+
+function parseNumberAnswer(str) {
+  const t = String(str).trim().replace(/[\s_']/g, '').replace(/[uUlL]+$/, '');
+  if (/^0[xX][0-9a-fA-F]{1,8}$/.test(t)) return parseInt(t.slice(2), 16);
+  if (/^0[bB][01]{1,32}$/.test(t)) return parseInt(t.slice(2), 2);
+  if (/^\d{1,10}$/.test(t)) { const v = Number(t); if (v <= 0xFFFFFFFF) return v; }
+  return null;
+}
+</script>
+
+<!-- ============ USER INTERFACE ============ -->
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const rint = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+/* ---------- register descriptions ---------- */
+const PIN_FIELDS_MODER = [...Array(16).keys()].map(n => [2 * n + 1, 2 * n, 'PA' + n]);
+const PIN_FIELDS_1BIT = [...Array(16).keys()].map(n => [n, n, String(n)]);
+const DEFS = {
+  'value': { desc: 'An ordinary 32-bit variable: uint32_t value;', fields: [], caps: null, hot: [] },
+  'RCC->AHB1ENR': { desc: 'AHB1 clock enable. A 1 switches on the clock of that peripheral. Letters = GPIO ports.',
+    fields: [[0, 0, 'A'], [1, 1, 'B'], [2, 2, 'C'], [3, 3, 'D'], [4, 4, 'E'], [7, 7, 'H'], [12, 12, 'CRC'], [21, 21, 'DMA1'], [22, 22, 'DMA2']],
+    caps: null, hot: [0] },
+  'GPIOA->MODER': { desc: 'Port A mode register. Two bits per pin: 00 input, 01 output, 10 alternate function, 11 analog.',
+    fields: PIN_FIELDS_MODER, caps: null, hot: [10] },
+  'GPIOA->ODR': { desc: 'Port A output data register. Bit n is the output level of PAn. Bits 31:16 are reserved.',
+    fields: PIN_FIELDS_1BIT, caps: { 1: 'reserved', 0: 'PA15 … PA0' }, hot: [5] },
+  'GPIOA->BSRR': { desc: 'Port A bit set/reset register. Write-only: each write is a command. The view shows the last value written.',
+    fields: [...PIN_FIELDS_1BIT.map(([h, l, t]) => [h + 16, l + 16, t]), ...PIN_FIELDS_1BIT],
+    caps: { 1: 'reset half: write 1 → pin low', 0: 'set half: write 1 → pin high' }, hot: [5, 21], writeOnly: true },
+};
+
+function regViewHTML(key, v, opt) {
+  opt = opt || {};
+  const d = DEFS[key]; let h = '<div class="reg">';
+  for (const half of [1, 0]) {
+    const top = half ? 31 : 15;
+    const col = b => (top - b) + 1;
+    h += '<div class="half">'; let row = 1;
+    if (d.caps) { h += `<div class="cap" style="grid-row:${row}">${esc(d.caps[half] || '')}</div>`; row++; }
+    for (let b = top; b > top - 16; b--)
+      h += `<div class="bn${b % 4 === 3 && b !== top ? ' nib' : ''}" style="grid-row:${row};grid-column:${col(b)}">${b}</div>`;
+    row++;
+    for (let b = top; b > top - 16; b--) {
+      const one = (v >>> b) & 1;
+      const chg = opt.diff !== undefined && opt.diff !== null && (((v ^ opt.diff) >>> b) & 1);
+      const lock = !opt.clickable || (key === 'GPIOA->ODR' && b > 15);
+      h += `<button class="bit${one ? ' one' : ''}${chg ? ' chg' : ''}${b % 4 === 3 && b !== top ? ' nib' : ''}" style="grid-row:${row};grid-column:${col(b)}" data-bit="${b}"${lock ? ' disabled' : ''} aria-label="bit ${b} is ${one}">${one}</button>`;
+    }
+    row++;
+    if (d.fields.length) {
+      let any = false;
+      for (const [hi, lo, t] of d.fields) {
+        if (hi > top || lo < top - 15) continue;
+        any = true;
+        const hot = d.hot.includes(lo) ? ' hot' : '';
+        h += `<div class="fl${hot}" style="grid-row:${row};grid-column:${col(hi)} / ${col(lo) + 1}" title="bits ${hi === lo ? hi : hi + ':' + lo}">${esc(t)}</div>`;
+      }
+      if (!any) h += `<div class="fl" style="grid-row:${row};grid-column:1 / -1;border:0">&nbsp;</div>`;
+      row++;
+    }
+    for (let n = 3; n >= 0; n--) {
+      const nib = half ? n + 4 : n;
+      const digit = ((v >>> (nib * 4)) & 15).toString(16).toUpperCase();
+      h += `<div class="hx" style="grid-row:${row};grid-column:${col(nib * 4 + 3)} / span 4" title="hex digit ${nib}">${digit}</div>`;
+    }
+    h += '</div>';
+  }
+  return h + '</div>';
+}
+
+function stripHTML(v, diff) {
+  let h = '<div class="strip" aria-hidden="true">';
+  for (let b = 31; b >= 0; b--) {
+    const one = (v >>> b) & 1;
+    const chg = diff !== undefined && diff !== null && (((v ^ diff) >>> b) & 1);
+    h += `<span class="${one ? 'one' : ''}${chg ? ' chg' : ''}${b % 4 === 3 && b !== 31 ? ' nib' : ''}" title="bit ${b}">${one}</span>`;
+  }
+  return h + '</div>';
+}
+function stepsHTML(steps) {
+  return steps.map(s => `<div class="step ${s.role || ''}"><code class="sc">${esc(s.text)}</code>${stripHTML(s.value, s.diff)}<code class="sh">${hex8(s.value)}</code></div>`).join('');
+}
+function notesHTML(notes) { return notes.map(n => `<div class="note ${n.type}">${esc(n.text)}</div>`).join(''); }
+const LEGEND = '<p class="legend"><i class="one"></i>bit = 1<i class="chg"></i>bit changed</p>';
+function resultHTML(out) {
+  let h = '';
+  for (const it of out.items) {
+    h += `<div class="stmt"><div class="stmt-head"><code>${esc(it.text)};</code></div>`;
+    h += it.error ? `<div class="note bad"><b>Error:</b> ${esc(it.error)}</div>` : stepsHTML(it.steps) + notesHTML(it.notes);
+    h += '</div>';
+  }
+  for (const t of out.tips) h += `<div class="note info">${esc(t)}</div>`;
+  if (out.items.some(it => !it.error && it.steps.length)) h += LEGEND;
+  return h;
+}
+
+function decodeHTML(key, v) {
+  if (key === 'value') {
+    const b = bitsOf(v).reverse();
+    return `<p>${b.length ? 'Bits that are 1: ' + b.join(', ') : 'All bits are 0.'}</p>`;
+  }
+  if (key === 'RCC->AHB1ENR') {
+    const ports = [['A', 0], ['B', 1], ['C', 2], ['D', 3], ['E', 4], ['H', 7]].filter(([, b]) => (v >>> b) & 1).map(([p]) => 'GPIO' + p);
+    return `<p>GPIOA clock: <b>${v & 1 ? 'ON' : 'OFF'}</b> · clocks on: ${ports.length ? ports.join(', ') : 'none'}</p>`;
+  }
+  if (key === 'GPIOA->MODER') {
+    let h = '<div class="chips">';
+    for (let n = 15; n >= 0; n--) {
+      const m = (v >>> (2 * n)) & 3;
+      const cls = ['', 'out', 'af', 'an'][m];
+      h += `<div class="chip ${cls}"><b>PA${n}</b>${['in', 'out', 'AF', 'analog'][m]}</div>`;
+    }
+    return h + '</div>';
+  }
+  if (key === 'GPIOA->ODR') {
+    const p = bitsOf(v & 0xFFFF).reverse().map(n => 'PA' + n);
+    return `<p>Pins driven high: ${p.length ? p.join(', ') : 'none'}</p>`;
+  }
+  if (key === 'GPIOA->BSRR') {
+    const hi = bitsOf(v & 0xFFFF).reverse(), lo = bitsOf(v >>> 16).reverse();
+    if (!hi.length && !lo.length) return '<p>No write yet (or the last write was 0).</p>';
+    return `<p>Last write: ${hi.length ? hi.map(n => 'PA' + n).join(', ') + ' → high' : ''}${hi.length && lo.length ? '; ' : ''}${lo.length ? lo.map(n => 'PA' + n).join(', ') + ' → low' : ''}</p>`;
+  }
+  return '';
+}
+
+function boardHTML(r) {
+  const clk = (r['RCC->AHB1ENR'] & 1) === 1;
+  const mode = (r['GPIOA->MODER'] >>> 10) & 3;
+  const high = ((r['GPIOA->ODR'] >>> 5) & 1) === 1;
+  const on = clk && mode === 1 && high;
+  const c = (ok, title, detail) => `<div class="cond ${ok ? 'y' : 'n'}"><span class="m">${ok ? '✓' : '✗'}</span><span>${title}<br><small>${detail}</small></span></div>`;
+  return `<div class="board"><div>
+    ${c(clk, 'GPIOA clock is on', `<code>RCC-&gt;AHB1ENR</code> bit 0 = ${clk ? 1 : 0}`)}
+    ${c(mode === 1, 'PA5 is an output', `<code>MODER</code> bits 11:10 = ${mode.toString(2).padStart(2, '0')} (${MODES[mode]})`)}
+    ${c(high, 'PA5 is driven high', `<code>ODR</code> bit 5 = ${high ? 1 : 0}`)}
+  </div><div class="lamp${on ? ' on' : ''}" role="img" aria-label="LD2 is ${on ? 'on' : 'off'}">LD2</div></div>
+  <p class="muted" style="font-size:14px;margin:10px 0 0">LD2 lights only when all three are true.</p>`;
+}
+
+/* ---------- EXPLORE ---------- */
+const SCEN = {
+  lab3: { label: 'Lab 3 start (example)',
+    regs: { value: 0, 'RCC->AHB1ENR': 0x00000085, 'GPIOA->MODER': 0x280000A0, 'GPIOA->ODR': 0, 'GPIOA->BSRR': 0 },
+    note: 'Example values: the start-up code has switched on the clocks of GPIOA, GPIOC and GPIOH. PA2/PA3 (serial) and PA13/PA14 (debugger) are in alternate-function mode; PA5 is an input.' },
+  zero: { label: 'All registers 0 (GPIOA clock off)',
+    regs: { value: 0, 'RCC->AHB1ENR': 0, 'GPIOA->MODER': 0, 'GPIOA->ODR': 0, 'GPIOA->BSRR': 0 },
+    note: 'Every register is 0, so GPIOA has no clock: try a GPIOA write before you enable the clock.' },
+};
+const EXAMPLES = [
+  { g: 'Bit operations on value', items: [
+    ['Set bit 5', 'value |= (1U << 5);'],
+    ['Clear bit 5', 'value &= ~(1U << 5);'],
+    ['Replace bits 11:10 with 01', 'value &= ~(3U << 10);   // clear bits 11:10\nvalue |=  (1U << 10);   // write 01'],
+    ['Toggle bit 5', 'value ^= (1U << 5);'],
+    ['Test bit 5 (an expression)', '(value & (1U << 5)) != 0U'],
+    ['L04 practice slide', 'value |=  (1U << 3);\nvalue &= ~(1U << 7);\nvalue &= ~(3U << 12);\nvalue |=  (1U << 12);'],
+  ] },
+  { g: 'Light LD2 (run in order)', items: [
+    ['1 · Enable the GPIOA clock', 'RCC->AHB1ENR |= (1U << 0);'],
+    ['2 · Make PA5 an output', 'GPIOA->MODER &= ~(3U << 10);\nGPIOA->MODER |=  (1U << 10);'],
+    ['3 · LD2 on', 'GPIOA->BSRR = (1U << 5);'],
+    ['4 · LD2 off', 'GPIOA->BSRR = (1U << 21);'],
+  ] },
+  { g: 'Common mistakes', items: [
+    ['= instead of |= on MODER', 'GPIOA->MODER = (1U << 10);'],
+    ['Field not cleared first', 'GPIOA->MODER |= (3U << 10);   // suppose PA5 was analog (11)\nGPIOA->MODER |= (1U << 10);   // forgot to clear: still 11'],
+    ['= on AHB1ENR', 'RCC->AHB1ENR = (1U << 1);   // meant: also enable GPIOB'],
+    ['Wrong bit to turn PA5 off', 'GPIOA->BSRR = (1U << 5);\nGPIOA->BSRR = (1U << 6);    // meant: PA5 off'],
+    ['Logical instead of bitwise', 'value = value && (1U << 5);'],
+    ['Dot instead of ->', 'GPIOA.MODER |= (1U << 10);'],
+  ] },
+];
+
+const ex = { m: null, history: [], view: 'value', diff: null, scen: 'lab3' };
+
+function exploreReset(scenKey) {
+  ex.scen = scenKey;
+  ex.m = new Machine(SCEN[scenKey].regs, { hw: true });
+  ex.history = []; ex.diff = null;
+  $('#run-out').innerHTML = `<div class="note info">${esc(SCEN[scenKey].note)}</div>`;
+  renderExplore();
+}
+function renderExplore() {
+  const k = ex.view, v = ex.m.r[k];
+  $('#reg-select').value = k;
+  $('#reg-desc').textContent = DEFS[k].desc;
+  $('#reg-view').innerHTML = regViewHTML(k, v, { clickable: !DEFS[k].writeOnly, diff: ex.diff ? ex.diff[k] : undefined });
+  $('#reg-readout').innerHTML =
+    `<span><b>hex</b>${hex8(v)}</span><span><b>decimal</b>${u32(v)}</span>` +
+    `<span><b>binary</b>${u32(v).toString(2).padStart(32, '0').replace(/(.{4})(?=.)/g, '$1 ')}</span>`;
+  $('#reg-decode').innerHTML = decodeHTML(k, v);
+  $('#board').innerHTML = boardHTML(ex.m.r);
+  $('#btn-clear').disabled = !!DEFS[k].writeOnly;
+  $('#btn-undo').disabled = !ex.history.length;
+}
+function exploreRun() {
+  const src = $('#code').value;
+  const before = Object.assign({}, ex.m.r);
+  const snapshot = ex.m.clone();
+  const out = runProgram(src, ex.m, REG_KEYS);
+  $('#run-out').innerHTML = out.items.length ? resultHTML(out) : `<div class="note bad">${esc(out.error)}</div>`;
+  const targets = out.items.filter(it => it.target).map(it => it.target);
+  if (targets.length) {
+    ex.history.push(snapshot);
+    ex.view = targets[targets.length - 1];
+    ex.diff = before;
+  }
+  renderExplore();
+}
+
+function initExplore() {
+  const rs = $('#reg-select');
+  REG_KEYS.forEach(k => rs.add(new Option(k === 'value' ? 'value (a variable)' : k, k)));
+  rs.addEventListener('change', () => { ex.view = rs.value; renderExplore(); });
+
+  const ss = $('#scen-select');
+  Object.entries(SCEN).forEach(([k, s]) => ss.add(new Option(s.label, k)));
+  ss.addEventListener('change', () => exploreReset(ss.value));
+
+  const es = $('#ex-select');
+  es.add(new Option('— choose an example —', ''));
+  EXAMPLES.forEach((g, gi) => {
+    const og = document.createElement('optgroup'); og.label = g.g;
+    g.items.forEach(([label], ii) => og.appendChild(new Option(label, gi + ':' + ii)));
+    es.appendChild(og);
+  });
+  es.addEventListener('change', () => {
+    if (!es.value) return;
+    const [gi, ii] = es.value.split(':').map(Number);
+    const code = EXAMPLES[gi].items[ii][1];
+    $('#code').value = code;
+    const name = (code.match(/^\s*(GPIOA\s*->\s*\w+|RCC\s*->\s*\w+|value)/) || [])[1];
+    const key = name && ALIASES[name.replace(/\s+/g, '')];
+    if (key) { ex.view = key; ex.diff = null; renderExplore(); }
+    $('#run-out').innerHTML = '<div class="note info">Predict which bits change, then press Run.</div>';
+  });
+
+  $('#reg-view').addEventListener('click', e => {
+    const b = e.target.closest('button.bit');
+    if (!b || b.disabled) return;
+    ex.history.push(ex.m.clone());
+    ex.m.r[ex.view] = u32(ex.m.r[ex.view] ^ (1 << Number(b.dataset.bit)));
+    ex.diff = null;
+    renderExplore();
+  });
+  $('#btn-clear').addEventListener('click', () => { ex.history.push(ex.m.clone()); ex.m.r[ex.view] = 0; ex.diff = null; renderExplore(); });
+  $('#btn-run').addEventListener('click', exploreRun);
+  $('#btn-undo').addEventListener('click', () => {
+    if (!ex.history.length) return;
+    ex.m = ex.history.pop(); ex.diff = null;
+    $('#run-out').innerHTML = '<div class="note info">Undone: the registers are back to their earlier values.</div>';
+    renderExplore();
+  });
+  $('#code').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); exploreRun(); }
+  });
+  ss.value = 'lab3';
+  exploreReset('lab3');
+}
+
+/* ---------- PRACTICE ---------- */
+const BITPOOL = [...Array(32).keys()].filter(b => ![0, 5, 10, 21].includes(b));   // avoids the Lab 3 pre-lab masks
+const PINPOOL = [0, 1, 4, 6, 7, 8, 9, 10, 11, 12];                               // avoids PA5 and the debugger pins
+const randValue = k => { let v = 0; for (let i = 0; i < k; i++) v |= 1 << rint(0, 31); return u32(v); };
+const evenFieldStart = () => { let m; do { m = 2 * rint(1, 14); } while (m === 10); return m; };
+
+function numCheck(expected, wantHex) {
+  return ans => {
+    const v = parseNumberAnswer(ans);
+    if (v === null) return { ok: false, msg: wantHex ? 'Enter a number, for example 0x00000400.' : 'Enter a whole number.' };
+    if (v === expected) return { ok: true, msg: wantHex && !/^\s*0[xX]/.test(ans) ? `Correct. In register code the hex form ${hex8(expected)} is easier to read.` : 'Correct.' };
+    return { ok: false, msg: 'Not quite. Your answer as bits:', html: wantHex ? stepsHTML([{ text: 'your answer', value: v }]) : '' };
+  };
+}
+function exprCheck(expected) {
+  return ans => {
+    const out = runProgram(ans, new Machine({}), []);
+    if (out.error) return { ok: false, msg: out.error };
+    if (out.items.length !== 1 || out.items[0].kind !== 'expr') return { ok: false, msg: 'Write one expression, without = and without a semicolon list.' };
+    const got = out.items[0].value;
+    if (got === expected) return { ok: true, msg: 'Correct.', html: resultHTML(out) };
+    const sel = bitsOf(got).reverse();
+    return { ok: false, msg: `Your mask selects ${sel.length ? 'bit' + (sel.length > 1 ? 's ' : ' ') + sel.join(', ') : 'no bit'}.`, html: resultHTML(out) };
+  };
+}
+function codeCheck(init, key, expected, extra) {
+  return ans => {
+    const m = new Machine(init);
+    const out = runProgram(ans, m, Object.keys(init));
+    if (out.error) return { ok: false, msg: out.error, html: resultHTML(out) };
+    if (!out.items.some(it => it.target === key)) return { ok: false, msg: `Your code does not write to ${key}. Start the statement with ${key} …`, html: resultHTML(out) };
+    const got = m.r[key];
+    if (got === expected) return { ok: true, msg: 'Correct.', html: resultHTML(out) };
+    const special = extra ? extra(got, out) : '';
+    return { ok: false, msg: special || 'Not quite. Compare your result with the expected value (orange = differs).',
+      html: resultHTML(out) + '<div class="stmt">' + stepsHTML([{ text: `expected ${key}`, value: expected, role: 'result', diff: got }]) + '</div>' };
+  };
+}
+function explainRun(init, code) {
+  const out = runProgram(code, new Machine(init), Object.keys(init));
+  return resultHTML(out);
+}
+
+const G = {
+  maskHex() {
+    const n = pick(BITPOOL), exp = u32(1 << n);
+    return { title: 'Mask → hex', input: 'number', placeholder: '0x…',
+      prompt: `What is <code>1U &lt;&lt; ${n}</code> in hexadecimal?`,
+      hint: `Bit ${n} is in hex digit ${Math.floor(n / 4)} (digits counted from 0 on the right). Inside that digit it has the weight ${1 << (n % 4)}.`,
+      answer: hex8(exp), explain: stepsHTML([{ text: `1U << ${n}`, value: exp, role: 'result' }]), check: numCheck(exp, true) };
+  },
+  bitOfHex() {
+    const n = pick(BITPOOL), v = u32(1 << n);
+    return { title: 'Hex → bit', input: 'number', placeholder: 'bit number',
+      prompt: `Exactly one bit is 1 in <code>${hex8(v)}</code>. Which bit?`,
+      hint: 'Each hex digit holds 4 bits: the rightmost digit holds bits 3–0, the next one bits 7–4, and so on.',
+      answer: String(n), explain: stepsHTML([{ text: hex8(v), value: v, role: 'result' }]), check: numCheck(n, false) };
+  },
+  writeMask() {
+    const n = pick(BITPOOL), exp = u32(1 << n);
+    return { title: 'Write a mask', input: 'expr', placeholder: 'C expression',
+      prompt: `Write a C expression for a mask that selects only bit ${n}.`,
+      hint: 'Start from 1U (only bit 0 is 1) and shift it left.',
+      answer: `(1U << ${n})`, explain: explainRun({}, `(1U << ${n})`), check: exprCheck(exp) };
+  },
+  fieldMask() {
+    const m = evenFieldStart(), exp = u32(3 << m);
+    return { title: 'Two-bit field mask', input: 'expr', placeholder: 'C expression',
+      prompt: `Write a C expression for a mask that selects the two bits ${m + 1}:${m}.`,
+      hint: `3U is binary 11: two ones next to each other. Shift them so the lower one lands on bit ${m}.`,
+      answer: `(3U << ${m})`, explain: explainRun({}, `(3U << ${m})`), check: exprCheck(exp) };
+  },
+  setBit() {
+    const n = pick(BITPOOL), V = u32(randValue(7) & ~(1 << n)), exp = u32(V | (1 << n));
+    return { title: 'Set a bit', input: 'code', show: { key: 'value', value: V },
+      prompt: `Set bit ${n} of <code>value</code>. Keep every other bit as it is.`,
+      hint: 'OR with a mask: x | 1 is 1, and x | 0 keeps x.',
+      answer: `value |= (1U << ${n});`, explain: explainRun({ value: V }, `value |= (1U << ${n});`),
+      check: codeCheck({ value: V }, 'value', exp) };
+  },
+  clearBit() {
+    const n = pick(BITPOOL), V = u32(randValue(7) | (1 << n)), exp = u32(V & ~(1 << n));
+    return { title: 'Clear a bit', input: 'code', show: { key: 'value', value: V },
+      prompt: `Clear bit ${n} of <code>value</code>. Keep every other bit as it is.`,
+      hint: 'AND with the inverted mask: ~(1U << n) has a 0 at bit n and 1 everywhere else.',
+      answer: `value &= ~(1U << ${n});`, explain: explainRun({ value: V }, `value &= ~(1U << ${n});`),
+      check: codeCheck({ value: V }, 'value', exp) };
+  },
+  predict() {
+    const V = randValue(5);
+    const makers = [
+      () => `value |=  (1U << ${pick(BITPOOL)});`,
+      () => `value &= ~(1U << ${pick(BITPOOL)});`,
+      () => `value &= ~(3U << ${evenFieldStart()});`,
+      () => `value |=  (2U << ${evenFieldStart()});`,
+    ];
+    const code = [0, 1, 2].map(() => pick(makers)()).join('\n');
+    const m = new Machine({ value: V }); runProgram(code, m, ['value']);
+    const exp = m.r.value;
+    return { title: 'Predict the result', input: 'number', placeholder: '0x…', show: { key: 'value', value: V },
+      prompt: `<code>value</code> starts at <code>${hex8(V)}</code>. What is <code>value</code> after these statements? Answer in hex.<pre class="codeblock">${esc(code)}</pre>`,
+      hint: 'Work one statement at a time. Mark the changed bits on paper, then convert each group of 4 bits to one hex digit.',
+      answer: hex8(exp), explain: explainRun({ value: V }, code), check: numCheck(exp, true) };
+  },
+  moderOut() {
+    const n = pick(PINPOOL);
+    let V = 0x28000000;                                         // PA13, PA14: alternate function (debugger)
+    for (const p of [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12].filter(p => p !== n).sort(() => Math.random() - 0.5).slice(0, 3))
+      V |= rint(1, 3) << (2 * p);
+    V = u32((V & ~(3 << (2 * n))) | (pick([0, 2, 3]) << (2 * n)));
+    const exp = u32((V & ~(3 << (2 * n))) | (1 << (2 * n)));
+    const code = `GPIOA->MODER &= ~(3U << ${2 * n});\nGPIOA->MODER |=  (1U << ${2 * n});`;
+    return { title: 'Make a pin an output', input: 'code', show: { key: 'GPIOA->MODER', value: V },
+      prompt: `Make PA${n} a general-purpose output: its <code>MODER</code> field, bits ${2 * n + 1}:${2 * n}, must become <code>01</code>. Do not change any other pin.`,
+      hint: `Pin ${n} starts at bit ${n} × 2 = ${2 * n}. Clear both field bits first, then set the lower one.`,
+      answer: code, explain: explainRun({ 'GPIOA->MODER': V }, code),
+      check: codeCheck({ 'GPIOA->MODER': V }, 'GPIOA->MODER', exp, got => {
+        if (((got >>> (2 * n)) & 3) === 1 && got !== exp) return `PA${n} is now an output, but other pins changed too. Change only bits ${2 * n + 1}:${2 * n}.`;
+        if (((got >>> (2 * n)) & 3) === 3) return `Bits ${2 * n + 1}:${2 * n} are 11 (analog): an old 1 is still there. Clear the field first.`;
+        return '';
+      }) };
+  },
+  bsrrWrite() {
+    const n = pick([...Array(16).keys()].filter(p => p !== 5)), on = Math.random() < 0.5;
+    const exp = u32(1 << (on ? n : n + 16));
+    const odr = on ? 0 : u32(1 << n);
+    const init = { 'GPIOA->BSRR': 0, 'GPIOA->ODR': odr };
+    const code = `GPIOA->BSRR = (1U << ${on ? n : n + 16});`;
+    return { title: 'Drive a pin with BSRR', input: 'code',
+      prompt: `Drive PA${n} <b>${on ? 'high' : 'low'}</b> with one write to <code>GPIOA-&gt;BSRR</code>.`,
+      hint: 'Bits 15:0 of BSRR set pins (high); bits 31:16 reset pins (low): bit n + 16 resets PAn.',
+      answer: code, explain: explainRun(init, code),
+      check: codeCheck(init, 'GPIOA->BSRR', exp, got => {
+        if (!on && got === u32(1 << n)) return `Bit ${n} is in the set half: it drives PA${n} high. To drive it low, use the reset half: bit ${n} + 16 = ${n + 16}.`;
+        if (on && got === u32(1 << (n + 16))) return `Bit ${n + 16} is in the reset half: it drives PA${n} low. To drive it high, use bit ${n}.`;
+        return '';
+      }) };
+  },
+  clockEnable() {
+    const [p, k] = pick([['B', 1], ['C', 2], ['D', 3], ['H', 7]]);
+    const V = u32((1 | (Math.random() < 0.5 ? 4 : 0) | (Math.random() < 0.5 ? 0x80 : 0)) & ~(1 << k));
+    const exp = u32(V | (1 << k));
+    const code = `RCC->AHB1ENR |= (1U << ${k});`;
+    return { title: 'Enable a clock', input: 'code', show: { key: 'RCC->AHB1ENR', value: V },
+      prompt: `Switch on the clock of GPIO${p} (bit ${k} of <code>RCC-&gt;AHB1ENR</code>). The clocks that are already on must stay on.`,
+      hint: 'Set one bit and keep the others: which compound operator does that?',
+      answer: code, explain: explainRun({ 'RCC->AHB1ENR': V }, code),
+      check: codeCheck({ 'RCC->AHB1ENR': V }, 'RCC->AHB1ENR', exp, got =>
+        ((got >>> k) & 1) && got !== exp ? `GPIO${p} now has its clock, but other clocks were switched off. Use |= instead of =.` : '') };
+  },
+  whichPin() {
+    const n = pick([...Array(16).keys()].filter(p => p !== 5));
+    return { title: 'MODER field → pin', input: 'number', placeholder: 'pin number',
+      prompt: `In <code>GPIOA-&gt;MODER</code>, bits ${2 * n + 1}:${2 * n} form one pin's mode field. Which pin?`,
+      hint: 'Each pin uses two bits, so pin n starts at bit 2 × n.',
+      answer: String(n), explain: '', check: numCheck(n, false) };
+  },
+};
+const GENS = {
+  '1': [G.maskHex, G.bitOfHex, G.writeMask, G.fieldMask],
+  '2': [G.setBit, G.clearBit, G.predict],
+  '3': [G.moderOut, G.bsrrWrite, G.clockEnable, G.whichPin],
+};
+GENS.mix = [...GENS['1'], ...GENS['2'], ...GENS['3']];
+
+const pr = { level: '1', q: null, gen: null, tried: false, solved: false, stats: { n: 0, first: 0, streak: 0, best: 0 } };
+const STORE = 'ee5203-bitwise-lab';
+function loadStats() {
+  try { const s = JSON.parse(localStorage.getItem(STORE) || 'null'); if (s && s.stats) { Object.assign(pr.stats, s.stats); pr.level = s.level || '1'; } } catch (e) { /* storage unavailable */ }
+}
+function saveStats() { try { localStorage.setItem(STORE, JSON.stringify({ stats: pr.stats, level: pr.level })); } catch (e) { /* storage unavailable */ } }
+function renderScore() {
+  const s = pr.stats;
+  $('#score').innerHTML = `Right first time: <b>${s.first}</b> / ${s.n} · streak <b>${s.streak}</b> · best ${s.best}`;
+}
+function newQuestion() {
+  const pool = GENS[pr.level];
+  let g; do { g = pick(pool); } while (pool.length > 1 && g === pr.gen);
+  pr.gen = g; pr.q = g(); pr.tried = false; pr.solved = false;
+  const q = pr.q;
+  $('#q-title').textContent = q.title;
+  $('#q-prompt').innerHTML = `<p>${q.prompt}</p>`;
+  $('#q-show').innerHTML = q.show
+    ? `<p class="muted"><code>${esc(q.show.key)}</code> = <code>${hex8(q.show.value)}</code></p>` + regViewHTML(q.show.key, q.show.value, {})
+    : '';
+  $('#q-input').innerHTML = q.input === 'code'
+    ? `<textarea id="q-ans" spellcheck="false" aria-label="Your C code" placeholder="Write C statements here, for example: value |= ...;"></textarea>`
+    : `<input type="text" id="q-ans" class="code" spellcheck="false" autocomplete="off" aria-label="Your answer" placeholder="${esc(q.placeholder || '')}">`;
+  $('#q-feedback').innerHTML = '';
+  const inp = $('#q-ans');
+  inp.addEventListener('keydown', e => {
+    const submit = q.input === 'code' ? (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) : e.key === 'Enter';
+    if (submit) { e.preventDefault(); pr.solved ? newQuestion() : practiceCheck(); }
+  });
+  inp.focus({ preventScroll: true });
+}
+function countAttempt(ok) {
+  if (pr.tried) return;
+  pr.tried = true; pr.stats.n++;
+  if (ok) { pr.stats.first++; pr.stats.streak++; pr.stats.best = Math.max(pr.stats.best, pr.stats.streak); }
+  else pr.stats.streak = 0;
+  saveStats(); renderScore();
+}
+function practiceCheck() {
+  const ans = $('#q-ans').value;
+  if (!ans.trim()) { $('#q-feedback').innerHTML = '<div class="note warn">Type an answer first.</div>'; return; }
+  const res = pr.q.check(ans);
+  countAttempt(res.ok);
+  if (res.ok) pr.solved = true;
+  $('#q-feedback').innerHTML = `<div class="note ${res.ok ? 'ok' : 'bad'}">${esc(res.msg)}${res.ok ? ' Press Enter or “Next question”.' : ''}</div>` + (res.html || '');
+  if (res.ok) $('#q-next').focus({ preventScroll: true });
+}
+function initPractice() {
+  loadStats();
+  const lv = $('#level'); lv.value = pr.level;
+  lv.addEventListener('change', () => { pr.level = lv.value; pr.gen = null; saveStats(); newQuestion(); });
+  $('#q-check').addEventListener('click', practiceCheck);
+  $('#q-next').addEventListener('click', newQuestion);
+  $('#q-hint').addEventListener('click', () => {
+    $('#q-feedback').insertAdjacentHTML('afterbegin', `<div class="note info"><b>Hint:</b> ${esc(pr.q.hint)}</div>`);
+  });
+  $('#q-answer').addEventListener('click', () => {
+    countAttempt(false); pr.solved = true;
+    $('#q-feedback').innerHTML = `<div class="note warn"><b>Answer:</b></div><pre class="codeblock">${esc(pr.q.answer)}</pre>${pr.q.explain || ''}`;
+  });
+  $('#btn-reset-score').addEventListener('click', () => {
+    pr.stats = { n: 0, first: 0, streak: 0, best: 0 }; saveStats(); renderScore();
+  });
+  renderScore();
+  newQuestion();
+}
+
+/* ---------- tabs ---------- */
+function showTab(name) {
+  for (const t of ['explore', 'practice']) {
+    $('#tab-' + t).setAttribute('aria-selected', String(t === name));
+    $('#panel-' + t).classList.toggle('hidden', t !== name);
+  }
+  if (location.hash !== '#' + name) history.replaceState(null, '', '#' + name);
+}
+$('#tab-explore').addEventListener('click', () => showTab('explore'));
+$('#tab-practice').addEventListener('click', () => showTab('practice'));
+
+initExplore();
+initPractice();
+showTab(location.hash === '#practice' ? 'practice' : 'explore');
+</script>
+</body>
+</html>
