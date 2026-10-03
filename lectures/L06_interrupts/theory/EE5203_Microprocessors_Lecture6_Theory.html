@@ -813,6 +813,7 @@ The EXTI pending bit lives in hardware and is cleared by the HAL helper; button_
 <div class="sourceCode" id="cb11"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a></a><span class="dt">volatile</span> <span class="dt">uint8_t</span> button_event<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>volatile</code> tells the compiler to read the stored value each time instead of relying on an old copy.</p>
 <p>It does not make the variable a hardware register.</p>
+<p>You have seen it before: every register in the device header is <code>volatile</code> (<code>__IO</code>), and the L04 slide wrote <code>(volatile uint32_t *)</code>. Same reason — the hardware changes a register by itself (<code>IDR</code> follows the pin), and every write must reach it.</p>
 <div class="source-note">
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=140">C11 draft N1570, §6.7.3 — p.&nbsp;140</a> · M. Barr, <a href="https://barrgroup.com/blog/how-use-cs-volatile-keyword"><em>How to Use C’s volatile Keyword</em></a>.</p>
 </div>

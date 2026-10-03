@@ -4968,7 +4968,7 @@ pre { font-size: 8.7pt; }
 <section id="checkpoint-b---decode-one-cmsis-register-expression" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-b---decode-one-cmsis-register-expression">Checkpoint B - Decode one CMSIS register expression</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>MODER</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Explain: <code>GPIOA</code> is a device-header pointer; <code>-&gt;</code> selects a member through that pointer; <code>MODER</code> is a 32-bit register; and the member is <code>volatile</code>.</p>
+<p>Explain: <code>GPIOA</code> is a device-header pointer; <code>-&gt;</code> selects a member through that pointer; and <code>MODER</code> is a 32-bit register.</p>
 <p>After generated initialization, execute this statement and inspect bits 11:10:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>   <span class="co">// temporary input-mode baseline</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Confirm <code>00</code>. This also establishes a known starting value for Checkpoint D.</p>
@@ -5062,7 +5062,7 @@ pre { font-size: 8.7pt; }
 <li><label><input type="checkbox">Prediction, register evidence, and physical evidence agree.</label></li>
 <li><label><input type="checkbox">The assigned individual change is demonstrated.</label></li>
 </ul>
-<p>Oral check: explain <code>GPIOA-&gt;MODER</code>, <code>volatile</code>, <code>3U &lt;&lt; 10</code>, BSRR assignment, or why a successful build does not prove LED behavior.</p>
+<p>Oral check: explain <code>GPIOA-&gt;MODER</code>, <code>3U &lt;&lt; 10</code>, BSRR assignment, or why a successful build does not prove LED behavior.</p>
 </section>
 <section id="submit" class="level2">
 <h2 class="anchored" data-anchor-id="submit">Submit</h2>

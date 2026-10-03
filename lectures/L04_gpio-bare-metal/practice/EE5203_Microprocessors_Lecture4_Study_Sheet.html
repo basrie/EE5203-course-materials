@@ -172,7 +172,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Read <code>&amp;</code>, <code>*</code>, <code>.</code>, and <code>-&gt;</code> in small C fragments.</li>
 <li>Convert between binary and hexadecimal for 32-bit registers.</li>
 <li>Build masks that set, clear, toggle, test, and field-replace bits.</li>
-<li>Decode <code>RCC-&gt;AHB1ENR</code>, <code>GPIOA-&gt;MODER</code>, <code>GPIOA-&gt;BSRR</code> and explain <code>volatile</code>.</li>
+<li>Decode <code>RCC-&gt;AHB1ENR</code>, <code>GPIOA-&gt;MODER</code>, <code>GPIOA-&gt;BSRR</code>.</li>
 <li>Enable the GPIOA clock, configure PA5 as output, and drive LD2 — then match the SFR view to the physical LED.</li>
 </ul>
 </section>
@@ -215,7 +215,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="reading-gpioa-moder" class="level2">
 <h2 class="anchored" data-anchor-id="reading-gpioa-moder">Reading <code>GPIOA-&gt;MODER</code></h2>
-<p><code>GPIOA</code> is a CMSIS pointer to the GPIOA register structure (from the device header <code>stm32f401xe.h</code>); <code>-&gt;</code> selects a member through it; <code>MODER</code> is one 32-bit <code>volatile</code> register. <strong><code>volatile</code></strong> tells the compiler every read and write must really happen — hardware can change registers outside program flow.</p>
+<p><code>GPIOA</code> is a CMSIS pointer to the GPIOA register structure (from the device header <code>stm32f401xe.h</code>); <code>-&gt;</code> selects a member through it; <code>MODER</code> is one 32-bit register.</p>
 </section>
 <section id="mask-recipes" class="level2">
 <h2 class="anchored" data-anchor-id="mask-recipes">Mask recipes</h2>
@@ -319,7 +319,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Which bits does <code>~(3U &lt;&lt; 6)</code> leave as <code>1</code>, and what is the mask’s purpose?</li>
 <li>A student writes <code>GPIOA-&gt;MODER |= (1U &lt;&lt; 10);</code> without the clear first. When does this still work, and what starting field value breaks it?</li>
 <li>Why does driving PB0 (homework) use <code>1U &lt;&lt; 0</code> in BSRR but bits 1:0 in MODER?</li>
-<li><code>volatile</code> is removed from the register definition and the LED stops blinking at <code>-O2</code>. Explain what the optimizer did.</li>
 </ol>
 <p>See the L04 worksheet for extended practice. Worked solutions are released after the practice window.</p>
 
