@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" font-family="Segoe UI, Helvetica, Arial, sans-serif" role="img" aria-label="Lab 3 overview: main.c calls the sensor functions and the LED functions; the LED functions write the GPIO registers that drive LD2">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#4a5968"/></marker></defs>
+  <rect width="900" height="300" fill="#fff"/>
+  <!-- main.c -->
+  <rect x="20" y="95" width="200" height="110" rx="10" fill="#f3f0fa" stroke="#6741a8" stroke-width="2"/>
+  <text x="120" y="122" text-anchor="middle" font-size="17" font-weight="700" fill="#4a2b85">main.c</text>
+  <text x="120" y="146" text-anchor="middle" font-size="12" fill="#202b38">Lab 2 data + status</text>
+  <text x="120" y="166" text-anchor="middle" font-size="12" fill="#202b38">calls the functions</text>
+  <text x="120" y="186" text-anchor="middle" font-size="12" fill="#202b38">blinks the status</text>
+  <!-- sensor_math -->
+  <rect x="300" y="20" width="250" height="100" rx="10" fill="#e8f1fb" stroke="#2f6db5" stroke-width="2"/>
+  <text x="425" y="46" text-anchor="middle" font-size="16" font-weight="700" fill="#1d4f8a">sensor_math.h / .c</text>
+  <text x="425" y="72" text-anchor="middle" font-size="13" font-family="Consolas, Menlo, monospace" fill="#202b38">clamp_u16()</text>
+  <text x="425" y="94" text-anchor="middle" font-size="13" font-family="Consolas, Menlo, monospace" fill="#202b38">average_samples()</text>
+  <text x="425" y="112" text-anchor="middle" font-size="11" fill="#4a5968">Checkpoint B · L03</text>
+  <!-- led_reg -->
+  <rect x="300" y="180" width="250" height="100" rx="10" fill="#eef7ee" stroke="#2e7d32" stroke-width="2"/>
+  <text x="425" y="206" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">led_reg.h / .c</text>
+  <text x="425" y="232" text-anchor="middle" font-size="13" font-family="Consolas, Menlo, monospace" fill="#202b38">led_init()</text>
+  <text x="425" y="254" text-anchor="middle" font-size="13" font-family="Consolas, Menlo, monospace" fill="#202b38">led_on()  led_off()</text>
+  <text x="425" y="272" text-anchor="middle" font-size="11" fill="#4a5968">Checkpoints C, D · L04</text>
+  <!-- registers -->
+  <rect x="620" y="180" width="150" height="100" rx="10" fill="#fff4e5" stroke="#c77700" stroke-width="2"/>
+  <text x="695" y="206" text-anchor="middle" font-size="15" font-weight="700" fill="#8a5200">Registers</text>
+  <text x="695" y="230" text-anchor="middle" font-size="12" font-family="Consolas, Menlo, monospace" fill="#202b38">RCC-&gt;AHB1ENR</text>
+  <text x="695" y="250" text-anchor="middle" font-size="12" font-family="Consolas, Menlo, monospace" fill="#202b38">GPIOA-&gt;MODER</text>
+  <text x="695" y="270" text-anchor="middle" font-size="12" font-family="Consolas, Menlo, monospace" fill="#202b38">GPIOA-&gt;BSRR</text>
+  <!-- LD2 -->
+  <circle cx="840" cy="230" r="28" fill="#2f9e44" stroke="#1b5e20" stroke-width="2"/>
+  <text x="840" y="236" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">LD2</text>
+  <text x="840" y="278" text-anchor="middle" font-size="11" fill="#4a5968">pin PA5</text>
+  <!-- arrows -->
+  <line x1="222" y1="130" x2="296" y2="78" stroke="#4a5968" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="240" y="92" font-size="11" fill="#4a5968">call</text>
+  <line x1="222" y1="172" x2="296" y2="225" stroke="#4a5968" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="240" y="220" font-size="11" fill="#4a5968">call</text>
+  <line x1="552" y1="230" x2="616" y2="230" stroke="#4a5968" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="584" y="222" text-anchor="middle" font-size="11" fill="#4a5968">write</text>
+  <line x1="772" y1="230" x2="808" y2="230" stroke="#4a5968" stroke-width="2.5" marker-end="url(#a)"/>
+  <!-- cmake note -->
+  <rect x="620" y="30" width="260" height="76" rx="8" fill="#ffffff" stroke="#9aa7b4" stroke-dasharray="5 4"/>
+  <text x="750" y="54" text-anchor="middle" font-size="13" font-weight="700" fill="#202b38">CMakeLists.txt</text>
+  <text x="750" y="76" text-anchor="middle" font-size="12" fill="#202b38">lists both .c files in</text>
+  <text x="750" y="94" text-anchor="middle" font-size="12" font-family="Consolas, Menlo, monospace" fill="#202b38">target_sources</text>
+  <line x1="618" y1="70" x2="554" y2="70" stroke="#9aa7b4" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+</svg>

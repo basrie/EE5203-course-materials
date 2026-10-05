@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" font-family="Segoe UI, Helvetica, Arial, sans-serif" role="img" aria-label="LD2 blink patterns: LOW blinks once, OK twice, HIGH three times; each blink is 200 ms on and 200 ms off, then a 1000 ms pause">
+<rect width="900" height="300" fill="#fff"/>
+<text x="20" y="40" font-size="15" font-weight="700" fill="#e8590c">LOW</text>
+<text x="20" y="60" font-size="11" fill="#4a5968" font-family="Consolas, Menlo, monospace">status_code = -1</text>
+<path d="M170,60 L170.0,60 L170.0,30 L196.0,30 L196.0,60 L352.0,60 L352.0,30 L378.0,30 L378.0,60 L534.0,60" fill="none" stroke="#e8590c" stroke-width="2.5"/>
+<text x="762" y="50" font-size="13" font-weight="700" fill="#e8590c">1 blink + pause</text>
+<text x="20" y="110" font-size="15" font-weight="700" fill="#2f9e44">OK</text>
+<text x="20" y="130" font-size="11" fill="#4a5968" font-family="Consolas, Menlo, monospace">status_code = 0</text>
+<path d="M170,130 L170.0,130 L170.0,100 L196.0,100 L196.0,130 L222.0,130 L222.0,100 L248.0,100 L248.0,130 L404.0,130 L404.0,100 L430.0,100 L430.0,130 L456.0,130 L456.0,100 L482.0,100 L482.0,130 L638.0,130" fill="none" stroke="#2f9e44" stroke-width="2.5"/>
+<text x="762" y="120" font-size="13" font-weight="700" fill="#2f9e44">2 blinks + pause</text>
+<text x="20" y="180" font-size="15" font-weight="700" fill="#c92a2a">HIGH</text>
+<text x="20" y="200" font-size="11" fill="#4a5968" font-family="Consolas, Menlo, monospace">status_code = 1</text>
+<path d="M170,200 L170.0,200 L170.0,170 L196.0,170 L196.0,200 L222.0,200 L222.0,170 L248.0,170 L248.0,200 L274.0,200 L274.0,170 L300.0,170 L300.0,200 L456.0,200 L456.0,170 L482.0,170 L482.0,200 L508.0,200 L508.0,170 L534.0,170 L534.0,200 L560.0,200 L560.0,170 L586.0,170 L586.0,200 L742.0,200" fill="none" stroke="#c92a2a" stroke-width="2.5"/>
+<text x="762" y="190" font-size="13" font-weight="700" fill="#c92a2a">3 blinks + pause</text>
+<line x1="170" y1="250" x2="222.0" y2="250" stroke="#202b38" stroke-width="2"/>
+<text x="170" y="266" font-size="11" fill="#202b38">1 blink = 200 ms on + 200 ms off</text>
+<line x1="326.0" y1="250" x2="456.0" y2="250" stroke="#202b38" stroke-width="2"/>
+<text x="326.0" y="243" font-size="11" fill="#202b38">pause 1000 ms (HIGH row)</text>
+<text x="20" y="292" font-size="11" fill="#4a5968">LD2 on = line up, LD2 off = line down.</text>
+</svg>

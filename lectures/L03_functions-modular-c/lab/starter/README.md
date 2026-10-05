@@ -1,25 +1,24 @@
-# EE5203 L03 Starter Files
+# EE5203 Lab 3 Starter Files
 
-Copy these files into a working copy of the completed L02 Nucleo-F401RE project:
+Download [`EE5203_L03_starter.zip`](EE5203_L03_starter.zip). It holds four files:
 
-- `Core/Inc/sensor_math.h` -> project `Core/Inc`
-- `Core/Inc/status_text.h` -> project `Core/Inc`
-- `Core/Src/sensor_math.c` -> project `Core/Src`
-- `Core/Src/status_text.c` -> project `Core/Src`
+- `Core/Inc/sensor_math.h`, `Core/Src/sensor_math.c` — sensor functions
+- `Core/Inc/led_reg.h`, `Core/Src/led_reg.c` — LED driver for LD2 through registers
 
-The starter implementations compile but intentionally return placeholder
-results. Complete every `TODO` using the L03 lab guide. Add the fixed arrays,
-debugger-visible result variables, and pipeline calls to generated `main.c` only
-inside its `USER CODE` regions.
+## Add them to your project
 
-Before copying the `main.c` declarations, be able to explain them:
+1. Create a new CubeMX project `EE5203_L03_<studentnumber>` (NUCLEO-F401RE,
+   Toolchain/IDE = CMake) and copy the lab `.vscode` template into it.
+2. Open the zip. Copy the `Core` folder inside and paste it into your project
+   folder. The files go to your `Core\Inc` and `Core\Src`.
+3. In `CMakeLists.txt`, add the two `.c` files to `target_sources`, below
+   `# Add user sources here`.
 
-- `uint16_t` is an unsigned 16-bit whole-number type; it can hold 0 through
-  65,535 and comes from `<stdint.h>`.
-- ordinary `int` is used for the lab's small counts, indices, and capacities.
-- `bool` stores `true` or `false` and comes from `<stdbool.h>`.
-- `#define SAMPLE_COUNT 8` gives the preprocessor a readable name to replace
-  before C compilation; it is not a variable.
+Without step 3 the build stops with an `undefined reference` error as soon as
+`main.c` calls one of the new functions.
 
-Do not add these files to a different project without checking its include paths
-and source folders.
+## What the starter contains
+
+The files build, but they are not finished. Each `TODO` comment says what you
+write: the missing declarations in the `.h` files and the function bodies in
+the `.c` files. The Lab 3 guide has every step.

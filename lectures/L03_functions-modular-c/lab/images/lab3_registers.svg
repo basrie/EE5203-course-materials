@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" font-family="Segoe UI, Helvetica, Arial, sans-serif" role="img" aria-label="The three registers of Lab 3: AHB1ENR bit 0 enables the GPIOA clock; MODER bits 11 to 10 set the PA5 mode, 01 means output; BSRR bit 5 sets PA5 and bit 21 resets it">
+<rect width="900" height="430" fill="#fff"/>
+<text x="20" y="46" font-size="15" font-weight="700" fill="#202b38" font-family="Consolas, Menlo, monospace">RCC->AHB1ENR</text>
+<text x="856" y="46" text-anchor="end" font-size="12" fill="#4a5968">bit 0 = GPIOA clock on  ·  use |= (keep the other bits)</text>
+<rect x="120" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="131.5" y="104" text-anchor="middle" font-size="10" fill="#4a5968">31</text>
+<rect x="143" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="166" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="189" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="212" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="223.5" y="104" text-anchor="middle" font-size="10" fill="#4a5968">27</text>
+<rect x="235" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="258" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="281" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="304" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="315.5" y="104" text-anchor="middle" font-size="10" fill="#4a5968">23</text>
+<rect x="327" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="350" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="373" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="396" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="407.5" y="104" text-anchor="middle" font-size="10" fill="#4a5968">19</text>
+<rect x="419" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="442" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="465" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="488" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="499.5" y="104" text-anchor="middle" font-size="10" fill="#4a5968">15</text>
+<rect x="511" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="534" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="557" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="580" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="591.5" y="104" text-anchor="middle" font-size="10" fill="#4a5968">11</text>
+<rect x="603" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="626" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="649" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="672" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="683.5" y="104" text-anchor="middle" font-size="10" fill="#4a5968">7</text>
+<rect x="695" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="718" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="741" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="764" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="775.5" y="104" text-anchor="middle" font-size="10" fill="#4a5968">3</text>
+<rect x="787" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="810" y="60" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="833" y="60" width="23" height="28" fill="#ffd8a8" stroke="#9aa7b4"/>
+<text x="844.5" y="79" text-anchor="middle" font-size="12" font-weight="700" fill="#202b38" font-family="Consolas, Menlo, monospace">1</text>
+<text x="844.5" y="104" text-anchor="middle" font-size="10" fill="#4a5968">0</text>
+<text x="110" y="79" text-anchor="end" font-size="11" fill="#4a5968">bit</text>
+<text x="20" y="156" font-size="15" font-weight="700" fill="#202b38" font-family="Consolas, Menlo, monospace">GPIOA->MODER</text>
+<text x="856" y="156" text-anchor="end" font-size="12" fill="#4a5968">bits 11:10 = PA5 mode  ·  00 input, 01 output</text>
+<rect x="120" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="131.5" y="214" text-anchor="middle" font-size="10" fill="#4a5968">31</text>
+<rect x="143" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="166" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="189" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="212" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="223.5" y="214" text-anchor="middle" font-size="10" fill="#4a5968">27</text>
+<rect x="235" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="258" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="281" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="304" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="315.5" y="214" text-anchor="middle" font-size="10" fill="#4a5968">23</text>
+<rect x="327" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="350" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="373" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="396" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="407.5" y="214" text-anchor="middle" font-size="10" fill="#4a5968">19</text>
+<rect x="419" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="442" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="465" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="488" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="499.5" y="214" text-anchor="middle" font-size="10" fill="#4a5968">15</text>
+<rect x="511" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="534" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="557" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="580" y="170" width="23" height="28" fill="#c3e6cb" stroke="#9aa7b4"/>
+<text x="591.5" y="189" text-anchor="middle" font-size="12" font-weight="700" fill="#202b38" font-family="Consolas, Menlo, monospace">0</text>
+<text x="591.5" y="214" text-anchor="middle" font-size="10" fill="#4a5968">11</text>
+<rect x="603" y="170" width="23" height="28" fill="#c3e6cb" stroke="#9aa7b4"/>
+<text x="614.5" y="189" text-anchor="middle" font-size="12" font-weight="700" fill="#202b38" font-family="Consolas, Menlo, monospace">1</text>
+<text x="614.5" y="214" text-anchor="middle" font-size="10" fill="#4a5968">10</text>
+<rect x="626" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="649" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="672" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="683.5" y="214" text-anchor="middle" font-size="10" fill="#4a5968">7</text>
+<rect x="695" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="718" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="741" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="764" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="775.5" y="214" text-anchor="middle" font-size="10" fill="#4a5968">3</text>
+<rect x="787" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="810" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="833" y="170" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="844.5" y="214" text-anchor="middle" font-size="10" fill="#4a5968">0</text>
+<text x="110" y="189" text-anchor="end" font-size="11" fill="#4a5968">bit</text>
+<text x="120" y="232" font-size="11" fill="#1b5e20">PA5 starts at bit 5 × 2 = 10: clear with &amp;= ~(3U &lt;&lt; 10), then set with |= (1U &lt;&lt; 10)</text>
+<text x="20" y="276" font-size="15" font-weight="700" fill="#202b38" font-family="Consolas, Menlo, monospace">GPIOA->BSRR</text>
+<text x="856" y="276" text-anchor="end" font-size="12" fill="#4a5968">write-only  ·  use = (a 1 acts, a 0 does nothing)</text>
+<rect x="120" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="131.5" y="334" text-anchor="middle" font-size="10" fill="#4a5968">31</text>
+<rect x="143" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="166" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="189" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="212" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="223.5" y="334" text-anchor="middle" font-size="10" fill="#4a5968">27</text>
+<rect x="235" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="258" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="281" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="304" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="315.5" y="334" text-anchor="middle" font-size="10" fill="#4a5968">23</text>
+<rect x="327" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="350" y="290" width="23" height="28" fill="#ffc9c9" stroke="#9aa7b4"/>
+<text x="361.5" y="309" text-anchor="middle" font-size="12" font-weight="700" fill="#202b38" font-family="Consolas, Menlo, monospace">R</text>
+<text x="361.5" y="334" text-anchor="middle" font-size="10" fill="#4a5968">21</text>
+<rect x="373" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="396" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="407.5" y="334" text-anchor="middle" font-size="10" fill="#4a5968">19</text>
+<rect x="419" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="442" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="465" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="476.5" y="334" text-anchor="middle" font-size="10" fill="#4a5968">16</text>
+<rect x="488" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="499.5" y="334" text-anchor="middle" font-size="10" fill="#4a5968">15</text>
+<rect x="511" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="534" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="557" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="580" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="591.5" y="334" text-anchor="middle" font-size="10" fill="#4a5968">11</text>
+<rect x="603" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="626" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="649" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="672" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="683.5" y="334" text-anchor="middle" font-size="10" fill="#4a5968">7</text>
+<rect x="695" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="718" y="290" width="23" height="28" fill="#a5d8ff" stroke="#9aa7b4"/>
+<text x="729.5" y="309" text-anchor="middle" font-size="12" font-weight="700" fill="#202b38" font-family="Consolas, Menlo, monospace">S</text>
+<text x="729.5" y="334" text-anchor="middle" font-size="10" fill="#4a5968">5</text>
+<rect x="741" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="764" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="775.5" y="334" text-anchor="middle" font-size="10" fill="#4a5968">3</text>
+<rect x="787" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="810" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<rect x="833" y="290" width="23" height="28" fill="#f4f6f8" stroke="#9aa7b4"/>
+<text x="844.5" y="334" text-anchor="middle" font-size="10" fill="#4a5968">0</text>
+<text x="110" y="309" text-anchor="end" font-size="11" fill="#4a5968">bit</text>
+<line x1="120" y1="346" x2="486" y2="346" stroke="#c92a2a" stroke-width="2"/>
+<text x="304" y="364" text-anchor="middle" font-size="12" fill="#c92a2a">bits 31–16: RESET pins (bit 21 = 5 + 16 → PA5 off)</text>
+<line x1="490" y1="346" x2="856" y2="346" stroke="#1971c2" stroke-width="2"/>
+<text x="672" y="364" text-anchor="middle" font-size="12" fill="#1971c2">bits 15–0: SET pins (bit 5 → PA5 on)</text>
+</svg>

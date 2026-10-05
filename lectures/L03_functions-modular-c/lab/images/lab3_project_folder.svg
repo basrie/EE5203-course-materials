@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" font-family="Segoe UI, Helvetica, Arial, sans-serif" role="img" aria-label="Project folder after Checkpoint A: the .vscode template next to the .ioc, the two headers in Core/Inc, the two source files in Core/Src, and two new lines in target_sources">
+  <rect width="900" height="330" fill="#fff"/>
+  <rect x="20" y="15" width="430" height="300" rx="8" fill="#f8f9fb" stroke="#c9d1da"/>
+  <g font-family="Consolas, Menlo, monospace" font-size="14" fill="#202b38">
+    <text x="40" y="45" font-weight="700">▸ EE5203_L03_&lt;studentnumber&gt;</text>
+    <rect x="58" y="56" width="250" height="24" rx="4" fill="#fff4e5" stroke="#c77700"/>
+    <text x="65" y="73">▸ .vscode   ← template copy</text>
+    <text x="65" y="100">▸ build</text>
+    <text x="65" y="124">▸ Core</text>
+    <text x="95" y="148">▸ Inc</text>
+    <rect x="118" y="156" width="215" height="44" rx="4" fill="#eef7ee" stroke="#2e7d32"/>
+    <text x="125" y="173">sensor_math.h   ← new</text>
+    <text x="125" y="193">led_reg.h       ← new</text>
+    <text x="95" y="220">▸ Src (main.c is here)</text>
+    <rect x="118" y="228" width="215" height="44" rx="4" fill="#eef7ee" stroke="#2e7d32"/>
+    <text x="125" y="245">sensor_math.c   ← new</text>
+    <text x="125" y="265">led_reg.c       ← new</text>
+    <rect x="58" y="280" width="250" height="24" rx="4" fill="#f3f0fa" stroke="#6741a8"/>
+    <text x="65" y="297">CMakeLists.txt  ← you edit</text>
+  </g>
+  <!-- cmake panel -->
+  <rect x="480" y="60" width="400" height="200" rx="8" fill="#1e1e1e" stroke="#555"/>
+  <text x="495" y="85" font-size="13" fill="#bbbbbb">CMakeLists.txt</text>
+  <g font-family="Consolas, Menlo, monospace" font-size="13">
+    <text x="495" y="118" fill="#6a9955"># Add sources to executable</text>
+    <text x="495" y="140" fill="#dcdcaa">target_sources<tspan fill="#d4d4d4">(${CMAKE_PROJECT_NAME} PRIVATE</tspan></text>
+    <text x="515" y="162" fill="#6a9955"># Add user sources here</text>
+    <rect x="508" y="170" width="300" height="46" rx="3" fill="#2d4a2d" stroke="#89d185"/>
+    <text x="515" y="188" fill="#ce9178">Core/Src/...   ← you write</text>
+    <text x="515" y="208" fill="#ce9178">Core/Src/...   ← you write</text>
+    <text x="495" y="238" fill="#d4d4d4">)</text>
+  </g>
+</svg>

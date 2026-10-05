@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>EE5203 L03 Lab Guide – EE5203 Microprocessors</title>
+<title>EE5203 Lab 3 Guide – EE5203 Microprocessors</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -4866,36 +4866,73 @@ pre { font-size: 8.7pt; }
 
 
 
-<section id="ee5203-l03-lab-guide" class="level1">
-<h1>EE5203 L03 Lab Guide</h1>
-<p><em>Process eight sensor values with small C functions - Basri Erdogan</em></p>
+<section id="ee5203-lab-3-guide" class="level1">
+<h1>EE5203 Lab 3 Guide</h1>
+<p><em>Functions and registers: a sensor module and an LED driver for LD2 - Basri Erdogan</em></p>
 <div class="mission">
-<p><strong>Mission:</strong> Copy your working L02 project and add four C files. Clamp eight sensor values, calculate their average, and write <code>&quot;LOW&quot;</code>, <code>&quot;OK&quot;</code>, or <code>&quot;HIGH&quot;</code>. Check every result in the debugger.</p>
+<p><strong>Mission:</strong> Move your Lab 2 calculations into C functions, and write a small LED driver that controls LD2 (pin PA5) through CMSIS registers. At the end, LD2 blinks the status of your eight sensor values: <strong>1 blink = LOW, 2 blinks = OK, 3 blinks = HIGH</strong>.</p>
+</div>
+<p>This lab uses Lecture 3 (functions, header files, <code>CMakeLists.txt</code>) and Lecture 4 (registers, bit masks, <code>-&gt;</code>).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img role="img" aria-label="Lab 3 overview diagram" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgMzAwIiBmb250LWZhbWlseT0iU2Vnb2UgVUksIEhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iTGFiIDMgb3ZlcnZpZXc6IG1haW4uYyBjYWxscyB0aGUgc2Vuc29yIGZ1bmN0aW9ucyBhbmQgdGhlIExFRCBmdW5jdGlvbnM7IHRoZSBMRUQgZnVuY3Rpb25zIHdyaXRlIHRoZSBHUElPIHJlZ2lzdGVycyB0aGF0IGRyaXZlIExEMiI+CiAgPGRlZnM+PG1hcmtlciBpZD0iYSIgdmlld0JveD0iMCAwIDEwIDEwIiByZWZYPSI5IiByZWZZPSI1IiBtYXJrZXJXaWR0aD0iNyIgbWFya2VySGVpZ2h0PSI3IiBvcmllbnQ9ImF1dG8iPjxwYXRoIGQ9Ik0wLDBMMTAsNUwwLDEweiIgZmlsbD0iIzRhNTk2OCIvPjwvbWFya2VyPjwvZGVmcz4KICA8cmVjdCB3aWR0aD0iOTAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2ZmZiIvPgogIDwhLS0gbWFpbi5jIC0tPgogIDxyZWN0IHg9IjIwIiB5PSI5NSIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxMTAiIHJ4PSIxMCIgZmlsbD0iI2YzZjBmYSIgc3Ryb2tlPSIjNjc0MWE4IiBzdHJva2Utd2lkdGg9IjIiLz4KICA8dGV4dCB4PSIxMjAiIHk9IjEyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzRhMmI4NSI+bWFpbi5jPC90ZXh0PgogIDx0ZXh0IHg9IjEyMCIgeT0iMTQ2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjMjAyYjM4Ij5MYWIgMiBkYXRhICsgc3RhdHVzPC90ZXh0PgogIDx0ZXh0IHg9IjEyMCIgeT0iMTY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjMjAyYjM4Ij5jYWxscyB0aGUgZnVuY3Rpb25zPC90ZXh0PgogIDx0ZXh0IHg9IjEyMCIgeT0iMTg2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjMjAyYjM4Ij5ibGlua3MgdGhlIHN0YXR1czwvdGV4dD4KICA8IS0tIHNlbnNvcl9tYXRoIC0tPgogIDxyZWN0IHg9IjMwMCIgeT0iMjAiIHdpZHRoPSIyNTAiIGhlaWdodD0iMTAwIiByeD0iMTAiIGZpbGw9IiNlOGYxZmIiIHN0cm9rZT0iIzJmNmRiNSIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHRleHQgeD0iNDI1IiB5PSI0NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzFkNGY4YSI+c2Vuc29yX21hdGguaCAvIC5jPC90ZXh0PgogIDx0ZXh0IHg9IjQyNSIgeT0iNzIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTMiIGZvbnQtZmFtaWx5PSJDb25zb2xhcywgTWVubG8sIG1vbm9zcGFjZSIgZmlsbD0iIzIwMmIzOCI+Y2xhbXBfdTE2KCk8L3RleHQ+CiAgPHRleHQgeD0iNDI1IiB5PSI5NCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMyIgZm9udC1mYW1pbHk9IkNvbnNvbGFzLCBNZW5sbywgbW9ub3NwYWNlIiBmaWxsPSIjMjAyYjM4Ij5hdmVyYWdlX3NhbXBsZXMoKTwvdGV4dD4KICA8dGV4dCB4PSI0MjUiIHk9IjExMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzRhNTk2OCI+Q2hlY2twb2ludCBCIMK3IEwwMzwvdGV4dD4KICA8IS0tIGxlZF9yZWcgLS0+CiAgPHJlY3QgeD0iMzAwIiB5PSIxODAiIHdpZHRoPSIyNTAiIGhlaWdodD0iMTAwIiByeD0iMTAiIGZpbGw9IiNlZWY3ZWUiIHN0cm9rZT0iIzJlN2QzMiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHRleHQgeD0iNDI1IiB5PSIyMDYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxYjVlMjAiPmxlZF9yZWcuaCAvIC5jPC90ZXh0PgogIDx0ZXh0IHg9IjQyNSIgeT0iMjMyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEzIiBmb250LWZhbWlseT0iQ29uc29sYXMsIE1lbmxvLCBtb25vc3BhY2UiIGZpbGw9IiMyMDJiMzgiPmxlZF9pbml0KCk8L3RleHQ+CiAgPHRleHQgeD0iNDI1IiB5PSIyNTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTMiIGZvbnQtZmFtaWx5PSJDb25zb2xhcywgTWVubG8sIG1vbm9zcGFjZSIgZmlsbD0iIzIwMmIzOCI+bGVkX29uKCkgIGxlZF9vZmYoKTwvdGV4dD4KICA8dGV4dCB4PSI0MjUiIHk9IjI3MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzRhNTk2OCI+Q2hlY2twb2ludHMgQywgRCDCtyBMMDQ8L3RleHQ+CiAgPCEtLSByZWdpc3RlcnMgLS0+CiAgPHJlY3QgeD0iNjIwIiB5PSIxODAiIHdpZHRoPSIxNTAiIGhlaWdodD0iMTAwIiByeD0iMTAiIGZpbGw9IiNmZmY0ZTUiIHN0cm9rZT0iI2M3NzcwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHRleHQgeD0iNjk1IiB5PSIyMDYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiM4YTUyMDAiPlJlZ2lzdGVyczwvdGV4dD4KICA8dGV4dCB4PSI2OTUiIHk9IjIzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMiIgZm9udC1mYW1pbHk9IkNvbnNvbGFzLCBNZW5sbywgbW9ub3NwYWNlIiBmaWxsPSIjMjAyYjM4Ij5SQ0MtJmd0O0FIQjFFTlI8L3RleHQ+CiAgPHRleHQgeD0iNjk1IiB5PSIyNTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtZmFtaWx5PSJDb25zb2xhcywgTWVubG8sIG1vbm9zcGFjZSIgZmlsbD0iIzIwMmIzOCI+R1BJT0EtJmd0O01PREVSPC90ZXh0PgogIDx0ZXh0IHg9IjY5NSIgeT0iMjcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEyIiBmb250LWZhbWlseT0iQ29uc29sYXMsIE1lbmxvLCBtb25vc3BhY2UiIGZpbGw9IiMyMDJiMzgiPkdQSU9BLSZndDtCU1JSPC90ZXh0PgogIDwhLS0gTEQyIC0tPgogIDxjaXJjbGUgY3g9Ijg0MCIgY3k9IjIzMCIgcj0iMjgiIGZpbGw9IiMyZjllNDQiIHN0cm9rZT0iIzFiNWUyMCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHRleHQgeD0iODQwIiB5PSIyMzYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmYiPkxEMjwvdGV4dD4KICA8dGV4dCB4PSI4NDAiIHk9IjI3OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzRhNTk2OCI+cGluIFBBNTwvdGV4dD4KICA8IS0tIGFycm93cyAtLT4KICA8bGluZSB4MT0iMjIyIiB5MT0iMTMwIiB4Mj0iMjk2IiB5Mj0iNzgiIHN0cm9rZT0iIzRhNTk2OCIgc3Ryb2tlLXdpZHRoPSIyLjUiIG1hcmtlci1lbmQ9InVybCgjYSkiLz4KICA8dGV4dCB4PSIyNDAiIHk9IjkyIiBmb250LXNpemU9IjExIiBmaWxsPSIjNGE1OTY4Ij5jYWxsPC90ZXh0PgogIDxsaW5lIHgxPSIyMjIiIHkxPSIxNzIiIHgyPSIyOTYiIHkyPSIyMjUiIHN0cm9rZT0iIzRhNTk2OCIgc3Ryb2tlLXdpZHRoPSIyLjUiIG1hcmtlci1lbmQ9InVybCgjYSkiLz4KICA8dGV4dCB4PSIyNDAiIHk9IjIyMCIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzRhNTk2OCI+Y2FsbDwvdGV4dD4KICA8bGluZSB4MT0iNTUyIiB5MT0iMjMwIiB4Mj0iNjE2IiB5Mj0iMjMwIiBzdHJva2U9IiM0YTU5NjgiIHN0cm9rZS13aWR0aD0iMi41IiBtYXJrZXItZW5kPSJ1cmwoI2EpIi8+CiAgPHRleHQgeD0iNTg0IiB5PSIyMjIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM0YTU5NjgiPndyaXRlPC90ZXh0PgogIDxsaW5lIHgxPSI3NzIiIHkxPSIyMzAiIHgyPSI4MDgiIHkyPSIyMzAiIHN0cm9rZT0iIzRhNTk2OCIgc3Ryb2tlLXdpZHRoPSIyLjUiIG1hcmtlci1lbmQ9InVybCgjYSkiLz4KICA8IS0tIGNtYWtlIG5vdGUgLS0+CiAgPHJlY3QgeD0iNjIwIiB5PSIzMCIgd2lkdGg9IjI2MCIgaGVpZ2h0PSI3NiIgcng9IjgiIGZpbGw9IiNmZmZmZmYiIHN0cm9rZT0iIzlhYTdiNCIgc3Ryb2tlLWRhc2hhcnJheT0iNSA0Ii8+CiAgPHRleHQgeD0iNzUwIiB5PSI1NCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMyIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzIwMmIzOCI+Q01ha2VMaXN0cy50eHQ8L3RleHQ+CiAgPHRleHQgeD0iNzUwIiB5PSI3NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzIwMmIzOCI+bGlzdHMgYm90aCAuYyBmaWxlcyBpbjwvdGV4dD4KICA8dGV4dCB4PSI3NTAiIHk9Ijk0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEyIiBmb250LWZhbWlseT0iQ29uc29sYXMsIE1lbmxvLCBtb25vc3BhY2UiIGZpbGw9IiMyMDJiMzgiPnRhcmdldF9zb3VyY2VzPC90ZXh0PgogIDxsaW5lIHgxPSI2MTgiIHkxPSI3MCIgeDI9IjU1NCIgeTI9IjcwIiBzdHJva2U9IiM5YWE3YjQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iNSA0IiBtYXJrZXItZW5kPSJ1cmwoI2EpIi8+Cjwvc3ZnPgo=" class="img-fluid figure-img" alt="Lab 3 overview diagram"></p>
+<figcaption>What you build: <code>main.c</code> calls two small modules; the LED module writes three registers that drive LD2.</figcaption>
+</figure>
 </div>
 <section id="prepare-before-class" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-before-class">Prepare before class</h2>
 <ul class="task-list">
-<li><label><input type="checkbox">Bring your working <code>EE5203_L02_&lt;studentnumber&gt;</code> project and a USB data cable.</label></li>
-<li><label><input type="checkbox">Review function declarations, definitions, calls, array indices, and <code>\0</code>.</label></li>
+<li><label><input type="checkbox">Bring your board and a USB data cable. Your Lab 2 project must be on <code>H:\EE_Labs</code>: you copy code from it, but you do not change it.</label></li>
 <li><label><input type="checkbox">Download the starter files: <a href="starter/EE5203_L03_starter.zip"><code>EE5203_L03_starter.zip</code></a>.</label></li>
-<li><label><input type="checkbox">Write the answers to this entry ticket on paper before the lab:</label></li>
+<li><label><input type="checkbox">Do the <strong>Lab 3 pre-lab quiz</strong> on CATS. It includes the bit-mask table below. To practise masks first, use the <a href="../../L04_gpio-bare-metal/assets/htmls/bitwise_lab.html#practice">Bitwise Lab</a>.</label></li>
+<li><label><input type="checkbox">Bring this table, completed on paper:</label></li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> average_samples<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ol type="1">
-<li>Circle the return type, the function name, and the two parameters.</li>
-<li>Why does the function need <code>count</code>? One sentence.</li>
-<li>Write the valid indices when <code>count == 8</code>.</li>
-</ol>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Purpose</th>
+<th>Expression</th>
+<th style="text-align: right;">Hex value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GPIOA clock bit</td>
+<td><code>1U &lt;&lt; 0</code></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td>PA5 mode field (two bits)</td>
+<td><code>3U &lt;&lt; 10</code></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td>PA5 output pattern <code>01</code></td>
+<td><code>1U &lt;&lt; 10</code></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td>Set PA5</td>
+<td><code>1U &lt;&lt; 5</code></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td>Reset PA5</td>
+<td><code>1U &lt;&lt; 21</code></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
 <p>By checkoff time, you can:</p>
 <ol type="1">
-<li>name the return type, name, and parameters in a C declaration;</li>
-<li>find the declaration, definition, and call of one function in three files;</li>
-<li>loop through an array without using an invalid index;</li>
-<li>write a C string that fits in its array and ends with <code>\0</code>;</li>
-<li>check a result in the debugger, then change one input and predict the new result.</li>
+<li>write a function declaration in a <code>.h</code> file and its definition in a <code>.c</code> file;</li>
+<li>add a new <code>.c</code> file to the build in <code>CMakeLists.txt</code>;</li>
+<li>replace repeated code in <code>main.c</code> with function calls and get the same results;</li>
+<li>set and clear register bits with <code>|=</code>, <code>&amp;= ~</code> and masks;</li>
+<li>show in the debugger that a register value agrees with what LD2 does.</li>
 </ol>
 </section>
 <section id="hardware-and-files" class="level2">
@@ -4908,7 +4945,7 @@ pre { font-size: 8.7pt; }
 <thead>
 <tr class="header">
 <th>Item</th>
-<th>Required value</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
@@ -4918,280 +4955,182 @@ pre { font-size: 8.7pt; }
 </tr>
 <tr class="even">
 <td>Tools</td>
-<td>VS Code (no CubeMX in this lab)</td>
+<td>STM32CubeMX (new project) + VS Code</td>
 </tr>
 <tr class="odd">
 <td>Starting point</td>
-<td>A copy of your L02 project</td>
+<td>A new CubeMX project; code copied from your Lab 2 <code>main.c</code></td>
 </tr>
 <tr class="even">
 <td>Project name</td>
 <td><code>EE5203_L03_&lt;studentnumber&gt;</code></td>
 </tr>
 <tr class="odd">
-<td>Header files</td>
-<td><code>sensor_math.h</code>, <code>status_text.h</code></td>
+<td>New files (starter)</td>
+<td><code>sensor_math.h</code>, <code>sensor_math.c</code>, <code>led_reg.h</code>, <code>led_reg.c</code></td>
 </tr>
 <tr class="even">
-<td>Source files</td>
-<td><code>sensor_math.c</code>, <code>status_text.c</code></td>
-</tr>
-<tr class="odd">
 <td>Files you edit</td>
-<td><code>CMakeLists.txt</code>, <code>main.c</code>, <code>sensor_math.c</code>, <code>status_text.c</code></td>
-</tr>
-<tr class="even">
-<td>Input</td>
-<td>Eight fixed <code>uint16_t</code> samples; no ADC yet</td>
+<td><code>CMakeLists.txt</code>, <code>main.c</code>, and the four new files</td>
 </tr>
 <tr class="odd">
-<td>What you show</td>
-<td>Build output, breakpoint, VARIABLES / WATCH, MEMORY panel</td>
+<td>Registers</td>
+<td><code>RCC-&gt;AHB1ENR</code>, <code>GPIOA-&gt;MODER</code>, <code>GPIOA-&gt;BSRR</code></td>
 </tr>
 </tbody>
 </table>
 <p>Keep all edits to <code>main.c</code> inside the <code>USER CODE</code> regions.</p>
 </section>
-<section id="checkpoint-a---copy-the-project-and-add-the-four-starter-files" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-a---copy-the-project-and-add-the-four-starter-files">Checkpoint A - Copy the project and add the four starter files</h2>
+<section id="checkpoint-a---create-a-new-project-and-add-the-starter-files" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-a---create-a-new-project-and-add-the-starter-files">Checkpoint A - Create a new project and add the starter files</h2>
+<p><strong>Start of the session:</strong> if <code>C:\Work\&lt;studentnumber&gt;</code> does not contain your Lab 2 project, copy <strong>all</strong> your project folders from <code>H:\EE_Labs</code> into it first (as in Lab 2). Do not run <em>Save to H</em> now.</p>
+<p>You make a <strong>new</strong> project. Do not change your Lab 2 project.</p>
 <ol type="1">
-<li><p>Put your <code>EE5203_L02_&lt;studentnumber&gt;</code> folder in <code>C:\Work\&lt;studentnumber&gt;</code>. Copy it, and rename the copy <code>EE5203_L03_&lt;studentnumber&gt;</code>. Check that the <code>.vscode</code> folder came with it.</p></li>
-<li><p>In the new folder, <strong>delete the <code>build</code> folder</strong>. It still points to the L02 folder, and CMake stops with an error if you keep it.</p></li>
-<li><p>Double-click <code>EE5203_L03_starter.zip</code>. Copy the <code>Core</code> folder you see inside and paste it into your project folder. Windows adds two files to <code>Core\Inc</code> and two files to <code>Core\Src</code>.</p></li>
-<li><p>Open <code>CMakeLists.txt</code> in the project folder and make two changes.</p>
-<p>Change the project name to the new folder name:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode cmake code-with-copy"><code class="sourceCode cmake"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the project name</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span>(<span class="dv">CMAKE_PROJECT_NAME</span> EE5203_L03_&lt;studentnumber&gt;)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Add the two new <code>.c</code> files to the build:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode cmake code-with-copy"><code class="sourceCode cmake"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add sources to executable</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">target_sources</span>(<span class="dv">${CMAKE_PROJECT_NAME}</span> <span class="bn">PRIVATE</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add user sources here</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    Core/Src/sensor_math.c</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    Core/Src/status_text.c</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The header files need no change: <code>Core/Inc</code> is already on the include path.</p></li>
-<li><p>In <code>main.c</code>, add these includes inside <code>USER CODE BEGIN Includes</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdbool.h&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdint.h&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;sensor_math.h&quot;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;status_text.h&quot;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>VS Code → File → Open Folder → <code>EE5203_L03_&lt;studentnumber&gt;</code>. Choose the <strong>Debug</strong> preset if asked. Build with <strong>Ctrl+Shift+B</strong>: zero errors.</p></li>
-<li><p>Find the declaration of <code>clamp_u16</code> (file and line) and its definition (file and line).</p></li>
+<li>In <strong>STM32CubeMX</strong>: Board Selector → <strong>NUCLEO-F401RE</strong> → accept the default initialization (as in Lab 1). PA5 is already LD2.</li>
+<li>Project Manager: name <strong><code>EE5203_L03_&lt;studentnumber&gt;</code></strong>, location <code>C:\Work\&lt;studentnumber&gt;</code>, <strong>Toolchain/IDE = CMake</strong> → Generate Code.</li>
+<li>Copy the folder <code>C:\Users\Public\EE5203_template\.vscode</code> into the new project folder, next to the <code>.ioc</code> file.</li>
+<li>Open <code>EE5203_L03_starter.zip</code>. Copy the <code>Core</code> folder inside it and paste it into your project folder. Two files go to <code>Core\Inc</code>, two to <code>Core\Src</code>.</li>
+<li>In <code>CMakeLists.txt</code>, add the two new <code>.c</code> files to <code>target_sources</code>, below the line <code># Add user sources here</code>. Write the paths yourself, in the same form as <code>Core/Src/&lt;file&gt;.c</code>. (The project name is already correct: CubeMX used your folder name.)</li>
+<li>Open the folder in VS Code and build with <strong>Ctrl+Shift+B</strong>: zero errors. The starter files build even though they are not finished.</li>
 </ol>
-<p><strong>Show:</strong> the four new files in the Explorer, the two new lines in <code>CMakeLists.txt</code>, and the build line <code>Linking C executable EE5203_L03_&lt;studentnumber&gt;.elf</code>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img role="img" aria-label="Project folder tree after Checkpoint A and the target_sources lines" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgMzMwIiBmb250LWZhbWlseT0iU2Vnb2UgVUksIEhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iUHJvamVjdCBmb2xkZXIgYWZ0ZXIgQ2hlY2twb2ludCBBOiB0aGUgLnZzY29kZSB0ZW1wbGF0ZSBuZXh0IHRvIHRoZSAuaW9jLCB0aGUgdHdvIGhlYWRlcnMgaW4gQ29yZS9JbmMsIHRoZSB0d28gc291cmNlIGZpbGVzIGluIENvcmUvU3JjLCBhbmQgdHdvIG5ldyBsaW5lcyBpbiB0YXJnZXRfc291cmNlcyI+CiAgPHJlY3Qgd2lkdGg9IjkwMCIgaGVpZ2h0PSIzMzAiIGZpbGw9IiNmZmYiLz4KICA8cmVjdCB4PSIyMCIgeT0iMTUiIHdpZHRoPSI0MzAiIGhlaWdodD0iMzAwIiByeD0iOCIgZmlsbD0iI2Y4ZjlmYiIgc3Ryb2tlPSIjYzlkMWRhIi8+CiAgPGcgZm9udC1mYW1pbHk9IkNvbnNvbGFzLCBNZW5sbywgbW9ub3NwYWNlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMjAyYjM4Ij4KICAgIDx0ZXh0IHg9IjQwIiB5PSI0NSIgZm9udC13ZWlnaHQ9IjcwMCI+4pa4IEVFNTIwM19MMDNfJmx0O3N0dWRlbnRudW1iZXImZ3Q7PC90ZXh0PgogICAgPHJlY3QgeD0iNTgiIHk9IjU2IiB3aWR0aD0iMjUwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iI2ZmZjRlNSIgc3Ryb2tlPSIjYzc3NzAwIi8+CiAgICA8dGV4dCB4PSI2NSIgeT0iNzMiPuKWuCAudnNjb2RlICAg4oaQIHRlbXBsYXRlIGNvcHk8L3RleHQ+CiAgICA8dGV4dCB4PSI2NSIgeT0iMTAwIj7ilrggYnVpbGQ8L3RleHQ+CiAgICA8dGV4dCB4PSI2NSIgeT0iMTI0Ij7ilrggQ29yZTwvdGV4dD4KICAgIDx0ZXh0IHg9Ijk1IiB5PSIxNDgiPuKWuCBJbmM8L3RleHQ+CiAgICA8cmVjdCB4PSIxMTgiIHk9IjE1NiIgd2lkdGg9IjIxNSIgaGVpZ2h0PSI0NCIgcng9IjQiIGZpbGw9IiNlZWY3ZWUiIHN0cm9rZT0iIzJlN2QzMiIvPgogICAgPHRleHQgeD0iMTI1IiB5PSIxNzMiPnNlbnNvcl9tYXRoLmggICDihpAgbmV3PC90ZXh0PgogICAgPHRleHQgeD0iMTI1IiB5PSIxOTMiPmxlZF9yZWcuaCAgICAgICDihpAgbmV3PC90ZXh0PgogICAgPHRleHQgeD0iOTUiIHk9IjIyMCI+4pa4IFNyYyAobWFpbi5jIGlzIGhlcmUpPC90ZXh0PgogICAgPHJlY3QgeD0iMTE4IiB5PSIyMjgiIHdpZHRoPSIyMTUiIGhlaWdodD0iNDQiIHJ4PSI0IiBmaWxsPSIjZWVmN2VlIiBzdHJva2U9IiMyZTdkMzIiLz4KICAgIDx0ZXh0IHg9IjEyNSIgeT0iMjQ1Ij5zZW5zb3JfbWF0aC5jICAg4oaQIG5ldzwvdGV4dD4KICAgIDx0ZXh0IHg9IjEyNSIgeT0iMjY1Ij5sZWRfcmVnLmMgICAgICAg4oaQIG5ldzwvdGV4dD4KICAgIDxyZWN0IHg9IjU4IiB5PSIyODAiIHdpZHRoPSIyNTAiIGhlaWdodD0iMjQiIHJ4PSI0IiBmaWxsPSIjZjNmMGZhIiBzdHJva2U9IiM2NzQxYTgiLz4KICAgIDx0ZXh0IHg9IjY1IiB5PSIyOTciPkNNYWtlTGlzdHMudHh0ICDihpAgeW91IGVkaXQ8L3RleHQ+CiAgPC9nPgogIDwhLS0gY21ha2UgcGFuZWwgLS0+CiAgPHJlY3QgeD0iNDgwIiB5PSI2MCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyMDAiIHJ4PSI4IiBmaWxsPSIjMWUxZTFlIiBzdHJva2U9IiM1NTUiLz4KICA8dGV4dCB4PSI0OTUiIHk9Ijg1IiBmb250LXNpemU9IjEzIiBmaWxsPSIjYmJiYmJiIj5DTWFrZUxpc3RzLnR4dDwvdGV4dD4KICA8ZyBmb250LWZhbWlseT0iQ29uc29sYXMsIE1lbmxvLCBtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTMiPgogICAgPHRleHQgeD0iNDk1IiB5PSIxMTgiIGZpbGw9IiM2YTk5NTUiPiMgQWRkIHNvdXJjZXMgdG8gZXhlY3V0YWJsZTwvdGV4dD4KICAgIDx0ZXh0IHg9IjQ5NSIgeT0iMTQwIiBmaWxsPSIjZGNkY2FhIj50YXJnZXRfc291cmNlczx0c3BhbiBmaWxsPSIjZDRkNGQ0Ij4oJHtDTUFLRV9QUk9KRUNUX05BTUV9IFBSSVZBVEU8L3RzcGFuPjwvdGV4dD4KICAgIDx0ZXh0IHg9IjUxNSIgeT0iMTYyIiBmaWxsPSIjNmE5OTU1Ij4jIEFkZCB1c2VyIHNvdXJjZXMgaGVyZTwvdGV4dD4KICAgIDxyZWN0IHg9IjUwOCIgeT0iMTcwIiB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQ2IiByeD0iMyIgZmlsbD0iIzJkNGEyZCIgc3Ryb2tlPSIjODlkMTg1Ii8+CiAgICA8dGV4dCB4PSI1MTUiIHk9IjE4OCIgZmlsbD0iI2NlOTE3OCI+Q29yZS9TcmMvLi4uICAg4oaQIHlvdSB3cml0ZTwvdGV4dD4KICAgIDx0ZXh0IHg9IjUxNSIgeT0iMjA4IiBmaWxsPSIjY2U5MTc4Ij5Db3JlL1NyYy8uLi4gICDihpAgeW91IHdyaXRlPC90ZXh0PgogICAgPHRleHQgeD0iNDk1IiB5PSIyMzgiIGZpbGw9IiNkNGQ0ZDQiPik8L3RleHQ+CiAgPC9nPgo8L3N2Zz4K" class="img-fluid figure-img" alt="Project folder tree after Checkpoint A and the target_sources lines"></p>
+<figcaption>Your project folder after Checkpoint A.</figcaption>
+</figure>
+</div>
+<p><strong>Show:</strong> the four new files in the Explorer, your two lines in <code>CMakeLists.txt</code>, and the build line <code>Linking C executable EE5203_L03_&lt;studentnumber&gt;.elf</code>.</p>
 </section>
-<section id="call-the-new-functions-from-main.c" class="level2">
-<h2 class="anchored" data-anchor-id="call-the-new-functions-from-main.c">Call the new functions from <code>main.c</code></h2>
-<p>Inside <code>USER CODE BEGIN PV</code> in <code>main.c</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SAMPLE_COUNT       </span><span class="dv">8</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define STATUS_CAPACITY    </span><span class="dv">8</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SAMPLE_LIMIT       </span><span class="dv">4095</span><span class="bu">U</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define HIGH_THRESHOLD     </span><span class="dv">2500</span><span class="bu">U</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> raw_samples<span class="op">[</span>SAMPLE_COUNT<span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">850</span><span class="bu">U</span><span class="op">,</span> <span class="dv">1250</span><span class="bu">U</span><span class="op">,</span> <span class="dv">4095</span><span class="bu">U</span><span class="op">,</span> <span class="dv">4200</span><span class="bu">U</span><span class="op">,</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2050</span><span class="bu">U</span><span class="op">,</span> <span class="dv">90</span><span class="bu">U</span><span class="op">,</span> <span class="dv">3100</span><span class="bu">U</span><span class="op">,</span> <span class="dv">2800</span><span class="bu">U</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> bounded_samples<span class="op">[</span>SAMPLE_COUNT<span class="op">];</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> status_text<span class="op">[</span>STATUS_CAPACITY<span class="op">];</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> sample_average <span class="op">=</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> samples_above <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> status_valid <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> lab_done <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Inside <code>USER CODE BEGIN 2</code>, before the generated <code>while (1)</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> SAMPLE_COUNT<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    bounded_samples<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        clamp_u16<span class="op">(</span>raw_samples<span class="op">[</span>i<span class="op">],</span> <span class="dv">0</span><span class="bu">U</span><span class="op">,</span> SAMPLE_LIMIT<span class="op">);</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>sample_average <span class="op">=</span> average_samples<span class="op">(</span>bounded_samples<span class="op">,</span> SAMPLE_COUNT<span class="op">);</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>samples_above <span class="op">=</span> count_above<span class="op">(</span>bounded_samples<span class="op">,</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                            SAMPLE_COUNT<span class="op">,</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                            HIGH_THRESHOLD<span class="op">);</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>status_valid <span class="op">=</span> make_status<span class="op">(</span>status_text<span class="op">,</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                           STATUS_CAPACITY<span class="op">,</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                           sample_average<span class="op">);</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>lab_done <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Do not add a second infinite loop. Leave the generated <code>while (1)</code> in place.</p>
-<p>Build again with Ctrl+Shift+B. Now <code>clamp_u16</code> is also <strong>called</strong>: find the call. If the build stops with <code>undefined reference to &#39;clamp_u16&#39;</code>, the two <code>.c</code> files are missing from <code>target_sources</code> (Checkpoint A, step 4).</p>
-</section>
-<section id="checkpoint-b---clamp-and-average-the-array-safely" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-b---clamp-and-average-the-array-safely">Checkpoint B - Clamp and average the array safely</h2>
-<p>Complete these functions in <code>sensor_math.c</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> clamp_u16<span class="op">(</span><span class="dt">uint16_t</span> value<span class="op">,</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                   <span class="dt">uint16_t</span> low<span class="op">,</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                   <span class="dt">uint16_t</span> high<span class="op">);</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> average_samples<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                         <span class="dt">int</span> count<span class="op">);</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> count_above<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                <span class="dt">int</span> count<span class="op">,</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                <span class="dt">uint16_t</span> threshold<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Rules:</p>
+<section id="checkpoint-b---move-the-lab-2-calculations-into-functions" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-b---move-the-lab-2-calculations-into-functions">Checkpoint B - Move the Lab 2 calculations into functions</h2>
+<p><code>sensor_math.h</code> already declares <code>clamp_u16</code>. You write the rest.</p>
+<ol type="1">
+<li>In <code>sensor_math.c</code>, complete the <strong>body</strong> of <code>clamp_u16</code>: return <code>low</code> if the value is below <code>low</code>, <code>high</code> if it is above <code>high</code>, and the value itself otherwise.</li>
+<li>In <code>sensor_math.h</code>, <strong>write the declaration</strong> of <code>average_samples</code>. It takes an array of <code>uint16_t</code> values and the number of values (<code>int</code>), and returns the average as <code>uint16_t</code>.</li>
+<li>In <code>sensor_math.c</code>, <strong>write the definition</strong> of <code>average_samples</code>:
 <ul>
-<li><code>clamp_u16</code> returns <code>low</code> for values below <code>low</code>, <code>high</code> for values above <code>high</code>, and the value itself otherwise. Here the range is <code>0U</code> to <code>4095U</code>.</li>
-<li>Every array loop uses <code>i &lt; count</code>.</li>
-<li><code>average_samples</code> returns <code>0U</code> when <code>count == 0</code>. It adds the values into a <code>uint32_t</code> sum, then divides once at the end.</li>
-<li><code>count_above</code> counts values strictly greater than the threshold: <code>values[i] &gt; threshold</code>, with <code>HIGH_THRESHOLD = 2500U</code>.</li>
-</ul>
-<p>Before debugging, calculate the expected results on paper:</p>
+<li>return <code>0U</code> when the count is <code>0</code>;</li>
+<li>add the values into a <code>uint32_t</code> sum; the loop uses <code>i &lt; count</code>;</li>
+<li>divide once, at the end.</li>
+</ul></li>
+<li>In <code>main.c</code>, add <code>#include &quot;sensor_math.h&quot;</code> inside <code>USER CODE BEGIN Includes</code>.</li>
+<li>Open your <strong>Lab 2</strong> <code>main.c</code> (read only). Copy everything between <code>USER CODE BEGIN 2</code> and <code>USER CODE END 2</code> into the same region of the new <code>main.c</code>. Then change the copy:
+<ul>
+<li>replace the clamping <code>if</code> with a call: <code>samples[i] = clamp_u16(samples[i], 0U, 4095U);</code></li>
+<li>remove the <code>sum</code> line from the loop, and after the loop write <code>average = average_samples(samples, 8);</code></li>
+<li>keep the <code>high_count</code> and <code>status_code</code> code from Lab 2.</li>
+</ul></li>
+</ol>
+<p>The results must be <strong>the same as in Lab 2</strong>. Fill in the table from your Lab 2 prediction table, then check in the debugger:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Quantity</th>
-<th style="text-align: right;">Prediction</th>
-<th style="text-align: right;">Observed</th>
+<th style="text-align: right;">Lab 2 value</th>
+<th style="text-align: right;">Lab 3 value (debugger)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>bounded_samples[3]</code></td>
+<td><code>samples[3]</code> after the loop</td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 </tr>
 <tr class="even">
-<td><code>sample_average</code></td>
+<td><code>average</code></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 </tr>
 <tr class="odd">
-<td><code>samples_above</code></td>
+<td><code>high_count</code></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td><code>status_code</code></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Show:</strong> a breakpoint inside the loop of <code>average_samples</code>, with <code>i</code> and the sum changing as you step, and the three observed values in the table.</p>
+<p><strong>Show:</strong> a breakpoint inside the loop of <code>average_samples</code>, with <code>i</code> and the sum changing as you step, and the completed table.</p>
 </section>
-<section id="checkpoint-c---write-low-ok-or-high-and-add-0" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-c---write-low-ok-or-high-and-add-0">Checkpoint C - Write <code>LOW</code>, <code>OK</code>, or <code>HIGH</code> and add <code>\0</code></h2>
-<p>Complete this function in <code>status_text.c</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> make_status<span class="op">(</span><span class="dt">char</span> destination<span class="op">[],</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                 <span class="dt">int</span> capacity<span class="op">,</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                 <span class="dt">uint16_t</span> average<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Rules:</p>
+<section id="checkpoint-c---write-led_init-and-check-the-registers" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-c---write-led_init-and-check-the-registers">Checkpoint C - Write <code>led_init()</code> and check the registers</h2>
+<p><code>led_reg.h</code> and <code>led_reg.c</code> contain only comments. You write the code. The three registers you use in Checkpoints C and D:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img role="img" aria-label="Bit diagrams of RCC AHB1ENR, GPIOA MODER and GPIOA BSRR" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgNDMwIiBmb250LWZhbWlseT0iU2Vnb2UgVUksIEhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iVGhlIHRocmVlIHJlZ2lzdGVycyBvZiBMYWIgMzogQUhCMUVOUiBiaXQgMCBlbmFibGVzIHRoZSBHUElPQSBjbG9jazsgTU9ERVIgYml0cyAxMSB0byAxMCBzZXQgdGhlIFBBNSBtb2RlLCAwMSBtZWFucyBvdXRwdXQ7IEJTUlIgYml0IDUgc2V0cyBQQTUgYW5kIGJpdCAyMSByZXNldHMgaXQiPgo8cmVjdCB3aWR0aD0iOTAwIiBoZWlnaHQ9IjQzMCIgZmlsbD0iI2ZmZiIvPgo8dGV4dCB4PSIyMCIgeT0iNDYiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMyMDJiMzgiIGZvbnQtZmFtaWx5PSJDb25zb2xhcywgTWVubG8sIG1vbm9zcGFjZSI+UkNDLT5BSEIxRU5SPC90ZXh0Pgo8dGV4dCB4PSI4NTYiIHk9IjQ2IiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNGE1OTY4Ij5iaXQgMCA9IEdQSU9BIGNsb2NrIG9uICDCtyAgdXNlIHw9IChrZWVwIHRoZSBvdGhlciBiaXRzKTwvdGV4dD4KPHJlY3QgeD0iMTIwIiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iMTMxLjUiIHk9IjEwNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+MzE8L3RleHQ+CjxyZWN0IHg9IjE0MyIgeT0iNjAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjE2NiIgeT0iNjAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjE4OSIgeT0iNjAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjIxMiIgeT0iNjAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+Cjx0ZXh0IHg9IjIyMy41IiB5PSIxMDQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IiM0YTU5NjgiPjI3PC90ZXh0Pgo8cmVjdCB4PSIyMzUiIHk9IjYwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSIyNTgiIHk9IjYwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSIyODEiIHk9IjYwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSIzMDQiIHk9IjYwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8dGV4dCB4PSIzMTUuNSIgeT0iMTA0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNGE1OTY4Ij4yMzwvdGV4dD4KPHJlY3QgeD0iMzI3IiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iMzUwIiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iMzczIiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iMzk2IiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iNDA3LjUiIHk9IjEwNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+MTk8L3RleHQ+CjxyZWN0IHg9IjQxOSIgeT0iNjAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjQ0MiIgeT0iNjAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjQ2NSIgeT0iNjAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjQ4OCIgeT0iNjAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+Cjx0ZXh0IHg9IjQ5OS41IiB5PSIxMDQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IiM0YTU5NjgiPjE1PC90ZXh0Pgo8cmVjdCB4PSI1MTEiIHk9IjYwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSI1MzQiIHk9IjYwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSI1NTciIHk9IjYwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSI1ODAiIHk9IjYwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8dGV4dCB4PSI1OTEuNSIgeT0iMTA0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNGE1OTY4Ij4xMTwvdGV4dD4KPHJlY3QgeD0iNjAzIiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iNjI2IiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iNjQ5IiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iNjcyIiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iNjgzLjUiIHk9IjEwNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+NzwvdGV4dD4KPHJlY3QgeD0iNjk1IiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iNzE4IiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iNzQxIiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iNzY0IiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iNzc1LjUiIHk9IjEwNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+MzwvdGV4dD4KPHJlY3QgeD0iNzg3IiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iODEwIiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iODMzIiB5PSI2MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZmZkOGE4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iODQ0LjUiIHk9Ijc5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEyIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMjAyYjM4IiBmb250LWZhbWlseT0iQ29uc29sYXMsIE1lbmxvLCBtb25vc3BhY2UiPjE8L3RleHQ+Cjx0ZXh0IHg9Ijg0NC41IiB5PSIxMDQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IiM0YTU5NjgiPjA8L3RleHQ+Cjx0ZXh0IHg9IjExMCIgeT0iNzkiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM0YTU5NjgiPmJpdDwvdGV4dD4KPHRleHQgeD0iMjAiIHk9IjE1NiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzIwMmIzOCIgZm9udC1mYW1pbHk9IkNvbnNvbGFzLCBNZW5sbywgbW9ub3NwYWNlIj5HUElPQS0+TU9ERVI8L3RleHQ+Cjx0ZXh0IHg9Ijg1NiIgeT0iMTU2IiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNGE1OTY4Ij5iaXRzIDExOjEwID0gUEE1IG1vZGUgIMK3ICAwMCBpbnB1dCwgMDEgb3V0cHV0PC90ZXh0Pgo8cmVjdCB4PSIxMjAiIHk9IjE3MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iMTMxLjUiIHk9IjIxNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+MzE8L3RleHQ+CjxyZWN0IHg9IjE0MyIgeT0iMTcwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSIxNjYiIHk9IjE3MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iMTg5IiB5PSIxNzAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjIxMiIgeT0iMTcwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8dGV4dCB4PSIyMjMuNSIgeT0iMjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNGE1OTY4Ij4yNzwvdGV4dD4KPHJlY3QgeD0iMjM1IiB5PSIxNzAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjI1OCIgeT0iMTcwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSIyODEiIHk9IjE3MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iMzA0IiB5PSIxNzAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+Cjx0ZXh0IHg9IjMxNS41IiB5PSIyMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IiM0YTU5NjgiPjIzPC90ZXh0Pgo8cmVjdCB4PSIzMjciIHk9IjE3MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iMzUwIiB5PSIxNzAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjM3MyIgeT0iMTcwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSIzOTYiIHk9IjE3MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iNDA3LjUiIHk9IjIxNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+MTk8L3RleHQ+CjxyZWN0IHg9IjQxOSIgeT0iMTcwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSI0NDIiIHk9IjE3MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iNDY1IiB5PSIxNzAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjQ4OCIgeT0iMTcwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8dGV4dCB4PSI0OTkuNSIgeT0iMjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNGE1OTY4Ij4xNTwvdGV4dD4KPHJlY3QgeD0iNTExIiB5PSIxNzAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjUzNCIgeT0iMTcwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSI1NTciIHk9IjE3MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iNTgwIiB5PSIxNzAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2MzZTZjYiIgc3Ryb2tlPSIjOWFhN2I0Ii8+Cjx0ZXh0IHg9IjU5MS41IiB5PSIxODkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMyMDJiMzgiIGZvbnQtZmFtaWx5PSJDb25zb2xhcywgTWVubG8sIG1vbm9zcGFjZSI+MDwvdGV4dD4KPHRleHQgeD0iNTkxLjUiIHk9IjIxNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+MTE8L3RleHQ+CjxyZWN0IHg9IjYwMyIgeT0iMTcwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNjM2U2Y2IiIHN0cm9rZT0iIzlhYTdiNCIvPgo8dGV4dCB4PSI2MTQuNSIgeT0iMTg5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEyIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMjAyYjM4IiBmb250LWZhbWlseT0iQ29uc29sYXMsIE1lbmxvLCBtb25vc3BhY2UiPjE8L3RleHQ+Cjx0ZXh0IHg9IjYxNC41IiB5PSIyMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IiM0YTU5NjgiPjEwPC90ZXh0Pgo8cmVjdCB4PSI2MjYiIHk9IjE3MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iNjQ5IiB5PSIxNzAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjY3MiIgeT0iMTcwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8dGV4dCB4PSI2ODMuNSIgeT0iMjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNGE1OTY4Ij43PC90ZXh0Pgo8cmVjdCB4PSI2OTUiIHk9IjE3MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iNzE4IiB5PSIxNzAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9Ijc0MSIgeT0iMTcwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSI3NjQiIHk9IjE3MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iNzc1LjUiIHk9IjIxNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+MzwvdGV4dD4KPHJlY3QgeD0iNzg3IiB5PSIxNzAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjgxMCIgeT0iMTcwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSI4MzMiIHk9IjE3MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iODQ0LjUiIHk9IjIxNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+MDwvdGV4dD4KPHRleHQgeD0iMTEwIiB5PSIxODkiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM0YTU5NjgiPmJpdDwvdGV4dD4KPHRleHQgeD0iMTIwIiB5PSIyMzIiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiMxYjVlMjAiPlBBNSBzdGFydHMgYXQgYml0IDUgw5cgMiA9IDEwOiBjbGVhciB3aXRoICZhbXA7PSB+KDNVICZsdDsmbHQ7IDEwKSwgdGhlbiBzZXQgd2l0aCB8PSAoMVUgJmx0OyZsdDsgMTApPC90ZXh0Pgo8dGV4dCB4PSIyMCIgeT0iMjc2IiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMjAyYjM4IiBmb250LWZhbWlseT0iQ29uc29sYXMsIE1lbmxvLCBtb25vc3BhY2UiPkdQSU9BLT5CU1JSPC90ZXh0Pgo8dGV4dCB4PSI4NTYiIHk9IjI3NiIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzRhNTk2OCI+d3JpdGUtb25seSAgwrcgIHVzZSA9IChhIDEgYWN0cywgYSAwIGRvZXMgbm90aGluZyk8L3RleHQ+CjxyZWN0IHg9IjEyMCIgeT0iMjkwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8dGV4dCB4PSIxMzEuNSIgeT0iMzM0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNGE1OTY4Ij4zMTwvdGV4dD4KPHJlY3QgeD0iMTQzIiB5PSIyOTAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjE2NiIgeT0iMjkwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSIxODkiIHk9IjI5MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iMjEyIiB5PSIyOTAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+Cjx0ZXh0IHg9IjIyMy41IiB5PSIzMzQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IiM0YTU5NjgiPjI3PC90ZXh0Pgo8cmVjdCB4PSIyMzUiIHk9IjI5MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iMjU4IiB5PSIyOTAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjI4MSIgeT0iMjkwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSIzMDQiIHk9IjI5MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iMzE1LjUiIHk9IjMzNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+MjM8L3RleHQ+CjxyZWN0IHg9IjMyNyIgeT0iMjkwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSIzNTAiIHk9IjI5MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZmZjOWM5IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iMzYxLjUiIHk9IjMwOSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMiIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzIwMmIzOCIgZm9udC1mYW1pbHk9IkNvbnNvbGFzLCBNZW5sbywgbW9ub3NwYWNlIj5SPC90ZXh0Pgo8dGV4dCB4PSIzNjEuNSIgeT0iMzM0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNGE1OTY4Ij4yMTwvdGV4dD4KPHJlY3QgeD0iMzczIiB5PSIyOTAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjM5NiIgeT0iMjkwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8dGV4dCB4PSI0MDcuNSIgeT0iMzM0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNGE1OTY4Ij4xOTwvdGV4dD4KPHJlY3QgeD0iNDE5IiB5PSIyOTAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjQ0MiIgeT0iMjkwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSI0NjUiIHk9IjI5MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iNDc2LjUiIHk9IjMzNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+MTY8L3RleHQ+CjxyZWN0IHg9IjQ4OCIgeT0iMjkwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8dGV4dCB4PSI0OTkuNSIgeT0iMzM0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNGE1OTY4Ij4xNTwvdGV4dD4KPHJlY3QgeD0iNTExIiB5PSIyOTAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjUzNCIgeT0iMjkwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSI1NTciIHk9IjI5MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iNTgwIiB5PSIyOTAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+Cjx0ZXh0IHg9IjU5MS41IiB5PSIzMzQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IiM0YTU5NjgiPjExPC90ZXh0Pgo8cmVjdCB4PSI2MDMiIHk9IjI5MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHJlY3QgeD0iNjI2IiB5PSIyOTAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjY0OSIgeT0iMjkwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSI2NzIiIHk9IjI5MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iNjgzLjUiIHk9IjMzNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+NzwvdGV4dD4KPHJlY3QgeD0iNjk1IiB5PSIyOTAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjcxOCIgeT0iMjkwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNhNWQ4ZmYiIHN0cm9rZT0iIzlhYTdiNCIvPgo8dGV4dCB4PSI3MjkuNSIgeT0iMzA5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEyIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMjAyYjM4IiBmb250LWZhbWlseT0iQ29uc29sYXMsIE1lbmxvLCBtb25vc3BhY2UiPlM8L3RleHQ+Cjx0ZXh0IHg9IjcyOS41IiB5PSIzMzQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IiM0YTU5NjgiPjU8L3RleHQ+CjxyZWN0IHg9Ijc0MSIgeT0iMjkwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSI3NjQiIHk9IjI5MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iNzc1LjUiIHk9IjMzNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+MzwvdGV4dD4KPHJlY3QgeD0iNzg3IiB5PSIyOTAiIHdpZHRoPSIyMyIgaGVpZ2h0PSIyOCIgZmlsbD0iI2Y0ZjZmOCIgc3Ryb2tlPSIjOWFhN2I0Ii8+CjxyZWN0IHg9IjgxMCIgeT0iMjkwIiB3aWR0aD0iMjMiIGhlaWdodD0iMjgiIGZpbGw9IiNmNGY2ZjgiIHN0cm9rZT0iIzlhYTdiNCIvPgo8cmVjdCB4PSI4MzMiIHk9IjI5MCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjI4IiBmaWxsPSIjZjRmNmY4IiBzdHJva2U9IiM5YWE3YjQiLz4KPHRleHQgeD0iODQ0LjUiIHk9IjMzNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMCIgZmlsbD0iIzRhNTk2OCI+MDwvdGV4dD4KPHRleHQgeD0iMTEwIiB5PSIzMDkiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM0YTU5NjgiPmJpdDwvdGV4dD4KPGxpbmUgeDE9IjEyMCIgeTE9IjM0NiIgeDI9IjQ4NiIgeTI9IjM0NiIgc3Ryb2tlPSIjYzkyYTJhIiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iMzA0IiB5PSIzNjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNjOTJhMmEiPmJpdHMgMzHigJMxNjogUkVTRVQgcGlucyAoYml0IDIxID0gNSArIDE2IOKGkiBQQTUgb2ZmKTwvdGV4dD4KPGxpbmUgeDE9IjQ5MCIgeTE9IjM0NiIgeDI9Ijg1NiIgeTI9IjM0NiIgc3Ryb2tlPSIjMTk3MWMyIiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iNjcyIiB5PSIzNjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiMxOTcxYzIiPmJpdHMgMTXigJMwOiBTRVQgcGlucyAoYml0IDUg4oaSIFBBNSBvbik8L3RleHQ+Cjwvc3ZnPg==" class="img-fluid figure-img" alt="Bit diagrams of RCC AHB1ENR, GPIOA MODER and GPIOA BSRR"></p>
+<figcaption>The bits you change: AHB1ENR bit 0, MODER bits 11:10 for PA5, BSRR bit 5 (set) and bit 21 (reset).</figcaption>
+</figure>
+</div>
+<ol type="1">
+<li>In <code>led_reg.h</code>, <strong>declare</strong> three functions with no parameters and no return value: <code>led_init</code>, <code>led_on</code>, <code>led_off</code>.</li>
+<li>In <code>led_reg.c</code>, <strong>define</strong> <code>led_init</code> with three statements:
 <ul>
-<li><code>&quot;LOW&quot;</code> when the average is below <code>1500U</code>, <code>&quot;HIGH&quot;</code> when it is above <code>3000U</code>, otherwise <code>&quot;OK&quot;</code>. The capacity is eight characters, including <code>\0</code>.</li>
-<li>Check that the text and its <code>\0</code> fit in <code>capacity</code> <strong>before</strong> you write. Write the <code>\0</code> yourself.</li>
-<li>Return <code>true</code> only after the whole string is written. If it does not fit, write an empty string (only <code>\0</code>) when <code>capacity &gt; 0</code> and return <code>false</code>.</li>
-</ul>
-<p>Look at <code>status_text</code> in the WATCH panel and in the MEMORY panel. Fill in the character and its hexadecimal byte for indices 0 to 4:</p>
+<li>set bit 0 of <code>RCC-&gt;AHB1ENR</code> (GPIOA clock) without changing other bits;</li>
+<li>clear bits 11:10 of <code>GPIOA-&gt;MODER</code>;</li>
+<li>write the pattern <code>01</code> into bits 11:10 (PA5 = output).</li>
+</ul></li>
+<li>In <code>main.c</code>, add <code>#include &quot;led_reg.h&quot;</code>. At the end of <code>USER CODE BEGIN 2</code>, add these two lines:</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>   <span class="co">/* start from input mode: makes the change visible */</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>led_init<span class="op">();</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>CubeMX already set up PA5 for you. The first line undoes that, so you can see that your <code>led_init</code> really does it.</p>
+<p>Break on <code>led_init();</code>, then step <strong>into</strong> it (F11) and over each statement. Look at GPIOA and RCC in the register (SFR) view:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Index</th>
-<th>0</th>
-<th>1</th>
-<th>2</th>
-<th>3</th>
-<th>4</th>
+<th>Moment</th>
+<th style="text-align: center;"><code>RCC-&gt;AHB1ENR</code> bit 0</th>
+<th style="text-align: center;"><code>MODER</code> bits 11:10</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Character</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>Before <code>led_init</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
 </tr>
 <tr class="even">
-<td>Byte (hex)</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>After the clear</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td>After the set</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Show:</strong> the string, the <code>0x00</code> byte after the last letter, and <code>status_valid</code>.</p>
+<p><strong>Show:</strong> the table, and explain why bit 0 was already <code>1</code> before <code>led_init</code>.</p>
 </section>
-<section id="checkpoint-d---check-the-final-values-in-the-debugger" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-d---check-the-final-values-in-the-debugger">Checkpoint D - Check the final values in the debugger</h2>
-<p>Set a breakpoint on the line <code>lab_done = true;</code>. Write every prediction first. Then press <strong>F5</strong> and fill in the table.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Check</th>
-<th>Where to look</th>
-<th>Prediction</th>
-<th>Observed</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>The last index used is 7</td>
-<td><code>i</code> at the last loop step inside <code>average_samples</code></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>The <code>4200</code> sample became <code>4095</code></td>
-<td><code>bounded_samples[3]</code></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>The average used all eight clamped samples</td>
-<td><code>sample_average</code></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>The status text ends with <code>\0</code></td>
-<td><code>status_text</code> in the MEMORY panel</td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>Press <strong>Step over</strong> (F10) once: <code>lab_done</code> changes to <code>true</code>.</p>
+<section id="checkpoint-d---turn-ld2-on-and-off-with-bsrr" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-d---turn-ld2-on-and-off-with-bsrr">Checkpoint D - Turn LD2 on and off with <code>BSRR</code></h2>
+<ol type="1">
+<li>In <code>led_reg.c</code>, <strong>define</strong> <code>led_on</code> and <code>led_off</code>. Each is one assignment to <code>GPIOA-&gt;BSRR</code>: bit 5 sets PA5, bit 21 (5 + 16) resets it.</li>
+<li>In <code>main.c</code>, inside <code>USER CODE BEGIN 3</code>, write a blink with <code>led_on()</code>, <code>led_off()</code> and <code>HAL_Delay(200)</code>. Do not use any <code>HAL_GPIO_...</code> call.</li>
+<li>Put a breakpoint on <code>led_off();</code>. When it stops, LD2 must be <strong>on</strong>. Step over: LD2 turns <strong>off</strong>.</li>
+</ol>
+<p><strong>Show:</strong> LD2 blinking, your three functions, and the register view when the program stops at <code>led_off();</code> (<code>ODR</code> bit 5 = 1).</p>
 </section>
-<section id="checkpoint-e---individual-modification" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-e---individual-modification">Checkpoint E - Individual modification</h2>
-<p>Each student gets one variant. Write your prediction first. Change only that one thing. Build, run, and compare.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Variant</th>
-<th>Required change</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>A</td>
-<td>Change the <code>90U</code> sample to <code>5000U</code>. Predict the clamped value and the new average.</td>
-</tr>
-<tr class="even">
-<td>B</td>
-<td>Change <code>HIGH_THRESHOLD</code> from <code>2500U</code> to <code>2000U</code>. Predict <code>samples_above</code>.</td>
-</tr>
-<tr class="odd">
-<td>C</td>
-<td>Change the <code>HIGH</code> status boundary from <code>3000U</code> to <code>2200U</code>. Predict the string.</td>
-</tr>
-<tr class="even">
-<td>D</td>
-<td>Call the array functions with <code>SAMPLE_COUNT - 1</code>. Predict which sample is left out and the new results.</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Show:</strong> the new values in the debugger. Explain in two sentences why they changed.</p>
+<section id="checkpoint-e---blink-the-status" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-e---blink-the-status">Checkpoint E - Blink the status</h2>
+<p>Use <code>status_code</code> from Checkpoint B (<code>-1</code>, <code>0</code> or <code>1</code>).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img role="img" aria-label="Timing diagram of the LOW, OK and HIGH blink patterns" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgMzAwIiBmb250LWZhbWlseT0iU2Vnb2UgVUksIEhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iTEQyIGJsaW5rIHBhdHRlcm5zOiBMT1cgYmxpbmtzIG9uY2UsIE9LIHR3aWNlLCBISUdIIHRocmVlIHRpbWVzOyBlYWNoIGJsaW5rIGlzIDIwMCBtcyBvbiBhbmQgMjAwIG1zIG9mZiwgdGhlbiBhIDEwMDAgbXMgcGF1c2UiPgo8cmVjdCB3aWR0aD0iOTAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2ZmZiIvPgo8dGV4dCB4PSIyMCIgeT0iNDAiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNlODU5MGMiPkxPVzwvdGV4dD4KPHRleHQgeD0iMjAiIHk9IjYwIiBmb250LXNpemU9IjExIiBmaWxsPSIjNGE1OTY4IiBmb250LWZhbWlseT0iQ29uc29sYXMsIE1lbmxvLCBtb25vc3BhY2UiPnN0YXR1c19jb2RlID0gLTE8L3RleHQ+CjxwYXRoIGQ9Ik0xNzAsNjAgTDE3MC4wLDYwIEwxNzAuMCwzMCBMMTk2LjAsMzAgTDE5Ni4wLDYwIEwzNTIuMCw2MCBMMzUyLjAsMzAgTDM3OC4wLDMwIEwzNzguMCw2MCBMNTM0LjAsNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U4NTkwYyIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KPHRleHQgeD0iNzYyIiB5PSI1MCIgZm9udC1zaXplPSIxMyIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2U4NTkwYyI+MSBibGluayArIHBhdXNlPC90ZXh0Pgo8dGV4dCB4PSIyMCIgeT0iMTEwIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMmY5ZTQ0Ij5PSzwvdGV4dD4KPHRleHQgeD0iMjAiIHk9IjEzMCIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzRhNTk2OCIgZm9udC1mYW1pbHk9IkNvbnNvbGFzLCBNZW5sbywgbW9ub3NwYWNlIj5zdGF0dXNfY29kZSA9IDA8L3RleHQ+CjxwYXRoIGQ9Ik0xNzAsMTMwIEwxNzAuMCwxMzAgTDE3MC4wLDEwMCBMMTk2LjAsMTAwIEwxOTYuMCwxMzAgTDIyMi4wLDEzMCBMMjIyLjAsMTAwIEwyNDguMCwxMDAgTDI0OC4wLDEzMCBMNDA0LjAsMTMwIEw0MDQuMCwxMDAgTDQzMC4wLDEwMCBMNDMwLjAsMTMwIEw0NTYuMCwxMzAgTDQ1Ni4wLDEwMCBMNDgyLjAsMTAwIEw0ODIuMCwxMzAgTDYzOC4wLDEzMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMmY5ZTQ0IiBzdHJva2Utd2lkdGg9IjIuNSIvPgo8dGV4dCB4PSI3NjIiIHk9IjEyMCIgZm9udC1zaXplPSIxMyIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzJmOWU0NCI+MiBibGlua3MgKyBwYXVzZTwvdGV4dD4KPHRleHQgeD0iMjAiIHk9IjE4MCIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2M5MmEyYSI+SElHSDwvdGV4dD4KPHRleHQgeD0iMjAiIHk9IjIwMCIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzRhNTk2OCIgZm9udC1mYW1pbHk9IkNvbnNvbGFzLCBNZW5sbywgbW9ub3NwYWNlIj5zdGF0dXNfY29kZSA9IDE8L3RleHQ+CjxwYXRoIGQ9Ik0xNzAsMjAwIEwxNzAuMCwyMDAgTDE3MC4wLDE3MCBMMTk2LjAsMTcwIEwxOTYuMCwyMDAgTDIyMi4wLDIwMCBMMjIyLjAsMTcwIEwyNDguMCwxNzAgTDI0OC4wLDIwMCBMMjc0LjAsMjAwIEwyNzQuMCwxNzAgTDMwMC4wLDE3MCBMMzAwLjAsMjAwIEw0NTYuMCwyMDAgTDQ1Ni4wLDE3MCBMNDgyLjAsMTcwIEw0ODIuMCwyMDAgTDUwOC4wLDIwMCBMNTA4LjAsMTcwIEw1MzQuMCwxNzAgTDUzNC4wLDIwMCBMNTYwLjAsMjAwIEw1NjAuMCwxNzAgTDU4Ni4wLDE3MCBMNTg2LjAsMjAwIEw3NDIuMCwyMDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2M5MmEyYSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KPHRleHQgeD0iNzYyIiB5PSIxOTAiIGZvbnQtc2l6ZT0iMTMiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNjOTJhMmEiPjMgYmxpbmtzICsgcGF1c2U8L3RleHQ+CjxsaW5lIHgxPSIxNzAiIHkxPSIyNTAiIHgyPSIyMjIuMCIgeTI9IjI1MCIgc3Ryb2tlPSIjMjAyYjM4IiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iMTcwIiB5PSIyNjYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiMyMDJiMzgiPjEgYmxpbmsgPSAyMDAgbXMgb24gKyAyMDAgbXMgb2ZmPC90ZXh0Pgo8bGluZSB4MT0iMzI2LjAiIHkxPSIyNTAiIHgyPSI0NTYuMCIgeTI9IjI1MCIgc3Ryb2tlPSIjMjAyYjM4IiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iMzI2LjAiIHk9IjI0MyIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzIwMmIzOCI+cGF1c2UgMTAwMCBtcyAoSElHSCByb3cpPC90ZXh0Pgo8dGV4dCB4PSIyMCIgeT0iMjkyIiBmb250LXNpemU9IjExIiBmaWxsPSIjNGE1OTY4Ij5MRDIgb24gPSBsaW5lIHVwLCBMRDIgb2ZmID0gbGluZSBkb3duLjwvdGV4dD4KPC9zdmc+" class="img-fluid figure-img" alt="Timing diagram of the LOW, OK and HIGH blink patterns"></p>
+<figcaption>The three blink patterns.</figcaption>
+</figure>
+</div>
+<ol type="1">
+<li>Calculate a blink count: LOW = 1, OK = 2, HIGH = 3. One short expression is enough.</li>
+<li>In <code>USER CODE BEGIN 3</code>, blink LD2 that many times (200 ms on, 200 ms off), then wait 1000 ms. Use a <code>for</code> loop.</li>
+<li>Predict the number of blinks for your data before you run it.</li>
+</ol>
+<p><strong>Show:</strong> the blink pattern, your prediction, and the code.</p>
+<p>If you finish early: change one of your samples so that the status becomes HIGH, predict the new blink count, and check it.</p>
 </section>
 <section id="common-problems" class="level2">
 <h2 class="anchored" data-anchor-id="common-problems">Common problems</h2>
@@ -5208,62 +5147,76 @@ pre { font-size: 8.7pt; }
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>undefined reference to &#39;clamp_u16&#39;</code></td>
-<td>Both <code>.c</code> files are listed in <code>target_sources</code> in <code>CMakeLists.txt</code>. The function name in the <code>.c</code> file matches the <code>.h</code> file.</td>
+<td><code>undefined reference to &#39;average_samples&#39;</code> or <code>&#39;led_init&#39;</code></td>
+<td>The <code>.c</code> file is in <code>target_sources</code>. The name in the <code>.c</code> file matches the <code>.h</code> file.</td>
 </tr>
 <tr class="even">
-<td><code>sensor_math.h: No such file or directory</code></td>
-<td>The header is in <code>Core\Inc</code> — not in <code>Core\Src</code>, and not in <code>Core\Core\Inc</code>.</td>
+<td><code>implicit declaration of function &#39;led_on&#39;</code></td>
+<td><code>#include &quot;led_reg.h&quot;</code> is in <code>main.c</code>, and the declaration is in the header.</td>
 </tr>
 <tr class="odd">
-<td><code>CMake Error: The current CMakeCache.txt directory ... is different</code></td>
-<td>You kept the copied <code>build</code> folder. Delete it and build again.</td>
+<td><code>&#39;GPIOA&#39; undeclared</code> in <code>led_reg.c</code></td>
+<td><code>#include &quot;main.h&quot;</code> is at the top of <code>led_reg.c</code>.</td>
 </tr>
 <tr class="even">
-<td>F5: program file <code>...EE5203_L03_&lt;studentnumber&gt;.elf</code> does not exist</td>
-<td>The <code>set(CMAKE_PROJECT_NAME ...)</code> line matches the folder name exactly.</td>
-</tr>
-<tr class="odd">
 <td><code>conflicting types for &#39;average_samples&#39;</code></td>
-<td>The declaration in the <code>.h</code> file and the definition in the <code>.c</code> file use the same types.</td>
-</tr>
-<tr class="even">
-<td>Build is clean, but the average is wrong</td>
-<td>Stop inside the loop and watch <code>i</code>, <code>count</code>, and the sum.</td>
+<td>The declaration and the definition use exactly the same types.</td>
 </tr>
 <tr class="odd">
-<td>The status string shows extra characters</td>
-<td>The <code>\0</code> is written right after the last letter.</td>
+<td>LD2 never lights after <code>led_init</code></td>
+<td>Check the <code>MODER</code> bits in the register view: they must be <code>01</code>.</td>
+</tr>
+<tr class="even">
+<td>LD2 stays on</td>
+<td><code>led_off</code> uses bit 21, not bit 5.</td>
+</tr>
+<tr class="odd">
+<td>The average differs from Lab 2</td>
+<td>Stop inside <code>average_samples</code>; watch <code>i</code>, <code>count</code> and the sum.</td>
+</tr>
+<tr class="even">
+<td><code>...FLASH.ld: syntax error</code></td>
+<td>Build with <strong>Ctrl+Shift+B</strong> (the template repairs the CubeMX linker script). Check that <code>.vscode</code> is in the project folder.</td>
 </tr>
 </tbody>
 </table>
-<p>More setup problems: see <em>Common Lab Mistakes</em> on CATS Lessons.</p>
+</section>
+<section id="end-of-the-session---save-to-h" class="level2">
+<h2 class="anchored" data-anchor-id="end-of-the-session---save-to-h">End of the session - Save to H</h2>
+<p>Close VS Code, run the <strong>Save to H</strong> desktop shortcut, and check that <code>H:\EE_Labs\EE5203_L03_&lt;studentnumber&gt;</code> exists before you log out.</p>
 </section>
 <section id="acceptance-checklist" class="level2">
 <h2 class="anchored" data-anchor-id="acceptance-checklist">Acceptance checklist</h2>
 <ul class="task-list">
-<li><label><input type="checkbox">The build is clean. Each declaration matches its definition exactly.</label></li>
-<li><label><input type="checkbox">Every array loop uses <code>i &lt; count</code>. The sum is a <code>uint32_t</code>.</label></li>
-<li><label><input type="checkbox">The status string fits in its array, ends with <code>\0</code>, and <code>status_valid</code> is <code>true</code>.</label></li>
-<li><label><input type="checkbox">The prediction tables and the Checkpoint D table are filled in.</label></li>
-<li><label><input type="checkbox">Your individual modification works and you can explain it.</label></li>
+<li><label><input type="checkbox">The build is clean. Every declaration matches its definition.</label></li>
+<li><label><input type="checkbox">Lab 3 results equal the Lab 2 results (Checkpoint B table), and the Lab 2 project is unchanged.</label></li>
+<li><label><input type="checkbox"><code>led_init</code>, <code>led_on</code>, <code>led_off</code> use only register writes; there is no <code>HAL_GPIO_...</code> call in your code.</label></li>
+<li><label><input type="checkbox">The register table of Checkpoint C is filled in.</label></li>
+<li><label><input type="checkbox">LD2 blinks the status (Checkpoint E).</label></li>
 <li><label><input type="checkbox">All <code>main.c</code> edits are inside the <code>USER CODE</code> regions.</label></li>
 </ul>
 </section>
 <section id="individual-oral-check" class="level2">
 <h2 class="anchored" data-anchor-id="individual-oral-check">Individual oral check</h2>
-<p>Be ready for one question and one live change:</p>
+<p>Be ready for one question and <strong>one live change</strong>, chosen by your lab assistant. Predict the result first, then make the change.</p>
+<p>Questions:</p>
 <ul>
-<li>What is the difference between declaring and defining a function?</li>
-<li>Why can <code>average_samples</code> not find the length of the array by itself?</li>
-<li>Why is the sum a <code>uint32_t</code>? Where is the <code>\0</code> byte in your status array?</li>
-<li>The build has 0 errors. Does that mean the average is correct? How do you check it?</li>
-<li>You see <code>undefined reference to &#39;count_above&#39;</code>. Which file do you check first?</li>
+<li>What is the difference between a declaration and a definition? Where is each one for <code>led_on</code>?</li>
+<li>Why does <code>average_samples</code> need the count as a parameter?</li>
+<li>Why does <code>led_init</code> use <code>|=</code> for the clock, but <code>led_on</code> uses <code>=</code> for <code>BSRR</code>?</li>
+<li>What does <code>3U &lt;&lt; 10</code> select, and why does PA5 start at bit 10?</li>
+</ul>
+<p>Live changes:</p>
+<ul>
+<li>Change both blink delays to <code>100</code> ms. Do the masks change?</li>
+<li>Change the HIGH limit from <code>3000</code> to <code>2000</code>. How many blinks now?</li>
+<li>Replace the literal <code>5</code> with <code>#define LED_PIN 5U</code> in <code>led_on</code> and <code>led_off</code>.</li>
 </ul>
 </section>
 <section id="submit" class="level2">
 <h2 class="anchored" data-anchor-id="submit">Submit</h2>
-<p>Submit the four module files, <code>CMakeLists.txt</code>, the <code>main.c</code> user-code sections, one debugger screenshot of the final arrays and results, the completed tables, and a three-sentence explanation of your modification.</p>
+<p>Submit the four module files, <code>CMakeLists.txt</code>, the <code>main.c</code> user-code sections, the Checkpoint B and C tables, and one photo or short video of LD2 blinking the status.</p>
+<p><strong>Marks (10):</strong> pre-lab quiz on CATS 1 · A new project and build 1 · B functions 2 · C <code>led_init</code> and registers 2 · D <code>led_on</code>/<code>led_off</code> 2 · E status blink 1 · oral check and live change 1.</p>
 
 
 </section>
