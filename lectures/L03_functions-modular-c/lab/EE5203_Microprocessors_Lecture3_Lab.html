@@ -4882,7 +4882,7 @@ pre { font-size: 8.7pt; }
 <section id="prepare-before-class" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-before-class">Prepare before class</h2>
 <ul class="task-list">
-<li><label><input type="checkbox">Bring your board and a USB data cable. Your Lab 2 project must be on <code>H:\EE_Labs</code>: you copy code from it, but you do not change it.</label></li>
+<li><label><input type="checkbox">Bring your board and a USB data cable, and your <strong>Lab 2 results</strong> (the Checkpoint D table). Lab 3 must give the same values.</label></li>
 <li><label><input type="checkbox">Download the starter files: <a href="starter/EE5203_L03_starter.zip"><code>EE5203_L03_starter.zip</code></a>.</label></li>
 <li><label><input type="checkbox">Do the <strong>Lab 3 pre-lab quiz</strong> on CATS. It includes the bit-mask table below. To practise masks first, use the <a href="../../L04_gpio-bare-metal/assets/htmls/bitwise_lab.html#practice">Bitwise Lab</a>.</label></li>
 <li><label><input type="checkbox">Bring this table, completed on paper:</label></li>
@@ -4959,7 +4959,7 @@ pre { font-size: 8.7pt; }
 </tr>
 <tr class="odd">
 <td>Starting point</td>
-<td>A new CubeMX project; code copied from your Lab 2 <code>main.c</code></td>
+<td>A new CubeMX project; the Lab 2 code is given in Checkpoint B</td>
 </tr>
 <tr class="even">
 <td>Project name</td>
@@ -4991,7 +4991,7 @@ pre { font-size: 8.7pt; }
 <li>Copy the folder <code>C:\Users\Public\EE5203_template\.vscode</code> into the new project folder, next to the <code>.ioc</code> file.</li>
 <li>Open <code>EE5203_L03_starter.zip</code>. Copy the <code>Core</code> folder inside it and paste it into your project folder. Two files go to <code>Core\Inc</code>, two to <code>Core\Src</code>.</li>
 <li>In <code>CMakeLists.txt</code>, add the two new <code>.c</code> files to <code>target_sources</code>, below the line <code># Add user sources here</code>. Write the paths yourself, in the same form as <code>Core/Src/&lt;file&gt;.c</code>. (The project name is already correct: CubeMX used your folder name.)</li>
-<li>Open the folder in VS Code and build with <strong>Ctrl+Shift+B</strong>: zero errors. The starter files build even though they are not finished.</li>
+<li>Open the folder in VS Code and build with <strong>Ctrl+Shift+B</strong>: zero errors. The starter files build even though they are not finished. Two warnings (<code>unused parameter &#39;low&#39;</code> and <code>&#39;high&#39;</code>) are normal: they go away when you finish <code>clamp_u16</code> in Checkpoint B.</li>
 </ol>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -5003,25 +5003,42 @@ pre { font-size: 8.7pt; }
 </section>
 <section id="checkpoint-b---move-the-lab-2-calculations-into-functions" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-b---move-the-lab-2-calculations-into-functions">Checkpoint B - Move the Lab 2 calculations into functions</h2>
-<p><code>sensor_math.h</code> already declares <code>clamp_u16</code>. You write the rest.</p>
+<p>You write two short functions, then call them from <code>main.c</code>.</p>
+<section id="b1---write-the-two-functions" class="level3">
+<h3 class="anchored" data-anchor-id="b1---write-the-two-functions">B1 - Write the two functions</h3>
 <ol type="1">
-<li>In <code>sensor_math.c</code>, complete the <strong>body</strong> of <code>clamp_u16</code>: return <code>low</code> if the value is below <code>low</code>, <code>high</code> if it is above <code>high</code>, and the value itself otherwise.</li>
-<li>In <code>sensor_math.h</code>, <strong>write the declaration</strong> of <code>average_samples</code>. It takes an array of <code>uint16_t</code> values and the number of values (<code>int</code>), and returns the average as <code>uint16_t</code>.</li>
-<li>In <code>sensor_math.c</code>, <strong>write the definition</strong> of <code>average_samples</code>:
-<ul>
-<li>return <code>0U</code> when the count is <code>0</code>;</li>
-<li>add the values into a <code>uint32_t</code> sum; the loop uses <code>i &lt; count</code>;</li>
-<li>divide once, at the end.</li>
-</ul></li>
-<li>In <code>main.c</code>, add <code>#include &quot;sensor_math.h&quot;</code> inside <code>USER CODE BEGIN Includes</code>.</li>
-<li>Open your <strong>Lab 2</strong> <code>main.c</code> (read only). Copy everything between <code>USER CODE BEGIN 2</code> and <code>USER CODE END 2</code> into the same region of the new <code>main.c</code>. Then change the copy:
-<ul>
-<li>replace the clamping <code>if</code> with a call: <code>samples[i] = clamp_u16(samples[i], 0U, 4095U);</code></li>
-<li>remove the <code>sum</code> line from the loop, and after the loop write <code>average = average_samples(samples, 8);</code></li>
-<li>keep the <code>high_count</code> and <code>status_code</code> code from Lab 2.</li>
-</ul></li>
+<li><p>In <code>sensor_math.c</code>, complete the <strong>body</strong> of <code>clamp_u16</code>: return <code>low</code> if the value is below <code>low</code>, <code>high</code> if it is above <code>high</code>, and the value itself otherwise.</p></li>
+<li><p>In <code>sensor_math.h</code>, replace the <code>TODO</code> comment for <code>average_samples</code> with this <strong>declaration</strong>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> average_samples<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>In <code>sensor_math.c</code>, replace the <code>TODO</code> comment for <code>average_samples</code> with this <strong>definition</strong>, and write the loop yourself:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> average_samples<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint32_t</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* Your loop: add every values[i] to sum. Use i &lt; count. */</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sum <span class="op">/</span> count<span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Build: zero errors.</p></li>
 </ol>
-<p>The results must be <strong>the same as in Lab 2</strong>. Fill in the table from your Lab 2 prediction table, then check in the debugger:</p>
+</section>
+<section id="b2---call-the-functions-from-main.c" class="level3">
+<h3 class="anchored" data-anchor-id="b2---call-the-functions-from-main.c">B2 - Call the functions from <code>main.c</code></h3>
+<ol type="1">
+<li>Add <code>#include &quot;sensor_math.h&quot;</code> inside <code>USER CODE BEGIN Includes</code>.</li>
+</ol>
+<p>Add steps 2-4 inside <code>USER CODE BEGIN 2</code>, one below the other.</p>
+<ol start="2" type="1">
+<li><p>The eight values from Lab 2:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> samples<span class="op">[</span><span class="dv">8</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">850</span><span class="op">,</span> <span class="dv">1250</span><span class="op">,</span> <span class="dv">4095</span><span class="op">,</span> <span class="dv">4200</span><span class="op">,</span> <span class="dv">2050</span><span class="op">,</span> <span class="dv">900</span><span class="op">,</span> <span class="dv">3100</span><span class="op">,</span> <span class="dv">2800</span><span class="op">};</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Clamp every value with your function:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">8</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    samples<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> clamp_u16<span class="op">(</span>samples<span class="op">[</span>i<span class="op">],</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">4095</span><span class="op">);</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Calculate the average with your function:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> average <span class="op">=</span> average_samples<span class="op">(</span>samples<span class="op">,</span> <span class="dv">8</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Build and start the debugger.</p></li>
+</ol>
+<p>The results must be <strong>the same as in Lab 2</strong>. Copy the Lab 2 values from your Lab 2 table, then read the Lab 3 values in the debugger:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -5041,19 +5058,10 @@ pre { font-size: 8.7pt; }
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 </tr>
-<tr class="odd">
-<td><code>high_count</code></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-</tr>
-<tr class="even">
-<td><code>status_code</code></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-</tr>
 </tbody>
 </table>
 <p><strong>Show:</strong> a breakpoint inside the loop of <code>average_samples</code>, with <code>i</code> and the sum changing as you step, and the completed table.</p>
+</section>
 </section>
 <section id="checkpoint-c---write-led_init-and-check-the-registers" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-c---write-led_init-and-check-the-registers">Checkpoint C - Write <code>led_init()</code> and check the registers</h2>
@@ -5074,8 +5082,8 @@ pre { font-size: 8.7pt; }
 </ul></li>
 <li>In <code>main.c</code>, add <code>#include &quot;led_reg.h&quot;</code>. At the end of <code>USER CODE BEGIN 2</code>, add these two lines:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>   <span class="co">/* start from input mode: makes the change visible */</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>led_init<span class="op">();</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>   <span class="co">/* start from input mode: makes the change visible */</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>led_init<span class="op">();</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>CubeMX already set up PA5 for you. The first line undoes that, so you can see that your <code>led_init</code> really does it.</p>
 <p>Break on <code>led_init();</code>, then step <strong>into</strong> it (F11) and over each statement. Look at GPIOA and RCC in the register (SFR) view:</p>
 <table class="caption-top table">
@@ -5117,7 +5125,13 @@ pre { font-size: 8.7pt; }
 </section>
 <section id="checkpoint-e---blink-the-status" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-e---blink-the-status">Checkpoint E - Blink the status</h2>
-<p>Use <code>status_code</code> from Checkpoint B (<code>-1</code>, <code>0</code> or <code>1</code>).</p>
+<p>First add the Lab 2 status rule in <code>USER CODE BEGIN 2</code>, below the <code>average</code> line:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>average <span class="op">&lt;</span> <span class="dv">1500</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    status_code <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span>     <span class="co">/* LOW  */</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>average <span class="op">&gt;</span> <span class="dv">3000</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    status_code <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>      <span class="co">/* HIGH */</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>                         <span class="co">/* otherwise 0 = OK */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img role="img" aria-label="Timing diagram of the LOW, OK and HIGH blink patterns" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgMzAwIiBmb250LWZhbWlseT0iU2Vnb2UgVUksIEhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iTEQyIGJsaW5rIHBhdHRlcm5zOiBMT1cgYmxpbmtzIG9uY2UsIE9LIHR3aWNlLCBISUdIIHRocmVlIHRpbWVzOyBlYWNoIGJsaW5rIGlzIDIwMCBtcyBvbiBhbmQgMjAwIG1zIG9mZiwgdGhlbiBhIDEwMDAgbXMgcGF1c2UiPgo8cmVjdCB3aWR0aD0iOTAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2ZmZiIvPgo8dGV4dCB4PSIyMCIgeT0iNDAiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNlODU5MGMiPkxPVzwvdGV4dD4KPHRleHQgeD0iMjAiIHk9IjYwIiBmb250LXNpemU9IjExIiBmaWxsPSIjNGE1OTY4IiBmb250LWZhbWlseT0iQ29uc29sYXMsIE1lbmxvLCBtb25vc3BhY2UiPnN0YXR1c19jb2RlID0gLTE8L3RleHQ+CjxwYXRoIGQ9Ik0xNzAsNjAgTDE3MC4wLDYwIEwxNzAuMCwzMCBMMTk2LjAsMzAgTDE5Ni4wLDYwIEwzNTIuMCw2MCBMMzUyLjAsMzAgTDM3OC4wLDMwIEwzNzguMCw2MCBMNTM0LjAsNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U4NTkwYyIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KPHRleHQgeD0iNzYyIiB5PSI1MCIgZm9udC1zaXplPSIxMyIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2U4NTkwYyI+MSBibGluayArIHBhdXNlPC90ZXh0Pgo8dGV4dCB4PSIyMCIgeT0iMTEwIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMmY5ZTQ0Ij5PSzwvdGV4dD4KPHRleHQgeD0iMjAiIHk9IjEzMCIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzRhNTk2OCIgZm9udC1mYW1pbHk9IkNvbnNvbGFzLCBNZW5sbywgbW9ub3NwYWNlIj5zdGF0dXNfY29kZSA9IDA8L3RleHQ+CjxwYXRoIGQ9Ik0xNzAsMTMwIEwxNzAuMCwxMzAgTDE3MC4wLDEwMCBMMTk2LjAsMTAwIEwxOTYuMCwxMzAgTDIyMi4wLDEzMCBMMjIyLjAsMTAwIEwyNDguMCwxMDAgTDI0OC4wLDEzMCBMNDA0LjAsMTMwIEw0MDQuMCwxMDAgTDQzMC4wLDEwMCBMNDMwLjAsMTMwIEw0NTYuMCwxMzAgTDQ1Ni4wLDEwMCBMNDgyLjAsMTAwIEw0ODIuMCwxMzAgTDYzOC4wLDEzMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMmY5ZTQ0IiBzdHJva2Utd2lkdGg9IjIuNSIvPgo8dGV4dCB4PSI3NjIiIHk9IjEyMCIgZm9udC1zaXplPSIxMyIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzJmOWU0NCI+MiBibGlua3MgKyBwYXVzZTwvdGV4dD4KPHRleHQgeD0iMjAiIHk9IjE4MCIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2M5MmEyYSI+SElHSDwvdGV4dD4KPHRleHQgeD0iMjAiIHk9IjIwMCIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzRhNTk2OCIgZm9udC1mYW1pbHk9IkNvbnNvbGFzLCBNZW5sbywgbW9ub3NwYWNlIj5zdGF0dXNfY29kZSA9IDE8L3RleHQ+CjxwYXRoIGQ9Ik0xNzAsMjAwIEwxNzAuMCwyMDAgTDE3MC4wLDE3MCBMMTk2LjAsMTcwIEwxOTYuMCwyMDAgTDIyMi4wLDIwMCBMMjIyLjAsMTcwIEwyNDguMCwxNzAgTDI0OC4wLDIwMCBMMjc0LjAsMjAwIEwyNzQuMCwxNzAgTDMwMC4wLDE3MCBMMzAwLjAsMjAwIEw0NTYuMCwyMDAgTDQ1Ni4wLDE3MCBMNDgyLjAsMTcwIEw0ODIuMCwyMDAgTDUwOC4wLDIwMCBMNTA4LjAsMTcwIEw1MzQuMCwxNzAgTDUzNC4wLDIwMCBMNTYwLjAsMjAwIEw1NjAuMCwxNzAgTDU4Ni4wLDE3MCBMNTg2LjAsMjAwIEw3NDIuMCwyMDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2M5MmEyYSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KPHRleHQgeD0iNzYyIiB5PSIxOTAiIGZvbnQtc2l6ZT0iMTMiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNjOTJhMmEiPjMgYmxpbmtzICsgcGF1c2U8L3RleHQ+CjxsaW5lIHgxPSIxNzAiIHkxPSIyNTAiIHgyPSIyMjIuMCIgeTI9IjI1MCIgc3Ryb2tlPSIjMjAyYjM4IiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iMTcwIiB5PSIyNjYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiMyMDJiMzgiPjEgYmxpbmsgPSAyMDAgbXMgb24gKyAyMDAgbXMgb2ZmPC90ZXh0Pgo8bGluZSB4MT0iMzI2LjAiIHkxPSIyNTAiIHgyPSI0NTYuMCIgeTI9IjI1MCIgc3Ryb2tlPSIjMjAyYjM4IiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iMzI2LjAiIHk9IjI0MyIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzIwMmIzOCI+cGF1c2UgMTAwMCBtcyAoSElHSCByb3cpPC90ZXh0Pgo8dGV4dCB4PSIyMCIgeT0iMjkyIiBmb250LXNpemU9IjExIiBmaWxsPSIjNGE1OTY4Ij5MRDIgb24gPSBsaW5lIHVwLCBMRDIgb2ZmID0gbGluZSBkb3duLjwvdGV4dD4KPC9zdmc+" class="img-fluid figure-img" alt="Timing diagram of the LOW, OK and HIGH blink patterns"></p>
