@@ -155,12 +155,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#part-a---pointers-and-structures" id="toc-part-a---pointers-and-structures" class="nav-link active" data-scroll-target="#part-a---pointers-and-structures">Part A - Pointers and structures</a></li>
-  <li><a href="#part-b---binary-and-hexadecimal" id="toc-part-b---binary-and-hexadecimal" class="nav-link" data-scroll-target="#part-b---binary-and-hexadecimal">Part B - Binary and hexadecimal</a></li>
-  <li><a href="#part-c---masks" id="toc-part-c---masks" class="nav-link" data-scroll-target="#part-c---masks">Part C - Masks</a></li>
-  <li><a href="#part-d---cmsis-registers-and-gpio" id="toc-part-d---cmsis-registers-and-gpio" class="nav-link" data-scroll-target="#part-d---cmsis-registers-and-gpio">Part D - CMSIS registers and GPIO</a></li>
-  <li><a href="#part-e---predict-the-register" id="toc-part-e---predict-the-register" class="nav-link" data-scroll-target="#part-e---predict-the-register">Part E - Predict the register</a></li>
-  <li><a href="#part-f---evidence" id="toc-part-f---evidence" class="nav-link" data-scroll-target="#part-f---evidence">Part F - Evidence</a></li>
+  <li><a href="#part-a---pointers-and-structures-8-min" id="toc-part-a---pointers-and-structures-8-min" class="nav-link active" data-scroll-target="#part-a---pointers-and-structures-8-min">Part A - Pointers and structures (8 min)</a></li>
+  <li><a href="#part-b---binary-and-hexadecimal-7-min" id="toc-part-b---binary-and-hexadecimal-7-min" class="nav-link" data-scroll-target="#part-b---binary-and-hexadecimal-7-min">Part B - Binary and hexadecimal (7 min)</a></li>
+  <li><a href="#part-c---masks-10-min" id="toc-part-c---masks-10-min" class="nav-link" data-scroll-target="#part-c---masks-10-min">Part C - Masks (10 min)</a></li>
+  <li><a href="#part-d---cmsis-registers-and-gpio-10-min" id="toc-part-d---cmsis-registers-and-gpio-10-min" class="nav-link" data-scroll-target="#part-d---cmsis-registers-and-gpio-10-min">Part D - CMSIS registers and GPIO (10 min)</a></li>
+  <li><a href="#part-e---predict-the-register-value-5-min" id="toc-part-e---predict-the-register-value-5-min" class="nav-link" data-scroll-target="#part-e---predict-the-register-value-5-min">Part E - Predict the register value (5 min)</a></li>
+  <li><a href="#part-f---check-it-in-the-debugger-5-min" id="toc-part-f---check-it-in-the-debugger-5-min" class="nav-link" data-scroll-target="#part-f---check-it-in-the-debugger-5-min">Part F - Check it in the debugger (5 min)</a></li>
   <li><a href="#exit-self-assessment" id="toc-exit-self-assessment" class="nav-link" data-scroll-target="#exit-self-assessment">Exit self-assessment</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="EE5203_Microprocessors_Lecture4_Worksheet.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -194,9 +194,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><strong>Expected time:</strong> 30-45 minutes <strong>Policy:</strong> Attempt every question before consulting the worked solutions. All register questions can — and should — be answered on paper first.</p>
-<section id="part-a---pointers-and-structures" class="level2">
-<h2 class="anchored" data-anchor-id="part-a---pointers-and-structures">Part A - Pointers and structures</h2>
+<p><strong>Time:</strong> 30-45 minutes. <strong>Rule:</strong> try every question before you open the solutions. Answer the register questions on paper first.</p>
+<section id="part-a---pointers-and-structures-8-min" class="level2">
+<h2 class="anchored" data-anchor-id="part-a---pointers-and-structures-8-min">Part A - Pointers and structures (8 min)</h2>
 <ol type="1">
 <li><p>Trace by hand and give every final value:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* (a) */</span>                    <span class="co">/* (b) */</span></span>
@@ -217,8 +217,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Explain in one sentence why the device header defines <code>GPIOA</code> as a <strong>pointer</strong> to a structure rather than a structure variable.</p></li>
 </ol>
 </section>
-<section id="part-b---binary-and-hexadecimal" class="level2">
-<h2 class="anchored" data-anchor-id="part-b---binary-and-hexadecimal">Part B - Binary and hexadecimal</h2>
+<section id="part-b---binary-and-hexadecimal-7-min" class="level2">
+<h2 class="anchored" data-anchor-id="part-b---binary-and-hexadecimal-7-min">Part B - Binary and hexadecimal (7 min)</h2>
 <ol start="4" type="1">
 <li><p>Convert:</p>
 <ol type="a">
@@ -230,15 +230,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>GPIOA’s <code>MODER</code> reads <code>0xA8000400</code>. Which pins are <strong>not</strong> in mode <code>00</code>, and what is the mode of PA5? (Pin <code>n</code> owns bits <code>2n+1:2n</code>.)</p></li>
 </ol>
 </section>
-<section id="part-c---masks" class="level2">
-<h2 class="anchored" data-anchor-id="part-c---masks">Part C - Masks</h2>
+<section id="part-c---masks-10-min" class="level2">
+<h2 class="anchored" data-anchor-id="part-c---masks-10-min">Part C - Masks (10 min)</h2>
 <ol start="6" type="1">
 <li><p>Write one statement each (operate on <code>uint32_t value</code>):</p>
 <ol type="a">
 <li>set bit 12;</li>
 <li>clear bit 3;</li>
-<li>toggle bit 0;</li>
-<li>test whether bit 9 is set (as an <code>if</code> condition);</li>
+<li>toggle bit 0 (hint: <code>^</code> flips a bit);</li>
+<li>test whether bit 9 is set, as an <code>if</code> condition (hint: <code>value &amp; mask</code> is non-zero when that bit is <code>1</code>);</li>
 <li>clear the two-bit field at bits 7:6, then write pattern <code>10</code> into it.</li>
 </ol></li>
 <li><p><code>value</code> starts as <code>0x0000 00F0</code>. Give the value after <strong>each</strong> statement, applied in order:</p>
@@ -251,14 +251,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>For which starting field values does this produce the wrong mode?</li>
 <li>Write the correct two-statement sequence.</li>
 </ol></li>
-<li><p>Explain the difference between <code>if (flags &amp; (1U &lt;&lt; 4))</code> and <code>if (flags &amp;&amp; (1U &lt;&lt; 4))</code> — what does each test, and when do they give different answers?</p></li>
+<li><p>Compare <code>if (flags &amp; (1U &lt;&lt; 4))</code> and <code>if (flags &amp;&amp; (1U &lt;&lt; 4))</code>. Say in one sentence what each one tests. Then give one value of <code>flags</code> for which the two answers are different.</p></li>
 </ol>
 </section>
-<section id="part-d---cmsis-registers-and-gpio" class="level2">
-<h2 class="anchored" data-anchor-id="part-d---cmsis-registers-and-gpio">Part D - CMSIS registers and GPIO</h2>
+<section id="part-d---cmsis-registers-and-gpio-10-min" class="level2">
+<h2 class="anchored" data-anchor-id="part-d---cmsis-registers-and-gpio-10-min">Part D - CMSIS registers and GPIO (10 min)</h2>
 <ol start="10" type="1">
 <li><p>Decode <code>RCC-&gt;AHB1ENR |= (1U &lt;&lt; 0);</code> word by word: <code>RCC</code>, <code>-&gt;</code>, <code>AHB1ENR</code>, <code>|=</code>, <code>1U &lt;&lt; 0</code>. Why is <code>|=</code> essential here rather than <code>=</code>?</p></li>
-<li><p>The homework wires an LED to PB0 and a button to PC1. Give the exact statements to:</p>
+<li><p>An LED is connected to PB0 and a push button to PC1. Write the statements to:</p>
 <ol type="a">
 <li>enable the clocks for GPIOB <strong>and</strong> GPIOC in one statement;</li>
 <li>make PB0 an output (field bits 1:0);</li>
@@ -269,28 +269,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Write the BSRR statements that drive PA5 high and low, and state the general rule for the reset bit of pin <code>n</code>.</p></li>
 </ol>
 </section>
-<section id="part-e---predict-the-register" class="level2">
-<h2 class="anchored" data-anchor-id="part-e---predict-the-register">Part E - Predict the register</h2>
+<section id="part-e---predict-the-register-value-5-min" class="level2">
+<h2 class="anchored" data-anchor-id="part-e---predict-the-register-value-5-min">Part E - Predict the register value (5 min)</h2>
 <ol start="14" type="1">
-<li><p>After generated initialization, <code>GPIOA-&gt;MODER</code> reads <code>0xA8000400</code>. The lab’s Checkpoint B/D sequence then executes:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>   <span class="co">/* observed value? */</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>   <span class="co">/* observed value? */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Give both intermediate hex values.</p></li>
+<li><p><code>GPIOA-&gt;MODER</code> reads <code>0xA8000400</code>, the value after the CubeMX initialisation. Then the two <code>MODER</code> statements of <code>led_init()</code> run:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>   <span class="co">/* value now? */</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>   <span class="co">/* value now? */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Write the hex value of <code>MODER</code> after each statement.</p></li>
 <li><p>In the SFR view you observe <code>RCC-&gt;AHB1ENR = 0x00000085</code>. Which GPIO ports are clocked? (AHB1ENR bit <code>n</code> clocks GPIO port <code>n</code>: A=0, B=1, C=2, … H=7.)</p></li>
 </ol>
 </section>
-<section id="part-f---evidence" class="level2">
-<h2 class="anchored" data-anchor-id="part-f---evidence">Part F - Evidence</h2>
+<section id="part-f---check-it-in-the-debugger-5-min" class="level2">
+<h2 class="anchored" data-anchor-id="part-f---check-it-in-the-debugger-5-min">Part F - Check it in the debugger (5 min)</h2>
 <ol start="16" type="1">
-<li><p>The LED blinks, but you must prove <em>“PA5 is configured as an output by my two MODER statements, not by leftover generated init.”</em> Describe a breakpoint plan and the two SFR observations that prove it.</p></li>
-<li><p>Build is clean, LED never lights. Give three distinct register-level explanations and the single SFR observation that eliminates each.</p></li>
+<li><p>LD2 blinks. Show in the debugger that <strong>your</strong> two <code>MODER</code> statements make PA5 an output, not the CubeMX code. Write where you put the breakpoint and which <code>MODER</code> bits you read, before and after each statement.</p></li>
+<li><p>The build is clean, but LD2 never lights. Give three different register mistakes that cause this. For each one, write the register and the bit value you would check in the register (SFR) view.</p></li>
 </ol>
 </section>
 <section id="exit-self-assessment" class="level2">
 <h2 class="anchored" data-anchor-id="exit-self-assessment">Exit self-assessment</h2>
 <p>Mark one:</p>
 <ul class="task-list">
-<li><label><input type="checkbox">Ready for the L04 lab without additional review</label></li>
+<li><label><input type="checkbox">Ready for Lab 3 (6/7 October) without more review</label></li>
 <li><label><input type="checkbox">Need to review pointers and <code>-&gt;</code></label></li>
 <li><label><input type="checkbox">Need to review binary/hex and shifts</label></li>
 <li><label><input type="checkbox">Need to review the mask recipes</label></li>
