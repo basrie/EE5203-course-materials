@@ -97,6 +97,7 @@
   <link rel="stylesheet" href="../../../site_libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
   <link rel="stylesheet" href="../../L01_microprocessor-systems-toolchain/assets/styles.css">
   <link rel="stylesheet" href="../../L02_c-for-embedded-systems/assets/week2.css">
+  <link rel="stylesheet" href="../assets/route_divider.css">
   <link href="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -344,6 +345,32 @@ Basri Erdogan
 <p><code>p</code> stores <code>&amp;x</code>; <code>*p</code> first produces <code>5</code>; the assignment stores <code>8</code> in <code>x</code>.</p>
 </div>
 </section>
+<section id="memory-mapped-registers" class="slide level2 route-divider" data-background-color="#e8f2f7">
+<h2>Memory-Mapped Registers</h2>
+<div class="route-num">
+<p>02</p>
+</div>
+<div class="route-kicker">
+<p>Step 2 of 4</p>
+</div>
+<div class="route-tagline">
+<p>A hardware register is a memory address. The pointer from step 1 now reaches the hardware.</p>
+</div>
+<div class="route-progress">
+<div class="route-seg done">
+<p>01 · Addresses</p>
+</div>
+<div class="route-seg now">
+<p>02 · Registers</p>
+</div>
+<div class="route-seg">
+<p>03 · Bits</p>
+</div>
+<div class="route-seg">
+<p>04 · GPIO</p>
+</div>
+</div>
+</section>
 <section id="memory-map-registers-have-addresses-too" class="slide level2">
 <h2>Memory map: registers have addresses too</h2>
 <svg class="story-visual" viewbox="0 0 1440 380" role="img" aria-labelledby="memmap-title">
@@ -429,13 +456,16 @@ The STM32F401 address space as three regions: flash at 0x0800 0000 holds the pro
 </div><div class="column" style="width:40%;">
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> The structure gives each register a name and an offset.</p>
+<p><span>01</span> <code>typedef</code> gives the structure type a short name: <code>GPIO_TypeDef</code>.</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> <code>GPIOA</code> is the base address, cast to a pointer to that structure.</p>
+<p><span>02</span> Each member is one register, at a fixed offset.</p>
 </div>
 <div class="vertical-item">
-<p><span>03</span> <code>GPIOA-&gt;BSRR</code> is the member at <code>+0x18</code>: address <code>0x40020018</code>.</p>
+<p><span>03</span> <code>GPIOA</code> is the base address, cast to a pointer to that type.</p>
+</div>
+<div class="vertical-item">
+<p><span>04</span> <code>GPIOA-&gt;BSRR</code> is the member at <code>+0x18</code>: <code>0x40020018</code>.</p>
 </div>
 </div>
 </div></div>
@@ -507,6 +537,32 @@ The STM32F401 address space as three regions: flash at 0x0800 0000 holds the pro
 </div>
 <div class="fragment relationship-strip">
 <p><code>0x40020000</code> · <code>0x40020014</code> · <code>0x40023830</code> · <code>GPIOA</code> is a pointer, so its members are reached with <code>-&gt;</code>.</p>
+</div>
+</section>
+<section id="bit-manipulation" class="slide level2 route-divider" data-background-color="#e8f2f7">
+<h2>Bit Manipulation</h2>
+<div class="route-num">
+<p>03</p>
+</div>
+<div class="route-kicker">
+<p>Step 3 of 4</p>
+</div>
+<div class="route-tagline">
+<p>We can reach a register. Now change only the bits we mean, and leave the rest alone.</p>
+</div>
+<div class="route-progress">
+<div class="route-seg done">
+<p>01 · Addresses</p>
+</div>
+<div class="route-seg done">
+<p>02 · Registers</p>
+</div>
+<div class="route-seg now">
+<p>03 · Bits</p>
+</div>
+<div class="route-seg">
+<p>04 · GPIO</p>
+</div>
 </div>
 </section>
 <section id="a-hardware-register-has-32-bits" class="slide level2">
@@ -664,6 +720,32 @@ A 32-bit register drawn as 32 cells, bit 31 on the left down to bit 0 on the rig
 </div>
 <div class="source-note">
 <p>Practise more: <a href="../assets/htmls/bitwise_lab.html">Bitwise Lab</a> — step through any mask, then try the exercises (<a href="../assets/htmls/bitwise_lab.html#practice">practice mode</a>).</p>
+</div>
+</section>
+<section id="gpio-configuration" class="slide level2 route-divider" data-background-color="#e8f2f7">
+<h2>GPIO Configuration</h2>
+<div class="route-num">
+<p>04</p>
+</div>
+<div class="route-kicker">
+<p>Step 4 of 4</p>
+</div>
+<div class="route-tagline">
+<p>Three register writes light LD2: clock → mode → <code>BSRR</code>. These are the Lab 3 functions.</p>
+</div>
+<div class="route-progress">
+<div class="route-seg done">
+<p>01 · Addresses</p>
+</div>
+<div class="route-seg done">
+<p>02 · Registers</p>
+</div>
+<div class="route-seg done">
+<p>03 · Bits</p>
+</div>
+<div class="route-seg now">
+<p>04 · GPIO</p>
+</div>
 </div>
 </section>
 <section id="clock-gating-rcc-switches-gpioa-on" class="slide level2">
