@@ -5080,11 +5080,13 @@ pre { font-size: 8.7pt; }
 <li>clear bits 11:10 of <code>GPIOA-&gt;MODER</code>;</li>
 <li>write the pattern <code>01</code> into bits 11:10 (PA5 = output).</li>
 </ul></li>
-<li>In <code>main.c</code>, add <code>#include &quot;led_reg.h&quot;</code>. At the end of <code>USER CODE BEGIN 2</code>, add these two lines:</li>
+<li>In <code>main.c</code>, add <code>#include &quot;led_reg.h&quot;</code> inside <code>USER CODE BEGIN Includes</code>.</li>
+<li>Call <code>led_init();</code> inside <code>USER CODE BEGIN SysInit</code>. This region is just <strong>above</strong> <code>MX_GPIO_Init();</code>, so your function runs <strong>before</strong> the CubeMX code:</li>
 </ol>
-<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span>   <span class="co">/* start from input mode: makes the change visible */</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>led_init<span class="op">();</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>CubeMX already set up PA5 for you. The first line undoes that, so you can see that your <code>led_init</code> really does it.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* USER CODE </span><span class="re">BEGIN</span><span class="co"> SysInit */</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>led_init<span class="op">();</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">/* USER CODE </span><span class="re">END</span><span class="co"> SysInit */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>At this point nothing has touched GPIOA yet: the clock bit is <code>0</code> and PA5 is in input mode (<code>00</code>). Your three statements change both.</p>
 <p>Break on <code>led_init();</code>, then step <strong>into</strong> it (F11) and over each statement. Look at GPIOA and RCC in the register (SFR) view:</p>
 <table class="caption-top table">
 <thead>
@@ -5101,37 +5103,48 @@ pre { font-size: 8.7pt; }
 <td style="text-align: center;"></td>
 </tr>
 <tr class="even">
-<td>After the clear</td>
+<td>After the clock line</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 </tr>
 <tr class="odd">
+<td>After the clear</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
 <td>After the set</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Show:</strong> the table, and explain why bit 0 was already <code>1</code> before <code>led_init</code>.</p>
+<p>Then step over <code>MX_GPIO_Init();</code>. CubeMX writes the same values, so nothing changes.</p>
+<p><strong>Show:</strong> the table, and answer: if the clock bit is <code>0</code>, what happens to a write to <code>GPIOA-&gt;MODER</code>?</p>
 </section>
 <section id="checkpoint-d---turn-ld2-on-and-off-with-bsrr" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-d---turn-ld2-on-and-off-with-bsrr">Checkpoint D - Turn LD2 on and off with <code>BSRR</code></h2>
 <ol type="1">
-<li>In <code>led_reg.c</code>, <strong>define</strong> <code>led_on</code> and <code>led_off</code>. Each is one assignment to <code>GPIOA-&gt;BSRR</code>: bit 5 sets PA5, bit 21 (5 + 16) resets it.</li>
-<li>In <code>main.c</code>, inside <code>USER CODE BEGIN 3</code>, write a blink with <code>led_on()</code>, <code>led_off()</code> and <code>HAL_Delay(200)</code>. Do not use any <code>HAL_GPIO_...</code> call.</li>
-<li>Put a breakpoint on <code>led_off();</code>. When it stops, LD2 must be <strong>on</strong>. Step over: LD2 turns <strong>off</strong>.</li>
+<li><p>In <code>led_reg.c</code>, <strong>define</strong> <code>led_on</code> and <code>led_off</code>. Each is one assignment to <code>GPIOA-&gt;BSRR</code>: bit 5 sets PA5, bit 21 (5 + 16) resets it.</p></li>
+<li><p>In <code>main.c</code>, inside <code>USER CODE BEGIN 3</code>, add this blink (LD2 on, wait, off, wait; the <code>while (1)</code> loop repeats it):</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>led_on<span class="op">();</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>HAL_Delay<span class="op">(</span><span class="dv">200</span><span class="op">);</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>led_off<span class="op">();</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>HAL_Delay<span class="op">(</span><span class="dv">200</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Do not use any <code>HAL_GPIO_...</code> call.</p></li>
+<li><p>Put a breakpoint on <code>led_off();</code>. When it stops, LD2 must be <strong>on</strong>. Step over: LD2 turns <strong>off</strong>.</p></li>
 </ol>
 <p><strong>Show:</strong> LD2 blinking, your three functions, and the register view when the program stops at <code>led_off();</code> (<code>ODR</code> bit 5 = 1).</p>
 </section>
 <section id="checkpoint-e---blink-the-status" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-e---blink-the-status">Checkpoint E - Blink the status</h2>
 <p>First add the Lab 2 status rule in <code>USER CODE BEGIN 2</code>, below the <code>average</code> line:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>average <span class="op">&lt;</span> <span class="dv">1500</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    status_code <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span>     <span class="co">/* LOW  */</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>average <span class="op">&gt;</span> <span class="dv">3000</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    status_code <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>      <span class="co">/* HIGH */</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>                         <span class="co">/* otherwise 0 = OK */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>average <span class="op">&lt;</span> <span class="dv">1500</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    status_code <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span>     <span class="co">/* LOW  */</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>average <span class="op">&gt;</span> <span class="dv">3000</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    status_code <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>      <span class="co">/* HIGH */</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>                         <span class="co">/* otherwise 0 = OK */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img role="img" aria-label="Timing diagram of the LOW, OK and HIGH blink patterns" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgMzAwIiBmb250LWZhbWlseT0iU2Vnb2UgVUksIEhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iTEQyIGJsaW5rIHBhdHRlcm5zOiBMT1cgYmxpbmtzIG9uY2UsIE9LIHR3aWNlLCBISUdIIHRocmVlIHRpbWVzOyBlYWNoIGJsaW5rIGlzIDIwMCBtcyBvbiBhbmQgMjAwIG1zIG9mZiwgdGhlbiBhIDEwMDAgbXMgcGF1c2UiPgo8cmVjdCB3aWR0aD0iOTAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2ZmZiIvPgo8dGV4dCB4PSIyMCIgeT0iNDAiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNlODU5MGMiPkxPVzwvdGV4dD4KPHRleHQgeD0iMjAiIHk9IjYwIiBmb250LXNpemU9IjExIiBmaWxsPSIjNGE1OTY4IiBmb250LWZhbWlseT0iQ29uc29sYXMsIE1lbmxvLCBtb25vc3BhY2UiPnN0YXR1c19jb2RlID0gLTE8L3RleHQ+CjxwYXRoIGQ9Ik0xNzAsNjAgTDE3MC4wLDYwIEwxNzAuMCwzMCBMMTk2LjAsMzAgTDE5Ni4wLDYwIEwzNTIuMCw2MCBMMzUyLjAsMzAgTDM3OC4wLDMwIEwzNzguMCw2MCBMNTM0LjAsNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U4NTkwYyIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KPHRleHQgeD0iNzYyIiB5PSI1MCIgZm9udC1zaXplPSIxMyIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2U4NTkwYyI+MSBibGluayArIHBhdXNlPC90ZXh0Pgo8dGV4dCB4PSIyMCIgeT0iMTEwIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMmY5ZTQ0Ij5PSzwvdGV4dD4KPHRleHQgeD0iMjAiIHk9IjEzMCIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzRhNTk2OCIgZm9udC1mYW1pbHk9IkNvbnNvbGFzLCBNZW5sbywgbW9ub3NwYWNlIj5zdGF0dXNfY29kZSA9IDA8L3RleHQ+CjxwYXRoIGQ9Ik0xNzAsMTMwIEwxNzAuMCwxMzAgTDE3MC4wLDEwMCBMMTk2LjAsMTAwIEwxOTYuMCwxMzAgTDIyMi4wLDEzMCBMMjIyLjAsMTAwIEwyNDguMCwxMDAgTDI0OC4wLDEzMCBMNDA0LjAsMTMwIEw0MDQuMCwxMDAgTDQzMC4wLDEwMCBMNDMwLjAsMTMwIEw0NTYuMCwxMzAgTDQ1Ni4wLDEwMCBMNDgyLjAsMTAwIEw0ODIuMCwxMzAgTDYzOC4wLDEzMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMmY5ZTQ0IiBzdHJva2Utd2lkdGg9IjIuNSIvPgo8dGV4dCB4PSI3NjIiIHk9IjEyMCIgZm9udC1zaXplPSIxMyIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzJmOWU0NCI+MiBibGlua3MgKyBwYXVzZTwvdGV4dD4KPHRleHQgeD0iMjAiIHk9IjE4MCIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2M5MmEyYSI+SElHSDwvdGV4dD4KPHRleHQgeD0iMjAiIHk9IjIwMCIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzRhNTk2OCIgZm9udC1mYW1pbHk9IkNvbnNvbGFzLCBNZW5sbywgbW9ub3NwYWNlIj5zdGF0dXNfY29kZSA9IDE8L3RleHQ+CjxwYXRoIGQ9Ik0xNzAsMjAwIEwxNzAuMCwyMDAgTDE3MC4wLDE3MCBMMTk2LjAsMTcwIEwxOTYuMCwyMDAgTDIyMi4wLDIwMCBMMjIyLjAsMTcwIEwyNDguMCwxNzAgTDI0OC4wLDIwMCBMMjc0LjAsMjAwIEwyNzQuMCwxNzAgTDMwMC4wLDE3MCBMMzAwLjAsMjAwIEw0NTYuMCwyMDAgTDQ1Ni4wLDE3MCBMNDgyLjAsMTcwIEw0ODIuMCwyMDAgTDUwOC4wLDIwMCBMNTA4LjAsMTcwIEw1MzQuMCwxNzAgTDUzNC4wLDIwMCBMNTYwLjAsMjAwIEw1NjAuMCwxNzAgTDU4Ni4wLDE3MCBMNTg2LjAsMjAwIEw3NDIuMCwyMDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2M5MmEyYSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KPHRleHQgeD0iNzYyIiB5PSIxOTAiIGZvbnQtc2l6ZT0iMTMiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNjOTJhMmEiPjMgYmxpbmtzICsgcGF1c2U8L3RleHQ+CjxsaW5lIHgxPSIxNzAiIHkxPSIyNTAiIHgyPSIyMjIuMCIgeTI9IjI1MCIgc3Ryb2tlPSIjMjAyYjM4IiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iMTcwIiB5PSIyNjYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiMyMDJiMzgiPjEgYmxpbmsgPSAyMDAgbXMgb24gKyAyMDAgbXMgb2ZmPC90ZXh0Pgo8bGluZSB4MT0iMzI2LjAiIHkxPSIyNTAiIHgyPSI0NTYuMCIgeTI9IjI1MCIgc3Ryb2tlPSIjMjAyYjM4IiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iMzI2LjAiIHk9IjI0MyIgZm9udC1zaXplPSIxMSIgZmlsbD0iIzIwMmIzOCI+cGF1c2UgMTAwMCBtcyAoSElHSCByb3cpPC90ZXh0Pgo8dGV4dCB4PSIyMCIgeT0iMjkyIiBmb250LXNpemU9IjExIiBmaWxsPSIjNGE1OTY4Ij5MRDIgb24gPSBsaW5lIHVwLCBMRDIgb2ZmID0gbGluZSBkb3duLjwvdGV4dD4KPC9zdmc+" class="img-fluid figure-img" alt="Timing diagram of the LOW, OK and HIGH blink patterns"></p>
@@ -5140,7 +5153,7 @@ pre { font-size: 8.7pt; }
 </div>
 <ol type="1">
 <li>Calculate a blink count: LOW = 1, OK = 2, HIGH = 3. One short expression is enough.</li>
-<li>In <code>USER CODE BEGIN 3</code>, blink LD2 that many times (200 ms on, 200 ms off), then wait 1000 ms. Use a <code>for</code> loop.</li>
+<li>In <code>USER CODE BEGIN 3</code>, replace the Checkpoint D blink: blink LD2 that many times (200 ms on, 200 ms off), then wait 1000 ms. Use a <code>for</code> loop.</li>
 <li>Predict the number of blinks for your data before you run it.</li>
 </ol>
 <p><strong>Show:</strong> the blink pattern, your prediction, and the code.</p>
@@ -5181,14 +5194,18 @@ pre { font-size: 8.7pt; }
 <td>Check the <code>MODER</code> bits in the register view: they must be <code>01</code>.</td>
 </tr>
 <tr class="even">
+<td><code>MODER</code> stays <code>00</code> while you step through <code>led_init</code></td>
+<td>The clock line must come <strong>first</strong>. Without the clock, writes to GPIOA are lost.</td>
+</tr>
+<tr class="odd">
 <td>LD2 stays on</td>
 <td><code>led_off</code> uses bit 21, not bit 5.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>The average differs from Lab 2</td>
 <td>Stop inside <code>average_samples</code>; watch <code>i</code>, <code>count</code> and the sum.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>...FLASH.ld: syntax error</code></td>
 <td>Build with <strong>Ctrl+Shift+B</strong> (the template repairs the CubeMX linker script). Check that <code>.vscode</code> is in the project folder.</td>
 </tr>
