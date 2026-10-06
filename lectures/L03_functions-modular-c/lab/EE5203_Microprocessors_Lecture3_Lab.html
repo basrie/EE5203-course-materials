@@ -5136,8 +5136,8 @@ pre { font-size: 8.7pt; }
 </ol>
 <p><strong>Show:</strong> LD2 blinking, your three functions, and the register view when the program stops at <code>led_off();</code> (<code>ODR</code> bit 5 = 1).</p>
 </section>
-<section id="checkpoint-e---blink-the-status" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-e---blink-the-status">Checkpoint E - Blink the status</h2>
+<section id="checkpoint-e-optional-not-graded---blink-the-status" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-e-optional-not-graded---blink-the-status">Checkpoint E (optional, not graded) - Blink the status</h2>
 <p>First add the Lab 2 status rule in <code>USER CODE BEGIN 2</code>, below the <code>average</code> line:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> status_code <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>average <span class="op">&lt;</span> <span class="dv">1500</span><span class="op">)</span> <span class="op">{</span></span>
@@ -5223,13 +5223,13 @@ pre { font-size: 8.7pt; }
 <li><label><input type="checkbox">Lab 3 results equal the Lab 2 results (Checkpoint B table), and the Lab 2 project is unchanged.</label></li>
 <li><label><input type="checkbox"><code>led_init</code>, <code>led_on</code>, <code>led_off</code> use only register writes; there is no <code>HAL_GPIO_...</code> call in your code.</label></li>
 <li><label><input type="checkbox">The register table of Checkpoint C is filled in.</label></li>
-<li><label><input type="checkbox">LD2 blinks the status (Checkpoint E).</label></li>
+<li><label><input type="checkbox">LD2 blinks with <code>led_on</code> / <code>led_off</code> (Checkpoint D).</label></li>
 <li><label><input type="checkbox">All <code>main.c</code> edits are inside the <code>USER CODE</code> regions.</label></li>
 </ul>
 </section>
 <section id="individual-oral-check" class="level2">
 <h2 class="anchored" data-anchor-id="individual-oral-check">Individual oral check</h2>
-<p>Be ready for one question and <strong>one live change</strong>, chosen by your lab assistant. Predict the result first, then make the change.</p>
+<p>Be ready for <strong>one</strong> question <strong>or</strong> one live change, chosen by your lab assistant. For a live change, predict the result first, then make the change.</p>
 <p>Questions:</p>
 <ul>
 <li>What is the difference between a declaration and a definition? Where is each one for <code>led_on</code>?</li>
@@ -5246,8 +5246,8 @@ pre { font-size: 8.7pt; }
 </section>
 <section id="submit" class="level2">
 <h2 class="anchored" data-anchor-id="submit">Submit</h2>
-<p>Submit the four module files, <code>CMakeLists.txt</code>, the <code>main.c</code> user-code sections, the Checkpoint B and C tables, and one photo or short video of LD2 blinking the status.</p>
-<p><strong>Marks (10):</strong> pre-lab quiz on CATS 1 · A new project and build 1 · B functions 2 · C <code>led_init</code> and registers 2 · D <code>led_on</code>/<code>led_off</code> 2 · E status blink 1 · oral check and live change 1.</p>
+<p>Submit the four module files, <code>CMakeLists.txt</code>, the <code>main.c</code> user-code sections, the Checkpoint B and C tables, and one photo or short video of LD2 blinking.</p>
+<p><strong>Marks (10):</strong> pre-lab quiz on CATS 1 · A new project and build 1 · B functions 2 · C <code>led_init</code> and registers 2 · D <code>led_on</code>/<code>led_off</code> 2 · oral check (one question or one live change) 2. Checkpoint E is optional and not graded.</p>
 
 
 </section>
