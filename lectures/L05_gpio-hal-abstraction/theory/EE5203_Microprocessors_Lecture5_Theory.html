@@ -6,8 +6,8 @@
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.42">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.43">
 
   <meta name="author" content="Basri Erdogan">
   <title>EE5203 Microprocessors</title>
@@ -98,6 +98,7 @@
   <link rel="stylesheet" href="../../L01_microprocessor-systems-toolchain/assets/styles.css">
   <link rel="stylesheet" href="../../L02_c-for-embedded-systems/assets/week2.css">
   <link rel="stylesheet" href="../assets/week5.css">
+  <link rel="stylesheet" href="../../../styles/code-vscode-light.css">
   <link href="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -219,8 +220,8 @@ Basri Erdogan
 <span id="cb1-3"><a></a>HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span> GPIO_PIN_SET<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Today we will connect every HAL name to the register behavior learned in L04.</p>
 </section>
-<section id="interface-not-hardware" class="slide level2">
-<h2>Interface, not hardware</h2>
+<section id="hal-another-interface-to-gpio-registers" class="slide level2 roomy">
+<h2>HAL: another interface to GPIO registers</h2>
 <div class="vertical-list">
 <div class="vertical-item">
 <p><span>01</span> <strong>L04:</strong> calculate masks and write CMSIS registers directly.</p>
@@ -234,6 +235,9 @@ Basri Erdogan
 </div>
 <div class="relationship-strip">
 <p>HAL does not replace the hardware model. It gives the program another way to express it.</p>
+</div>
+<div class="source-note at-bottom">
+<p><strong>CMSIS</strong> = Common Microcontroller Software Interface Standard (Arm): standard C names for registers, such as <code>GPIOA-&gt;MODER</code>. <strong>HAL</strong> = Hardware Abstraction Layer (ST): functions such as <code>HAL_GPIO_WritePin</code>.</p>
 </div>
 </section>
 <section id="todays-objectives" class="slide level2">
@@ -276,63 +280,56 @@ Basri Erdogan
 </div>
 <p>Today: the exact same bits — written by a function with names instead of masks.</p>
 </section>
-<section id="l04-recap-registers" class="slide level2">
-<h2>L04 recap: registers</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a></a>RCC<span class="op">-&gt;</span>AHB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span></span>
-<span id="cb3-2"><a></a></span>
-<span id="cb3-3"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
-<span id="cb3-4"><a></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">|=</span>  <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
-<span id="cb3-5"><a></a></span>
-<span id="cb3-6"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="prompt-list compact-prompts">
-<div class="prompt-item">
-<p><span>1</span> Which statement enables GPIOA?</p>
-</div>
-<div class="prompt-item">
-<p><span>2</span> Which two statements configure PA5 as an output?</p>
-</div>
-<div class="prompt-item">
-<p><span>3</span> Which statement changes the output pin?</p>
-</div>
-</div>
-</section>
-<section id="the-abstraction-stack" class="slide level2">
-<h2>The abstraction stack</h2>
-<svg class="story-visual" viewbox="0 0 1440 300" role="img" aria-labelledby="stack-title">
-<title id="stack-title">
-The abstraction stack: your code calls the STM32 HAL, the HAL writes the CMSIS register, and the register drives the hardware pin
-</title>
-<defs> <marker id="stack-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> <filter id="stack-glow" x="-100%" y="-100%" width="300%" height="300%"><fegaussianblur stddeviation="6" result="blur"></fegaussianblur><femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter> </defs> <rect x="40" y="60" width="310" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="40" y="60" width="310" height="8" fill="#3f7f58"></rect> <text x="195" y="115" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">YOUR CODE</text> <text x="195" y="160" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">led_on()</text> <line x1="354" y1="135" x2="382" y2="135" stroke="#2b789f" stroke-width="4" marker-end="url(#stack-arrow)"></line> <rect x="390" y="60" width="310" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="390" y="60" width="310" height="8" fill="#d47b28"></rect> <text x="545" y="115" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">STM32 HAL</text> <text x="545" y="160" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">HAL_GPIO_WritePin()</text> <line x1="704" y1="135" x2="732" y2="135" stroke="#2b789f" stroke-width="4" marker-end="url(#stack-arrow)"></line> <rect x="740" y="60" width="310" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="740" y="60" width="310" height="8" fill="#2b789f"></rect> <text x="895" y="115" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">CMSIS REGISTER</text> <text x="895" y="160" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">GPIOA-&gt;BSRR</text> <line x1="1054" y1="135" x2="1082" y2="135" stroke="#2b789f" stroke-width="4" marker-end="url(#stack-arrow)"></line> <rect x="1090" y="60" width="310" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="1090" y="60" width="310" height="8" fill="#174f73"></rect> <text x="1245" y="115" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">HARDWARE PIN</text> <text x="1245" y="160" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">PA5 / LD2</text> <text x="195" y="250" text-anchor="middle" fill="#5a6b76" font-size="18">what you write</text> <text x="1245" y="250" text-anchor="middle" fill="#5a6b76" font-size="18">what the LED sees</text> <circle class="story-pulse" r="12" fill="#d47b28" filter="url(#stack-glow)"> <animatemotion dur="4s" repeatcount="indefinite" calcmode="linear" path="M 195 135 H 1245"></animatemotion> <animate attributename="opacity" values="0;1;1;0" keytimes="0;0.1;0.9;1" dur="4s" repeatcount="indefinite"></animate> </circle>
-</svg>
-<p>HAL changes how you write the command—not which hardware receives it.</p>
-</section>
 <section id="cmsis-vs-hal-side-by-side" class="slide level2">
 <h2>CMSIS vs HAL, side by side</h2>
 <div class="columns">
 <div class="column" style="width:48%;">
 <p><strong>DIRECT CMSIS ACCESS</strong></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You choose the register and calculate the mask.</p>
 </div><div class="column" style="width:48%;">
 <p><strong>STM32 HAL</strong></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a></a>HAL_GPIO_WritePin<span class="op">(</span></span>
-<span id="cb5-2"><a></a>    GPIOA<span class="op">,</span></span>
-<span id="cb5-3"><a></a>    GPIO_PIN_5<span class="op">,</span></span>
-<span id="cb5-4"><a></a>    GPIO_PIN_SET<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a></a>HAL_GPIO_WritePin<span class="op">(</span></span>
+<span id="cb4-2"><a></a>    GPIOA<span class="op">,</span></span>
+<span id="cb4-3"><a></a>    GPIO_PIN_5<span class="op">,</span></span>
+<span id="cb4-4"><a></a>    GPIO_PIN_SET<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You provide named arguments to a function.</p>
 </div></div>
-<div class="relationship-strip">
-<p>The HAL call is longer, but each argument states its job directly.</p>
-</div>
+<table class="caption-top">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 43%">
+<col style="width: 43%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Direct CMSIS access</th>
+<th>STM32 HAL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Strength</td>
+<td>precise control; every register write is visible</td>
+<td>readable names; faster to write</td>
+</tr>
+<tr class="even">
+<td>Cost</td>
+<td>you calculate masks and know register details</td>
+<td>an extra layer hides the register writes</td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="gpio_inittypedef" class="slide level2">
-<h2><code>GPIO_InitTypeDef</code></h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a>GPIO_InitTypeDef output <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
-<span id="cb6-2"><a></a></span>
-<span id="cb6-3"><a></a>output<span class="op">.</span>Pin   <span class="op">=</span> GPIO_PIN_5<span class="op">;</span></span>
-<span id="cb6-4"><a></a>output<span class="op">.</span>Mode  <span class="op">=</span> GPIO_MODE_OUTPUT_PP<span class="op">;</span></span>
-<span id="cb6-5"><a></a>output<span class="op">.</span>Pull  <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
-<span id="cb6-6"><a></a>output<span class="op">.</span>Speed <span class="op">=</span> GPIO_SPEED_FREQ_LOW<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="gpio_inittypedef-holds-the-pin-settings" class="slide level2">
+<h2><code>GPIO_InitTypeDef</code> holds the pin settings</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a></a>GPIO_InitTypeDef output <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb5-2"><a></a></span>
+<span id="cb5-3"><a></a>output<span class="op">.</span>Pin   <span class="op">=</span> GPIO_PIN_5<span class="op">;</span></span>
+<span id="cb5-4"><a></a>output<span class="op">.</span>Mode  <span class="op">=</span> GPIO_MODE_OUTPUT_PP<span class="op">;</span></span>
+<span id="cb5-5"><a></a>output<span class="op">.</span>Pull  <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
+<span id="cb5-6"><a></a>output<span class="op">.</span>Speed <span class="op">=</span> GPIO_SPEED_FREQ_LOW<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>GPIO_InitTypeDef</code> is a structure type supplied by the STM32 HAL headers. <code>output</code> is our variable name, and the dot selects one setting inside it.</p>
 <div class="relationship-strip">
 <p>The <code>{0}</code> initializes every member to zero before individual settings are assigned.</p>
@@ -341,8 +338,8 @@ The abstraction stack: your code calls the STM32 HAL, the HAL writes the CMSIS r
 <p>Deep dive: <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=447">UM1725 Rev 8, GPIO functions — p.&nbsp;447</a>.</p>
 </div>
 </section>
-<section id="the-four-settings" class="slide level2">
-<h2>The four settings</h2>
+<section id="four-pin-settings-in-gpio_inittypedef" class="slide level2">
+<h2>Four pin settings in <code>GPIO_InitTypeDef</code></h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
 <p><span>01</span> <strong><code>Pin</code></strong> selects PA5 using the mask <code>GPIO_PIN_5</code>.</p>
@@ -357,11 +354,11 @@ The abstraction stack: your code calls the STM32 HAL, the HAL writes the CMSIS r
 <p><span>04</span> <strong><code>Speed</code></strong> requests the low output transition-speed setting.</p>
 </div>
 </div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>output<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>output<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>&amp;output</code> passes the structure’s address so the function can read its members.</p>
 </section>
-<section id="hal-names-register-bits" class="slide level2">
-<h2>HAL names → register bits</h2>
+<section id="hal-settings-map-to-register-bits" class="slide level2">
+<h2>HAL settings map to register bits</h2>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -388,97 +385,48 @@ The abstraction stack: your code calls the STM32 HAL, the HAL writes the CMSIS r
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>output<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>output<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The HAL function converts the named settings into register operations.</p>
 <div class="source-note">
 <p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=146">RM0368 Rev 6, §8 <em>GPIO</em> — p.&nbsp;146</a>.</p>
 </div>
 </section>
-<section id="output-speed-vs-delay" class="slide level2">
-<h2>Output speed vs delay</h2>
-<p>GPIO speed does not set the blink frequency:</p>
-<div class="columns">
-<div class="column" style="width:48%;">
-<p><strong>OUTPUT TRANSITION SPEED</strong></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a>output<span class="op">.</span>Speed <span class="op">=</span> GPIO_SPEED_FREQ_LOW<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Controls how strongly and quickly the pin voltage changes.</p>
-</div><div class="column" style="width:48%;">
-<p><strong>VISIBLE BLINK TIMING</strong></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a></a>HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Controls how long the program waits between output changes.</p>
-</div></div>
-<p>Use the lowest GPIO speed that satisfies the electrical requirement.</p>
-</section>
-<section id="the-cubemx-pipeline" class="slide level2">
-<h2>The CubeMX pipeline</h2>
-<div class="pipeline-grid wide-pipeline four-step-pipeline">
-<div class="pipeline-card">
-<p><span>1</span> <strong>CONFIGURE <code>.ioc</code></strong></p>
-<p>PA5 → GPIO output</p>
-</div>
-<div class="pipeline-arrow">
-<p>→</p>
-</div>
-<div class="pipeline-card">
-<p><span>2</span> <strong>GENERATE CODE</strong></p>
-<p>CubeMX writes C</p>
-</div>
-<div class="pipeline-arrow">
-<p>→</p>
-</div>
-<div class="pipeline-card">
-<p><span>3</span> <strong>CALL ONCE</strong></p>
-<p><code>MX_GPIO_Init()</code></p>
-</div>
-<div class="pipeline-arrow">
-<p>→</p>
-</div>
-<div class="pipeline-card">
-<p><span>4</span> <strong>USE IN LOOP</strong></p>
-<p>HAL GPIO calls</p>
-</div>
-</div>
-<p>CubeMX removes repetitive typing; you must still check the generated settings.</p>
-</section>
 <section id="the-generated-init-code" class="slide level2">
 <h2>The generated init code</h2>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a></a><span class="dt">static</span> <span class="dt">void</span> MX_GPIO_Init<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
-<span id="cb11-2"><a></a><span class="op">{</span></span>
-<span id="cb11-3"><a></a>    GPIO_InitTypeDef config <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
-<span id="cb11-4"><a></a>    __HAL_RCC_GPIOA_CLK_ENABLE<span class="op">();</span></span>
-<span id="cb11-5"><a></a>    HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span></span>
-<span id="cb11-6"><a></a>                      GPIO_PIN_RESET<span class="op">);</span></span>
-<span id="cb11-7"><a></a>    config<span class="op">.</span>Pin   <span class="op">=</span> GPIO_PIN_5<span class="op">;</span></span>
-<span id="cb11-8"><a></a>    config<span class="op">.</span>Mode  <span class="op">=</span> GPIO_MODE_OUTPUT_PP<span class="op">;</span></span>
-<span id="cb11-9"><a></a>    config<span class="op">.</span>Pull  <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
-<span id="cb11-10"><a></a>    config<span class="op">.</span>Speed <span class="op">=</span> GPIO_SPEED_FREQ_LOW<span class="op">;</span></span>
-<span id="cb11-11"><a></a>    HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span>
-<span id="cb11-12"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>MX_GPIO_Init()</code> sets up the pins you chose in CubeMX. Here it makes PA5 (LD2) an output that starts low. <code>main()</code> calls it once, before the <code>while (1)</code> loop.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a><span class="dt">static</span> <span class="dt">void</span> MX_GPIO_Init<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb8-2"><a></a><span class="op">{</span></span>
+<span id="cb8-3"><a></a>    GPIO_InitTypeDef config <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb8-4"><a></a>    __HAL_RCC_GPIOA_CLK_ENABLE<span class="op">();</span></span>
+<span id="cb8-5"><a></a>    HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span> GPIO_PIN_RESET<span class="op">);</span></span>
+<span id="cb8-6"><a></a>    config<span class="op">.</span>Pin   <span class="op">=</span> GPIO_PIN_5<span class="op">;</span></span>
+<span id="cb8-7"><a></a>    config<span class="op">.</span>Mode  <span class="op">=</span> GPIO_MODE_OUTPUT_PP<span class="op">;</span></span>
+<span id="cb8-8"><a></a>    config<span class="op">.</span>Pull  <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
+<span id="cb8-9"><a></a>    config<span class="op">.</span>Speed <span class="op">=</span> GPIO_SPEED_FREQ_LOW<span class="op">;</span></span>
+<span id="cb8-10"><a></a>    HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span>
+<span id="cb8-11"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Read top to bottom: clock → safe starting level → settings → initialization. Here, generated <code>static</code> means this helper is used only inside this source file.</p>
 </section>
-<section id="hal_gpio_writepin" class="slide level2">
-<h2><code>HAL_GPIO_WritePin</code></h2>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a></a>HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span> GPIO_PIN_SET<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="vertical-list compact-list">
-<div class="vertical-item">
-<p><span>01</span> <strong><code>GPIOA</code></strong> chooses the peripheral port.</p>
+<section id="driving-an-output-with-hal_gpio_writepin" class="slide level2">
+<h2>Driving an output with <code>HAL_GPIO_WritePin</code></h2>
+<div class="annotated-call">
+<span class="fn">HAL_GPIO_WritePin</span>(<span class="arg port" data-role="port">GPIOA</span>, <span class="arg pin" data-role="pin">GPIO_PIN_5</span>, <span class="arg level" data-role="level: SET or RESET">GPIO_PIN_SET</span>);
 </div>
-<div class="vertical-item">
-<p><span>02</span> <strong><code>GPIO_PIN_5</code></strong> chooses one or more pins with a mask.</p>
-</div>
-<div class="vertical-item">
-<p><span>03</span> <strong><code>GPIO_PIN_SET</code></strong> requests a high output level.</p>
-</div>
-</div>
-<p>Use <code>GPIO_PIN_RESET</code> for a low output level.</p>
+<svg class="story-visual" viewbox="0 0 1440 410" role="img" aria-labelledby="writepin-title">
+<title id="writepin-title">
+HAL_GPIO_WritePin on PA5, shown twice. GPIO_PIN_SET writes BSRR bit 5, ODR bit 5 becomes 1, PA5 is 3.3 V and LD2 is on. GPIO_PIN_RESET writes BSRR bit 21, ODR bit 5 becomes 0, PA5 is 0 V and LD2 is off.
+</title>
+<defs><marker id="wr-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker><marker id="wr-arrow-o" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d47b28"></path></marker><filter id="wr-glow" x="-100%" y="-100%" width="300%" height="300%"><fegaussianblur stddeviation="6" result="blur"></fegaussianblur><femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter></defs> <rect x="10" y="8" width="700" height="392" rx="14" fill="#ffffff" stroke="#f8e2c8" stroke-width="4"></rect> <text x="38" y="50" fill="#d47b28" font-size="26" font-weight="700" letter-spacing="1">LD2 ON</text> <rect x="100" y="72" width="260" height="40" rx="20" fill="#ffffff" stroke="#d47b28" stroke-width="2"></rect> <text x="230.0" y="99" text-anchor="middle" fill="#d47b28" font-size="22" font-weight="600" font-family="ui-monospace, Menlo, monospace">GPIO_PIN_SET</text> <line x1="230.0" y1="116" x2="230.0" y2="130" stroke="#2b789f" stroke-width="4" marker-end="url(#wr-arrow)"></line> <rect x="150" y="136" width="9" height="12" fill="#b9c4cd"></rect> <rect x="150" y="348" width="9" height="12" fill="#b9c4cd"></rect> <rect x="178" y="136" width="9" height="12" fill="#b9c4cd"></rect> <rect x="178" y="348" width="9" height="12" fill="#b9c4cd"></rect> <rect x="206" y="136" width="9" height="12" fill="#b9c4cd"></rect> <rect x="206" y="348" width="9" height="12" fill="#b9c4cd"></rect> <rect x="234" y="136" width="9" height="12" fill="#b9c4cd"></rect> <rect x="234" y="348" width="9" height="12" fill="#b9c4cd"></rect> <rect x="262" y="136" width="9" height="12" fill="#b9c4cd"></rect> <rect x="262" y="348" width="9" height="12" fill="#b9c4cd"></rect> <rect x="290" y="136" width="9" height="12" fill="#b9c4cd"></rect> <rect x="290" y="348" width="9" height="12" fill="#b9c4cd"></rect> <rect x="118" y="168" width="12" height="9" fill="#b9c4cd"></rect> <rect x="330" y="168" width="12" height="9" fill="#b9c4cd"></rect> <rect x="118" y="196" width="12" height="9" fill="#b9c4cd"></rect> <rect x="118" y="224" width="12" height="9" fill="#b9c4cd"></rect> <rect x="330" y="224" width="12" height="9" fill="#b9c4cd"></rect> <rect x="118" y="252" width="12" height="9" fill="#b9c4cd"></rect> <rect x="330" y="252" width="12" height="9" fill="#b9c4cd"></rect> <rect x="118" y="280" width="12" height="9" fill="#b9c4cd"></rect> <rect x="330" y="280" width="12" height="9" fill="#b9c4cd"></rect> <rect x="118" y="308" width="12" height="9" fill="#b9c4cd"></rect> <rect x="330" y="308" width="12" height="9" fill="#b9c4cd"></rect> <rect x="130" y="148" width="200" height="200" rx="8" fill="#e6ebef" stroke="#9aa7b4" stroke-width="2"></rect> <circle cx="146" cy="164" r="5" fill="#9aa7b4"></circle> <text x="230.0" y="180" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">STM32F401</text> <rect x="330" y="206" width="18" height="12" fill="#d47b28"></rect> <text x="318" y="220" text-anchor="end" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">PA5</text> <text x="230.0" y="288" text-anchor="middle" fill="#5a6b76" font-size="19" font-family="ui-monospace, Menlo, monospace">BSRR bit 5 ← 1</text> <rect x="368" y="230" width="42" height="42" rx="6" fill="#ffffff" stroke="#d47b28" stroke-width="2"></rect><text x="389.0" y="261.0" text-anchor="middle" fill="#d47b28" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="426" y="260" fill="#5a6b76" font-size="20" font-family="ui-monospace, Menlo, monospace">ODR bit 5</text> <line x1="350" y1="212" x2="606" y2="212" stroke="#d47b28" stroke-width="4"></line> <text x="478.0" y="198" text-anchor="middle" fill="#d47b28" font-size="30" font-weight="700">3.3 V</text> <polyline points="606,212 606,220 620,224 592,231 620,238 592,246 620,253 592,260 606,264 606,272" fill="none" stroke="#5a6b76" stroke-width="3"></polyline> <line x1="606" y1="272" x2="606" y2="278" stroke="#5a6b76" stroke-width="3"></line> <circle cx="606" cy="294" r="24" fill="#7ee08a" opacity="0.35" filter="url(#wr-glow)"></circle> <polygon points="582,278 630,278 606,312" fill="#2e9d3a" stroke="#2e9d3a" stroke-width="3"></polygon> <line x1="580" y1="314" x2="632" y2="314" stroke="#2e9d3a" stroke-width="4"></line> <text x="648" y="304" fill="#2e9d3a" font-size="28" font-weight="700">LD2</text> <line x1="606" y1="314" x2="606" y2="334" stroke="#5a6b76" stroke-width="3"></line> <line x1="580" y1="334" x2="632" y2="334" stroke="#5a6b76" stroke-width="3"></line><line x1="590" y1="344" x2="622" y2="344" stroke="#5a6b76" stroke-width="3"></line><line x1="600" y1="354" x2="612" y2="354" stroke="#5a6b76" stroke-width="3"></line> <circle class="story-pulse" r="9" fill="#d47b28" filter="url(#wr-glow)"><animatemotion dur="2.4s" repeatcount="indefinite" calcmode="linear" path="M 350 212 H 606 V 334"></animatemotion><animate attributename="opacity" values="0;1;1;0" keytimes="0;0.1;0.9;1" dur="2.4s" repeatcount="indefinite"></animate></circle> <rect x="730" y="8" width="700" height="392" rx="14" fill="#ffffff" stroke="#dcebf3" stroke-width="4"></rect> <text x="758" y="50" fill="#2b789f" font-size="26" font-weight="700" letter-spacing="1">LD2 OFF</text> <rect x="820" y="72" width="260" height="40" rx="20" fill="#ffffff" stroke="#2b789f" stroke-width="2"></rect> <text x="950.0" y="99" text-anchor="middle" fill="#2b789f" font-size="22" font-weight="600" font-family="ui-monospace, Menlo, monospace">GPIO_PIN_RESET</text> <line x1="950.0" y1="116" x2="950.0" y2="130" stroke="#2b789f" stroke-width="4" marker-end="url(#wr-arrow)"></line> <rect x="870" y="136" width="9" height="12" fill="#b9c4cd"></rect> <rect x="870" y="348" width="9" height="12" fill="#b9c4cd"></rect> <rect x="898" y="136" width="9" height="12" fill="#b9c4cd"></rect> <rect x="898" y="348" width="9" height="12" fill="#b9c4cd"></rect> <rect x="926" y="136" width="9" height="12" fill="#b9c4cd"></rect> <rect x="926" y="348" width="9" height="12" fill="#b9c4cd"></rect> <rect x="954" y="136" width="9" height="12" fill="#b9c4cd"></rect> <rect x="954" y="348" width="9" height="12" fill="#b9c4cd"></rect> <rect x="982" y="136" width="9" height="12" fill="#b9c4cd"></rect> <rect x="982" y="348" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1010" y="136" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1010" y="348" width="9" height="12" fill="#b9c4cd"></rect> <rect x="838" y="168" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1050" y="168" width="12" height="9" fill="#b9c4cd"></rect> <rect x="838" y="196" width="12" height="9" fill="#b9c4cd"></rect> <rect x="838" y="224" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1050" y="224" width="12" height="9" fill="#b9c4cd"></rect> <rect x="838" y="252" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1050" y="252" width="12" height="9" fill="#b9c4cd"></rect> <rect x="838" y="280" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1050" y="280" width="12" height="9" fill="#b9c4cd"></rect> <rect x="838" y="308" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1050" y="308" width="12" height="9" fill="#b9c4cd"></rect> <rect x="850" y="148" width="200" height="200" rx="8" fill="#e6ebef" stroke="#9aa7b4" stroke-width="2"></rect> <circle cx="866" cy="164" r="5" fill="#9aa7b4"></circle> <text x="950.0" y="180" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">STM32F401</text> <rect x="1050" y="206" width="18" height="12" fill="#2b789f"></rect> <text x="1038" y="220" text-anchor="end" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">PA5</text> <text x="950.0" y="288" text-anchor="middle" fill="#5a6b76" font-size="19" font-family="ui-monospace, Menlo, monospace">BSRR bit 21 ← 1</text> <rect x="1088" y="230" width="42" height="42" rx="6" fill="#ffffff" stroke="#2b789f" stroke-width="2"></rect><text x="1109.0" y="261.0" text-anchor="middle" fill="#2b789f" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <text x="1146" y="260" fill="#5a6b76" font-size="20" font-family="ui-monospace, Menlo, monospace">ODR bit 5</text> <line x1="1070" y1="212" x2="1326" y2="212" stroke="#2b789f" stroke-width="4"></line> <text x="1198.0" y="198" text-anchor="middle" fill="#2b789f" font-size="30" font-weight="700">0 V</text> <polyline points="1326,212 1326,220 1340,224 1312,231 1340,238 1312,246 1340,253 1312,260 1326,264 1326,272" fill="none" stroke="#5a6b76" stroke-width="3"></polyline> <line x1="1326" y1="272" x2="1326" y2="278" stroke="#5a6b76" stroke-width="3"></line> <polygon points="1302,278 1350,278 1326,312" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></polygon> <line x1="1300" y1="314" x2="1352" y2="314" stroke="#5a6b76" stroke-width="4"></line> <text x="1368" y="304" fill="#5a6b76" font-size="28" font-weight="700">LD2</text> <line x1="1326" y1="314" x2="1326" y2="334" stroke="#5a6b76" stroke-width="3"></line> <line x1="1300" y1="334" x2="1352" y2="334" stroke="#5a6b76" stroke-width="3"></line><line x1="1310" y1="344" x2="1342" y2="344" stroke="#5a6b76" stroke-width="3"></line><line x1="1320" y1="354" x2="1332" y2="354" stroke="#5a6b76" stroke-width="3"></line>
+</svg>
 </section>
-<section id="the-three-runtime-functions" class="slide level2">
-<h2>The three runtime functions</h2>
+<section id="three-hal-gpio-functions-at-run-time" class="slide level2">
+<h2>Three HAL GPIO functions at run time</h2>
+<div data-tbl-colwidths="[46,20,34]">
 <table class="caption-top">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
+<col style="width: 46%">
+<col style="width: 20%">
+<col style="width: 34%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -505,61 +453,75 @@ The abstraction stack: your code calls the STM32 HAL, the HAL writes the CMSIS r
 </tr>
 </tbody>
 </table>
+</div>
 <p>Configuration happens once. These functions are used while the program is running.</p>
 <div class="source-note">
 <p>Each function is a few lines of C: <a href="https://github.com/STMicroelectronics/stm32f4xx-hal-driver/blob/master/Src/stm32f4xx_hal_gpio.c"><code>stm32f4xx_hal_gpio.c</code></a> — read <code>HAL_GPIO_WritePin</code> and find the <code>BSRR</code> write.</p>
 </div>
 </section>
-<section id="floating-inputs" class="slide level2">
-<h2>Floating inputs</h2>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb13-1"><a></a>GPIO_PinState input <span class="op">=</span> HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>If nothing drives the pin high or low, electrical noise can change the value that the program reads.</p>
-<div class="vertical-list compact-list">
-<div class="vertical-item">
-<p><span>01</span> <strong>HIGH</strong> means the pin voltage is near the logic-high range.</p>
+<section id="live-demo-1-from-cubemx-to-a-blinking-ld2" class="slide level2 live-demo">
+<h2>Live demo 1: from CubeMX to a blinking LD2</h2>
+<div class="pipeline-grid wide-pipeline four-step-pipeline">
+<div class="pipeline-card">
+<p><span>1</span> <strong>CONFIGURE <code>.ioc</code></strong></p>
+<p>PA5 → GPIO output</p>
 </div>
-<div class="vertical-item">
-<p><span>02</span> <strong>LOW</strong> means the pin voltage is near the logic-low range.</p>
+<div class="pipeline-arrow">
+<p>→</p>
 </div>
-<div class="vertical-item">
-<p><span>03</span> <strong>FLOATING</strong> means no circuit establishes either level reliably.</p>
+<div class="pipeline-card">
+<p><span>2</span> <strong>GENERATE CODE</strong></p>
+<p>CubeMX writes C</p>
+</div>
+<div class="pipeline-arrow">
+<p>→</p>
+</div>
+<div class="pipeline-card">
+<p><span>3</span> <strong>CALL ONCE</strong></p>
+<p><code>MX_GPIO_Init()</code></p>
+</div>
+<div class="pipeline-arrow">
+<p>→</p>
+</div>
+<div class="pipeline-card">
+<p><span>4</span> <strong>USE IN LOOP</strong></p>
+<p><code>WritePin</code> / <code>TogglePin</code></p>
 </div>
 </div>
+<p><strong>Watch for:</strong> LD2 blinks · <code>MODER5</code> = <code>01</code> in the register view · <code>ODR5</code> follows each <code>WritePin</code>.</p>
+</section>
+<section id="a-gpio-pin-as-an-input" class="slide level2">
+<h2>A GPIO pin as an input</h2>
+<p>So far PA5 was an <strong>output</strong>: the program sets the pin voltage. On an <strong>input</strong>, a circuit outside the chip sets the voltage, and the program reads it.</p>
+<svg class="story-visual" viewbox="0 0 1440 410" role="img" aria-labelledby="dir-title">
+<title id="dir-title">
+Output and input compared as two small circuits. Output: pin PA5 of the STM32F401 drives LED LD2; the program sets the voltage; MODER 01, the program writes BSRR or ODR with HAL_GPIO_WritePin. Input: button B1 with pull-up R30 drives pin PC13; the circuit sets the voltage; MODER 00, the program reads IDR with HAL_GPIO_ReadPin.
+</title>
+<defs><marker id="io-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker><marker id="io-arrow-o" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d47b28"></path></marker><filter id="io-glow" x="-100%" y="-100%" width="300%" height="300%"><fegaussianblur stddeviation="6" result="blur"></fegaussianblur><femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter></defs> <rect x="10" y="8" width="700" height="392" rx="14" fill="#ffffff" stroke="#f8e2c8" stroke-width="4"></rect> <text x="38" y="50" fill="#d47b28" font-size="26" font-weight="700" letter-spacing="1">OUTPUT: PA5 DRIVES LD2</text> <rect x="70" y="78" width="9" height="12" fill="#b9c4cd"></rect> <rect x="70" y="250" width="9" height="12" fill="#b9c4cd"></rect> <rect x="98" y="78" width="9" height="12" fill="#b9c4cd"></rect> <rect x="98" y="250" width="9" height="12" fill="#b9c4cd"></rect> <rect x="126" y="78" width="9" height="12" fill="#b9c4cd"></rect> <rect x="126" y="250" width="9" height="12" fill="#b9c4cd"></rect> <rect x="154" y="78" width="9" height="12" fill="#b9c4cd"></rect> <rect x="154" y="250" width="9" height="12" fill="#b9c4cd"></rect> <rect x="182" y="78" width="9" height="12" fill="#b9c4cd"></rect> <rect x="182" y="250" width="9" height="12" fill="#b9c4cd"></rect> <rect x="38" y="110" width="12" height="9" fill="#b9c4cd"></rect> <rect x="210" y="110" width="12" height="9" fill="#b9c4cd"></rect> <rect x="38" y="138" width="12" height="9" fill="#b9c4cd"></rect> <rect x="210" y="138" width="12" height="9" fill="#b9c4cd"></rect> <rect x="38" y="166" width="12" height="9" fill="#b9c4cd"></rect> <rect x="38" y="194" width="12" height="9" fill="#b9c4cd"></rect> <rect x="210" y="194" width="12" height="9" fill="#b9c4cd"></rect> <rect x="38" y="222" width="12" height="9" fill="#b9c4cd"></rect> <rect x="210" y="222" width="12" height="9" fill="#b9c4cd"></rect> <rect x="50" y="90" width="160" height="160" rx="8" fill="#e6ebef" stroke="#9aa7b4" stroke-width="2"></rect> <circle cx="66" cy="106" r="5" fill="#9aa7b4"></circle> <text x="130.0" y="122" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">STM32F401</text> <rect x="210" y="164" width="18" height="12" fill="#d47b28"></rect> <text x="198" y="178" text-anchor="end" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">PA5</text> <line x1="228" y1="170" x2="550" y2="170" stroke="#d47b28" stroke-width="4"></line> <polygon points="379.0,159 401.0,170 379.0,181" fill="#d47b28"></polygon> <text x="389.0" y="210" text-anchor="middle" fill="#d47b28" font-size="20" font-weight="700">program sets the voltage</text> <polyline points="550,170 550,178 564,181 536,186 564,192 536,198 564,204 536,209 550,212 550,220" fill="none" stroke="#5a6b76" stroke-width="3"></polyline> <line x1="550" y1="220" x2="550" y2="226" stroke="#5a6b76" stroke-width="3"></line> <polygon points="530,226 570,226 550,254" fill="#2e9d3a" stroke="#2e9d3a" stroke-width="3"></polygon> <line x1="528" y1="256" x2="572" y2="256" stroke="#2e9d3a" stroke-width="4"></line> <text x="584" y="250" fill="#2e9d3a" font-size="24" font-weight="700">LD2</text> <line x1="550" y1="256" x2="550" y2="270" stroke="#5a6b76" stroke-width="3"></line> <line x1="524" y1="270" x2="576" y2="270" stroke="#5a6b76" stroke-width="3"></line><line x1="534" y1="280" x2="566" y2="280" stroke="#5a6b76" stroke-width="3"></line><line x1="544" y1="290" x2="556" y2="290" stroke="#5a6b76" stroke-width="3"></line> <text x="50" y="318" fill="#5a6b76" font-size="20">MODER</text> <text x="160" y="318" fill="#174f73" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">01 output</text> <text x="50" y="348" fill="#5a6b76" font-size="20">register</text> <text x="160" y="348" fill="#174f73" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">BSRR / ODR (write)</text> <text x="50" y="378" fill="#5a6b76" font-size="20">HAL</text> <text x="160" y="378" fill="#174f73" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">HAL_GPIO_WritePin</text> <rect x="730" y="8" width="700" height="392" rx="14" fill="#ffffff" stroke="#dcebf3" stroke-width="4"></rect> <text x="758" y="50" fill="#2b789f" font-size="26" font-weight="700" letter-spacing="1">INPUT: B1 DRIVES PC13</text> <rect x="790" y="78" width="9" height="12" fill="#b9c4cd"></rect> <rect x="790" y="250" width="9" height="12" fill="#b9c4cd"></rect> <rect x="818" y="78" width="9" height="12" fill="#b9c4cd"></rect> <rect x="818" y="250" width="9" height="12" fill="#b9c4cd"></rect> <rect x="846" y="78" width="9" height="12" fill="#b9c4cd"></rect> <rect x="846" y="250" width="9" height="12" fill="#b9c4cd"></rect> <rect x="874" y="78" width="9" height="12" fill="#b9c4cd"></rect> <rect x="874" y="250" width="9" height="12" fill="#b9c4cd"></rect> <rect x="902" y="78" width="9" height="12" fill="#b9c4cd"></rect> <rect x="902" y="250" width="9" height="12" fill="#b9c4cd"></rect> <rect x="758" y="110" width="12" height="9" fill="#b9c4cd"></rect> <rect x="930" y="110" width="12" height="9" fill="#b9c4cd"></rect> <rect x="758" y="138" width="12" height="9" fill="#b9c4cd"></rect> <rect x="930" y="138" width="12" height="9" fill="#b9c4cd"></rect> <rect x="758" y="166" width="12" height="9" fill="#b9c4cd"></rect> <rect x="758" y="194" width="12" height="9" fill="#b9c4cd"></rect> <rect x="930" y="194" width="12" height="9" fill="#b9c4cd"></rect> <rect x="758" y="222" width="12" height="9" fill="#b9c4cd"></rect> <rect x="930" y="222" width="12" height="9" fill="#b9c4cd"></rect> <rect x="770" y="90" width="160" height="160" rx="8" fill="#e6ebef" stroke="#9aa7b4" stroke-width="2"></rect> <circle cx="786" cy="106" r="5" fill="#9aa7b4"></circle> <text x="850.0" y="122" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">STM32F401</text> <rect x="930" y="164" width="18" height="12" fill="#2b789f"></rect> <text x="918" y="178" text-anchor="end" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">PC13</text> <line x1="948" y1="170" x2="1270" y2="170" stroke="#2b789f" stroke-width="4"></line> <polygon points="1119.0,159 1097.0,170 1119.0,181" fill="#2b789f"></polygon> <text x="1109.0" y="210" text-anchor="middle" fill="#2b789f" font-size="20" font-weight="700">circuit sets the voltage</text> <circle cx="1270" cy="170" r="6" fill="#2b789f"></circle> <line x1="1270" y1="170" x2="1270" y2="150" stroke="#5a6b76" stroke-width="3"></line> <polyline points="1270,90 1270,98 1284,102 1256,109 1284,116 1256,124 1284,131 1256,138 1270,142 1270,150" fill="none" stroke="#5a6b76" stroke-width="3"></polyline> <line x1="1234" y1="90" x2="1306" y2="90" stroke="#5a6b76" stroke-width="4"></line> <text x="1314" y="98" fill="#5a6b76" font-size="22" font-weight="700">3.3 V</text> <text x="1292" y="134" fill="#5a6b76" font-size="22" font-weight="700">R30</text> <line x1="1270" y1="170" x2="1270" y2="200" stroke="#5a6b76" stroke-width="3"></line> <circle cx="1270" cy="204" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <circle cx="1270" cy="250" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <line x1="1270" y1="246" x2="1304" y2="212" stroke="#5a6b76" stroke-width="5"></line> <text x="1250" y="234" text-anchor="end" fill="#5a6b76" font-size="22" font-weight="700">B1</text> <line x1="1270" y1="255" x2="1270" y2="270" stroke="#5a6b76" stroke-width="3"></line> <line x1="1244" y1="270" x2="1296" y2="270" stroke="#5a6b76" stroke-width="3"></line><line x1="1254" y1="280" x2="1286" y2="280" stroke="#5a6b76" stroke-width="3"></line><line x1="1264" y1="290" x2="1276" y2="290" stroke="#5a6b76" stroke-width="3"></line> <text x="770" y="318" fill="#5a6b76" font-size="20">MODER</text> <text x="880" y="318" fill="#174f73" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">00 input</text> <text x="770" y="348" fill="#5a6b76" font-size="20">register</text> <text x="880" y="348" fill="#174f73" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">IDR (read)</text> <text x="770" y="378" fill="#5a6b76" font-size="20">HAL</text> <text x="880" y="378" fill="#174f73" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">HAL_GPIO_ReadPin</text>
+</svg>
+</section>
+<section id="a-floating-input-reads-random-values" class="slide level2">
+<h2>A floating input reads random values</h2>
+<p>An input reads a clear value only if a circuit holds the pin high or low. With B1 open and no pull resistor, nothing drives PC13: noise moves its voltage, and each read can give a different value.</p>
+<svg class="story-visual" viewbox="0 0 1440 410" role="img" aria-labelledby="float-title">
+<title id="float-title">
+Left: PC13 is connected only to button B1, which is open, and there is no pull resistor, so nothing drives the pin; its voltage is noise that wanders between the HIGH and LOW ranges, and eight reads give 1s and 0s by chance. Right: the same open button, but R30 pulls PC13 up to 3.3 V; the voltage is steady in the HIGH range and every read gives 1.
+</title>
+<defs><marker id="fl-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker><marker id="fl-arrow-o" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d47b28"></path></marker><filter id="fl-glow" x="-100%" y="-100%" width="300%" height="300%"><fegaussianblur stddeviation="6" result="blur"></fegaussianblur><femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter></defs> <rect x="10" y="8" width="700" height="392" rx="14" fill="#ffffff" stroke="#fdecea" stroke-width="4"></rect> <text x="38" y="50" fill="#c0392b" font-size="26" font-weight="700" letter-spacing="1">FLOATING: NO PULL RESISTOR</text> <rect x="54" y="148" width="9" height="12" fill="#b9c4cd"></rect> <rect x="54" y="260" width="9" height="12" fill="#b9c4cd"></rect> <rect x="82" y="148" width="9" height="12" fill="#b9c4cd"></rect> <rect x="82" y="260" width="9" height="12" fill="#b9c4cd"></rect> <rect x="110" y="148" width="9" height="12" fill="#b9c4cd"></rect> <rect x="110" y="260" width="9" height="12" fill="#b9c4cd"></rect> <rect x="22" y="180" width="12" height="9" fill="#b9c4cd"></rect> <rect x="134" y="180" width="12" height="9" fill="#b9c4cd"></rect> <rect x="22" y="208" width="12" height="9" fill="#b9c4cd"></rect> <rect x="22" y="236" width="12" height="9" fill="#b9c4cd"></rect> <rect x="134" y="236" width="12" height="9" fill="#b9c4cd"></rect> <rect x="34" y="160" width="100" height="100" rx="8" fill="#e6ebef" stroke="#9aa7b4" stroke-width="2"></rect> <circle cx="50" cy="176" r="5" fill="#9aa7b4"></circle> <text x="84.0" y="192" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">MCU</text> <rect x="134" y="204" width="18" height="12" fill="#c0392b"></rect> <text x="122" y="218" text-anchor="end" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">PC13</text> <line x1="152" y1="210" x2="210" y2="210" stroke="#c0392b" stroke-width="4"></line> <circle cx="210" cy="210" r="6" fill="#c0392b"></circle> <line x1="210" y1="210" x2="210" y2="244" stroke="#5a6b76" stroke-width="3"></line> <circle cx="210" cy="248" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <circle cx="210" cy="296" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <line x1="210" y1="292" x2="244" y2="258" stroke="#5a6b76" stroke-width="5"></line> <text x="196" y="280" text-anchor="end" fill="#5a6b76" font-size="22" font-weight="700">B1</text> <line x1="210" y1="301" x2="210" y2="320" stroke="#5a6b76" stroke-width="3"></line> <line x1="184" y1="320" x2="236" y2="320" stroke="#5a6b76" stroke-width="3"></line><line x1="194" y1="330" x2="226" y2="330" stroke="#5a6b76" stroke-width="3"></line><line x1="204" y1="340" x2="216" y2="340" stroke="#5a6b76" stroke-width="3"></line> <text x="210" y="188" text-anchor="middle" fill="#c0392b" font-size="40" font-weight="700">?</text> <text x="38" y="380" fill="#c0392b" font-size="20" font-weight="700">B1 open: nothing drives PC13</text> <rect x="370" y="96" width="316" height="40" fill="#f8e2c8" opacity="0.6"></rect> <rect x="370" y="210" width="316" height="40" fill="#dcebf3" opacity="0.8"></rect> <text x="680" y="126" text-anchor="end" fill="#d47b28" font-size="17" font-weight="700">HIGH</text> <text x="680" y="240" text-anchor="end" fill="#2b789f" font-size="17" font-weight="700">LOW</text> <line x1="370" y1="96" x2="370" y2="250" stroke="#5a6b76" stroke-width="2"></line> <line x1="370" y1="250" x2="686" y2="250" stroke="#5a6b76" stroke-width="2"></line> <text x="362" y="108" text-anchor="end" fill="#5a6b76" font-size="16">3.3 V</text> <text x="362" y="250" text-anchor="end" fill="#5a6b76" font-size="16">0 V</text> <text x="686" y="272" text-anchor="end" fill="#5a6b76" font-size="16">time →</text> <text x="378" y="86" fill="#5a6b76" font-size="17" font-weight="700">PC13 voltage</text> <polyline points="388,110 408,144 428,238 448,237 468,176 488,110 508,104 528,204 548,244 568,185 588,186 608,181 628,116 648,144 668,232" fill="none" stroke="#c0392b" stroke-width="3" stroke-linejoin="round"></polyline> <text x="498" y="86" fill="#c0392b" font-size="19" font-weight="700" font-style="italic">= noise</text> <circle cx="388" cy="110" r="5" fill="#174f73"></circle> <circle cx="428" cy="238" r="5" fill="#174f73"></circle> <circle cx="468" cy="176" r="5" fill="#174f73"></circle> <circle cx="508" cy="104" r="5" fill="#174f73"></circle> <circle cx="548" cy="244" r="5" fill="#174f73"></circle> <circle cx="588" cy="186" r="5" fill="#174f73"></circle> <circle cx="628" cy="116" r="5" fill="#174f73"></circle> <circle cx="668" cy="232" r="5" fill="#174f73"></circle> <text x="370" y="312" fill="#5a6b76" font-size="18" font-weight="700">ReadPin results</text> <text x="388" y="350" text-anchor="middle" fill="#c0392b" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="428" y="350" text-anchor="middle" fill="#c0392b" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <text x="468" y="350" text-anchor="middle" fill="#c0392b" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <text x="508" y="350" text-anchor="middle" fill="#c0392b" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="548" y="350" text-anchor="middle" fill="#c0392b" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <text x="588" y="350" text-anchor="middle" fill="#c0392b" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="628" y="350" text-anchor="middle" fill="#c0392b" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="668" y="350" text-anchor="middle" fill="#c0392b" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <rect x="730" y="8" width="700" height="392" rx="14" fill="#ffffff" stroke="#f8e2c8" stroke-width="4"></rect> <text x="758" y="50" fill="#d47b28" font-size="26" font-weight="700" letter-spacing="1">PULLED UP: R30 TO 3.3 V</text> <rect x="774" y="148" width="9" height="12" fill="#b9c4cd"></rect> <rect x="774" y="260" width="9" height="12" fill="#b9c4cd"></rect> <rect x="802" y="148" width="9" height="12" fill="#b9c4cd"></rect> <rect x="802" y="260" width="9" height="12" fill="#b9c4cd"></rect> <rect x="830" y="148" width="9" height="12" fill="#b9c4cd"></rect> <rect x="830" y="260" width="9" height="12" fill="#b9c4cd"></rect> <rect x="742" y="180" width="12" height="9" fill="#b9c4cd"></rect> <rect x="854" y="180" width="12" height="9" fill="#b9c4cd"></rect> <rect x="742" y="208" width="12" height="9" fill="#b9c4cd"></rect> <rect x="742" y="236" width="12" height="9" fill="#b9c4cd"></rect> <rect x="854" y="236" width="12" height="9" fill="#b9c4cd"></rect> <rect x="754" y="160" width="100" height="100" rx="8" fill="#e6ebef" stroke="#9aa7b4" stroke-width="2"></rect> <circle cx="770" cy="176" r="5" fill="#9aa7b4"></circle> <text x="804.0" y="192" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">MCU</text> <rect x="854" y="204" width="18" height="12" fill="#d47b28"></rect> <text x="842" y="218" text-anchor="end" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">PC13</text> <line x1="872" y1="210" x2="930" y2="210" stroke="#d47b28" stroke-width="4"></line> <circle cx="930" cy="210" r="6" fill="#d47b28"></circle> <line x1="930" y1="210" x2="930" y2="244" stroke="#5a6b76" stroke-width="3"></line> <circle cx="930" cy="248" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <circle cx="930" cy="296" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <line x1="930" y1="292" x2="964" y2="258" stroke="#5a6b76" stroke-width="5"></line> <text x="916" y="280" text-anchor="end" fill="#5a6b76" font-size="22" font-weight="700">B1</text> <line x1="930" y1="301" x2="930" y2="320" stroke="#5a6b76" stroke-width="3"></line> <line x1="904" y1="320" x2="956" y2="320" stroke="#5a6b76" stroke-width="3"></line><line x1="914" y1="330" x2="946" y2="330" stroke="#5a6b76" stroke-width="3"></line><line x1="924" y1="340" x2="936" y2="340" stroke="#5a6b76" stroke-width="3"></line> <line x1="930" y1="210" x2="930" y2="194" stroke="#5a6b76" stroke-width="3"></line> <polyline points="930,124 930,132 944,136 916,146 944,154 916,164 944,172 916,182 930,186 930,194" fill="none" stroke="#5a6b76" stroke-width="3"></polyline> <line x1="896" y1="124" x2="964" y2="124" stroke="#5a6b76" stroke-width="4"></line> <text x="930" y="114" text-anchor="middle" fill="#5a6b76" font-size="20" font-weight="700">3.3 V</text> <text x="950" y="166" fill="#5a6b76" font-size="20" font-weight="700">R30</text> <text x="758" y="380" fill="#d47b28" font-size="20" font-weight="700">B1 open: R30 holds PC13 high</text> <rect x="1090" y="96" width="316" height="40" fill="#f8e2c8" opacity="0.6"></rect> <rect x="1090" y="210" width="316" height="40" fill="#dcebf3" opacity="0.8"></rect> <text x="1400" y="126" text-anchor="end" fill="#d47b28" font-size="17" font-weight="700">HIGH</text> <text x="1400" y="240" text-anchor="end" fill="#2b789f" font-size="17" font-weight="700">LOW</text> <line x1="1090" y1="96" x2="1090" y2="250" stroke="#5a6b76" stroke-width="2"></line> <line x1="1090" y1="250" x2="1406" y2="250" stroke="#5a6b76" stroke-width="2"></line> <text x="1082" y="108" text-anchor="end" fill="#5a6b76" font-size="16">3.3 V</text> <text x="1082" y="250" text-anchor="end" fill="#5a6b76" font-size="16">0 V</text> <text x="1406" y="272" text-anchor="end" fill="#5a6b76" font-size="16">time →</text> <text x="1098" y="86" fill="#5a6b76" font-size="17" font-weight="700">PC13 voltage</text> <line x1="1092" y1="106" x2="1406" y2="106" stroke="#d47b28" stroke-width="3"></line> <text x="1218" y="86" fill="#d47b28" font-size="19" font-weight="700" font-style="italic">= steady 3.3 V</text> <circle cx="1108" cy="106" r="5" fill="#174f73"></circle> <circle cx="1148" cy="106" r="5" fill="#174f73"></circle> <circle cx="1188" cy="106" r="5" fill="#174f73"></circle> <circle cx="1228" cy="106" r="5" fill="#174f73"></circle> <circle cx="1268" cy="106" r="5" fill="#174f73"></circle> <circle cx="1308" cy="106" r="5" fill="#174f73"></circle> <circle cx="1348" cy="106" r="5" fill="#174f73"></circle> <circle cx="1388" cy="106" r="5" fill="#174f73"></circle> <text x="1090" y="312" fill="#5a6b76" font-size="18" font-weight="700">ReadPin results</text> <text x="1108" y="350" text-anchor="middle" fill="#d47b28" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="1148" y="350" text-anchor="middle" fill="#d47b28" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="1188" y="350" text-anchor="middle" fill="#d47b28" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="1228" y="350" text-anchor="middle" fill="#d47b28" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="1268" y="350" text-anchor="middle" fill="#d47b28" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="1308" y="350" text-anchor="middle" fill="#d47b28" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="1348" y="350" text-anchor="middle" fill="#d47b28" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="1388" y="350" text-anchor="middle" fill="#d47b28" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text>
+</svg>
 </section>
 <section id="pull-up-and-pull-down" class="slide level2">
 <h2>Pull-up and pull-down</h2>
-<p>While the switch is open, only the resistor defines the level.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="../assets/images/pullup-pulldown-circuits.png" style="width:38.0%"></p>
-<figcaption>Pull-up circuit on the left and pull-down circuit on the right</figcaption>
-</figure>
-</div>
-<table class="caption-top">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th><strong>Pull-up circuit</strong></th>
-<th><strong>Pull-down circuit</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>resistor to 3.3 V; switch to ground</td>
-<td>switch to 3.3 V; resistor to ground</td>
-</tr>
-<tr class="even">
-<td>released (open) → <code>1</code>; pressed (closed) → <code>0</code></td>
-<td>released (open) → <code>0</code>; pressed (closed) → <code>1</code></td>
-</tr>
-</tbody>
-</table>
+<p>While B1 is open, only the resistor sets the level of PC13.</p>
+<svg class="story-visual" viewbox="0 0 1440 410" role="img" aria-labelledby="pull-title">
+<title id="pull-title">
+Pull-up and pull-down compared. Pull-up: resistor from PC13 to 3.3 V, button B1 to ground; released reads 1, pressed reads 0. Pull-down: button B1 to 3.3 V, resistor from PC13 to ground; released reads 0, pressed reads 1. The animation opens and closes the button.
+</title>
+<defs><marker id="pp-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker><marker id="pp-arrow-o" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d47b28"></path></marker><filter id="pp-glow" x="-100%" y="-100%" width="300%" height="300%"><fegaussianblur stddeviation="6" result="blur"></fegaussianblur><femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter></defs> <rect x="10" y="8" width="700" height="392" rx="14" fill="#ffffff" stroke="#f8e2c8" stroke-width="4"></rect> <text x="38" y="50" fill="#d47b28" font-size="26" font-weight="700" letter-spacing="1">PULL-UP: RESISTOR TO 3.3 V</text> <rect x="58" y="138" width="9" height="12" fill="#b9c4cd"></rect> <rect x="58" y="270" width="9" height="12" fill="#b9c4cd"></rect> <rect x="86" y="138" width="9" height="12" fill="#b9c4cd"></rect> <rect x="86" y="270" width="9" height="12" fill="#b9c4cd"></rect> <rect x="114" y="138" width="9" height="12" fill="#b9c4cd"></rect> <rect x="114" y="270" width="9" height="12" fill="#b9c4cd"></rect> <rect x="142" y="138" width="9" height="12" fill="#b9c4cd"></rect> <rect x="142" y="270" width="9" height="12" fill="#b9c4cd"></rect> <rect x="26" y="170" width="12" height="9" fill="#b9c4cd"></rect> <rect x="158" y="170" width="12" height="9" fill="#b9c4cd"></rect> <rect x="26" y="198" width="12" height="9" fill="#b9c4cd"></rect> <rect x="26" y="226" width="12" height="9" fill="#b9c4cd"></rect> <rect x="158" y="226" width="12" height="9" fill="#b9c4cd"></rect> <rect x="26" y="254" width="12" height="9" fill="#b9c4cd"></rect> <rect x="158" y="254" width="12" height="9" fill="#b9c4cd"></rect> <rect x="38" y="150" width="120" height="120" rx="8" fill="#e6ebef" stroke="#9aa7b4" stroke-width="2"></rect> <circle cx="54" cy="166" r="5" fill="#9aa7b4"></circle> <text x="98.0" y="182" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">MCU</text> <rect x="158" y="204" width="18" height="12" fill="#d47b28"></rect> <text x="146" y="218" text-anchor="end" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">PC13</text> <line x1="176" y1="210" x2="330" y2="210" stroke="#d47b28" stroke-width="4"></line> <circle cx="330" cy="210" r="6" fill="#d47b28"></circle> <line x1="296" y1="90" x2="364" y2="90" stroke="#5a6b76" stroke-width="4"></line> <text x="374" y="98" fill="#5a6b76" font-size="22" font-weight="700">3.3 V</text> <line x1="304" y1="340" x2="356" y2="340" stroke="#5a6b76" stroke-width="3"></line><line x1="314" y1="350" x2="346" y2="350" stroke="#5a6b76" stroke-width="3"></line><line x1="324" y1="360" x2="336" y2="360" stroke="#5a6b76" stroke-width="3"></line> <line x1="330" y1="90" x2="330" y2="110" stroke="#5a6b76" stroke-width="3"></line> <polyline points="330,110 330,118 344,122 316,129 344,136 316,144 344,151 316,158 330,162 330,170" fill="none" stroke="#5a6b76" stroke-width="3"></polyline> <text x="354" y="148.0" fill="#5a6b76" font-size="22" font-weight="700">R</text> <line x1="330" y1="170" x2="330" y2="246" stroke="#5a6b76" stroke-width="3"></line> <circle cx="330" cy="250" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <circle cx="330" cy="300" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <g><animate attributename="opacity" values="1;1;0;0" keytimes="0;0.5;0.5;1" dur="6s" calcmode="discrete" repeatcount="indefinite"></animate><line x1="330" y1="296" x2="364" y2="260" stroke="#5a6b76" stroke-width="5"></line></g> <g opacity="0"><animate attributename="opacity" values="0;0;1;1" keytimes="0;0.5;0.5;1" dur="6s" calcmode="discrete" repeatcount="indefinite"></animate><line x1="330" y1="296" x2="330" y2="254" stroke="#d47b28" stroke-width="5"></line></g> <text x="314" y="283.0" text-anchor="end" fill="#5a6b76" font-size="22" font-weight="700">B1</text> <line x1="330" y1="305" x2="330" y2="340" stroke="#5a6b76" stroke-width="3"></line> <g opacity="0"><animate attributename="opacity" values="0;0;1;1" keytimes="0;0.5;0.5;1" dur="6s" calcmode="discrete" repeatcount="indefinite"></animate><circle r="8" fill="#d47b28" filter="url(#pp-glow)"><animatemotion dur="1.5s" repeatcount="indefinite" path="M 330 90 V 340"></animatemotion></circle></g> <g><animate attributename="opacity" values="1;1;0;0" keytimes="0;0.5;0.5;1" dur="6s" calcmode="discrete" repeatcount="indefinite"></animate><text x="486" y="150" fill="#5a6b76" font-size="22" font-weight="700">B1 released</text><text x="486" y="196" fill="#d47b28" font-size="26" font-weight="700">PC13 = 3.3 V</text><text x="486" y="248" fill="#5a6b76" font-size="22">reads</text><rect x="562" y="214" width="42" height="42" rx="6" fill="#ffffff" stroke="#d47b28" stroke-width="2"></rect><text x="583.0" y="245.0" text-anchor="middle" fill="#d47b28" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text></g> <g opacity="0"><animate attributename="opacity" values="0;0;1;1" keytimes="0;0.5;0.5;1" dur="6s" calcmode="discrete" repeatcount="indefinite"></animate><text x="486" y="150" fill="#5a6b76" font-size="22" font-weight="700">B1 pressed</text><text x="486" y="196" fill="#d47b28" font-size="26" font-weight="700">PC13 = 0 V</text><text x="486" y="248" fill="#5a6b76" font-size="22">reads</text><rect x="562" y="214" width="42" height="42" rx="6" fill="#ffffff" stroke="#d47b28" stroke-width="2"></rect><text x="583.0" y="245.0" text-anchor="middle" fill="#d47b28" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text></g> <text x="38" y="388" fill="#5a6b76" font-size="20">released → <tspan font-weight="700" fill="#d47b28">1</tspan> · pressed → <tspan font-weight="700" fill="#d47b28">0</tspan></text> <rect x="730" y="8" width="700" height="392" rx="14" fill="#ffffff" stroke="#dcebf3" stroke-width="4"></rect> <text x="758" y="50" fill="#2b789f" font-size="26" font-weight="700" letter-spacing="1">PULL-DOWN: RESISTOR TO GND</text> <rect x="778" y="138" width="9" height="12" fill="#b9c4cd"></rect> <rect x="778" y="270" width="9" height="12" fill="#b9c4cd"></rect> <rect x="806" y="138" width="9" height="12" fill="#b9c4cd"></rect> <rect x="806" y="270" width="9" height="12" fill="#b9c4cd"></rect> <rect x="834" y="138" width="9" height="12" fill="#b9c4cd"></rect> <rect x="834" y="270" width="9" height="12" fill="#b9c4cd"></rect> <rect x="862" y="138" width="9" height="12" fill="#b9c4cd"></rect> <rect x="862" y="270" width="9" height="12" fill="#b9c4cd"></rect> <rect x="746" y="170" width="12" height="9" fill="#b9c4cd"></rect> <rect x="878" y="170" width="12" height="9" fill="#b9c4cd"></rect> <rect x="746" y="198" width="12" height="9" fill="#b9c4cd"></rect> <rect x="746" y="226" width="12" height="9" fill="#b9c4cd"></rect> <rect x="878" y="226" width="12" height="9" fill="#b9c4cd"></rect> <rect x="746" y="254" width="12" height="9" fill="#b9c4cd"></rect> <rect x="878" y="254" width="12" height="9" fill="#b9c4cd"></rect> <rect x="758" y="150" width="120" height="120" rx="8" fill="#e6ebef" stroke="#9aa7b4" stroke-width="2"></rect> <circle cx="774" cy="166" r="5" fill="#9aa7b4"></circle> <text x="818.0" y="182" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">MCU</text> <rect x="878" y="204" width="18" height="12" fill="#2b789f"></rect> <text x="866" y="218" text-anchor="end" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">PC13</text> <line x1="896" y1="210" x2="1050" y2="210" stroke="#2b789f" stroke-width="4"></line> <circle cx="1050" cy="210" r="6" fill="#2b789f"></circle> <line x1="1016" y1="90" x2="1084" y2="90" stroke="#5a6b76" stroke-width="4"></line> <text x="1094" y="98" fill="#5a6b76" font-size="22" font-weight="700">3.3 V</text> <line x1="1024" y1="340" x2="1076" y2="340" stroke="#5a6b76" stroke-width="3"></line><line x1="1034" y1="350" x2="1066" y2="350" stroke="#5a6b76" stroke-width="3"></line><line x1="1044" y1="360" x2="1056" y2="360" stroke="#5a6b76" stroke-width="3"></line> <line x1="1050" y1="90" x2="1050" y2="116" stroke="#5a6b76" stroke-width="3"></line> <circle cx="1050" cy="120" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <circle cx="1050" cy="170" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <g><animate attributename="opacity" values="1;1;0;0" keytimes="0;0.5;0.5;1" dur="6s" calcmode="discrete" repeatcount="indefinite"></animate><line x1="1050" y1="166" x2="1084" y2="130" stroke="#5a6b76" stroke-width="5"></line></g> <g opacity="0"><animate attributename="opacity" values="0;0;1;1" keytimes="0;0.5;0.5;1" dur="6s" calcmode="discrete" repeatcount="indefinite"></animate><line x1="1050" y1="166" x2="1050" y2="124" stroke="#2b789f" stroke-width="5"></line></g> <text x="1034" y="153.0" text-anchor="end" fill="#5a6b76" font-size="22" font-weight="700">B1</text> <line x1="1050" y1="175" x2="1050" y2="250" stroke="#5a6b76" stroke-width="3"></line> <polyline points="1050,250 1050,258 1064,262 1036,270 1064,279 1036,287 1064,296 1036,304 1050,308 1050,316" fill="none" stroke="#5a6b76" stroke-width="3"></polyline> <text x="1074" y="291.0" fill="#5a6b76" font-size="22" font-weight="700">R</text> <line x1="1050" y1="316" x2="1050" y2="340" stroke="#5a6b76" stroke-width="3"></line> <g opacity="0"><animate attributename="opacity" values="0;0;1;1" keytimes="0;0.5;0.5;1" dur="6s" calcmode="discrete" repeatcount="indefinite"></animate><circle r="8" fill="#2b789f" filter="url(#pp-glow)"><animatemotion dur="1.5s" repeatcount="indefinite" path="M 1050 90 V 340"></animatemotion></circle></g> <g><animate attributename="opacity" values="1;1;0;0" keytimes="0;0.5;0.5;1" dur="6s" calcmode="discrete" repeatcount="indefinite"></animate><text x="1206" y="150" fill="#5a6b76" font-size="22" font-weight="700">B1 released</text><text x="1206" y="196" fill="#2b789f" font-size="26" font-weight="700">PC13 = 0 V</text><text x="1206" y="248" fill="#5a6b76" font-size="22">reads</text><rect x="1282" y="214" width="42" height="42" rx="6" fill="#ffffff" stroke="#2b789f" stroke-width="2"></rect><text x="1303.0" y="245.0" text-anchor="middle" fill="#2b789f" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text></g> <g opacity="0"><animate attributename="opacity" values="0;0;1;1" keytimes="0;0.5;0.5;1" dur="6s" calcmode="discrete" repeatcount="indefinite"></animate><text x="1206" y="150" fill="#5a6b76" font-size="22" font-weight="700">B1 pressed</text><text x="1206" y="196" fill="#2b789f" font-size="26" font-weight="700">PC13 = 3.3 V</text><text x="1206" y="248" fill="#5a6b76" font-size="22">reads</text><rect x="1282" y="214" width="42" height="42" rx="6" fill="#ffffff" stroke="#2b789f" stroke-width="2"></rect><text x="1303.0" y="245.0" text-anchor="middle" fill="#2b789f" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text></g> <text x="758" y="388" fill="#5a6b76" font-size="20">released → <tspan font-weight="700" fill="#2b789f">0</tspan> · pressed → <tspan font-weight="700" fill="#2b789f">1</tspan></text>
+</svg>
 </section>
-<section id="the-pupdr-register" class="slide level2">
-<h2>The <code>PUPDR</code> register</h2>
+<section id="pupdr-selects-the-internal-pull-resistor" class="slide level2">
+<h2><code>PUPDR</code> selects the internal pull resistor</h2>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -629,11 +591,20 @@ PUPDR bits 31 down to 16 drawn as eight two-bit fields for pins 15 to 8; the pin
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a></a>config<span class="op">.</span>Pull <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a>config<span class="op">.</span>Pull <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The Nucleo button already has an external pull-up, so it does not need an internal one.</p>
+<svg class="story-visual" viewbox="0 0 740 420" style="max-width:46%;display:block;margin:0.3em auto 0;" role="img" aria-labelledby="ipull-title">
+<title id="ipull-title">
+Inside the STM32F401, right at pin PC13, two internal resistors of about 40 kilo-ohms sit behind switches. The animation steps through PUPDR values: 00 leaves both switches open (no pull, the setting for B1), 01 closes the switch to the pull-up resistor to 3.3 V, 10 closes the switch to the pull-down resistor to ground. The pin line continues to IDR.
+</title>
+<defs><marker id="ip-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker><marker id="ip-arrow-o" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d47b28"></path></marker><filter id="ip-glow" x="-100%" y="-100%" width="300%" height="300%"><fegaussianblur stddeviation="6" result="blur"></fegaussianblur><femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter></defs> <line x1="30" y1="210" x2="312" y2="210" stroke="#5a6b76" stroke-width="4"></line> <text x="304" y="196" text-anchor="end" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">PC13</text> <text x="30" y="242" fill="#5a6b76" font-size="19">to B1 / R30 on the board</text> <g opacity="1"><animate attributename="opacity" values="1;0;0;0" keytimes="0;0.3333;0.6667;1" dur="7.5s" calcmode="discrete" repeatcount="indefinite"></animate><rect x="8" y="40" width="300" height="44" rx="22" fill="#eef1f4" stroke="#5a6b76" stroke-width="2"></rect><text x="158" y="68" text-anchor="middle" fill="#5a6b76" font-size="18" font-weight="700" font-family="ui-monospace, Menlo, monospace">PUPDR = 00: no pull</text></g> <g opacity="0"><animate attributename="opacity" values="0;1;0;0" keytimes="0;0.3333;0.6667;1" dur="7.5s" calcmode="discrete" repeatcount="indefinite"></animate><rect x="8" y="40" width="300" height="44" rx="22" fill="#f8e2c8" stroke="#d47b28" stroke-width="2"></rect><text x="158" y="68" text-anchor="middle" fill="#d47b28" font-size="18" font-weight="700" font-family="ui-monospace, Menlo, monospace">PUPDR = 01: pull-up on</text></g> <g opacity="0"><animate attributename="opacity" values="0;0;1;0" keytimes="0;0.3333;0.6667;1" dur="7.5s" calcmode="discrete" repeatcount="indefinite"></animate><rect x="8" y="40" width="300" height="44" rx="22" fill="#dcebf3" stroke="#2b789f" stroke-width="2"></rect><text x="158" y="68" text-anchor="middle" fill="#2b789f" font-size="18" font-weight="700" font-family="ui-monospace, Menlo, monospace">PUPDR = 10: pull-down on</text></g> <rect x="350" y="8" width="9" height="12" fill="#b9c4cd"></rect> <rect x="350" y="400" width="9" height="12" fill="#b9c4cd"></rect> <rect x="378" y="8" width="9" height="12" fill="#b9c4cd"></rect> <rect x="378" y="400" width="9" height="12" fill="#b9c4cd"></rect> <rect x="406" y="8" width="9" height="12" fill="#b9c4cd"></rect> <rect x="406" y="400" width="9" height="12" fill="#b9c4cd"></rect> <rect x="434" y="8" width="9" height="12" fill="#b9c4cd"></rect> <rect x="434" y="400" width="9" height="12" fill="#b9c4cd"></rect> <rect x="462" y="8" width="9" height="12" fill="#b9c4cd"></rect> <rect x="462" y="400" width="9" height="12" fill="#b9c4cd"></rect> <rect x="490" y="8" width="9" height="12" fill="#b9c4cd"></rect> <rect x="490" y="400" width="9" height="12" fill="#b9c4cd"></rect> <rect x="518" y="8" width="9" height="12" fill="#b9c4cd"></rect> <rect x="518" y="400" width="9" height="12" fill="#b9c4cd"></rect> <rect x="546" y="8" width="9" height="12" fill="#b9c4cd"></rect> <rect x="546" y="400" width="9" height="12" fill="#b9c4cd"></rect> <rect x="574" y="8" width="9" height="12" fill="#b9c4cd"></rect> <rect x="574" y="400" width="9" height="12" fill="#b9c4cd"></rect> <rect x="602" y="8" width="9" height="12" fill="#b9c4cd"></rect> <rect x="602" y="400" width="9" height="12" fill="#b9c4cd"></rect> <rect x="630" y="8" width="9" height="12" fill="#b9c4cd"></rect> <rect x="630" y="400" width="9" height="12" fill="#b9c4cd"></rect> <rect x="658" y="8" width="9" height="12" fill="#b9c4cd"></rect> <rect x="658" y="400" width="9" height="12" fill="#b9c4cd"></rect> <rect x="686" y="8" width="9" height="12" fill="#b9c4cd"></rect> <rect x="686" y="400" width="9" height="12" fill="#b9c4cd"></rect> <rect x="318" y="40" width="12" height="9" fill="#b9c4cd"></rect> <rect x="710" y="40" width="12" height="9" fill="#b9c4cd"></rect> <rect x="318" y="68" width="12" height="9" fill="#b9c4cd"></rect> <rect x="710" y="68" width="12" height="9" fill="#b9c4cd"></rect> <rect x="318" y="96" width="12" height="9" fill="#b9c4cd"></rect> <rect x="710" y="96" width="12" height="9" fill="#b9c4cd"></rect> <rect x="318" y="124" width="12" height="9" fill="#b9c4cd"></rect> <rect x="710" y="124" width="12" height="9" fill="#b9c4cd"></rect> <rect x="318" y="152" width="12" height="9" fill="#b9c4cd"></rect> <rect x="710" y="152" width="12" height="9" fill="#b9c4cd"></rect> <rect x="318" y="180" width="12" height="9" fill="#b9c4cd"></rect> <rect x="710" y="180" width="12" height="9" fill="#b9c4cd"></rect> <rect x="710" y="208" width="12" height="9" fill="#b9c4cd"></rect> <rect x="318" y="236" width="12" height="9" fill="#b9c4cd"></rect> <rect x="710" y="236" width="12" height="9" fill="#b9c4cd"></rect> <rect x="318" y="264" width="12" height="9" fill="#b9c4cd"></rect> <rect x="710" y="264" width="12" height="9" fill="#b9c4cd"></rect> <rect x="318" y="292" width="12" height="9" fill="#b9c4cd"></rect> <rect x="710" y="292" width="12" height="9" fill="#b9c4cd"></rect> <rect x="318" y="320" width="12" height="9" fill="#b9c4cd"></rect> <rect x="710" y="320" width="12" height="9" fill="#b9c4cd"></rect> <rect x="318" y="348" width="12" height="9" fill="#b9c4cd"></rect> <rect x="710" y="348" width="12" height="9" fill="#b9c4cd"></rect> <rect x="318" y="376" width="12" height="9" fill="#b9c4cd"></rect> <rect x="710" y="376" width="12" height="9" fill="#b9c4cd"></rect> <rect x="330" y="20" width="380" height="380" rx="8" fill="#e6ebef" stroke="#9aa7b4" stroke-width="2"></rect> <circle cx="346" cy="36" r="5" fill="#9aa7b4"></circle> <text x="520.0" y="52" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1"></text> <rect x="312" y="204" width="18" height="12" fill="#174f73"></rect> <text x="342" y="218" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace"></text> <text x="694" y="384" text-anchor="end" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">STM32F401</text> <line x1="330" y1="210" x2="614" y2="210" stroke="#174f73" stroke-width="4"></line> <rect x="618" y="188" width="76" height="44" rx="6" fill="#ffffff" stroke="#174f73" stroke-width="2"></rect> <text x="656" y="218" text-anchor="middle" fill="#174f73" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">IDR</text> <circle cx="382" cy="210" r="6" fill="#174f73"></circle> <line x1="382" y1="210" x2="382" y2="194" stroke="#d47b28" stroke-width="3"></line> <circle cx="382" cy="190" r="5" fill="#ffffff" stroke="#d47b28" stroke-width="3"></circle> <circle cx="382" cy="152" r="5" fill="#ffffff" stroke="#d47b28" stroke-width="3"></circle> <g><animate attributename="opacity" values="1;0;1;1" keytimes="0;0.3333;0.6667;1" dur="7.5s" calcmode="discrete" repeatcount="indefinite"></animate><line x1="382" y1="186" x2="408" y2="158" stroke="#d47b28" stroke-width="4"></line></g> <g opacity="0"><animate attributename="opacity" values="0;1;0;0" keytimes="0;0.3333;0.6667;1" dur="7.5s" calcmode="discrete" repeatcount="indefinite"></animate><line x1="382" y1="186" x2="382" y2="156" stroke="#d47b28" stroke-width="5"></line></g> <polyline points="382,82 382,90 396,94 368,102 396,111 368,119 396,128 368,136 382,140 382,148" fill="none" stroke="#d47b28" stroke-width="3"></polyline> <line x1="354" y1="82" x2="410" y2="82" stroke="#5a6b76" stroke-width="4"></line> <text x="422" y="88" fill="#5a6b76" font-size="19" font-weight="700">3.3 V</text> <text x="422" y="124" fill="#d47b28" font-size="19" font-weight="700">pull-up ≈ 40 kΩ</text> <text x="422" y="178" fill="#d47b28" font-size="19" font-weight="700" font-family="ui-monospace, Menlo, monospace">closes for 01</text> <line x1="382" y1="210" x2="382" y2="226" stroke="#2b789f" stroke-width="3"></line> <circle cx="382" cy="230" r="5" fill="#ffffff" stroke="#2b789f" stroke-width="3"></circle> <circle cx="382" cy="268" r="5" fill="#ffffff" stroke="#2b789f" stroke-width="3"></circle> <g><animate attributename="opacity" values="1;1;0;0" keytimes="0;0.3333;0.6667;1" dur="7.5s" calcmode="discrete" repeatcount="indefinite"></animate><line x1="382" y1="264" x2="408" y2="236" stroke="#2b789f" stroke-width="4"></line></g> <g opacity="0"><animate attributename="opacity" values="0;0;1;1" keytimes="0;0.3333;0.6667;1" dur="7.5s" calcmode="discrete" repeatcount="indefinite"></animate><line x1="382" y1="264" x2="382" y2="234" stroke="#2b789f" stroke-width="5"></line></g> <polyline points="382,272 382,280 396,284 368,292 396,301 368,309 396,318 368,326 382,330 382,338" fill="none" stroke="#2b789f" stroke-width="3"></polyline> <line x1="356" y1="338" x2="408" y2="338" stroke="#5a6b76" stroke-width="3"></line><line x1="366" y1="348" x2="398" y2="348" stroke="#5a6b76" stroke-width="3"></line><line x1="376" y1="358" x2="388" y2="358" stroke="#5a6b76" stroke-width="3"></line> <text x="422" y="256" fill="#2b789f" font-size="19" font-weight="700" font-family="ui-monospace, Menlo, monospace">closes for 10</text> <text x="422" y="314" fill="#2b789f" font-size="19" font-weight="700">pull-down ≈ 40 kΩ</text>
+</svg>
+<div class="source-note at-bottom">
+<p>Source: <a href="https://www.st.com/resource/en/datasheet/stm32f401re.pdf#page=92">STM32F401xD/xE datasheet, DS10086 Rev 5, Table 54 — p.&nbsp;92</a>: internal pull-up and pull-down are 30–50 kΩ (typical 40 kΩ); each is a resistor in series with a switchable transistor.</p>
+</div>
 </section>
-<section id="b1-on-the-nucleo-board" class="slide level2">
-<h2>B1 on the Nucleo board</h2>
+<section id="button-b1-on-pc13-is-active-low" class="slide level2">
+<h2>Button B1 on PC13 is active-low</h2>
 <div class="columns">
 <div class="column" style="width:55%;">
 <div class="quarto-figure quarto-figure-center">
@@ -656,53 +627,51 @@ PUPDR bits 31 down to 16 drawn as eight two-bit fields for pins 15 to 8; the pin
 <p>Source: <a href="https://www.st.com/resource/en/schematic_pack/mb1136-default-c04_schematic.pdf">official MB1136 C04 schematic</a> · <a href="https://www.st.com/resource/en/user_manual/um1724-stm32-nucleo64-boards-mb1136-stmicroelectronics.pdf#page=24">UM1724 Rev 17, p.&nbsp;24</a> · <a href="https://github.com/STMicroelectronics/stm32f4xx-nucleo-bsp/blob/84b99c762908ef56f711acf970ab13d4ec278df6/stm32f4xx_nucleo.c#L250-L265">ST Nucleo BSP</a>.</p>
 </div>
 </section>
-<section id="pc13-as-input" class="slide level2">
-<h2>PC13 as input</h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a></a>GPIO_InitTypeDef config <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
-<span id="cb15-2"><a></a></span>
-<span id="cb15-3"><a></a>__HAL_RCC_GPIOC_CLK_ENABLE<span class="op">();</span></span>
-<span id="cb15-4"><a></a></span>
-<span id="cb15-5"><a></a>config<span class="op">.</span>Pin  <span class="op">=</span> GPIO_PIN_13<span class="op">;</span></span>
-<span id="cb15-6"><a></a>config<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_INPUT<span class="op">;</span></span>
-<span id="cb15-7"><a></a>config<span class="op">.</span>Pull <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
-<span id="cb15-8"><a></a></span>
-<span id="cb15-9"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOC<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="configuring-pc13-as-an-input" class="slide level2">
+<h2>Configuring PC13 as an input</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a></a>GPIO_InitTypeDef config <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb10-2"><a></a></span>
+<span id="cb10-3"><a></a>__HAL_RCC_GPIOC_CLK_ENABLE<span class="op">();</span></span>
+<span id="cb10-4"><a></a></span>
+<span id="cb10-5"><a></a>config<span class="op">.</span>Pin  <span class="op">=</span> GPIO_PIN_13<span class="op">;</span></span>
+<span id="cb10-6"><a></a>config<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_INPUT<span class="op">;</span></span>
+<span id="cb10-7"><a></a>config<span class="op">.</span>Pull <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
+<span id="cb10-8"><a></a></span>
+<span id="cb10-9"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOC<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>No output speed is required for a plain input.</p>
 </section>
-<section id="hal_gpio_readpin" class="slide level2">
-<h2><code>HAL_GPIO_ReadPin</code></h2>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a></a>GPIO_PinState button <span class="op">=</span></span>
-<span id="cb16-2"><a></a>    HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="compare-grid">
-<div class="compare-card c-card">
-<p><strong><code>GPIO_PIN_SET</code></strong></p>
-<p>PC13 is high → B1 released</p>
+<section id="reading-b1-with-hal_gpio_readpin" class="slide level2">
+<h2>Reading B1 with <code>HAL_GPIO_ReadPin</code></h2>
+<div class="annotated-call">
+<span class="type">GPIO_PinState</span> <span class="arg result" data-role="result: SET or RESET">button</span> = <span class="fn">HAL_GPIO_ReadPin</span>(<span class="arg port" data-role="port">GPIOC</span>, <span class="arg pin" data-role="pin">GPIO_PIN_13</span>);
 </div>
-<div class="compare-card">
-<p><strong><code>GPIO_PIN_RESET</code></strong></p>
-<p>PC13 is low → B1 pressed</p>
-</div>
-</div>
-<p><code>GPIO_PinState</code> is the HAL’s name for this two-value result: <code>GPIO_PIN_RESET</code> or <code>GPIO_PIN_SET</code>.</p>
+<svg class="story-visual" viewbox="0 0 1440 410" role="img" aria-labelledby="readpin-title">
+<title id="readpin-title">
+Button B1 wired to pin PC13 of the STM32F401, shown twice. Released: the switch is open, R30 holds PC13 at 3.3 V, IDR bit 13 is 1 and HAL_GPIO_ReadPin returns GPIO_PIN_SET. Pressed: the switch connects PC13 to ground, current flows through R30 to ground, PC13 is 0 V, IDR bit 13 is 0 and HAL_GPIO_ReadPin returns GPIO_PIN_RESET.
+</title>
+<defs><marker id="read-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker><marker id="read-arrow-o" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d47b28"></path></marker><filter id="read-glow" x="-100%" y="-100%" width="300%" height="300%"><fegaussianblur stddeviation="6" result="blur"></fegaussianblur><femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter></defs> <rect x="10" y="8" width="700" height="392" rx="14" fill="#ffffff" stroke="#f8e2c8" stroke-width="4"></rect> <text x="38" y="50" fill="#d47b28" font-size="26" font-weight="700" letter-spacing="1">B1 RELEASED</text> <text x="50" y="92" fill="#5a6b76" font-size="26" font-weight="700">3.3 V</text> <line x1="70" y1="100" x2="150" y2="100" stroke="#5a6b76" stroke-width="4"></line> <polyline points="110,100 110,108 124,111 96,116 124,122 96,128 124,134 96,139 110,142 110,150" fill="none" stroke="#5a6b76" stroke-width="3"></polyline> <text x="138" y="134" fill="#5a6b76" font-size="26" font-weight="700">R30</text> <line x1="110" y1="150" x2="110" y2="232" stroke="#5a6b76" stroke-width="3"></line> <line x1="110" y1="180" x2="386" y2="180" stroke="#d47b28" stroke-width="4"></line> <circle cx="110" cy="180" r="7" fill="#d47b28"></circle> <text x="260" y="166" text-anchor="middle" fill="#d47b28" font-size="30" font-weight="700">3.3 V</text> <circle cx="110" cy="236" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <circle cx="110" cy="286" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <line x1="110" y1="282" x2="148" y2="246" stroke="#5a6b76" stroke-width="5"></line> <text x="88" y="268" text-anchor="end" fill="#5a6b76" font-size="26" font-weight="700">B1</text> <line x1="110" y1="291" x2="110" y2="316" stroke="#5a6b76" stroke-width="3"></line> <line x1="84" y1="316" x2="136" y2="316" stroke="#5a6b76" stroke-width="3"></line><line x1="94" y1="326" x2="126" y2="326" stroke="#5a6b76" stroke-width="3"></line><line x1="104" y1="336" x2="116" y2="336" stroke="#5a6b76" stroke-width="3"></line> <rect x="426" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="426" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="454" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="454" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="482" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="482" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="510" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="510" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="538" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="538" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="566" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="566" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="594" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="594" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="394" y="108" width="12" height="9" fill="#b9c4cd"></rect> <rect x="610" y="108" width="12" height="9" fill="#b9c4cd"></rect> <rect x="394" y="136" width="12" height="9" fill="#b9c4cd"></rect> <rect x="610" y="136" width="12" height="9" fill="#b9c4cd"></rect> <rect x="610" y="164" width="12" height="9" fill="#b9c4cd"></rect> <rect x="394" y="192" width="12" height="9" fill="#b9c4cd"></rect> <rect x="610" y="192" width="12" height="9" fill="#b9c4cd"></rect> <rect x="394" y="220" width="12" height="9" fill="#b9c4cd"></rect> <rect x="610" y="220" width="12" height="9" fill="#b9c4cd"></rect> <rect x="394" y="248" width="12" height="9" fill="#b9c4cd"></rect> <rect x="610" y="248" width="12" height="9" fill="#b9c4cd"></rect> <rect x="394" y="276" width="12" height="9" fill="#b9c4cd"></rect> <rect x="610" y="276" width="12" height="9" fill="#b9c4cd"></rect> <rect x="406" y="88" width="204" height="204" rx="8" fill="#e6ebef" stroke="#9aa7b4" stroke-width="2"></rect> <circle cx="422" cy="104" r="5" fill="#9aa7b4"></circle> <text x="508.0" y="120" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">STM32F401</text> <rect x="388" y="174" width="18" height="12" fill="#d47b28"></rect> <text x="418" y="188" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">PC13</text> <rect x="322" y="198" width="42" height="42" rx="6" fill="#ffffff" stroke="#d47b28" stroke-width="2"></rect><text x="343.0" y="229.0" text-anchor="middle" fill="#d47b28" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">1</text> <text x="310" y="228" text-anchor="end" fill="#5a6b76" font-size="20" font-family="ui-monospace, Menlo, monospace">IDR bit 13</text> <text x="508.0" y="332" text-anchor="middle" fill="#5a6b76" font-size="20" font-family="ui-monospace, Menlo, monospace">ReadPin returns</text> <rect x="376" y="342" width="264" height="40" rx="20" fill="#ffffff" stroke="#d47b28" stroke-width="2"></rect> <text x="508.0" y="369" text-anchor="middle" fill="#d47b28" font-size="22" font-weight="600" font-family="ui-monospace, Menlo, monospace">GPIO_PIN_SET</text> <rect x="730" y="8" width="700" height="392" rx="14" fill="#ffffff" stroke="#dcebf3" stroke-width="4"></rect> <text x="758" y="50" fill="#2b789f" font-size="26" font-weight="700" letter-spacing="1">B1 PRESSED</text> <text x="770" y="92" fill="#5a6b76" font-size="26" font-weight="700">3.3 V</text> <line x1="790" y1="100" x2="870" y2="100" stroke="#5a6b76" stroke-width="4"></line> <polyline points="830,100 830,108 844,111 816,116 844,122 816,128 844,134 816,139 830,142 830,150" fill="none" stroke="#5a6b76" stroke-width="3"></polyline> <text x="858" y="134" fill="#5a6b76" font-size="26" font-weight="700">R30</text> <line x1="830" y1="150" x2="830" y2="232" stroke="#5a6b76" stroke-width="3"></line> <line x1="830" y1="180" x2="1106" y2="180" stroke="#2b789f" stroke-width="4"></line> <circle cx="830" cy="180" r="7" fill="#2b789f"></circle> <text x="980" y="166" text-anchor="middle" fill="#2b789f" font-size="30" font-weight="700">0 V</text> <circle cx="830" cy="236" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <circle cx="830" cy="286" r="5" fill="#ffffff" stroke="#5a6b76" stroke-width="3"></circle> <line x1="830" y1="282" x2="830" y2="240" stroke="#2b789f" stroke-width="5"></line> <text x="808" y="268" text-anchor="end" fill="#5a6b76" font-size="26" font-weight="700">B1</text> <line x1="830" y1="291" x2="830" y2="316" stroke="#5a6b76" stroke-width="3"></line> <line x1="804" y1="316" x2="856" y2="316" stroke="#5a6b76" stroke-width="3"></line><line x1="814" y1="326" x2="846" y2="326" stroke="#5a6b76" stroke-width="3"></line><line x1="824" y1="336" x2="836" y2="336" stroke="#5a6b76" stroke-width="3"></line> <rect x="1146" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1146" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1174" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1174" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1202" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1202" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1230" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1230" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1258" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1258" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1286" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1286" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1314" y="76" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1314" y="292" width="9" height="12" fill="#b9c4cd"></rect> <rect x="1114" y="108" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1330" y="108" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1114" y="136" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1330" y="136" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1330" y="164" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1114" y="192" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1330" y="192" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1114" y="220" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1330" y="220" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1114" y="248" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1330" y="248" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1114" y="276" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1330" y="276" width="12" height="9" fill="#b9c4cd"></rect> <rect x="1126" y="88" width="204" height="204" rx="8" fill="#e6ebef" stroke="#9aa7b4" stroke-width="2"></rect> <circle cx="1142" cy="104" r="5" fill="#9aa7b4"></circle> <text x="1228.0" y="120" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">STM32F401</text> <rect x="1108" y="174" width="18" height="12" fill="#2b789f"></rect> <text x="1138" y="188" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">PC13</text> <rect x="1042" y="198" width="42" height="42" rx="6" fill="#ffffff" stroke="#2b789f" stroke-width="2"></rect><text x="1063.0" y="229.0" text-anchor="middle" fill="#2b789f" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">0</text> <text x="1030" y="228" text-anchor="end" fill="#5a6b76" font-size="20" font-family="ui-monospace, Menlo, monospace">IDR bit 13</text> <text x="1228.0" y="332" text-anchor="middle" fill="#5a6b76" font-size="20" font-family="ui-monospace, Menlo, monospace">ReadPin returns</text> <rect x="1096" y="342" width="264" height="40" rx="20" fill="#ffffff" stroke="#2b789f" stroke-width="2"></rect> <text x="1228.0" y="369" text-anchor="middle" fill="#2b789f" font-size="22" font-weight="600" font-family="ui-monospace, Menlo, monospace">GPIO_PIN_RESET</text> <circle class="story-pulse" r="9" fill="#2b789f" filter="url(#read-glow)"><animatemotion dur="2.4s" repeatcount="indefinite" calcmode="linear" path="M 830 100 V 316"></animatemotion><animate attributename="opacity" values="0;1;1;0" keytimes="0;0.1;0.9;1" dur="2.4s" repeatcount="indefinite"></animate></circle> <text x="876" y="320" fill="#2b789f" font-size="22" font-style="italic">current to GND</text>
+</svg>
+<p>B1 is active-low: pressed reads <code>GPIO_PIN_RESET</code> (0).</p>
 </section>
-<section id="the-polling-loop" class="slide level2">
-<h2>The polling loop</h2>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb17-2"><a></a>    GPIO_PinState button <span class="op">=</span></span>
-<span id="cb17-3"><a></a>        HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">);</span></span>
-<span id="cb17-4"><a></a></span>
-<span id="cb17-5"><a></a>    <span class="cf">if</span> <span class="op">(</span>button <span class="op">==</span> GPIO_PIN_RESET<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb17-6"><a></a>        HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span></span>
-<span id="cb17-7"><a></a>                          GPIO_PIN_SET<span class="op">);</span></span>
-<span id="cb17-8"><a></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
-<span id="cb17-9"><a></a>        HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span></span>
-<span id="cb17-10"><a></a>                          GPIO_PIN_RESET<span class="op">);</span></span>
-<span id="cb17-11"><a></a>    <span class="op">}</span></span>
-<span id="cb17-12"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>B1 pressed → LD2 on. B1 released → LD2 off.</p>
+<section id="polling-b1-to-control-ld2" class="slide level2">
+<h2>Polling B1 to control LD2</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-2"><a></a>    GPIO_PinState button <span class="op">=</span> HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">);</span></span>
+<span id="cb11-3"><a></a>    <span class="cf">if</span> <span class="op">(</span>button <span class="op">==</span> GPIO_PIN_RESET<span class="op">)</span> <span class="op">{</span>   <span class="co">// pressed</span></span>
+<span id="cb11-4"><a></a>        HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span> GPIO_PIN_SET<span class="op">);</span></span>
+<span id="cb11-5"><a></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb11-6"><a></a>        HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span> GPIO_PIN_RESET<span class="op">);</span></span>
+<span id="cb11-7"><a></a>    <span class="op">}</span></span>
+<span id="cb11-8"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<svg class="story-visual" viewbox="0 0 1440 400" role="img" aria-labelledby="poll-title">
+<title id="poll-title">
+The polling loop: read B1 with HAL_GPIO_ReadPin; if it is pressed (GPIO_PIN_RESET) turn LD2 on with WritePin SET, otherwise turn LD2 off with WritePin RESET; then repeat inside while (1). The animation alternates: pressed takes the yes branch to LD2 ON, released takes the no branch to LD2 OFF.
+</title>
+<defs><marker id="pl-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker><marker id="pl-arrow-o" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d47b28"></path></marker><filter id="pl-glow" x="-100%" y="-100%" width="300%" height="300%"><fegaussianblur stddeviation="6" result="blur"></fegaussianblur><femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter></defs> <rect x="30" y="70" width="330" height="130" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="30" y="70" width="330" height="8" fill="#2b789f"></rect> <text x="195.0" y="116" text-anchor="middle" fill="#5a6b76" font-size="24" font-weight="700" letter-spacing="1">READ B1</text> <text x="195.0" y="164" text-anchor="middle" fill="#174f73" font-size="30" font-weight="700" font-family="ui-monospace, Menlo, monospace">ReadPin()</text> <line x1="364" y1="135" x2="456" y2="135" stroke="#2b789f" stroke-width="5" marker-end="url(#pl-arrow)"></line> <polygon points="590,40 720,135 590,230 460,135" fill="#ffffff" stroke="#174f73" stroke-width="3"></polygon> <text x="590" y="129" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700">pressed?</text> <text x="590" y="161" text-anchor="middle" fill="#5a6b76" font-size="18" font-family="ui-monospace, Menlo, monospace">== RESET</text> <path d="M 720 135 H 800 V 75 H 870" fill="none" stroke="#d47b28" stroke-width="5" marker-end="url(#pl-arrow-o)"></path> <text x="736" y="124" fill="#d47b28" font-size="24" font-weight="700">yes</text> <path d="M 590 230 V 290 H 870" fill="none" stroke="#2b789f" stroke-width="5" marker-end="url(#pl-arrow)"></path> <text x="604" y="262" fill="#2b789f" font-size="24" font-weight="700">no</text> <rect x="876" y="30" width="300" height="90" rx="10" fill="#f8e2c8" stroke="#d47b28" stroke-width="3"></rect> <text x="1026" y="68" text-anchor="middle" fill="#d47b28" font-size="26" font-weight="700">LD2 ON</text> <text x="1026" y="102" text-anchor="middle" fill="#5a6b76" font-size="19" font-family="ui-monospace, Menlo, monospace">WritePin(…, SET)</text> <rect x="876" y="245" width="300" height="90" rx="10" fill="#dcebf3" stroke="#2b789f" stroke-width="3"></rect> <text x="1026" y="283" text-anchor="middle" fill="#2b789f" font-size="26" font-weight="700">LD2 OFF</text> <text x="1026" y="317" text-anchor="middle" fill="#5a6b76" font-size="19" font-family="ui-monospace, Menlo, monospace">WritePin(…, RESET)</text> <path d="M 1176 75 H 1260 V 380 H 195 V 204" fill="none" stroke="#5a6b76" stroke-width="4" stroke-dasharray="10 7" marker-end="url(#pl-arrow)"></path> <path d="M 1176 290 H 1260" fill="none" stroke="#5a6b76" stroke-width="4" stroke-dasharray="10 7"></path> <text x="728" y="366" text-anchor="middle" fill="#5a6b76" font-size="24" font-weight="700">while (1): repeat, thousands of times per second</text> <rect x="876" y="30" width="300" height="90" rx="10" fill="none" stroke="#d47b28" stroke-width="7" opacity="0"><set attributename="opacity" to="1" begin="pollA.begin" end="pollA.end"></set></rect> <circle cx="1146" cy="58" r="13" fill="#7ee08a" opacity="0" filter="url(#pl-glow)"><set attributename="opacity" to="1" begin="pollA.begin" end="pollA.end"></set></circle> <rect x="876" y="245" width="300" height="90" rx="10" fill="none" stroke="#2b789f" stroke-width="7" opacity="0"><set attributename="opacity" to="1" begin="pollB.begin" end="pollB.end"></set></rect> <g opacity="0"><set attributename="opacity" to="1" begin="pollA.begin" end="pollA.end"></set><rect x="45" y="16" width="300" height="40" rx="20" fill="#dcebf3" stroke="#2b789f" stroke-width="2"></rect><text x="195" y="43" text-anchor="middle" fill="#2b789f" font-size="21" font-weight="700">B1 pressed → RESET</text></g> <g opacity="0"><set attributename="opacity" to="1" begin="pollB.begin" end="pollB.end"></set><rect x="45" y="16" width="300" height="40" rx="20" fill="#f8e2c8" stroke="#d47b28" stroke-width="2"></rect><text x="195" y="43" text-anchor="middle" fill="#d47b28" font-size="21" font-weight="700">B1 released → SET</text></g> <circle r="10" fill="#d47b28" filter="url(#pl-glow)" opacity="0"><animatemotion id="pollA" begin="0s;pollB.end" dur="4s" calcmode="linear" path="M 195 135 H 800 V 75 H 1260 V 380 H 195 V 135"></animatemotion><set attributename="opacity" to="1" begin="pollA.begin" end="pollA.end"></set></circle> <circle r="10" fill="#2b789f" filter="url(#pl-glow)" opacity="0"><animatemotion id="pollB" begin="pollA.end" dur="4s" calcmode="linear" path="M 195 135 H 590 V 290 H 1260 V 380 H 195 V 135"></animatemotion><set attributename="opacity" to="1" begin="pollB.begin" end="pollB.end"></set></circle>
+</svg>
 </section>
-<section id="practice-predict-the-read" class="slide level2">
-<h2>Practice: predict the read</h2>
+<section id="practice-predict-the-input-read" class="slide level2">
+<h2>Practice: predict the input read</h2>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -739,104 +708,26 @@ PUPDR bits 31 down to 16 drawn as eight two-bit fields for pins 15 to 8; the pin
 </div>
 </div>
 </section>
-<section id="register-evidence" class="slide level2">
-<h2>Register evidence</h2>
+<section id="live-demo-2-b1-controls-ld2" class="slide level2 live-demo roomy">
+<h2>Live demo 2: B1 controls LD2</h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> After <code>MX_GPIO_Init()</code>, inspect <code>GPIOA-&gt;MODER</code> bits 11:10 for <code>01</code>.</p>
+<p><span>01</span> <strong>CUBEMX:</strong> set PC13 to <code>GPIO_Input</code>, generate code.</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> Inspect <code>GPIOC-&gt;MODER</code> bits 27:26 for <code>00</code>.</p>
+<p><span>02</span> <strong>CODE:</strong> paste the polling loop into <code>USER CODE 3</code>, build, run.</p>
 </div>
 <div class="vertical-item">
-<p><span>03</span> Inspect <code>GPIOC-&gt;PUPDR</code> bits 27:26 for <code>00</code>.</p>
+<p><span>03</span> <strong>CHECK:</strong> press and release B1; compare LD2 with your prediction.</p>
 </div>
 <div class="vertical-item">
-<p><span>04</span> Watch <code>GPIOC-&gt;IDR</code> bit 13 while pressing and releasing B1.</p>
+<p><span>04</span> <strong>REGISTERS:</strong> <code>MODER13</code> = <code>00</code>, <code>PUPDR13</code> = <code>00</code>, <code>IDR13</code> 1 → 0 when pressed.</p>
 </div>
 <div class="vertical-item">
-<p><span>05</span> Confirm the PA5 output state agrees with LD2.</p>
+<p><span>05</span> <strong>CHANGE:</strong> <code>==</code> becomes <code>!=</code>. Predict LD2, then run.</p>
 </div>
 </div>
 <p>A successful build proves valid translation and linking—not correct pin behavior.</p>
-</section>
-<section id="cmsis-vs-hal-trade-offs" class="slide level2">
-<h2>CMSIS vs HAL trade-offs</h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Question</th>
-<th>Direct CMSIS access</th>
-<th>STM32 HAL</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>What do you write?</td>
-<td>registers and masks</td>
-<td>structures and functions</td>
-</tr>
-<tr class="even">
-<td>What stays visible?</td>
-<td>every register operation</td>
-<td>intent and named configuration</td>
-</tr>
-<tr class="odd">
-<td>Main strength</td>
-<td>precise control and transparency</td>
-<td>readability and faster development</td>
-</tr>
-<tr class="even">
-<td>Main cost</td>
-<td>more device-specific detail</td>
-<td>extra software layer and hidden operations</td>
-</tr>
-</tbody>
-</table>
-<p>Neither interface removes the need to understand the circuit and verify the result.</p>
-</section>
-<section id="configuration-ownership" class="slide level2">
-<h2>Configuration ownership</h2>
-<div class="vertical-list">
-<div class="vertical-item">
-<p><span>01</span> <strong>CUBEMX</strong> owns the generated peripheral initialization.</p>
-</div>
-<div class="vertical-item">
-<p><span>02</span> <strong>USER CODE REGIONS</strong> own application calls and controlled changes.</p>
-</div>
-<div class="vertical-item">
-<p><span>03</span> <strong>CMSIS REGISTER VIEWS</strong> provide evidence of what HAL changed.</p>
-</div>
-<div class="vertical-item">
-<p><span>04</span> <strong>DIRECT WRITES</strong> are used only when the exercise explicitly assigns that ownership.</p>
-</div>
-</div>
-<p>Do not let CubeMX and hand-written register code silently fight over the same pin configuration.</p>
-</section>
-<section id="common-hal-gpio-mistakes" class="slide level2">
-<h2>Common HAL GPIO mistakes</h2>
-<div class="vertical-list compact-list">
-<div class="vertical-item">
-<p><span>01</span> <strong>INIT NOT CALLED:</strong> <code>MX_GPIO_Init()</code> never runs before the loop.</p>
-</div>
-<div class="vertical-item">
-<p><span>02</span> <strong>WRONG PORT OR PIN:</strong> <code>GPIOA</code> is paired with a PC13 mask, or vice versa.</p>
-</div>
-<div class="vertical-item">
-<p><span>03</span> <strong>WRONG PULL:</strong> the default input level does not match the circuit.</p>
-</div>
-<div class="vertical-item">
-<p><span>04</span> <strong>REVERSED LOGIC:</strong> the program treats the released value as pressed.</p>
-</div>
-<div class="vertical-item">
-<p><span>05</span> <strong>CODE REGENERATED:</strong> edits outside USER CODE regions disappear.</p>
-</div>
-</div>
 </section>
 <section id="laboratory-mission" class="slide level2">
 <h2>Laboratory mission</h2>
@@ -878,9 +769,9 @@ PUPDR bits 31 down to 16 drawn as eight two-bit fields for pins 15 to 8; the pin
 <h2>Exit ticket</h2>
 <div class="columns">
 <div class="column" style="width:62%;">
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a></a>config<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_INPUT<span class="op">;</span></span>
-<span id="cb18-2"><a></a>config<span class="op">.</span>Pull <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
-<span id="cb18-3"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOC<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a></a>config<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_INPUT<span class="op">;</span></span>
+<span id="cb12-2"><a></a>config<span class="op">.</span>Pull <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
+<span id="cb12-3"><a></a>HAL_GPIO_Init<span class="op">(</span>GPIOC<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="vertical-list ticket-list compact-tickets">
 <div class="vertical-item">
 <p><span>01</span> <strong>REGISTER:</strong> PC13’s <code>MODER</code> and <code>PUPDR</code> fields — what values?</p>
@@ -1121,6 +1012,65 @@ PUPDR bits 31 down to 16 drawn as eight two-bit fields for pins 15 to 8; the pin
           RevealZoom
         ]
       });
+    </script>
+    <script>
+    /* Adds VS Code-style classes to identifiers in C code blocks; colours are in
+       code-vscode-light.css. Pandoc leaves identifiers as plain text, so:
+       name followed by "("            -> vs-fn    (HAL_GPIO_WritePin, main)
+       *_t or *TypeDef / *PinState     -> vs-type  (uint16_t, GPIO_InitTypeDef)
+       ALL_CAPS                        -> vs-const (GPIO_PIN_SET, GPIOA, MODER)
+       other names                     -> vs-var   (button, config, Pin) */
+    (function () {
+      const TYPE = /^(?:\w+_t|\w*TypeDef|GPIO_PinState|HAL_StatusTypeDef|bool)$/;
+      const CONST = /^[A-Z][A-Z0-9_]*$/;
+      const WORD = /[A-Za-z_]\w*/g;
+
+      function nextChar(node, from) {
+        const rest = node.nodeValue.slice(from).trim();
+        if (rest) return rest[0];
+        for (let n = node.nextSibling; n; n = n.nextSibling) {
+          const t = (n.textContent || "").trim();
+          if (t) return t[0];
+        }
+        return "";
+      }
+
+      function classify(word, node, end) {
+        if (TYPE.test(word)) return "vs-type";
+        if (nextChar(node, end) === "(") return "vs-fn";
+        if (CONST.test(word)) return "vs-const";
+        return "vs-var";
+      }
+
+      function colourTextNode(node) {
+        const text = node.nodeValue;
+        const frag = document.createDocumentFragment();
+        let last = 0, m;
+        WORD.lastIndex = 0;
+        while ((m = WORD.exec(text))) {
+          frag.append(text.slice(last, m.index));
+          const span = document.createElement("span");
+          span.className = classify(m[0], node, m.index + m[0].length);
+          span.textContent = m[0];
+          frag.append(span);
+          last = m.index + m[0].length;
+        }
+        if (last === 0) return;
+        frag.append(text.slice(last));
+        node.replaceWith(frag);
+      }
+
+      document.querySelectorAll("code.sourceCode.c, code.sourceCode.cpp").forEach(function (code) {
+        code.querySelectorAll("span.dt").forEach(function (s) {
+          if (TYPE.test(s.textContent)) s.classList.add("vs-type");
+        });
+        code.querySelectorAll(":scope > span").forEach(function (line) {
+          Array.from(line.childNodes)
+            .filter(function (n) { return n.nodeType === Node.TEXT_NODE; })
+            .forEach(colourTextNode);
+        });
+      });
+    })();
     </script>
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {

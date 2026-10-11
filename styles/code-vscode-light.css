@@ -1,0 +1,34 @@
+/* VS Code "Light Modern"-style colours for C code blocks.
+   Pandoc marks keywords, numbers, strings and comments; code-vscode-light.html
+   adds the classes for functions, constants (ALL_CAPS), types and variables. */
+
+.reveal div.sourceCode,
+div.sourceCode {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+}
+
+.reveal pre code.sourceCode,
+pre code.sourceCode { color: #1f1f1f; }
+
+code.sourceCode span.kw,
+code.sourceCode span.dt,
+code.sourceCode span.pp,
+code.sourceCode span.im  { color: #0000ff; font-weight: normal; }  /* void, static, #include */
+code.sourceCode span.cf  { color: #af00db; font-weight: normal; }  /* if, else, while, return */
+code.sourceCode span.dv,
+code.sourceCode span.bn,
+code.sourceCode span.fl  { color: #098658; }                       /* numbers */
+code.sourceCode span.st,
+code.sourceCode span.ch  { color: #a31515; }                       /* strings, chars */
+code.sourceCode span.co  { color: #008000; font-style: normal; }   /* comments */
+code.sourceCode span.op  { color: #1f1f1f; }                       /* operators, brackets */
+
+code.sourceCode span.vs-fn    { color: #795e26; }                  /* HAL_GPIO_WritePin */
+code.sourceCode span.vs-const { color: #0070c1; }                  /* GPIO_PIN_SET, GPIOA */
+code.sourceCode span.vs-type  { color: #267f99; }                  /* uint16_t, GPIO_PinState */
+code.sourceCode span.vs-var   { color: #001080; }                  /* button, config.Pin */
+
+/* line numbers */
+pre.numberSource code > span > a:first-child::before { color: #237893; }

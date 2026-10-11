@@ -20,3 +20,83 @@
 .reveal .four-step-pipeline .pipeline-arrow {
   font-size: 1.45em;
 }
+
+/* L05: larger code blocks than the shared L01 default (0.72em) — 2026-10-09.
+   L05's longest line (~62 chars) still fits on one line at this size. */
+.reveal pre.sourceCode {
+  font-size: 0.88em;
+}
+
+/* Annotated one-line call: each argument underlined with its role written below (2026-10-09). */
+.reveal .annotated-call {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 1.05em;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  padding: 0.35em 0.6em 1.6em;
+  margin: 0.2em 0 0.5em;
+  white-space: nowrap;
+  color: #1f1f1f;
+}
+.reveal .annotated-call .fn { color: #795e26; }
+.reveal .annotated-call .arg {
+  position: relative;
+  display: inline-block;
+  color: #0070c1;
+  border-bottom: 3px solid currentColor;
+  line-height: 1.15;
+}
+.reveal .annotated-call .arg::after {
+  content: attr(data-role);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0.25em;
+  font-family: var(--r-main-font, "Quicksand", sans-serif);
+  font-size: 0.7em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.reveal .annotated-call .arg.port  { color: #3f7f58; }
+.reveal .annotated-call .arg.pin   { color: #2b789f; }
+.reveal .annotated-call .arg.level { color: #d47b28; }
+.reveal .annotated-call .type { color: #267f99; }
+.reveal .annotated-call .arg.result { color: #7b3fb5; }
+
+/* Small definition note pinned to the bottom of the slide (2026-10-09). */
+.reveal .slides section .source-note.at-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 40px;
+  margin: 0;
+}
+
+/* Slides with little content: larger list, strip and bottom note (2026-10-09). */
+.reveal section.roomy .vertical-list { font-size: 1.3em; margin-top: 0.6em; }
+.reveal section.roomy .vertical-item { padding-top: 0.35em; padding-bottom: 0.35em; }
+.reveal section.roomy .relationship-strip { font-size: 1.3em; margin-top: 1em; }
+.reveal section.roomy .source-note { font-size: 0.75em; }
+.reveal section.roomy .vertical-item p > span:first-child + strong { width: 220px; }
+.reveal section.roomy .vertical-item p:has(> span:first-child + strong) { padding-left: 296px; text-indent: -296px; }
+.reveal section.roomy .vertical-list { font-size: 1.22em; }
+
+/* Live demo slides: small tag before the title (2026-10-09). */
+.reveal section.live-demo h2::before {
+  content: "LIVE DEMO";
+  display: inline-block;
+  margin-right: 0.6em;
+  padding: 0.12em 0.55em;
+  border-radius: 0.4em;
+  background: #fdf1e4;
+  border: 2px solid #d47b28;
+  color: #d47b28;
+  font-size: 0.45em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  vertical-align: middle;
+}
+.reveal section.live-demo .pipeline-grid { font-size: 1.3em; margin-top: 0.8em; }
+.reveal section.live-demo > p { font-size: 1.1em; margin-top: 1em; }
