@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,7 +70,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -158,7 +158,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#part-a---reading-hal-configuration" id="toc-part-a---reading-hal-configuration" class="nav-link active" data-scroll-target="#part-a---reading-hal-configuration">Part A - Reading HAL configuration</a></li>
   <li><a href="#part-b---the-two-interfaces" id="toc-part-b---the-two-interfaces" class="nav-link" data-scroll-target="#part-b---the-two-interfaces">Part B - The two interfaces</a></li>
   <li><a href="#part-c---inputs-and-pulls" id="toc-part-c---inputs-and-pulls" class="nav-link" data-scroll-target="#part-c---inputs-and-pulls">Part C - Inputs and pulls</a></li>
-  <li><a href="#part-d---edges-debounce-state" id="toc-part-d---edges-debounce-state" class="nav-link" data-scroll-target="#part-d---edges-debounce-state">Part D - Edges, debounce, state</a></li>
+  <li><a href="#part-d---counting-presses" id="toc-part-d---counting-presses" class="nav-link" data-scroll-target="#part-d---counting-presses">Part D - Counting presses</a></li>
   <li><a href="#part-e---register-evidence" id="toc-part-e---register-evidence" class="nav-link" data-scroll-target="#part-e---register-evidence">Part E - Register evidence</a></li>
   <li><a href="#exit-self-assessment" id="toc-exit-self-assessment" class="nav-link" data-scroll-target="#exit-self-assessment">Exit self-assessment</a></li>
   </ul>
@@ -204,7 +204,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>config<span class="op">.</span>Pull  <span class="op">=</span> GPIO_NOPULL<span class="op">;</span>         config<span class="op">.</span>Pull <span class="op">=</span> GPIO_PULLDOWN<span class="op">;</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>config<span class="op">.</span>Speed <span class="op">=</span> GPIO_SPEED_FREQ_LOW<span class="op">;</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span>      HAL_GPIO_Init<span class="op">(</span>GPIOC<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>Write the complete <code>GPIO_InitTypeDef</code> block (with <code>HAL_GPIO_Init</code>) that reproduces the L04 homework’s PB0 output — and state which register fields it writes, at which bit positions.</p></li>
+<li><p>Write the complete <code>GPIO_InitTypeDef</code> block (with the clock enable and <code>HAL_GPIO_Init</code>) that makes <strong>PB0</strong> a push-pull output with no pull and low speed, and state which register fields it writes, at which bit positions.</p></li>
 <li><p>Why does the generated <code>MX_GPIO_Init</code> call <code>HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET)</code> <strong>before</strong> <code>HAL_GPIO_Init</code>? What glitch does this ordering prevent?</p></li>
 <li><p><code>{0}</code> in <code>GPIO_InitTypeDef config = {0};</code> — what does it do, and what class of bug appears when it is omitted and <code>config</code> is reused for a second pin?</p></li>
 </ol>
@@ -219,12 +219,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>reading B1: <code>HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)</code> — write the <code>IDR</code> test that yields the same information.</li>
 </ol></li>
 <li><p>Name one concrete situation where direct register access is the better choice and one where HAL is — with a one-sentence justification each. (“Better” must refer to something checkable: code size, clarity, portability, atomicity, review effort.)</p></li>
-<li><p>A teammate mixes interfaces: CubeMX configures PA5, then their code does <code>GPIOA-&gt;MODER = 0x400;</code> “to be sure”. Name <strong>two</strong> distinct things this plain assignment breaks on this board.</p></li>
 </ol>
 </section>
 <section id="part-c---inputs-and-pulls" class="level2">
 <h2 class="anchored" data-anchor-id="part-c---inputs-and-pulls">Part C - Inputs and pulls</h2>
-<ol start="8" type="1">
+<ol start="7" type="1">
 <li><p>For each wiring, state what the pin reads when the switch is open and when it is closed:</p>
 <ol type="a">
 <li>resistor to 3.3 V, switch to ground (B1’s wiring);</li>
@@ -233,7 +232,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <p>Which case is a bug, and what would the program observe?</p></li>
 <li><p>The board’s B1 has external R30 to 3.3 V. A student nevertheless configures <code>GPIO_PULLUP</code>. Explain what is now physically on the pin, and whether pressed/released readings change.</p></li>
-<li><p>Fill the truth table for the lab’s Checkpoint B loop:</p>
+<li><p>Fill the truth table for the Lab 4 Checkpoint B loop:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -258,29 +257,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>Then state the one-token change that inverts the behavior (LED on while pressed).</p></li>
+<p>Then state the one-token change that swaps the behavior (LD2 blinks while B1 is held and is off after release).</p></li>
 </ol>
 </section>
-<section id="part-d---edges-debounce-state" class="level2">
-<h2 class="anchored" data-anchor-id="part-d---edges-debounce-state">Part D - Edges, debounce, state</h2>
-<ol start="11" type="1">
+<section id="part-d---counting-presses" class="level2">
+<h2 class="anchored" data-anchor-id="part-d---counting-presses">Part D - Counting presses</h2>
+<ol start="10" type="1">
 <li><p>This loop is meant to count presses but counts hundreds per press:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">)</span> <span class="op">==</span> GPIO_PIN_RESET<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">++</span>press_count<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    press_count <span class="op">=</span> press_count <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="a">
 <li>Why does it over-count even with a perfect, bounce-free button?</li>
-<li>Add the <code>prev</code>/<code>cur</code> edge detection (write the corrected loop body).</li>
-<li>With edge detection in place, the count still jumps by 2-3 per press. What causes it, and where does the debounce delay go?</li>
+<li>Rewrite the loop body with <code>previous</code> and <code>current</code>, as in Lab 4 Checkpoint C, so that only the start of a press is counted.</li>
+<li>With that fix, the count still jumps by 2-3 per press. What causes it, and where does the <code>HAL_Delay(20)</code> go?</li>
 </ol></li>
-<li><p>Why are <code>press_count</code> and <code>prev</code> declared <code>static</code> inside the loop’s enclosing function? What breaks if <code>static</code> is removed (assume they are declared inside <code>while (1)</code>’s body)?</p></li>
-<li><p>Trace Checkpoint C: <code>press_count</code> starts at 0 and B1 is pressed five times. Using <code>press_count &amp; 0x3U</code>, which pattern (0-3) is active after each press? Why is <code>&amp; 0x3U</code> equivalent to <code>% 4</code> here?</p></li>
+<li><p>In Checkpoint C, <code>press_count</code> and <code>previous</code> are declared in <code>USER CODE BEGIN 2</code>, before the loop. What breaks if they are declared inside the body of <code>while (1)</code> instead?</p></li>
+<li><p><code>press_count</code> starts at 0 and B1 is pressed five times. Using <code>press_count % 4</code> and the Checkpoint C behaviors (0 off · 1 on · 2 blink every 200 ms · 3 blink every 50 ms), which behavior is active after each press?</p></li>
 </ol>
 </section>
 <section id="part-e---register-evidence" class="level2">
 <h2 class="anchored" data-anchor-id="part-e---register-evidence">Part E - Register evidence</h2>
-<ol start="14" type="1">
-<li><p>After <code>MX_GPIO_Init()</code> with the lab’s <code>.ioc</code> settings, predict the exact values of these fields:</p>
+<ol start="13" type="1">
+<li><p>After <code>MX_GPIO_Init()</code> with the Lab 4 settings (PA5 output, PC13 input, no pull), predict the exact values of these fields:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -306,20 +305,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td></td>
 </tr>
 </tbody>
-</table></li>
-<li><p>While you hold B1 down, which single SFR bit changes, in which register — and does <code>GPIOC-&gt;ODR</code> change too? Why or why not?</p></li>
-<li><p>Your claim: “HAL wrote the same MODER bits I wrote by hand in L04.” Describe the two-project comparison (breakpoints, registers, values) that proves it.</p></li>
+</table>
+<p>Check your predictions in XPERIPHERALS in the lab (Registers Tree at home).</p></li>
+<li><p>While you hold B1 down, which single SFR bit changes, in which register, and does <code>GPIOC-&gt;ODR</code> change too? Why or why not?</p></li>
+<li><p>Your claim: “HAL wrote the same MODER bits that my Lab 3 <code>led_init</code> wrote by hand.” Describe the two-project comparison (breakpoints, registers, values) that proves it.</p></li>
 </ol>
 </section>
 <section id="exit-self-assessment" class="level2">
 <h2 class="anchored" data-anchor-id="exit-self-assessment">Exit self-assessment</h2>
 <p>Mark one:</p>
 <ul class="task-list">
-<li><label><input type="checkbox">Ready for the L05 lab without additional review</label></li>
+<li><label><input type="checkbox">Ready for Lab 4 without additional review</label></li>
 <li><label><input type="checkbox">Need to review HAL-name-to-register mapping</label></li>
 <li><label><input type="checkbox">Need to review pulls and the B1 circuit</label></li>
-<li><label><input type="checkbox">Need to review edge detection and debounce</label></li>
-<li><label><input type="checkbox">Need to review the SFR evidence workflow</label></li>
+<li><label><input type="checkbox">Need to review press counting and contact bounce</label></li>
+<li><label><input type="checkbox">Need to review the register evidence workflow</label></li>
 </ul>
 
 
