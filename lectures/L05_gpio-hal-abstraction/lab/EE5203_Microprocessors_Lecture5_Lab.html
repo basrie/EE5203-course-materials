@@ -5101,7 +5101,7 @@ Why <code>previous</code> and <code>current</code>? (click)
 </div>
 </div>
 </div>
-<p>Below it, use <code>press_count % 4</code> to choose what the LED on PA5 does:</p>
+<p><code>press_count % 4</code> is the remainder when <code>press_count</code> is divided by 4, so it is always 0, 1, 2 or 3. Use it to choose what the LED on PA5 does:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -5133,6 +5133,18 @@ Why <code>previous</code> and <code>current</code>? (click)
 </tr>
 </tbody>
 </table>
+<p>Paste this below <code>previous = current;</code> and complete the four branches. Each branch needs one or two HAL calls you used in Checkpoints A and B (<code>HAL_GPIO_WritePin</code>, <code>HAL_GPIO_TogglePin</code>, <code>HAL_Delay</code>):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> mode <span class="op">=</span> press_count <span class="op">%</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>mode <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* </span><span class="al">TODO</span><span class="co">: LED off */</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>mode <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* </span><span class="al">TODO</span><span class="co">: LED on */</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>mode <span class="op">==</span> <span class="dv">2</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* </span><span class="al">TODO</span><span class="co">: toggle the LED, then wait 200 ms */</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* </span><span class="al">TODO</span><span class="co">: toggle the LED, then wait 50 ms */</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Check it in two steps:</strong></p>
 <ol type="1">
 <li><strong>One count per press.</strong> Set a breakpoint on <code>press_count = press_count + 1;</code> and Continue (F5). Press and <strong>hold</strong> B1: the program stops once. Press Continue while you still hold B1: it does <strong>not</strong> stop again. Release, press again: it stops again, and <code>press_count</code> in VARIABLES is 1 higher.</li>
