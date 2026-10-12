@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600;700&display=swap">
 <style>
-  /* Layout: header, then a two-column bench (code | controls + counters), then a full-width logic-analyzer strip with the pass table. */
+  /* Light theme only (projector). Layout: header, then a two-column bench (code | controls + counters), then a full-width logic-analyzer strip with the pass table. */
   :root {
     --bg: #f5f7f9;
     --panel: #ffffff;
@@ -26,18 +26,7 @@
     --focus: #2b789f;
     --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0f1a22; --panel: #15232d; --ink: #e3edf3; --muted: #9db0bd; --line: #2a3b47; --grid: #1d2d38;
-      --high: #f0a25a; --high-soft: #3a2a1b; --low: #6bb7dc; --low-soft: #183244; --bad: #ec7d7d; --bad-soft: #3a1f22;
-      --wait: #7d8c97; --focus: #6bb7dc; color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0f1a22; --panel: #15232d; --ink: #e3edf3; --muted: #9db0bd; --line: #2a3b47; --grid: #1d2d38;
-    --high: #f0a25a; --high-soft: #3a2a1b; --low: #6bb7dc; --low-soft: #183244; --bad: #ec7d7d; --bad-soft: #3a1f22;
-    --wait: #7d8c97; --focus: #6bb7dc; color-scheme: dark;
+    color-scheme: light;
   }
   * { box-sizing: border-box; font-variant-ligatures: none; }
   body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.45; }
@@ -68,14 +57,12 @@
   .toggles input { width: 1.1rem; height: 1.1rem; accent-color: var(--low); }
   .hint { color: var(--muted); font-size: 0.9rem; margin: 0; }
   kbd { font-family: var(--font-mono); font-size: 0.82em; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: var(--bg); }
-  .counters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .counters { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .counter { border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 4px; min-width: 0; }
-  .counter.a { border-color: var(--bad); background: var(--bad-soft); }
   .counter.b { border-color: var(--high); background: var(--high-soft); }
   .counter .name { font-weight: 700; }
   .counter code { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); overflow-wrap: anywhere; }
   .counter .num { font-family: var(--font-mono); font-size: 2.6rem; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
-  .counter.a .num { color: var(--bad); }
   .counter.b .num { color: var(--high); }
   .status { min-height: 1.5em; margin: 0; font-weight: 700; }
   .scope { overflow-x: auto; }
@@ -90,7 +77,7 @@
 <div class="wrap">
   <header>
     <h1>B1 Press Counter</h1>
-    <p class="lede">A press is a <strong>change</strong>, from released (1) to pressed (0). One reading shows only the state now, so the loop compares the reading from the last pass, <code>previous</code>, with the reading from this pass, <code>current</code>. Press B1, step through the loop and watch the two counters.</p>
+    <p class="lede">A press is a <strong>change</strong>, from released (1) to pressed (0). One reading shows only the state now, so the loop compares the reading from the last pass, <code>previous</code>, with the reading from this pass, <code>current</code>. Press B1, step through the loop and watch <code>press_count</code>.</p>
   </header>
 
   <section class="bench">
@@ -112,14 +99,9 @@
       </div>
       <p class="hint">Click B1 to press or release it, or hold <kbd>Space</kbd>. <kbd>→</kbd> steps one pass.</p>
       <div class="counters">
-        <div class="counter a">
-          <span class="name">Count A — level</span>
-          <code>if (current == GPIO_PIN_RESET) count++;</code>
-          <span class="num" id="countA">0</span>
-        </div>
         <div class="counter b">
-          <span class="name">Count B — change</span>
-          <code>previous == 1 &amp;&amp; current == 0</code>
+          <span class="name">press_count</span>
+          <code>adds 1 only when previous is 1 and current is 0</code>
           <span class="num" id="countB">0</span>
         </div>
       </div>
@@ -129,7 +111,7 @@
 
   <section class="panel">
     <p class="label">Loop passes — newest on the right</p>
-    <div class="scope"><svg id="scope" role="img" aria-label="Timing diagram of B1, the PC13 pin level and the values of current, previous and both counters for each loop pass"></svg></div>
+    <div class="scope"><svg id="scope" role="img" aria-label="Timing diagram of B1, the PC13 pin level and the values of current, previous and press_count for each loop pass"></svg></div>
     <div class="legend">
       <span><span class="sw" style="background:var(--high)"></span>1 = released (GPIO_PIN_SET)</span>
       <span><span class="sw" style="background:var(--low)"></span>0 = pressed (GPIO_PIN_RESET)</span>
@@ -138,7 +120,7 @@
     </div>
   </section>
 
-  <footer>Slowed down: here one loop pass stands for 5 ms, so HAL_Delay(20) lasts 4 passes and a bounce lasts 3. On the board one pass takes microseconds, so Count A climbs by thousands while B1 is held.</footer>
+  <footer>Slowed down: here one loop pass stands for 5 ms, so HAL_Delay(20) lasts 4 passes and a bounce lasts 3. On the board one pass takes microseconds.</footer>
 </div>
 
 <script>
@@ -146,11 +128,11 @@
   const SHOW = 16, BOUNCE = [0, 1, 0], DELAY_PASSES = 4, RUN_MS = 450;
   const $ = (id) => document.getElementById(id);
   const ui = { b1: $("b1"), step: $("step"), run: $("run"), reset: $("reset"), bounce: $("bounce"), delay: $("delay"),
-               a: $("countA"), b: $("countB"), status: $("status"), svg: $("scope"), lines: [...document.querySelectorAll(".ln[data-l]")] };
+               b: $("countB"), status: $("status"), svg: $("scope"), lines: [...document.querySelectorAll(".ln[data-l]")] };
   let s, timer = null;
 
   function fresh() {
-    return { pressed: false, queue: [], wait: 0, previous: 1, countA: 0, countB: 0, n: 0, passes: [] };
+    return { pressed: false, queue: [], wait: 0, previous: 1, countB: 0, n: 0, passes: [] };
   }
 
   function setB1(down) {
@@ -166,13 +148,12 @@
     s.n += 1;
     if (s.wait > 0) {
       s.wait -= 1;
-      s.passes.push({ n: s.n, b1: s.pressed, pin, wait: true, countA: s.countA, countB: s.countB });
+      s.passes.push({ n: s.n, b1: s.pressed, pin, wait: true, countB: s.countB });
     } else {
       const current = pin, previous = s.previous;
       const edge = previous === 1 && current === 0;
-      if (current === 0) s.countA += 1;
       if (edge) { s.countB += 1; if (ui.delay.checked) s.wait = DELAY_PASSES; }
-      s.passes.push({ n: s.n, b1: s.pressed, pin, current, previous, edge, countA: s.countA, countB: s.countB });
+      s.passes.push({ n: s.n, b1: s.pressed, pin, current, previous, edge, countB: s.countB });
       s.previous = current;
     }
     if (s.passes.length > 200) s.passes.splice(0, s.passes.length - 200);
@@ -196,15 +177,14 @@
   function statusText(p) {
     if (!p) return "Press B1, then step.";
     if (p.wait) return `Pass ${p.n}: inside HAL_Delay(20), the pin is not read.`;
-    if (p.edge) return `Pass ${p.n}: previous 1, current 0 — a press starts. Count B + 1.`;
-    if (p.current === 0) return `Pass ${p.n}: still pressed (previous 0). Count A + 1, Count B unchanged.`;
+    if (p.edge) return `Pass ${p.n}: previous 1, current 0 — a press starts. press_count + 1.`;
+    if (p.current === 0) return `Pass ${p.n}: still pressed (previous 0). No count.`;
     return `Pass ${p.n}: released. Nothing to count.`;
   }
 
   const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 
   function render() {
-    ui.a.textContent = s.countA;
     ui.b.textContent = s.countB;
     const last = s.passes[s.passes.length - 1];
     highlight(last);
@@ -212,8 +192,8 @@
 
     const view = s.passes.slice(-SHOW);
     const L = 150, CW = 62, W = L + SHOW * CW + 10;
-    const rows = [["B1", 34], ["PC13 pin", 96], ["pass", 150], ["current", 186], ["previous", 222], ["count A", 258], ["count B", 294]];
-    const H = 318;
+    const rows = [["B1", 34], ["PC13 pin", 96], ["pass", 150], ["current", 186], ["previous", 222], ["press_count", 258]];
+    const H = 282;
     const C = { ink: css("--ink"), muted: css("--muted"), grid: css("--grid"), line: css("--line"), high: css("--high"), highSoft: css("--high-soft"), low: css("--low"), bad: css("--bad"), wait: css("--wait") };
     const mono = 'font-family="JetBrains Mono, ui-monospace, Menlo, monospace"';
     const x0 = (i) => L + i * CW;
@@ -221,8 +201,8 @@
     rows.forEach(([name, y]) => { o += `<text x="10" y="${y + 6}" fill="${C.muted}" font-size="15" font-weight="700">${name}</text>`; });
     for (let i = 0; i <= SHOW; i++) o += `<line x1="${x0(i)}" y1="10" x2="${x0(i)}" y2="${H - 8}" stroke="${C.grid}" stroke-width="1"/>`;
     view.forEach((p, i) => {
-      if (p.wait) o += `<rect x="${x0(i) + 1}" y="128" width="${CW - 2}" height="182" fill="${C.grid}"/>`;
-      if (p.edge) o += `<rect x="${x0(i) + 1}" y="128" width="${CW - 2}" height="182" fill="${C.highSoft}" stroke="${C.high}" stroke-width="2"/>`;
+      if (p.wait) o += `<rect x="${x0(i) + 1}" y="128" width="${CW - 2}" height="146" fill="${C.grid}"/>`;
+      if (p.edge) o += `<rect x="${x0(i) + 1}" y="128" width="${CW - 2}" height="146" fill="${C.highSoft}" stroke="${C.high}" stroke-width="2"/>`;
     });
     const wave = (yHi, yLo, key) => {
       let d = "", prev = null;
@@ -250,8 +230,7 @@
         o += cell(i, 186, p.current, bitCol(p.current), p.edge);
         o += cell(i, 222, p.previous, bitCol(p.previous), p.edge);
       }
-      o += cell(i, 258, p.countA, C.bad, false);
-      o += cell(i, 294, p.countB, C.high, p.edge);
+      o += cell(i, 258, p.countB, C.high, p.edge);
     });
     if (!view.length) o += `<text x="${L + 12}" y="160" fill="${C.muted}" font-size="15">No passes yet.</text>`;
     ui.svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
@@ -278,8 +257,6 @@
     if (e.code === "ArrowRight") { e.preventDefault(); stop(); tick(); }
   });
   document.addEventListener("keyup", (e) => { if (e.code === "Space") { e.preventDefault(); setB1(false); } });
-  matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", render);
-  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
   demo();
 })();
