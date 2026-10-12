@@ -4993,6 +4993,53 @@ Using your own laptop? (click)
 </tr>
 </tbody>
 </table>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+How to read the register fields (click)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>In XPERIPHERALS each pin has a named field: <code>MODER5</code>, <code>PUPDR13</code>, <code>IDR13</code>…</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>MODERy</code> (2 bits)</td>
+<td><code>00</code> input · <code>01</code> output · <code>10</code> alternate function · <code>11</code> analog</td>
+</tr>
+<tr class="even">
+<td><code>PUPDRy</code> (2 bits)</td>
+<td><code>00</code> no pull · <code>01</code> pull-up · <code>10</code> pull-down · <code>11</code> reserved</td>
+</tr>
+<tr class="odd">
+<td><code>IDRy</code> (1 bit, read-only)</td>
+<td>the level on the pin now: <code>1</code> high, <code>0</code> low</td>
+</tr>
+<tr class="even">
+<td><code>ODRy</code> (1 bit)</td>
+<td>the value an output pin drives</td>
+</tr>
+</tbody>
+</table>
+<p>Pause the program first: the register view only updates while the program is halted. Full register views: <a href="../../../lectures/L05_gpio-hal-abstraction/theory/EE5203_Microprocessors_Lecture5_Theory.html#/reference-gpio-configuration-registers">L05 theory slides 30–31</a>.</p>
+</div>
+</div>
+</div>
 <p><strong>Show:</strong> LD2 blinking and the three fields in XPERIPHERALS.</p>
 </section>
 <section id="checkpoint-b---b1-stops-the-blink" class="level2">
