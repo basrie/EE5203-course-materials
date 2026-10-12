@@ -5070,8 +5070,44 @@ How to read the register fields (click)
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">20</span><span class="op">);</span>        <span class="co">/* ignore contact bounce */</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>previous <span class="op">=</span> current<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Below it, use <code>press_count % 4</code> to choose LD2’s behavior: <strong>0</strong> off · <strong>1</strong> on · <strong>2</strong> blink, toggle every 200 ms · <strong>3</strong> blink, toggle every 50 ms.</p>
-<p><strong>Show:</strong> four presses go through the four behaviors and back to the first; <code>press_count</code> grows by exactly 1 per press in VARIABLES.</p>
+<p>Below it, use <code>press_count % 4</code> to choose LD2’s behavior:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Presses so far</th>
+<th style="text-align: center;"><code>press_count % 4</code></th>
+<th>LD2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0, 4, 8, …</td>
+<td style="text-align: center;">0</td>
+<td>off</td>
+</tr>
+<tr class="even">
+<td>1, 5, …</td>
+<td style="text-align: center;">1</td>
+<td>on</td>
+</tr>
+<tr class="odd">
+<td>2, 6, …</td>
+<td style="text-align: center;">2</td>
+<td>blinks slowly (toggle every 200 ms)</td>
+</tr>
+<tr class="even">
+<td>3, 7, …</td>
+<td style="text-align: center;">3</td>
+<td>blinks fast (toggle every 50 ms)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Check it in two steps:</strong></p>
+<ol type="1">
+<li><strong>One count per press.</strong> Set a breakpoint on <code>press_count = press_count + 1;</code> and Continue (F5). Press and <strong>hold</strong> B1: the program stops once. Press Continue while you still hold B1: it does <strong>not</strong> stop again. Release, press again: it stops again, and <code>press_count</code> in VARIABLES is 1 higher.</li>
+<li><strong>Count and LD2 together.</strong> Remove the breakpoint and Continue. Press B1 slowly and compare LD2 with the table. Then press <strong>Pause</strong>, click <strong><code>main</code></strong> in CALL STACK, and read <code>press_count</code> in VARIABLES. (Pause usually stops inside <code>HAL_Delay</code>, whose variables do not include <code>press_count</code>.)</li>
+</ol>
+<p><strong>Show:</strong> the hold test from step 1, then five slow presses from the start: LD2 on and <code>press_count</code> = 5.</p>
 </section>
 <section id="optional-not-graded---bare-metal-rematch" class="level2">
 <h2 class="anchored" data-anchor-id="optional-not-graded---bare-metal-rematch">Optional (not graded) - Bare-metal rematch</h2>
