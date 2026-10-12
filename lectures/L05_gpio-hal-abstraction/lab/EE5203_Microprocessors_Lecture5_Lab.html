@@ -4870,7 +4870,7 @@ pre { font-size: 8.7pt; }
 <h1>EE5203 Lab 4 Guide</h1>
 <p><em>GPIO with the HAL: same pins, new interface - Basri Erdogan</em></p>
 <div class="mission">
-<p><strong>Mission:</strong> Rebuild your Lab 3 LED control with HAL functions, let B1 control LD2 by polling, and show in the register view that HAL wrote the same bits you wrote by hand in Lab 3.</p>
+<p><strong>Mission:</strong> Rebuild your Lab 3 LED control with HAL functions, let B1 control the LED on PA5 by polling, and show in the register view that HAL wrote the same bits you wrote by hand in Lab 3.</p>
 </div>
 <p>This lab uses Lecture 5 (HAL GPIO, inputs, pull resistors, polling). You saw the first two steps as live demos in the lecture.</p>
 <section id="prepare-before-class" class="level2">
@@ -4908,7 +4908,7 @@ pre { font-size: 8.7pt; }
 <tbody>
 <tr class="odd">
 <td>Board</td>
-<td>Nucleo-F401RE: LD2 on PA5, B1 on PC13, no wiring</td>
+<td>Nucleo-F401RE: LED on PA5, B1 on PC13, no wiring</td>
 </tr>
 <tr class="even">
 <td>Tools</td>
@@ -4956,7 +4956,13 @@ Using your own laptop? (click)
 <h2 class="anchored" data-anchor-id="checkpoint-a---new-hal-project-and-register-proof">Checkpoint A - New HAL project and register proof</h2>
 <p><strong>Start of the session:</strong> if <code>C:\Work\&lt;studentnumber&gt;</code> does not contain your Lab 3 project, copy <strong>all</strong> your project folders from <code>H:\EE_Labs</code> into it first.</p>
 <ol type="1">
-<li><p><strong>STM32CubeMX:</strong> Board Selector → <strong>NUCLEO-F401RE</strong> → accept the default initialization. PA5 is already <code>GPIO_Output</code> (LD2).</p></li>
+<li><p><strong>STM32CubeMX:</strong> Board Selector → <strong>NUCLEO-F401RE</strong> → accept the default initialization. Then set up <strong>PA5</strong> yourself:</p>
+<ul>
+<li>Click <strong>PA5</strong> → <strong>Reset_State</strong>. The pin is now unused (grey).</li>
+<li>Click <strong>PA5</strong> again → <strong><code>GPIO_Output</code></strong> (green).</li>
+<li>In System Core → GPIO, PA5: <strong>User Label</strong> empty, <strong>Low</strong> output level, <strong>Output Push Pull</strong>, <strong>No pull-up and no pull-down</strong>, <strong>Low</strong> speed.</li>
+</ul>
+<p>With no label, <code>main.c</code> names the pin <code>GPIOA, GPIO_PIN_5</code>.</p></li>
 <li><p>Click <strong>PC13</strong> and choose <strong><code>GPIO_Input</code></strong> (the default is <code>GPIO_EXTI13</code>). In System Core → GPIO, PC13: <strong>No pull-up and no pull-down</strong>.</p></li>
 <li><p>Project Manager: name <strong><code>EE5203_L04_&lt;studentnumber&gt;</code></strong>, location <code>C:\Work\&lt;studentnumber&gt;</code>, Toolchain/IDE = <strong>CMake</strong> → Generate Code.</p></li>
 <li><p>Copy <code>C:\Users\Public\EE5203_template\.vscode</code> into the project folder.</p></li>
@@ -4964,7 +4970,7 @@ Using your own laptop? (click)
 <li><p>Inside <code>USER CODE BEGIN 3</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>Build (<strong>Ctrl+Shift+B</strong>), start the debugger (<strong>F5</strong>), Continue: LD2 blinks.</p></li>
+<li><p>Build (<strong>Ctrl+Shift+B</strong>), start the debugger (<strong>F5</strong>), Continue: the LED on PA5 blinks.</p></li>
 <li><p>Stop at a breakpoint after <code>MX_GPIO_Init()</code> and open <strong>XPERIPHERALS</strong>:</p></li>
 </ol>
 <table class="caption-top table">
@@ -5040,7 +5046,7 @@ How to read the register fields (click)
 </div>
 </div>
 </div>
-<p><strong>Show:</strong> LD2 blinking and the three fields in XPERIPHERALS.</p>
+<p><strong>Show:</strong> the LED on PA5 blinking and the three fields in XPERIPHERALS.</p>
 </section>
 <section id="checkpoint-b---b1-stops-the-blink" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-b---b1-stops-the-blink">Checkpoint B - B1 stops the blink</h2>
@@ -5050,11 +5056,11 @@ How to read the register fields (click)
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>button <span class="op">==</span> GPIO_PIN_SET<span class="op">)</span> <span class="op">{</span>          <span class="co">/* released: blink */</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span>                               <span class="co">/* pressed: LD2 off */</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span>                               <span class="co">/* pressed: LED off */</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span> GPIO_PIN_RESET<span class="op">);</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Before you run it, predict LD2 for “released” and “pressed”. Then put a breakpoint on the <code>if</code> line. Released: <code>button</code> = <code>GPIO_PIN_SET</code> and <code>IDR13</code> = 1. Hold B1 and press Continue: <code>GPIO_PIN_RESET</code> and <code>IDR13</code> = 0.</p>
-<p><strong>Show:</strong> LD2 off while B1 is held, blinking again after release, and <code>IDR13</code> changing in XPERIPHERALS.</p>
+<p>Before you run it, predict the LED on PA5 for “released” and “pressed”. Then put a breakpoint on the <code>if</code> line. Released: <code>button</code> = <code>GPIO_PIN_SET</code> and <code>IDR13</code> = 1. Hold B1 and press Continue: <code>GPIO_PIN_RESET</code> and <code>IDR13</code> = 0.</p>
+<p><strong>Show:</strong> the LED on PA5 off while B1 is held, blinking again after release, and <code>IDR13</code> changing in XPERIPHERALS.</p>
 </section>
 <section id="checkpoint-c---count-the-presses" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-c---count-the-presses">Checkpoint C - Count the presses</h2>
@@ -5070,13 +5076,13 @@ How to read the register fields (click)
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">20</span><span class="op">);</span>        <span class="co">/* ignore contact bounce */</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>previous <span class="op">=</span> current<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Below it, use <code>press_count % 4</code> to choose LD2’s behavior:</p>
+<p>Below it, use <code>press_count % 4</code> to choose what the LED on PA5 does:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Presses so far</th>
 <th style="text-align: center;"><code>press_count % 4</code></th>
-<th>LD2</th>
+<th>LED on PA5</th>
 </tr>
 </thead>
 <tbody>
@@ -5105,9 +5111,9 @@ How to read the register fields (click)
 <p><strong>Check it in two steps:</strong></p>
 <ol type="1">
 <li><strong>One count per press.</strong> Set a breakpoint on <code>press_count = press_count + 1;</code> and Continue (F5). Press and <strong>hold</strong> B1: the program stops once. Press Continue while you still hold B1: it does <strong>not</strong> stop again. Release, press again: it stops again, and <code>press_count</code> in VARIABLES is 1 higher.</li>
-<li><strong>Count and LD2 together.</strong> Remove the breakpoint and Continue. Press B1 slowly and compare LD2 with the table. Then press <strong>Pause</strong>, click <strong><code>main</code></strong> in CALL STACK, and read <code>press_count</code> in VARIABLES. (Pause usually stops inside <code>HAL_Delay</code>, whose variables do not include <code>press_count</code>.)</li>
+<li><strong>Count and LED together.</strong> Remove the breakpoint and Continue. Press B1 slowly and compare the LED with the table. Then press <strong>Pause</strong>, click <strong><code>main</code></strong> in CALL STACK, and read <code>press_count</code> in VARIABLES. (Pause usually stops inside <code>HAL_Delay</code>, whose variables do not include <code>press_count</code>.)</li>
 </ol>
-<p><strong>Show:</strong> the hold test from step 1, then five slow presses from the start: LD2 on and <code>press_count</code> = 5.</p>
+<p><strong>Show:</strong> the hold test from step 1, then five slow presses from the start: the LED lit and <code>press_count</code> = 5.</p>
 </section>
 <section id="optional-not-graded---bare-metal-rematch" class="level2">
 <h2 class="anchored" data-anchor-id="optional-not-graded---bare-metal-rematch">Optional (not graded) - Bare-metal rematch</h2>
@@ -5128,7 +5134,7 @@ How to read the register fields (click)
 <td>PC13 is <code>GPIO_Input</code> in the <code>.ioc</code>, and you generated code again. <code>IDR13</code> changes when you press.</td>
 </tr>
 <tr class="even">
-<td>LD2 behavior is inverted</td>
+<td>LED behavior is inverted</td>
 <td><code>GPIO_PIN_SET</code> = released, <code>GPIO_PIN_RESET</code> = pressed.</td>
 </tr>
 <tr class="odd">
@@ -5183,8 +5189,8 @@ How to read the register fields (click)
 </ul>
 <p>Live changes:</p>
 <ul>
-<li>Set PC13 to pull-up in CubeMX. What does <code>PUPDR13</code> show? Does LD2 behave differently?</li>
-<li>In Checkpoint B, make LD2 blink only while B1 is <strong>pressed</strong>.</li>
+<li>Set PC13 to pull-up in CubeMX. What does <code>PUPDR13</code> show? Does the LED behave differently?</li>
+<li>In Checkpoint B, make the LED on PA5 blink only while B1 is <strong>pressed</strong>.</li>
 <li>Remove the 20 ms delay. Press B1 a few times and watch <code>press_count</code>.</li>
 </ul>
 </section>
