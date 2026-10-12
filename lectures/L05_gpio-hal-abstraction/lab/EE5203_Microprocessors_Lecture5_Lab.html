@@ -5088,89 +5088,16 @@ Why <code>previous</code> and <code>current</code>? (click)
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>A press is a <strong>change</strong> (released → pressed), not a state. One reading shows only the state now, so the loop keeps the reading from the last pass in <code>previous</code> and compares it with <code>current</code> (1 = <code>GPIO_PIN_SET</code>, 0 = <code>GPIO_PIN_RESET</code>).</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 37%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Loop pass</th>
-<th style="text-align: center;">1</th>
-<th style="text-align: center;">2</th>
-<th style="text-align: center;">3</th>
-<th style="text-align: center;">4</th>
-<th style="text-align: center;">5</th>
-<th style="text-align: center;">6</th>
-<th style="text-align: center;">7</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>B1 (up = released)</td>
-<td style="text-align: center;">up</td>
-<td style="text-align: center;">up</td>
-<td style="text-align: center;"><strong>down</strong></td>
-<td style="text-align: center;">down</td>
-<td style="text-align: center;">down</td>
-<td style="text-align: center;">up</td>
-<td style="text-align: center;">up</td>
-</tr>
-<tr class="even">
-<td><code>current</code></td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;"><strong>0</strong></td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">1</td>
-</tr>
-<tr class="odd">
-<td><code>previous</code></td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;"><strong>1</strong></td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">1</td>
-</tr>
-<tr class="even">
-<td>count A: <code>current</code> 0</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">3</td>
-<td style="text-align: center;">3</td>
-<td style="text-align: center;">3</td>
-</tr>
-<tr class="odd">
-<td>count B: 1 → 0</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;"><strong>1</strong></td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">1</td>
-</tr>
-</tbody>
-</table>
-<p>Count A grows on every pass while B1 is held. Count B grows once per press: only in pass 3 is <code>previous</code> 1 and <code>current</code> 0.</p>
+<p>A press is a <strong>change</strong> (released → pressed), not a state. The loop is always in one of two states, and <code>previous</code> remembers which one (1 = <code>GPIO_PIN_SET</code> = released, 0 = <code>GPIO_PIN_RESET</code> = pressed).</p>
+<p><img role="img" aria-label="State machine with two states, RELEASED (previous = 1) and PRESSED (previous = 0). Reading 0 in RELEASED moves to PRESSED and adds 1 to press_count; reading 1 in PRESSED moves back. Staying in a state counts nothing." src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgMzAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0ic20tdGl0bGUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIj4KICA8dGl0bGUgaWQ9InNtLXRpdGxlIj5TdGF0ZSBtYWNoaW5lIG9mIHRoZSBwcmVzcyBjb3VudGVyLiBUd28gc3RhdGVzOiBSRUxFQVNFRCAocHJldmlvdXMgPSAxKSBhbmQgUFJFU1NFRCAocHJldmlvdXMgPSAwKS4gVGhlIGxvb3Agc3RhcnRzIGluIFJFTEVBU0VELiBGcm9tIFJFTEVBU0VELCByZWFkaW5nIDAgbW92ZXMgdG8gUFJFU1NFRCBhbmQgYWRkcyAxIHRvIHByZXNzX2NvdW50LCB0aGVuIHdhaXRzIDIwIG1zLiBGcm9tIFBSRVNTRUQsIHJlYWRpbmcgMSBtb3ZlcyBiYWNrIHRvIFJFTEVBU0VELiBSZWFkaW5nIDEgaW4gUkVMRUFTRUQgb3IgcmVhZGluZyAwIGluIFBSRVNTRUQga2VlcHMgdGhlIHN0YXRlIGFuZCBjb3VudHMgbm90aGluZy48L3RpdGxlPgogIDxkZWZzPgogICAgPG1hcmtlciBpZD0ic20tbyIgdmlld0JveD0iMCAwIDEwIDEwIiByZWZYPSI5IiByZWZZPSI1IiBtYXJrZXJXaWR0aD0iOCIgbWFya2VySGVpZ2h0PSI4IiBvcmllbnQ9ImF1dG8tc3RhcnQtcmV2ZXJzZSI+PHBhdGggZD0iTTAgMCBMMTAgNSBMMCAxMCB6IiBmaWxsPSIjZDQ3YjI4Ii8+PC9tYXJrZXI+CiAgICA8bWFya2VyIGlkPSJzbS1nIiB2aWV3Qm94PSIwIDAgMTAgMTAiIHJlZlg9IjkiIHJlZlk9IjUiIG1hcmtlcldpZHRoPSI4IiBtYXJrZXJIZWlnaHQ9IjgiIG9yaWVudD0iYXV0by1zdGFydC1yZXZlcnNlIj48cGF0aCBkPSJNMCAwIEwxMCA1IEwwIDEwIHoiIGZpbGw9IiM1YTZiNzYiLz48L21hcmtlcj4KICA8L2RlZnM+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjgwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNmZmZmZmYiLz4KICA8IS0tIHN0YXJ0IGFycm93IC0tPgogIDx0ZXh0IHg9IjE2MCIgeT0iNzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM1YTZiNzYiIGZvbnQtc2l6ZT0iMTUiPnN0YXJ0PC90ZXh0PgogIDxsaW5lIHgxPSIxNjAiIHkxPSI3OCIgeDI9IjE2MCIgeTI9IjExNiIgc3Ryb2tlPSIjNWE2Yjc2IiBzdHJva2Utd2lkdGg9IjIuNSIgbWFya2VyLWVuZD0idXJsKCNzbS1nKSIvPgogIDwhLS0gc3RhdGVzIC0tPgogIDxyZWN0IHg9IjEwMCIgeT0iMTIwIiB3aWR0aD0iMjEwIiBoZWlnaHQ9Ijg2IiByeD0iMTQiIGZpbGw9IiNmOGUyYzgiIHN0cm9rZT0iI2Q0N2IyOCIgc3Ryb2tlLXdpZHRoPSIzIi8+CiAgPHRleHQgeD0iMjA1IiB5PSIxNTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxNzRmNzMiIGZvbnQtc2l6ZT0iMjMiIGZvbnQtd2VpZ2h0PSI3MDAiPlJFTEVBU0VEPC90ZXh0PgogIDx0ZXh0IHg9IjIwNSIgeT0iMTg3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNWE2Yjc2IiBmb250LXNpemU9IjE3IiBmb250LWZhbWlseT0iTWVubG8sIENvbnNvbGFzLCBtb25vc3BhY2UiPnByZXZpb3VzID0gMTwvdGV4dD4KICA8cmVjdCB4PSI0OTAiIHk9IjEyMCIgd2lkdGg9IjIxMCIgaGVpZ2h0PSI4NiIgcng9IjE0IiBmaWxsPSIjZGNlYmYzIiBzdHJva2U9IiMyYjc4OWYiIHN0cm9rZS13aWR0aD0iMyIvPgogIDx0ZXh0IHg9IjU5NSIgeT0iMTU4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMTc0ZjczIiBmb250LXNpemU9IjIzIiBmb250LXdlaWdodD0iNzAwIj5QUkVTU0VEPC90ZXh0PgogIDx0ZXh0IHg9IjU5NSIgeT0iMTg3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNWE2Yjc2IiBmb250LXNpemU9IjE3IiBmb250LWZhbWlseT0iTWVubG8sIENvbnNvbGFzLCBtb25vc3BhY2UiPnByZXZpb3VzID0gMDwvdGV4dD4KICA8IS0tIGNvdW50aW5nIGFycm93OiBSRUxFQVNFRCAtPiBQUkVTU0VEIC0tPgogIDxwYXRoIGQ9Ik0yODUgMTIwIEMgMzQwIDUyLCA0NjAgNTIsIDUxNSAxMTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Q0N2IyOCIgc3Ryb2tlLXdpZHRoPSI0IiBtYXJrZXItZW5kPSJ1cmwoI3NtLW8pIi8+CiAgPHRleHQgeD0iNDAwIiB5PSIyNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2Q0N2IyOCIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjcwMCI+cmVhZCAwPC90ZXh0PgogIDx0ZXh0IHg9IjQwMCIgeT0iNDgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNkNDdiMjgiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtZmFtaWx5PSJNZW5sbywgQ29uc29sYXMsIG1vbm9zcGFjZSI+cHJlc3NfY291bnQgKyAxLCB3YWl0IDIwIG1zPC90ZXh0PgogIDwhLS0gYmFjayBhcnJvdzogUFJFU1NFRCAtPiBSRUxFQVNFRCAtLT4KICA8cGF0aCBkPSJNNTE1IDIwNiBDIDQ2MCAyNjgsIDM0MCAyNjgsIDI4NyAyMDgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzVhNmI3NiIgc3Ryb2tlLXdpZHRoPSIyLjUiIG1hcmtlci1lbmQ9InVybCgjc20tZykiLz4KICA8dGV4dCB4PSI0MDAiIHk9IjI4NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzVhNmI3NiIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjcwMCI+cmVhZCAxPC90ZXh0PgogIDwhLS0gc2VsZiBsb29wcyAtLT4KICA8cGF0aCBkPSJNMTAwIDE0NSBDIDM4IDExOCwgMzggMjA4LCA5OCAxODMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzVhNmI3NiIgc3Ryb2tlLXdpZHRoPSIyLjUiIG1hcmtlci1lbmQ9InVybCgjc20tZykiLz4KICA8dGV4dCB4PSIyMCIgeT0iMjM2IiBmaWxsPSIjNWE2Yjc2IiBmb250LXNpemU9IjE1Ij5yZWFkIDE6IHN0YXk8L3RleHQ+CiAgPHBhdGggZD0iTTcwMCAxNDUgQyA3NjIgMTE4LCA3NjIgMjA4LCA3MDIgMTgzIiBmaWxsPSJub25lIiBzdHJva2U9IiM1YTZiNzYiIHN0cm9rZS13aWR0aD0iMi41IiBtYXJrZXItZW5kPSJ1cmwoI3NtLWcpIi8+CiAgPHRleHQgeD0iNzgyIiB5PSIyMzYiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM1YTZiNzYiIGZvbnQtc2l6ZT0iMTUiPnJlYWQgMDogc3RheTwvdGV4dD4KICA8dGV4dCB4PSI3ODIiIHk9IjI1NSIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzVhNmI3NiIgZm9udC1zaXplPSIxNSI+KG5vIGNvdW50KTwvdGV4dD4KPC9zdmc+Cg==" class="img-fluid" style="width:90.0%" alt="State machine with two states, RELEASED (previous = 1) and PRESSED (previous = 0). Reading 0 in RELEASED moves to PRESSED and adds 1 to press_count; reading 1 in PRESSED moves back. Staying in a state counts nothing."></p>
 <ul>
-<li><code>previous = current;</code> at the end of the loop moves the <code>current</code> row one pass to the right.</li>
-<li><code>previous</code> starts as <code>GPIO_PIN_SET</code> because B1 is released when the program starts.</li>
-<li>A real button bounces (1 0 1 0 0 …) for a few ms. The 20 ms delay after the first change skips it.</li>
+<li><code>if (previous == GPIO_PIN_SET &amp;&amp; current == GPIO_PIN_RESET)</code> is the orange arrow: in RELEASED and read 0. Only this arrow adds 1.</li>
+<li><code>previous = current;</code> moves the loop into the new state.</li>
+<li>Testing <code>current == GPIO_PIN_RESET</code> alone also counts on the “read 0: stay” loop, so it adds 1 on every pass while B1 is held.</li>
+<li><code>previous</code> starts as <code>GPIO_PIN_SET</code>, so the loop starts in RELEASED.</li>
+<li>A real button bounces (1 0 1 0 …) for a few ms. The 20 ms wait on the orange arrow skips it.</li>
 </ul>
+<p>Try it pass by pass: <a href="../assets/htmls/b1_press_counter.html">B1 Press Counter</a> (interactive page; switch bounce and the 20 ms delay on and off).</p>
 </div>
 </div>
 </div>

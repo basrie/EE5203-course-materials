@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B1 Press Counter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+  /* Layout: header, then a two-column bench (code | controls + counters), then a full-width logic-analyzer strip with the pass table. */
+  :root {
+    --bg: #f5f7f9;
+    --panel: #ffffff;
+    --ink: #173a52;
+    --muted: #5b6b77;
+    --line: #d9e1e7;
+    --grid: #e9eef2;
+    --high: #d47b28;      /* released / logic 1 / edge */
+    --high-soft: #fbe9d6;
+    --low: #2b789f;       /* pressed / logic 0 */
+    --low-soft: #dcecf5;
+    --bad: #b23a3a;       /* count A climbing */
+    --bad-soft: #f7e1e1;
+    --wait: #8a96a0;
+    --focus: #2b789f;
+    --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1a22; --panel: #15232d; --ink: #e3edf3; --muted: #9db0bd; --line: #2a3b47; --grid: #1d2d38;
+      --high: #f0a25a; --high-soft: #3a2a1b; --low: #6bb7dc; --low-soft: #183244; --bad: #ec7d7d; --bad-soft: #3a1f22;
+      --wait: #7d8c97; --focus: #6bb7dc; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1a22; --panel: #15232d; --ink: #e3edf3; --muted: #9db0bd; --line: #2a3b47; --grid: #1d2d38;
+    --high: #f0a25a; --high-soft: #3a2a1b; --low: #6bb7dc; --low-soft: #183244; --bad: #ec7d7d; --bad-soft: #3a1f22;
+    --wait: #7d8c97; --focus: #6bb7dc; color-scheme: dark;
+  }
+  * { box-sizing: border-box; font-variant-ligatures: none; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.45; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 40px; display: grid; gap: 18px; }
+  header { display: grid; gap: 4px; }
+  h1 { font-size: clamp(1.5rem, 2.6vw, 2.1rem); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+  .lede { margin: 0; color: var(--muted); max-width: 70ch; }
+  .lede strong { color: var(--ink); }
+  .bench { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+  @media (max-width: 860px) { .bench { grid-template-columns: minmax(0, 1fr); } }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-width: 0; }
+  .label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+  pre.code { margin: 0; font-family: var(--font-mono); font-size: 0.92rem; line-height: 1.6; overflow-x: auto; }
+  .ln { display: block; padding: 0 8px; border-radius: 5px; border-left: 3px solid transparent; white-space: pre; }
+  .ln.on { background: var(--grid); border-left-color: var(--muted); }
+  .ln.hit { background: var(--high-soft); border-left-color: var(--high); }
+  .cm { color: var(--muted); }
+  .kw { color: var(--low); font-weight: 600; }
+  .controls { display: grid; gap: 14px; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  button { font: inherit; font-weight: 700; border-radius: 8px; border: 1.5px solid var(--line); background: var(--panel); color: var(--ink); padding: 10px 16px; cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button:focus-visible, input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  #b1 { font-size: 1.15rem; padding: 14px 22px; min-width: 12.5rem; border-width: 2px; border-color: var(--high); color: var(--high); background: var(--high-soft); }
+  #b1[aria-pressed="true"] { border-color: var(--low); color: var(--low); background: var(--low-soft); }
+  .toggles { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+  .toggles label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+  .toggles input { width: 1.1rem; height: 1.1rem; accent-color: var(--low); }
+  .hint { color: var(--muted); font-size: 0.9rem; margin: 0; }
+  kbd { font-family: var(--font-mono); font-size: 0.82em; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: var(--bg); }
+  .counters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .counter { border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 4px; min-width: 0; }
+  .counter.a { border-color: var(--bad); background: var(--bad-soft); }
+  .counter.b { border-color: var(--high); background: var(--high-soft); }
+  .counter .name { font-weight: 700; }
+  .counter code { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); overflow-wrap: anywhere; }
+  .counter .num { font-family: var(--font-mono); font-size: 2.6rem; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .counter.a .num { color: var(--bad); }
+  .counter.b .num { color: var(--high); }
+  .status { min-height: 1.5em; margin: 0; font-weight: 700; }
+  .scope { overflow-x: auto; }
+  .scope svg { display: block; min-width: 760px; width: 100%; height: auto; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-size: 0.9rem; margin-top: 8px; }
+  .sw { display: inline-block; width: 0.9em; height: 0.9em; border-radius: 3px; vertical-align: -0.1em; margin-right: 6px; }
+  footer { color: var(--muted); font-size: 0.88rem; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>B1 Press Counter</h1>
+    <p class="lede">A press is a <strong>change</strong>, from released (1) to pressed (0). One reading shows only the state now, so the loop compares the reading from the last pass, <code>previous</code>, with the reading from this pass, <code>current</code>. Press B1, step through the loop and watch the two counters.</p>
+  </header>
+
+  <section class="bench">
+    <div class="panel">
+      <p class="label">Lab 4, Checkpoint C — one pass of while (1)</p>
+      <pre class="code" id="code"><span class="ln" data-l="read">GPIO_PinState current = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);</span><span class="ln">&nbsp;</span><span class="ln" data-l="cmt"><span class="cm">/* a press starts: released before, pressed now */</span></span><span class="ln" data-l="if"><span class="kw">if</span> (previous == GPIO_PIN_SET &amp;&amp; current == GPIO_PIN_RESET) {</span><span class="ln" data-l="inc">    press_count = press_count + 1;</span><span class="ln" data-l="delay">    HAL_Delay(20);        <span class="cm">/* ignore contact bounce */</span></span><span class="ln" data-l="close">}</span><span class="ln" data-l="prev">previous = current;</span></pre>
+    </div>
+
+    <div class="panel controls">
+      <div class="row">
+        <button id="b1" type="button" aria-pressed="false">B1 released</button>
+        <button id="step" type="button">Step one pass</button>
+        <button id="run" type="button">Run</button>
+        <button id="reset" type="button">Reset</button>
+      </div>
+      <div class="toggles">
+        <label><input type="checkbox" id="bounce"> Contact bounce on press</label>
+        <label><input type="checkbox" id="delay" checked> HAL_Delay(20) after a press</label>
+      </div>
+      <p class="hint">Click B1 to press or release it, or hold <kbd>Space</kbd>. <kbd>→</kbd> steps one pass.</p>
+      <div class="counters">
+        <div class="counter a">
+          <span class="name">Count A — level</span>
+          <code>if (current == GPIO_PIN_RESET) count++;</code>
+          <span class="num" id="countA">0</span>
+        </div>
+        <div class="counter b">
+          <span class="name">Count B — change</span>
+          <code>previous == 1 &amp;&amp; current == 0</code>
+          <span class="num" id="countB">0</span>
+        </div>
+      </div>
+      <p class="status" id="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section class="panel">
+    <p class="label">Loop passes — newest on the right</p>
+    <div class="scope"><svg id="scope" role="img" aria-label="Timing diagram of B1, the PC13 pin level and the values of current, previous and both counters for each loop pass"></svg></div>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--high)"></span>1 = released (GPIO_PIN_SET)</span>
+      <span><span class="sw" style="background:var(--low)"></span>0 = pressed (GPIO_PIN_RESET)</span>
+      <span><span class="sw" style="background:var(--high-soft);border:1.5px solid var(--high)"></span>a press is counted (1 → 0)</span>
+      <span><span class="sw" style="background:var(--grid)"></span>inside HAL_Delay(20): no reading</span>
+    </div>
+  </section>
+
+  <footer>Slowed down: here one loop pass stands for 5 ms, so HAL_Delay(20) lasts 4 passes and a bounce lasts 3. On the board one pass takes microseconds, so Count A climbs by thousands while B1 is held.</footer>
+</div>
+
+<script>
+(() => {
+  const SHOW = 16, BOUNCE = [0, 1, 0], DELAY_PASSES = 4, RUN_MS = 450;
+  const $ = (id) => document.getElementById(id);
+  const ui = { b1: $("b1"), step: $("step"), run: $("run"), reset: $("reset"), bounce: $("bounce"), delay: $("delay"),
+               a: $("countA"), b: $("countB"), status: $("status"), svg: $("scope"), lines: [...document.querySelectorAll(".ln[data-l]")] };
+  let s, timer = null;
+
+  function fresh() {
+    return { pressed: false, queue: [], wait: 0, previous: 1, countA: 0, countB: 0, n: 0, passes: [] };
+  }
+
+  function setB1(down) {
+    if (s.pressed === down) return;
+    s.pressed = down;
+    s.queue = down && ui.bounce.checked ? BOUNCE.slice() : [];
+    ui.b1.setAttribute("aria-pressed", String(down));
+    ui.b1.textContent = down ? "B1 pressed" : "B1 released";
+  }
+
+  function tick() {
+    const pin = s.queue.length ? s.queue.shift() : (s.pressed ? 0 : 1);
+    s.n += 1;
+    if (s.wait > 0) {
+      s.wait -= 1;
+      s.passes.push({ n: s.n, b1: s.pressed, pin, wait: true, countA: s.countA, countB: s.countB });
+    } else {
+      const current = pin, previous = s.previous;
+      const edge = previous === 1 && current === 0;
+      if (current === 0) s.countA += 1;
+      if (edge) { s.countB += 1; if (ui.delay.checked) s.wait = DELAY_PASSES; }
+      s.passes.push({ n: s.n, b1: s.pressed, pin, current, previous, edge, countA: s.countA, countB: s.countB });
+      s.previous = current;
+    }
+    if (s.passes.length > 200) s.passes.splice(0, s.passes.length - 200);
+    render();
+  }
+
+  function highlight(p) {
+    const on = new Set(), hit = new Set();
+    if (!p) { /* nothing yet */ }
+    else if (p.wait) { hit.add("delay"); }
+    else {
+      ["read", "if", "prev"].forEach((k) => on.add(k));
+      if (p.edge) { hit.add("inc"); if (ui.delay.checked) hit.add("delay"); hit.add("if"); }
+    }
+    ui.lines.forEach((el) => {
+      el.classList.toggle("on", on.has(el.dataset.l) && !hit.has(el.dataset.l));
+      el.classList.toggle("hit", hit.has(el.dataset.l));
+    });
+  }
+
+  function statusText(p) {
+    if (!p) return "Press B1, then step.";
+    if (p.wait) return `Pass ${p.n}: inside HAL_Delay(20), the pin is not read.`;
+    if (p.edge) return `Pass ${p.n}: previous 1, current 0 — a press starts. Count B + 1.`;
+    if (p.current === 0) return `Pass ${p.n}: still pressed (previous 0). Count A + 1, Count B unchanged.`;
+    return `Pass ${p.n}: released. Nothing to count.`;
+  }
+
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+  function render() {
+    ui.a.textContent = s.countA;
+    ui.b.textContent = s.countB;
+    const last = s.passes[s.passes.length - 1];
+    highlight(last);
+    ui.status.textContent = statusText(last);
+
+    const view = s.passes.slice(-SHOW);
+    const L = 150, CW = 62, W = L + SHOW * CW + 10;
+    const rows = [["B1", 34], ["PC13 pin", 96], ["pass", 150], ["current", 186], ["previous", 222], ["count A", 258], ["count B", 294]];
+    const H = 318;
+    const C = { ink: css("--ink"), muted: css("--muted"), grid: css("--grid"), line: css("--line"), high: css("--high"), highSoft: css("--high-soft"), low: css("--low"), bad: css("--bad"), wait: css("--wait") };
+    const mono = 'font-family="JetBrains Mono, ui-monospace, Menlo, monospace"';
+    const x0 = (i) => L + i * CW;
+    let o = `<rect x="0" y="0" width="${W}" height="${H}" fill="transparent"/>`;
+    rows.forEach(([name, y]) => { o += `<text x="10" y="${y + 6}" fill="${C.muted}" font-size="15" font-weight="700">${name}</text>`; });
+    for (let i = 0; i <= SHOW; i++) o += `<line x1="${x0(i)}" y1="10" x2="${x0(i)}" y2="${H - 8}" stroke="${C.grid}" stroke-width="1"/>`;
+    view.forEach((p, i) => {
+      if (p.wait) o += `<rect x="${x0(i) + 1}" y="128" width="${CW - 2}" height="182" fill="${C.grid}"/>`;
+      if (p.edge) o += `<rect x="${x0(i) + 1}" y="128" width="${CW - 2}" height="182" fill="${C.highSoft}" stroke="${C.high}" stroke-width="2"/>`;
+    });
+    const wave = (yHi, yLo, key) => {
+      let d = "", prev = null;
+      view.forEach((p, i) => {
+        const lvl = key === "b1" ? (p.b1 ? 0 : 1) : p.pin;
+        const y = lvl ? yHi : yLo;
+        d += (i === 0 ? `M${x0(i)},${y}` : (prev !== y ? `L${x0(i)},${prev} L${x0(i)},${y}` : "")) + ` L${x0(i + 1)},${y}`;
+        prev = y;
+      });
+      return d;
+    };
+    if (view.length) {
+      o += `<path d="${wave(20, 50, "b1")}" fill="none" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`;
+      o += `<path d="${wave(82, 112, "pin")}" fill="none" stroke="${C.high}" stroke-width="3" stroke-linejoin="round"/>`;
+    }
+    o += `<text x="${L - 8}" y="25" text-anchor="end" fill="${C.muted}" font-size="12" ${mono}>up</text><text x="${L - 8}" y="55" text-anchor="end" fill="${C.muted}" font-size="12" ${mono}>down</text>`;
+    o += `<text x="${L - 8}" y="87" text-anchor="end" fill="${C.muted}" font-size="12" ${mono}>1</text><text x="${L - 8}" y="117" text-anchor="end" fill="${C.muted}" font-size="12" ${mono}>0</text>`;
+    const cell = (i, y, v, col, bold) => `<text x="${x0(i) + CW / 2}" y="${y + 6}" text-anchor="middle" fill="${col}" font-size="16" ${bold ? 'font-weight="700"' : ""} ${mono}>${v}</text>`;
+    const bitCol = (v) => (v === 1 ? C.high : C.low);
+    view.forEach((p, i) => {
+      o += cell(i, 150, p.n, C.muted);
+      if (p.wait) {
+        o += `<text x="${x0(i) + CW / 2}" y="210" text-anchor="middle" fill="${C.wait}" font-size="13" ${mono}>wait</text>`;
+      } else {
+        o += cell(i, 186, p.current, bitCol(p.current), p.edge);
+        o += cell(i, 222, p.previous, bitCol(p.previous), p.edge);
+      }
+      o += cell(i, 258, p.countA, C.bad, false);
+      o += cell(i, 294, p.countB, C.high, p.edge);
+    });
+    if (!view.length) o += `<text x="${L + 12}" y="160" fill="${C.muted}" font-size="15">No passes yet.</text>`;
+    ui.svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    ui.svg.innerHTML = o;
+  }
+
+  function stop() { clearInterval(timer); timer = null; ui.run.textContent = "Run"; }
+  function start() { timer = setInterval(tick, RUN_MS); ui.run.textContent = "Pause"; }
+
+  function demo() {
+    /* Example at rest: the table from the Lab 4 guide (2 released, 3 pressed, 2 released). */
+    s = fresh();
+    [false, false, true, true, true, false, false].forEach((down) => { setB1(down); tick(); });
+  }
+
+  ui.b1.addEventListener("click", () => setB1(!s.pressed));
+  ui.step.addEventListener("click", () => { stop(); tick(); });
+  ui.run.addEventListener("click", () => (timer ? stop() : start()));
+  ui.reset.addEventListener("click", () => { stop(); s = fresh(); setB1(false); render(); });
+  ui.bounce.addEventListener("change", () => { if (!ui.bounce.checked) s.queue = []; });
+  document.addEventListener("keydown", (e) => {
+    if (e.target.closest("input")) return;
+    if (e.code === "Space") { e.preventDefault(); if (!e.repeat) setB1(true); }
+    if (e.code === "ArrowRight") { e.preventDefault(); stop(); tick(); }
+  });
+  document.addEventListener("keyup", (e) => { if (e.code === "Space") { e.preventDefault(); setB1(false); } });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", render);
+  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  demo();
+})();
+</script>
+</body>
+</html>

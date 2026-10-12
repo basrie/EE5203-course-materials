@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" role="img" aria-labelledby="sm-title" font-family="Helvetica, Arial, sans-serif">
+  <title id="sm-title">State machine of the press counter. Two states: RELEASED (previous = 1) and PRESSED (previous = 0). The loop starts in RELEASED. From RELEASED, reading 0 moves to PRESSED and adds 1 to press_count, then waits 20 ms. From PRESSED, reading 1 moves back to RELEASED. Reading 1 in RELEASED or reading 0 in PRESSED keeps the state and counts nothing.</title>
+  <defs>
+    <marker id="sm-o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#d47b28"/></marker>
+    <marker id="sm-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a6b76"/></marker>
+  </defs>
+  <rect x="0" y="0" width="800" height="300" fill="#ffffff"/>
+  <!-- start arrow -->
+  <text x="160" y="70" text-anchor="middle" fill="#5a6b76" font-size="15">start</text>
+  <line x1="160" y1="78" x2="160" y2="116" stroke="#5a6b76" stroke-width="2.5" marker-end="url(#sm-g)"/>
+  <!-- states -->
+  <rect x="100" y="120" width="210" height="86" rx="14" fill="#f8e2c8" stroke="#d47b28" stroke-width="3"/>
+  <text x="205" y="158" text-anchor="middle" fill="#174f73" font-size="23" font-weight="700">RELEASED</text>
+  <text x="205" y="187" text-anchor="middle" fill="#5a6b76" font-size="17" font-family="Menlo, Consolas, monospace">previous = 1</text>
+  <rect x="490" y="120" width="210" height="86" rx="14" fill="#dcebf3" stroke="#2b789f" stroke-width="3"/>
+  <text x="595" y="158" text-anchor="middle" fill="#174f73" font-size="23" font-weight="700">PRESSED</text>
+  <text x="595" y="187" text-anchor="middle" fill="#5a6b76" font-size="17" font-family="Menlo, Consolas, monospace">previous = 0</text>
+  <!-- counting arrow: RELEASED -> PRESSED -->
+  <path d="M285 120 C 340 52, 460 52, 515 118" fill="none" stroke="#d47b28" stroke-width="4" marker-end="url(#sm-o)"/>
+  <text x="400" y="26" text-anchor="middle" fill="#d47b28" font-size="19" font-weight="700">read 0</text>
+  <text x="400" y="48" text-anchor="middle" fill="#d47b28" font-size="15" font-family="Menlo, Consolas, monospace">press_count + 1, wait 20 ms</text>
+  <!-- back arrow: PRESSED -> RELEASED -->
+  <path d="M515 206 C 460 268, 340 268, 287 208" fill="none" stroke="#5a6b76" stroke-width="2.5" marker-end="url(#sm-g)"/>
+  <text x="400" y="285" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700">read 1</text>
+  <!-- self loops -->
+  <path d="M100 145 C 38 118, 38 208, 98 183" fill="none" stroke="#5a6b76" stroke-width="2.5" marker-end="url(#sm-g)"/>
+  <text x="20" y="236" fill="#5a6b76" font-size="15">read 1: stay</text>
+  <path d="M700 145 C 762 118, 762 208, 702 183" fill="none" stroke="#5a6b76" stroke-width="2.5" marker-end="url(#sm-g)"/>
+  <text x="782" y="236" text-anchor="end" fill="#5a6b76" font-size="15">read 0: stay</text>
+  <text x="782" y="255" text-anchor="end" fill="#5a6b76" font-size="15">(no count)</text>
+</svg>
