@@ -5076,6 +5076,104 @@ How to read the register fields (click)
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">20</span><span class="op">);</span>        <span class="co">/* ignore contact bounce */</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>previous <span class="op">=</span> current<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Why <code>previous</code> and <code>current</code>? (click)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A press is a <strong>change</strong> (released → pressed), not a state. One reading shows only the state now, so the loop keeps the reading from the last pass in <code>previous</code> and compares it with <code>current</code> (1 = <code>GPIO_PIN_SET</code>, 0 = <code>GPIO_PIN_RESET</code>).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 37%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Loop pass</th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">5</th>
+<th style="text-align: center;">6</th>
+<th style="text-align: center;">7</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>B1 (up = released)</td>
+<td style="text-align: center;">up</td>
+<td style="text-align: center;">up</td>
+<td style="text-align: center;"><strong>down</strong></td>
+<td style="text-align: center;">down</td>
+<td style="text-align: center;">down</td>
+<td style="text-align: center;">up</td>
+<td style="text-align: center;">up</td>
+</tr>
+<tr class="even">
+<td><code>current</code></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"><strong>0</strong></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td><code>previous</code></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"><strong>1</strong></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td>count A: <code>current</code> 0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td>count B: 1 → 0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"><strong>1</strong></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table>
+<p>Count A grows on every pass while B1 is held. Count B grows once per press: only in pass 3 is <code>previous</code> 1 and <code>current</code> 0.</p>
+<ul>
+<li><code>previous = current;</code> at the end of the loop moves the <code>current</code> row one pass to the right.</li>
+<li><code>previous</code> starts as <code>GPIO_PIN_SET</code> because B1 is released when the program starts.</li>
+<li>A real button bounces (1 0 1 0 0 …) for a few ms. The 20 ms delay after the first change skips it.</li>
+</ul>
+</div>
+</div>
+</div>
 <p>Below it, use <code>press_count % 4</code> to choose what the LED on PA5 does:</p>
 <table class="caption-top table">
 <thead>
@@ -5121,6 +5219,18 @@ How to read the register fields (click)
 </section>
 <section id="common-problems" class="level2">
 <h2 class="anchored" data-anchor-id="common-problems">Common problems</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Show the table (click)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -5163,10 +5273,28 @@ How to read the register fields (click)
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+</div>
 </section>
 <section id="end-of-the-session---save-to-h" class="level2">
 <h2 class="anchored" data-anchor-id="end-of-the-session---save-to-h">End of the session - Save to H</h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Show the steps (click)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>Close VS Code, run the <strong>Save to H</strong> desktop shortcut, and check that <code>H:\EE_Labs\EE5203_L04_&lt;studentnumber&gt;</code> exists before you log out.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="acceptance-checklist" class="level2">
 <h2 class="anchored" data-anchor-id="acceptance-checklist">Acceptance checklist</h2>
