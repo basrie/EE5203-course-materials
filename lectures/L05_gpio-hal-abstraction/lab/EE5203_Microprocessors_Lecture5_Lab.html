@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>EE5203 L05 Lab Guide – EE5203 Microprocessors</title>
+<title>EE5203 Lab 4 Guide – EE5203 Microprocessors</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -4866,28 +4866,30 @@ pre { font-size: 8.7pt; }
 
 
 
-<section id="ee5203-l05-lab-guide" class="level1">
-<h1>EE5203 L05 Lab Guide</h1>
-<p><em>GPIO with the HAL — same hardware, new interface - Basri Erdogan</em></p>
+<section id="ee5203-lab-4-guide" class="level1">
+<h1>EE5203 Lab 4 Guide</h1>
+<p><em>GPIO with the HAL: same pins, new interface - Basri Erdogan</em></p>
 <div class="mission">
-<p><strong>Mission:</strong> Rebuild the L04 LED control with HAL functions, make B1 control LD2 by polling, and prove in the register view that HAL wrote the same bits you wrote by hand last week.</p>
+<p><strong>Mission:</strong> Rebuild your Lab 3 LED control with HAL functions, let B1 control LD2 by polling, and show in the register view that HAL wrote the same bits you wrote by hand in Lab 3.</p>
 </div>
+<p>This lab uses Lecture 5 (HAL GPIO, inputs, pull resistors, polling). You saw the first two steps as live demos in the lecture.</p>
 <section id="prepare-before-class" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-before-class">Prepare before class</h2>
 <ul class="task-list">
-<li><label><input type="checkbox">Re-read the theory slides up to “The polling loop.”</label></li>
-<li><label><input type="checkbox">Know last week’s three registers: <code>AHB1ENR</code>, <code>MODER</code>, <code>BSRR</code>.</label></li>
-<li><label><input type="checkbox">Know why B1 released reads <code>GPIO_PIN_SET</code> (external pull-up, active-low).</label></li>
+<li><label><input type="checkbox">Bring your board and a USB <strong>data</strong> cable.</label></li>
+<li><label><input type="checkbox">Do the <strong>Lab 4 pre-lab quiz</strong> on CATS.</label></li>
+<li><label><input type="checkbox">Re-read the theory slides up to “Polling B1 to control LD2”.</label></li>
+<li><label><input type="checkbox">Know why B1 released reads <code>GPIO_PIN_SET</code> (external pull-up R30, active-low).</label></li>
 </ul>
 </section>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
 <p>By checkoff time, you can:</p>
 <ol type="1">
-<li>configure PA5 (output) and PC13 (input, no pull) in CubeMX and read the generated <code>MX_GPIO_Init()</code>;</li>
-<li>drive and read pins with <code>HAL_GPIO_WritePin</code> / <code>TogglePin</code> / <code>ReadPin</code>;</li>
-<li>verify a HAL configuration in the SFR view down to the register bits;</li>
-<li>build a polled button behavior without any direct register writes.</li>
+<li>configure PA5 (output) and PC13 (input, no pull) in CubeMX and find them in the generated <code>MX_GPIO_Init()</code>;</li>
+<li>drive and read pins with <code>HAL_GPIO_WritePin</code>, <code>HAL_GPIO_TogglePin</code> and <code>HAL_GPIO_ReadPin</code>;</li>
+<li>check a HAL configuration in the register view, down to the field;</li>
+<li>detect a button <strong>press</strong> (the change from released to pressed), not only its level.</li>
 </ol>
 </section>
 <section id="hardware-and-files" class="level2">
@@ -4900,127 +4902,213 @@ pre { font-size: 8.7pt; }
 <thead>
 <tr class="header">
 <th>Item</th>
-<th>Required value</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Board</td>
-<td>Nucleo-F401RE (LD2 on PA5, B1 on PC13 — no wiring)</td>
+<td>Nucleo-F401RE: LD2 on PA5, B1 on PC13, no wiring</td>
 </tr>
 <tr class="even">
-<td>Input</td>
-<td>B1, external pull-up: released = <code>SET</code>, pressed = <code>RESET</code></td>
+<td>Tools</td>
+<td>STM32CubeMX (new project) + VS Code</td>
 </tr>
 <tr class="odd">
-<td>Project</td>
-<td>New CubeMX project <code>L05_HAL_GPIO</code> (Toolchain = CMake), opened in VS Code</td>
+<td>Project name</td>
+<td><code>EE5203_L04_&lt;studentnumber&gt;</code></td>
 </tr>
 <tr class="even">
-<td>Clock</td>
-<td>Default HSI is sufficient</td>
+<td>File you edit</td>
+<td><code>main.c</code>, only inside the <code>USER CODE</code> regions</td>
+</tr>
+<tr class="odd">
+<td>Register fields</td>
+<td><code>GPIOA</code> <code>MODER5</code>; <code>GPIOC</code> <code>MODER13</code>, <code>PUPDR13</code>, <code>IDR13</code></td>
 </tr>
 </tbody>
 </table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Using your own laptop? (click)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Follow the steps as written, with these changes. Set up your laptop once with the <a href="../../../resources/guides/EE5203_Home_Setup_Guide.html">Home Setup Guide</a>.</p>
+<ul>
+<li><strong>Folder:</strong> <code>C:\STM32\EE5203</code> (Mac: <code>~/STM32/EE5203</code>), not <code>C:\Work</code>.</li>
+<li><strong>Step 4:</strong> skip it. Open the folder, choose <strong>Debug</strong>, then ST icon → <strong>Set Up STM32Cube project(s)</strong>.</li>
+<li><strong>Build / debug:</strong> <strong>F7</strong> (Mac: <strong>fn + F7</strong>), then Run and Debug → <strong>STM32Cube: STM32 Launch ST-Link GDB Server</strong>.</li>
+<li><strong>Registers:</strong> use <strong>STM32CUBE REGISTERS TREE</strong> wherever this guide says XPERIPHERALS.</li>
+<li><strong>End of session:</strong> no <em>Save to H</em>. Your project stays on your laptop.</li>
+</ul>
+</div>
+</div>
+</div>
 </section>
-<section id="configure-in-cubemx" class="level2">
-<h2 class="anchored" data-anchor-id="configure-in-cubemx">Configure in CubeMX</h2>
+<section id="checkpoint-a---new-hal-project-and-register-proof" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-a---new-hal-project-and-register-proof">Checkpoint A - New HAL project and register proof</h2>
+<p><strong>Start of the session:</strong> if <code>C:\Work\&lt;studentnumber&gt;</code> does not contain your Lab 3 project, copy <strong>all</strong> your project folders from <code>H:\EE_Labs</code> into it first.</p>
 <ol type="1">
-<li>New STM32 project → Board Selector → <strong>NUCLEO-F401RE</strong>; accept default peripheral initialization.</li>
-<li><code>PA5</code> → <code>GPIO_Output</code> (defaults: push-pull, no pull, low speed).</li>
-<li><code>PC13</code> → <code>GPIO_Input</code>, <strong>no pull-up and no pull-down</strong> — the board’s external resistor already holds PC13 high.</li>
-<li>Generate code. CubeMX already calls <code>MX_GPIO_Init()</code> in <code>main()</code> before the loop — <strong>verify it is there; do not add a second call.</strong></li>
-</ol>
-</section>
-<section id="checkpoint-a---hal-blink-and-register-proof" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-a---hal-blink-and-register-proof">Checkpoint A - HAL blink and register proof</h2>
-<p>Inside the <code>while (1)</code> user-code region:</p>
+<li><p><strong>STM32CubeMX:</strong> Board Selector → <strong>NUCLEO-F401RE</strong> → accept the default initialization. PA5 is already <code>GPIO_Output</code> (LD2).</p></li>
+<li><p>Click <strong>PC13</strong> and choose <strong><code>GPIO_Input</code></strong> (the default is <code>GPIO_EXTI13</code>). In System Core → GPIO, PC13: <strong>No pull-up and no pull-down</strong>.</p></li>
+<li><p>Project Manager: name <strong><code>EE5203_L04_&lt;studentnumber&gt;</code></strong>, location <code>C:\Work\&lt;studentnumber&gt;</code>, Toolchain/IDE = <strong>CMake</strong> → Generate Code.</p></li>
+<li><p>Copy <code>C:\Users\Public\EE5203_template\.vscode</code> into the project folder.</p></li>
+<li><p>In <code>main.c</code>, check that <code>main()</code> calls <code>MX_GPIO_Init()</code> once before the loop. Do not add a second call.</p></li>
+<li><p>Inside <code>USER CODE BEGIN 3</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Build, flash, and confirm the blink. Then pause in the debugger after <code>MX_GPIO_Init()</code> and check the SFR view:</p>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Build (<strong>Ctrl+Shift+B</strong>), start the debugger (<strong>F5</strong>), Continue: LD2 blinks.</p></li>
+<li><p>Stop at a breakpoint after <code>MX_GPIO_Init()</code> and open <strong>XPERIPHERALS</strong>:</p></li>
+</ol>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Register</th>
-<th>Expected</th>
+<th>Register → field</th>
+<th style="text-align: center;">Expected</th>
+<th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>GPIOA-&gt;MODER</code> bits 11:10</td>
-<td><code>01</code> (output)</td>
+<td>GPIOA → MODER → <code>MODER5</code></td>
+<td style="text-align: center;"><code>01</code></td>
+<td>output (as in your Lab 3 table)</td>
 </tr>
 <tr class="even">
-<td><code>GPIOC-&gt;MODER</code> bits 27:26</td>
-<td><code>00</code> (input)</td>
+<td>GPIOC → MODER → <code>MODER13</code></td>
+<td style="text-align: center;"><code>00</code></td>
+<td>input</td>
 </tr>
 <tr class="odd">
-<td><code>GPIOC-&gt;PUPDR</code> bits 27:26</td>
-<td><code>00</code> (no internal pull)</td>
+<td>GPIOC → PUPDR → <code>PUPDR13</code></td>
+<td style="text-align: center;"><code>00</code></td>
+<td>no internal pull</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Evidence for Checkpoint A:</strong> the three register fields above, plus the blink. HAL wrote what you wrote by hand in L04.</p>
+<p><strong>Show:</strong> LD2 blinking and the three fields in XPERIPHERALS.</p>
 </section>
-<section id="checkpoint-b---button-override" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-b---button-override">Checkpoint B - Button override</h2>
-<p>Replace the loop body: blink while B1 is released, hold LD2 <strong>off</strong> while B1 is pressed.</p>
+<section id="checkpoint-b---b1-stops-the-blink" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-b---b1-stops-the-blink">Checkpoint B - B1 stops the blink</h2>
+<p>Replace the two lines in <code>USER CODE BEGIN 3</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>GPIO_PinState button <span class="op">=</span> HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">);</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>button <span class="op">==</span> GPIO_PIN_SET<span class="op">)</span> <span class="op">{</span>          <span class="co">/* released */</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>button <span class="op">==</span> GPIO_PIN_SET<span class="op">)</span> <span class="op">{</span>          <span class="co">/* released: blink */</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span>                               <span class="co">/* pressed  */</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span>                               <span class="co">/* pressed: LD2 off */</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span> GPIO_PIN_RESET<span class="op">);</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Evidence for Checkpoint B:</strong> LED dark while B1 is held, blinking resumes on release; watch <code>GPIOC-&gt;IDR</code> bit 13 change in the SFR view as you press.</p>
+<p>Before you run it, predict LD2 for “released” and “pressed”. Then put a breakpoint on the <code>if</code> line. Released: <code>button</code> = <code>GPIO_PIN_SET</code> and <code>IDR13</code> = 1. Hold B1 and press Continue: <code>GPIO_PIN_RESET</code> and <code>IDR13</code> = 0.</p>
+<p><strong>Show:</strong> LD2 off while B1 is held, blinking again after release, and <code>IDR13</code> changing in XPERIPHERALS.</p>
 </section>
-<section id="checkpoint-c---press-counter-with-patterns" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-c---press-counter-with-patterns">Checkpoint C - Press counter with patterns</h2>
-<p>Count presses and cycle four LED behaviors (off → steady → slow blink → double flash). Detect the press <strong>edge</strong>, not the level:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">uint32_t</span> press_count <span class="op">=</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">uint32_t</span> prev <span class="op">=</span> <span class="dv">1</span><span class="bu">U</span><span class="op">;</span>                     <span class="co">/* released */</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> cur <span class="op">=</span> <span class="op">(</span><span class="dt">uint32_t</span><span class="op">)</span>HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">);</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>prev <span class="op">==</span> <span class="dv">1</span><span class="bu">U</span> <span class="op">&amp;&amp;</span> cur <span class="op">==</span> <span class="dv">0</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span>                 <span class="co">/* falling edge */</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">++</span>press_count<span class="op">;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">10</span><span class="op">);</span>                             <span class="co">/* debounce sample */</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>prev <span class="op">=</span> cur<span class="op">;</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> <span class="op">(</span>press_count <span class="op">&amp;</span> <span class="bn">0x3</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span> <span class="co">/* four cases: your patterns here */</span> <span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Evidence for Checkpoint C:</strong> four presses walk through all four patterns and return to the first.</p>
+<section id="checkpoint-c---count-the-presses" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-c---count-the-presses">Checkpoint C - Count the presses</h2>
+<p>Inside <code>USER CODE BEGIN 2</code> (before the loop):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> press_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>GPIO_PinState previous <span class="op">=</span> GPIO_PIN_SET<span class="op">;</span>   <span class="co">/* released */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Replace the code in <code>USER CODE BEGIN 3</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>GPIO_PinState current <span class="op">=</span> HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">);</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">/* a press starts: released before, pressed now */</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>previous <span class="op">==</span> GPIO_PIN_SET <span class="op">&amp;&amp;</span> current <span class="op">==</span> GPIO_PIN_RESET<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    press_count <span class="op">=</span> press_count <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">20</span><span class="op">);</span>        <span class="co">/* ignore contact bounce */</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>previous <span class="op">=</span> current<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Below it, use <code>press_count % 4</code> to choose LD2’s behavior: <strong>0</strong> off · <strong>1</strong> on · <strong>2</strong> blink, toggle every 200 ms · <strong>3</strong> blink, toggle every 50 ms.</p>
+<p><strong>Show:</strong> four presses go through the four behaviors and back to the first; <code>press_count</code> grows by exactly 1 per press in VARIABLES.</p>
 </section>
-<section id="individual-extension---bare-metal-rematch" class="level2">
-<h2 class="anchored" data-anchor-id="individual-extension---bare-metal-rematch">Individual extension - Bare-metal rematch</h2>
-<p>Recreate Checkpoint B <strong>without HAL calls</strong>: clocks via <code>RCC-&gt;AHB1ENR</code> (GPIOA bit 0, GPIOC bit 2), PA5 output via <code>MODER</code>, read <code>GPIOC-&gt;IDR</code> bit 13, drive PA5 via <code>BSRR</code>. Leave PC13 with <strong>no internal pull</strong> — the external resistor is already there. Keep it in a separate source file or <code>#ifdef</code> block.</p>
+<section id="optional-not-graded---bare-metal-rematch" class="level2">
+<h2 class="anchored" data-anchor-id="optional-not-graded---bare-metal-rematch">Optional (not graded) - Bare-metal rematch</h2>
+<p>In a second project, do Checkpoint B <strong>without HAL GPIO calls</strong>: enable the clocks (<code>RCC-&gt;AHB1ENR</code> bit 0 for GPIOA, bit 2 for GPIOC), reuse your Lab 3 <code>led_init</code>, <code>led_on</code>, <code>led_off</code>, and read <code>GPIOC-&gt;IDR</code> bit 13. Leave PC13 with no internal pull.</p>
+</section>
+<section id="common-problems" class="level2">
+<h2 class="anchored" data-anchor-id="common-problems">Common problems</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>What you see</th>
+<th>First check</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>B1 does nothing</td>
+<td>PC13 is <code>GPIO_Input</code> in the <code>.ioc</code>, and you generated code again. <code>IDR13</code> changes when you press.</td>
+</tr>
+<tr class="even">
+<td>LD2 behavior is inverted</td>
+<td><code>GPIO_PIN_SET</code> = released, <code>GPIO_PIN_RESET</code> = pressed.</td>
+</tr>
+<tr class="odd">
+<td><code>press_count</code> climbs while B1 is held</td>
+<td>You test the level (<code>current</code> only), not the change (<code>previous</code> and <code>current</code>).</td>
+</tr>
+<tr class="even">
+<td><code>press_count</code> jumps by 2-3 per press</td>
+<td>The 20 ms delay is missing from the press branch.</td>
+</tr>
+<tr class="odd">
+<td>Some presses are not counted</td>
+<td>A long <code>HAL_Delay</code> blocks reading. Keep blink delays short. (Lecture 6 fixes this with interrupts.)</td>
+</tr>
+<tr class="even">
+<td>My code disappeared after Generate Code</td>
+<td>It was outside <code>USER CODE</code>. Paste it again inside the region.</td>
+</tr>
+<tr class="odd">
+<td><code>...FLASH.ld: syntax error</code></td>
+<td>Build with <strong>Ctrl+Shift+B</strong>; check that <code>.vscode</code> is in the project folder.</td>
+</tr>
+<tr class="even">
+<td><code>...FLASH.ld: syntax error</code> on your own laptop</td>
+<td>Replace <code>FLASH.ld</code> with the file from the <a href="../../../resources/guides/EE5203_Home_Setup_Guide.html">Home Setup Guide</a> (step 6). Repeat after every Generate Code.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="end-of-the-session---save-to-h" class="level2">
+<h2 class="anchored" data-anchor-id="end-of-the-session---save-to-h">End of the session - Save to H</h2>
+<p>Close VS Code, run the <strong>Save to H</strong> desktop shortcut, and check that <code>H:\EE_Labs\EE5203_L04_&lt;studentnumber&gt;</code> exists before you log out.</p>
 </section>
 <section id="acceptance-checklist" class="level2">
 <h2 class="anchored" data-anchor-id="acceptance-checklist">Acceptance checklist</h2>
 <ul class="task-list">
-<li><label><input type="checkbox"><code>.ioc</code>: PA5 output, PC13 input with no pull; generated code untouched outside <code>USER CODE</code> regions.</label></li>
-<li><label><input type="checkbox">Register proof for all three fields in Checkpoint A.</label></li>
-<li><label><input type="checkbox">Button override works and <code>IDR</code> bit 13 evidence shown.</label></li>
-<li><label><input type="checkbox">Press counter cycles four patterns with edge detection.</label></li>
-<li><label><input type="checkbox">Extension demonstrated in one interface only (no HAL/register mixing).</label></li>
+<li><label><input type="checkbox"><code>.ioc</code>: PA5 output, PC13 input with no pull; code only inside <code>USER CODE</code>.</label></li>
+<li><label><input type="checkbox">Checkpoint A: blink and the three register fields.</label></li>
+<li><label><input type="checkbox">Checkpoint B: B1 stops the blink; <code>IDR13</code> shown.</label></li>
+<li><label><input type="checkbox">Checkpoint C: four behaviors, one count per press.</label></li>
 </ul>
 </section>
 <section id="individual-oral-check" class="level2">
 <h2 class="anchored" data-anchor-id="individual-oral-check">Individual oral check</h2>
+<p>Be ready for <strong>one</strong> question <strong>or</strong> one live change, chosen by your lab assistant. For a live change, predict the result first, then make the change.</p>
+<p>Questions:</p>
 <ul>
-<li>Which register bits did <code>GPIO_MODE_OUTPUT_PP</code> change, and to what?</li>
-<li>Why must PC13 use <code>GPIO_NOPULL</code> on this board?</li>
-<li>Why does the press counter compare <code>prev</code> and <code>cur</code> instead of testing <code>cur == 0</code> alone?</li>
-<li>What does a successful build <em>not</em> prove?</li>
+<li>Which field did <code>GPIO_MODE_OUTPUT_PP</code> change for PA5, and to what?</li>
+<li>Why does PC13 use <code>GPIO_NOPULL</code> on this board?</li>
+<li>Why does the counter compare <code>previous</code> and <code>current</code> instead of testing <code>current</code> alone?</li>
+<li>What does a successful build <strong>not</strong> prove?</li>
+</ul>
+<p>Live changes:</p>
+<ul>
+<li>Set PC13 to pull-up in CubeMX. What does <code>PUPDR13</code> show? Does LD2 behave differently?</li>
+<li>In Checkpoint B, make LD2 blink only while B1 is <strong>pressed</strong>.</li>
+<li>Remove the 20 ms delay. Press B1 a few times and watch <code>press_count</code>.</li>
 </ul>
 </section>
 <section id="submit" class="level2">
 <h2 class="anchored" data-anchor-id="submit">Submit</h2>
-<p>Submit <code>main.c</code> (and the bare-metal file if attempted) plus one SFR-view screenshot showing the three Checkpoint A register fields.</p>
-</section>
-<section id="if-you-are-stuck" class="level2">
-<h2 class="anchored" data-anchor-id="if-you-are-stuck">If you are stuck</h2>
-<p>Check in order: <code>MX_GPIO_Init()</code> runs before the loop (once); the <code>.ioc</code> pin settings match this card; the SFR view shows the expected <code>MODER</code>/<code>PUPDR</code> fields; <code>IDR</code> bit 13 follows the physical button; only then suspect your loop logic. <strong>LED inverted?</strong> You swapped <code>SET</code>/<code>RESET</code> meaning. <strong>Count jumps by 2–3 per press?</strong> Your edge test or debounce delay is missing.</p>
+<p>Submit <code>main.c</code>, the <code>.ioc</code> file, and one XPERIPHERALS screenshot showing <code>MODER5</code>, <code>MODER13</code> and <code>PUPDR13</code>.</p>
+<p><strong>Marks (10):</strong> pre-lab quiz on CATS 1 · A project, blink and register proof 3 · B button 2 · C press counter 2 · oral check (one question or one live change) 2. The bare-metal rematch is optional and not graded.</p>
 
 
 </section>
