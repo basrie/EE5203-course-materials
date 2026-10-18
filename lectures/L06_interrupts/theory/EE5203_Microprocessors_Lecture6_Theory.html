@@ -263,7 +263,7 @@ Basri Erdogan
 <span id="cb2-2"><a></a>    <span class="cf">if</span> <span class="op">(</span>HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">)</span> <span class="op">==</span> GPIO_PIN_RESET<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb2-3"><a></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
 <span id="cb2-4"><a></a>    <span class="op">}</span></span>
-<span id="cb2-5"><a></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span>   <span class="co">/* busy for 500 ms: B1 is not read */</span></span>
+<span id="cb2-5"><a></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span>   <span class="co">/* other work: busy 500 ms, B1 is not read */</span></span>
 <span id="cb2-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <svg class="story-visual" viewbox="0 0 1440 300" role="img" aria-labelledby="poll-title poll-desc">
 <title id="poll-title">
@@ -752,38 +752,51 @@ The interrupt path from the B1 button to your code, drawn as a schematic
 </table>
 <p>This setup runs once, before <code>while (1)</code>. The path then runs on every press.</p>
 </section>
-<section id="first-test-toggle-ld2-in-the-callback" class="slide level2">
-<h2>First test: toggle LD2 in the callback</h2>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
-<span id="cb9-2"><a></a><span class="op">{</span></span>
-<span id="cb9-3"><a></a>    <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_13<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb9-4"><a></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
-<span id="cb9-5"><a></a>    <span class="op">}</span></span>
-<span id="cb9-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<svg class="story-visual" style="max-height:170px" viewbox="0 0 1440 180" role="img" aria-labelledby="ft-title ft-desc">
-<title id="ft-title">
-Expected behaviour: each B1 press toggles LD2 once, immediately
-</title>
-<desc id="ft-desc">Upper lane: B1 presses at 400, 1100 and 1900 ms, each a short low pulse. Lower lane: LD2 changes level at each press and stays until the next press.</desc> <text x="20" y="60" text-anchor="start" fill="#174f73" font-size="22" font-weight="700">B1</text> <text x="20" y="146" text-anchor="start" fill="#174f73" font-size="22" font-weight="700">LD2</text> <path d="M 150.0 46 H 350.0 V 76 H 425.0 V 46 H 700.0 V 76 H 775.0 V 46 H 1100.0 V 76 H 1175.0 V 46 H 1350.0" fill="none" stroke="#174f73" stroke-width="4"></path> <path d="M 150.0 160 H 350.0 V 130 H 700.0 V 160 H 1100.0 V 130 H 1350.0" fill="none" stroke="#3f7f58" stroke-width="4"></path> <line x1="350.0" y1="82" x2="350.0" y2="126" stroke="#d47b28" stroke-width="3" stroke-dasharray="6 5"></line> <line x1="700.0" y1="82" x2="700.0" y2="126" stroke="#d47b28" stroke-width="3" stroke-dasharray="6 5"></line> <line x1="1100.0" y1="82" x2="1100.0" y2="126" stroke="#d47b28" stroke-width="3" stroke-dasharray="6 5"></line> <text x="750.0" y="110" text-anchor="middle" fill="#d47b28" font-size="19" font-weight="700">one press → one toggle, with no delay</text>
-</svg>
-<p>If one press changes LD2, all six blocks work. <strong>Live demo.</strong> This is only a test: application code does not belong in the callback.</p>
+<section id="first-test-the-interrupt-version-of-the-polling-loop" class="slide level2">
+<h2>First test: the interrupt version of the polling loop</h2>
+<div style="font-size:0.84em">
+<div class="columns">
+<div class="column" style="width:48%;">
+<p><strong>Polling (slide 4):</strong> the loop reads PC13.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-2"><a aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>HAL_GPIO_ReadPin<span class="op">(</span>GPIOC<span class="op">,</span> GPIO_PIN_13<span class="op">)</span></span>
+<span id="cb9-3"><a aria-hidden="true" tabindex="-1"></a>            <span class="op">==</span> GPIO_PIN_RESET<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-4"><a aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb9-5"><a aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-6"><a aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span>
+<span id="cb9-7"><a aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:52%;">
+<p><strong>Interrupt:</strong> the loop keeps the delay; the callback does the work.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-2"><a aria-hidden="true" tabindex="-1"></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span>   <span class="co">/* other work: busy 500 ms */</span></span>
+<span id="cb10-3"><a aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb10-4"><a aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
+<span id="cb10-6"><a aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb10-7"><a aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_13<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-8"><a aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb10-9"><a aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-10"><a aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+</div>
+<p>The press arrives during <code>HAL_Delay()</code>: the callback runs, toggles LD2, and the loop continues. No press is lost. <strong>Live demo.</strong> This is only a test: application code does not belong in the callback.</p>
 </section>
 <section id="a-long-callback-freezes-main" class="slide level2">
 <h2>A long callback freezes <code>main()</code></h2>
 <div class="columns">
 <div class="column" style="width:46%;">
 <p>Heartbeat in <code>main()</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb10-2"><a></a>    HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span></span>
-<span id="cb10-3"><a></a>                       GPIO_PIN_5<span class="op">);</span></span>
-<span id="cb10-4"><a></a>    HAL_Delay<span class="op">(</span><span class="dv">100</span><span class="op">);</span></span>
-<span id="cb10-5"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-2"><a></a>    HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span></span>
+<span id="cb11-3"><a></a>                       GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb11-4"><a></a>    HAL_Delay<span class="op">(</span><span class="dv">100</span><span class="op">);</span></span>
+<span id="cb11-5"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:52%;">
 <p>A callback that waits — <strong>wrong</strong>:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
-<span id="cb11-2"><a></a><span class="op">{</span></span>
-<span id="cb11-3"><a></a>    HAL_Delay<span class="op">(</span><span class="dv">2000</span><span class="op">);</span></span>
-<span id="cb11-4"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
+<span id="cb12-2"><a></a><span class="op">{</span></span>
+<span id="cb12-3"><a></a>    HAL_Delay<span class="op">(</span><span class="dv">2000</span><span class="op">);</span></span>
+<span id="cb12-4"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
 <svg class="story-visual" style="max-height:200px" viewbox="0 0 1440 210" role="img" aria-labelledby="hb-title hb-desc">
 <title id="hb-title">
@@ -797,7 +810,7 @@ LD2 toggles every 100 ms from main(); after the press the callback blocks and LD
 <section id="the-volatile-event-variable" class="slide level2">
 <h2>The <code>volatile</code> event variable</h2>
 <p>One variable carries the event from the callback to <code>main()</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a></a><span class="dt">volatile</span> <span class="dt">uint8_t</span> button_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">/* 0 = no event, 1 = event waiting */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb13-1"><a></a><span class="dt">volatile</span> <span class="dt">uint8_t</span> button_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">/* 0 = no event, 1 = event waiting */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <table class="caption-top">
 <colgroup>
 <col style="width: 50%">
@@ -827,19 +840,19 @@ LD2 toggles every 100 ms from main(); after the press the callback blocks and LD
 <section id="the-callback-records-the-event-main-consumes-it" class="slide level2">
 <h2>The callback records the event; <code>main()</code> consumes it</h2>
 <p><strong>The callback records the event:</strong> no LED action, no waiting.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb13-1"><a></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
-<span id="cb13-2"><a></a><span class="op">{</span></span>
-<span id="cb13-3"><a></a>    <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_13<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb13-4"><a></a>        button_event <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb13-5"><a></a>    <span class="op">}</span></span>
-<span id="cb13-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>The main loop consumes the event</strong> and no longer polls PC13: reset the variable first, then act.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb14-2"><a></a>    <span class="cf">if</span> <span class="op">(</span>button_event <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb14-3"><a></a>        button_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb14-4"><a></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
+<span id="cb14-2"><a></a><span class="op">{</span></span>
+<span id="cb14-3"><a></a>    <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_13<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-4"><a></a>        button_event <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb14-5"><a></a>    <span class="op">}</span></span>
 <span id="cb14-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>The main loop consumes the event</strong> and no longer polls PC13: reset the variable first, then act.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb15-2"><a></a>    <span class="cf">if</span> <span class="op">(</span>button_event <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb15-3"><a></a>        button_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb15-4"><a></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb15-5"><a></a>    <span class="op">}</span></span>
+<span id="cb15-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="the-pending-bit-and-button_event-are-two-different-flags" class="slide level2">
 <h2>The pending bit and <code>button_event</code> are two different flags</h2>
@@ -889,18 +902,18 @@ The EXTI pending bit lives in hardware and is cleared by the HAL helper; button_
 </section>
 <section id="software-debounce-accepts-one-edge-per-80-ms" class="slide level2">
 <h2>Software debounce accepts one edge per 80 ms</h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a></a><span class="dt">uint32_t</span> last_press_ms <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb15-2"><a></a></span>
-<span id="cb15-3"><a></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
-<span id="cb15-4"><a></a><span class="op">{</span></span>
-<span id="cb15-5"><a></a>    <span class="dt">uint32_t</span> now <span class="op">=</span> HAL_GetTick<span class="op">();</span></span>
-<span id="cb15-6"><a></a></span>
-<span id="cb15-7"><a></a>    <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_13 <span class="op">&amp;&amp;</span></span>
-<span id="cb15-8"><a></a>        <span class="op">(</span>now <span class="op">-</span> last_press_ms<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">80</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb15-9"><a></a>        last_press_ms <span class="op">=</span> now<span class="op">;</span></span>
-<span id="cb15-10"><a></a>        button_event <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb15-11"><a></a>    <span class="op">}</span></span>
-<span id="cb15-12"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a></a><span class="dt">uint32_t</span> last_press_ms <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb16-2"><a></a></span>
+<span id="cb16-3"><a></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
+<span id="cb16-4"><a></a><span class="op">{</span></span>
+<span id="cb16-5"><a></a>    <span class="dt">uint32_t</span> now <span class="op">=</span> HAL_GetTick<span class="op">();</span></span>
+<span id="cb16-6"><a></a></span>
+<span id="cb16-7"><a></a>    <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_13 <span class="op">&amp;&amp;</span></span>
+<span id="cb16-8"><a></a>        <span class="op">(</span>now <span class="op">-</span> last_press_ms<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">80</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-9"><a></a>        last_press_ms <span class="op">=</span> now<span class="op">;</span></span>
+<span id="cb16-10"><a></a>        button_event <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb16-11"><a></a>    <span class="op">}</span></span>
+<span id="cb16-12"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>HAL_GetTick()</code> returns the milliseconds since startup as a <code>uint32_t</code>.</p>
 <p><strong>The 80 ms guard:</strong> bounce settles within about 10 ms, so 80 ms skips every bounce edge. A fast double press takes longer than 80 ms, so it still counts as two presses.</p>
 <div class="source-note">
