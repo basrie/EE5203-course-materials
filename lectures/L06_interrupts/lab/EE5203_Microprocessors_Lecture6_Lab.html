@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>EE5203 L06 Lab Guide – EE5203 Microprocessors</title>
+<title>EE5203 Lab 5 Guide – EE5203 Microprocessors</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -4866,18 +4866,20 @@ pre { font-size: 8.7pt; }
 
 
 
-<section id="ee5203-l06-lab-guide" class="level1">
-<h1>EE5203 L06 Lab Guide</h1>
-<p><em>Button interrupts — replace polling with EXTI - Basri Erdogan</em></p>
+<section id="ee5203-lab-5-guide" class="level1">
+<h1>EE5203 Lab 5 Guide</h1>
+<p><em>Button interrupts: replace polling with EXTI - Basri Erdogan</em></p>
 <div class="mission">
-<p><strong>Mission:</strong> Configure B1 (PC13) as a falling-edge interrupt so that one valid press toggles LD2 (PA5) — without reading the button anywhere in <code>while (1)</code>.</p>
+<p><strong>Mission:</strong> Configure B1 (PC13) as a falling-edge interrupt so that one valid press toggles the LED on PA5 — without reading the button anywhere in <code>while (1)</code>.</p>
 </div>
+<p>This lab uses Lecture 6 (EXTI, NVIC, callbacks, <code>volatile</code> flags, debounce).</p>
 <section id="prepare-before-class" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-before-class">Prepare before class</h2>
 <ul class="task-list">
-<li><label><input type="checkbox">Re-read the theory slides up to “The complete interrupt path.”</label></li>
-<li><label><input type="checkbox">Bring your working L05 HAL GPIO project.</label></li>
-<li><label><input type="checkbox">Know the answer to: why does pressing B1 produce a <em>falling</em> edge?</label></li>
+<li><label><input type="checkbox">Bring your board and a USB <strong>data</strong> cable.</label></li>
+<li><label><input type="checkbox">Do the <strong>Lab 5 pre-lab quiz</strong> on CATS.</label></li>
+<li><label><input type="checkbox">Re-read the theory slides up to “The complete interrupt path with register names”.</label></li>
+<li><label><input type="checkbox">Know why pressing B1 produces a <em>falling</em> edge on PC13.</label></li>
 </ul>
 </section>
 <section id="learning-objectives" class="level2">
@@ -4900,64 +4902,85 @@ pre { font-size: 8.7pt; }
 <thead>
 <tr class="header">
 <th>Item</th>
-<th>Required value</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Board</td>
-<td>Nucleo-F401RE (no wiring — B1 and LD2 are on the board)</td>
+<td>Nucleo-F401RE: LED on PA5, B1 on PC13 (external pull-up, <strong>low while pressed</strong>), no wiring</td>
 </tr>
 <tr class="even">
-<td>Input</td>
-<td>B1 on PC13, external pull-up, <strong>low while pressed</strong></td>
+<td>Tools</td>
+<td>STM32CubeMX (new project) + VS Code</td>
 </tr>
 <tr class="odd">
-<td>Output</td>
-<td>LD2 on PA5, high turns the LED on</td>
+<td>Project name</td>
+<td><code>EE5203_L05_&lt;studentnumber&gt;</code></td>
 </tr>
 <tr class="even">
-<td>Starting point</td>
-<td>Copy of your L05 project, saved as <code>L06_Button_Interrupt</code></td>
+<td>File you edit</td>
+<td><code>main.c</code>, only inside the <code>USER CODE</code> regions</td>
 </tr>
 </tbody>
 </table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Using your own laptop? (click)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Follow the steps as written, with these changes. Set up your laptop once with the <a href="../../../resources/guides/EE5203_Home_Setup_Guide.html">Home Setup Guide</a>.</p>
+<ul>
+<li><strong>Folder:</strong> <code>C:\STM32\EE5203</code> (Mac: <code>~/STM32/EE5203</code>), not <code>C:\Work</code>.</li>
+<li><strong>Step 5:</strong> skip it. Open the folder, choose <strong>Debug</strong>, then ST icon → <strong>Set Up STM32Cube project(s)</strong>.</li>
+<li><strong>Build / debug:</strong> <strong>F7</strong> (Mac: <strong>fn + F7</strong>), then Run and Debug → <strong>STM32Cube: STM32 Launch ST-Link GDB Server</strong>.</li>
+<li><strong>End of session:</strong> no <em>Save to H</em>. Your project stays on your laptop.</li>
+</ul>
+</div>
+</div>
+</div>
 </section>
-<section id="configure-the-interrupt-in-cubemx" class="level2">
-<h2 class="anchored" data-anchor-id="configure-the-interrupt-in-cubemx">Configure the interrupt in CubeMX</h2>
-<p>Open the <code>.ioc</code> file. Keep PA5 as <code>GPIO_Output</code> (label <code>LD2</code>). Then:</p>
+<section id="checkpoint-a---new-exti-project-and-callback-proof" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-a---new-exti-project-and-callback-proof">Checkpoint A - New EXTI project and callback proof</h2>
+<p><strong>Start of the session:</strong> if <code>C:\Work\&lt;studentnumber&gt;</code> does not contain your Lab 4 project, copy <strong>all</strong> your project folders from <code>H:\EE_Labs</code> into it first.</p>
 <ol type="1">
-<li>Click <code>PC13</code> and select <code>GPIO_EXTI13</code>.</li>
-<li>In <strong>System Core → GPIO</strong>: falling-edge interrupt mode, <strong>no pull-up and no pull-down</strong> (the board’s external resistor already holds PC13 high).</li>
-<li>In <strong>System Core → NVIC</strong>: enable <strong>EXTI line[15:10] interrupts</strong> (PC13 is line 13; lines 10–15 share this entry). Leave the priority at its default.</li>
-<li>Generate code, then verify the generated setup in <code>MX_GPIO_Init()</code>:</li>
-</ol>
+<li><p><strong>STM32CubeMX:</strong> Board Selector → <strong>NUCLEO-F401RE</strong> → accept the default initialization. Set up <strong>PA5</strong> as in Lab 4: <strong>Reset_State</strong>, then <strong><code>GPIO_Output</code></strong>, User Label empty.</p></li>
+<li><p>Keep <strong>PC13</strong> as <strong><code>GPIO_EXTI13</code></strong>. In System Core → GPIO, PC13: <strong>External Interrupt Mode with Falling edge trigger detection</strong>, <strong>No pull-up and no pull-down</strong> (the board’s resistor already holds PC13 high).</p></li>
+<li><p>In System Core → <strong>NVIC</strong>: enable <strong>EXTI line[15:10] interrupts</strong> (PC13 is line 13; lines 10–15 share this entry). Leave the priority at its default.</p></li>
+<li><p>Project Manager: name <strong><code>EE5203_L05_&lt;studentnumber&gt;</code></strong>, location <code>C:\Work\&lt;studentnumber&gt;</code>, Toolchain/IDE = <strong>CMake</strong> → Generate Code.</p></li>
+<li><p>Copy <code>C:\Users\Public\EE5203_template\.vscode</code> into the project folder.</p></li>
+<li><p>Check the generated setup in <code>MX_GPIO_Init()</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>GPIO_InitStruct<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_IT_FALLING<span class="op">;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>GPIO_InitStruct<span class="op">.</span>Pull <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>HAL_NVIC_EnableIRQ<span class="op">(</span>EXTI15_10_IRQn<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Write code only inside <code>USER CODE</code> blocks.</p>
-</section>
-<section id="checkpoint-a---the-interrupt-fires" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-a---the-interrupt-fires">Checkpoint A - The interrupt fires</h2>
-<p>Add below <code>main()</code> in the user-code section for functions:</p>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>HAL_NVIC_EnableIRQ<span class="op">(</span>EXTI15_10_IRQn<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Add below <code>main()</code>, in the user-code section for functions:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_13<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Build, flash, press B1 — the LED responds without any button code in the loop.</p>
-<p><strong>Evidence for Checkpoint A:</strong> a breakpoint on the <code>if</code> line is hit when you press B1, and <code>GPIO_Pin</code> equals <code>GPIO_PIN_13</code>. If execution never stops, recheck the PC13 mode and the NVIC checkbox.</p>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Build (<strong>Ctrl+Shift+B</strong>), start the debugger (<strong>F5</strong>), Continue, press B1: the LED responds without any button code in the loop.</p></li>
+</ol>
+<p><strong>Show:</strong> a breakpoint on the <code>if</code> line is hit when you press B1, and <code>GPIO_Pin</code> equals <code>GPIO_PIN_13</code>.</p>
 </section>
 <section id="checkpoint-b---the-callback-reports-the-loop-acts" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-b---the-callback-reports-the-loop-acts">Checkpoint B - The callback reports, the loop acts</h2>
 <p>The LED action does not belong in the callback. In <code>USER CODE BEGIN PV</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint8_t</span> button_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Change the callback body to only record the event (<code>button_event = 1;</code>), and let the main loop consume it:</p>
+<p>Change the callback body to only record the event (<code>button_event = 1;</code>), and let the main loop consume it in <code>USER CODE BEGIN 3</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>button_event <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    button_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>               <span class="co">/* consume before acting */</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Show:</strong> the callback with one statement, and the LED toggle in <code>main()</code>.</p>
 </section>
 <section id="checkpoint-c---one-press-one-event" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-c---one-press-one-event">Checkpoint C - One press, one event</h2>
@@ -4974,9 +4997,7 @@ pre { font-size: 8.7pt; }
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    button_event <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The subtraction stays correct even when the millisecond counter wraps.</p>
-</section>
-<section id="test-behavior-not-just-compilation" class="level2">
-<h2 class="anchored" data-anchor-id="test-behavior-not-just-compilation">Test behavior, not just compilation</h2>
+<p><strong>Check it:</strong> test behavior, not just compilation. Record unexpected behavior <em>before</em> changing the code.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -4987,11 +5008,11 @@ pre { font-size: 8.7pt; }
 <tbody>
 <tr class="odd">
 <td>press once slowly</td>
-<td>LD2 toggles once</td>
+<td>LED toggles once</td>
 </tr>
 <tr class="even">
 <td>press ten times</td>
-<td>LD2 toggles ten times</td>
+<td>LED toggles ten times</td>
 </tr>
 <tr class="odd">
 <td>hold B1 down</td>
@@ -5003,39 +5024,132 @@ pre { font-size: 8.7pt; }
 </tr>
 </tbody>
 </table>
-<p>Record unexpected behavior <em>before</em> changing the code.</p>
+<p><strong>Show:</strong> the four tests in the table.</p>
 </section>
-<section id="individual-extension" class="level2">
-<h2 class="anchored" data-anchor-id="individual-extension">Individual extension</h2>
-<p>Toggle LD2 only after <strong>two</strong> valid presses (a counter in the main loop); the interrupt and debounce code stay unchanged.</p>
+<section id="checkpoint-d---two-valid-presses-per-toggle" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-d---two-valid-presses-per-toggle">Checkpoint D - Two valid presses per toggle</h2>
+<p>No code is given: toggle the LED only after <strong>two</strong> valid presses, using a counter in the main loop; the interrupt and debounce code stay unchanged.</p>
+<p><strong>Show:</strong> four presses give exactly two toggles; explain where your counter lives.</p>
+</section>
+<section id="optional-not-graded---two-state-led-control" class="level2">
+<h2 class="anchored" data-anchor-id="optional-not-graded---two-state-led-control">Optional (not graded) - Two-state LED control</h2>
+<p>After Checkpoint D: two states, <code>STEADY</code> and <code>BLINK</code> (the LED toggles every 250 ms); each valid press switches the state. Time it with <code>HAL_GetTick()</code>, not <code>HAL_Delay()</code>.</p>
+</section>
+<section id="common-problems" class="level2">
+<h2 class="anchored" data-anchor-id="common-problems">Common problems</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Show the table (click)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Fix the <strong>first</strong> failed stage along the path B1/PC13 → EXTI13 → <code>EXTI15_10_IRQn</code> → handler → callback → <code>button_event</code> → main loop.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>What you see</th>
+<th>First check</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>The callback breakpoint is never hit</td>
+<td>PC13 is <code>GPIO_EXTI13</code> and <strong>EXTI line[15:10]</strong> is enabled in NVIC; you generated code again.</td>
+</tr>
+<tr class="even">
+<td>The callback runs, the LED does not change</td>
+<td>Inspect <code>GPIO_Pin</code>: compare with <code>GPIO_PIN_13</code>.</td>
+</tr>
+<tr class="odd">
+<td>The LED toggles on <strong>release</strong></td>
+<td>Rising edge selected: choose falling edge in CubeMX.</td>
+</tr>
+<tr class="even">
+<td>The flag is set, <code>main()</code> never sees it</td>
+<td><code>button_event</code> is not declared <code>volatile</code>.</td>
+</tr>
+<tr class="odd">
+<td>Several toggles per press</td>
+<td>The 80 ms guard or <code>last_press_ms = now;</code> is missing.</td>
+</tr>
+<tr class="even">
+<td>The LED never lights</td>
+<td>PA5 is <code>GPIO_Output</code> in the <code>.ioc</code>.</td>
+</tr>
+<tr class="odd">
+<td>My code disappeared after Generate Code</td>
+<td>It was outside <code>USER CODE</code>. Paste it again inside the region.</td>
+</tr>
+<tr class="even">
+<td><code>...FLASH.ld: syntax error</code></td>
+<td>Build with <strong>Ctrl+Shift+B</strong>; check that <code>.vscode</code> is in the project folder.</td>
+</tr>
+<tr class="odd">
+<td><code>...FLASH.ld: syntax error</code> on your own laptop</td>
+<td>Replace <code>FLASH.ld</code> with the file from the <a href="../../../resources/guides/EE5203_Home_Setup_Guide.html">Home Setup Guide</a> (step 6). Repeat after every Generate Code.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="end-of-the-session---save-to-h" class="level2">
+<h2 class="anchored" data-anchor-id="end-of-the-session---save-to-h">End of the session - Save to H</h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Show the steps (click)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Close VS Code, run the <strong>Save to H</strong> desktop shortcut, and check that <code>H:\EE_Labs\EE5203_L05_&lt;studentnumber&gt;</code> exists before you log out.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="acceptance-checklist" class="level2">
 <h2 class="anchored" data-anchor-id="acceptance-checklist">Acceptance checklist</h2>
 <ul class="task-list">
-<li><label><input type="checkbox"><code>.ioc</code> shows PC13 = <code>GPIO_EXTI13</code>, falling edge, no pull, NVIC enabled.</label></li>
-<li><label><input type="checkbox">Breakpoint proves <code>HAL_GPIO_EXTI_Callback</code> runs on a press.</label></li>
-<li><label><input type="checkbox"><code>button_event</code> is declared <code>volatile</code>; the LED action lives in <code>main()</code>.</label></li>
-<li><label><input type="checkbox">Ten deliberate presses produce ten reliable state changes.</label></li>
-<li><label><input type="checkbox">Individual extension demonstrated.</label></li>
+<li><label><input type="checkbox"><code>.ioc</code>: PC13 = <code>GPIO_EXTI13</code>, falling edge, no pull, NVIC enabled; code only inside <code>USER CODE</code>.</label></li>
+<li><label><input type="checkbox">Checkpoint A: breakpoint proves <code>HAL_GPIO_EXTI_Callback</code> runs on a press.</label></li>
+<li><label><input type="checkbox">Checkpoint B: <code>button_event</code> is <code>volatile</code>; the LED action lives in <code>main()</code>.</label></li>
+<li><label><input type="checkbox">Checkpoint C: the four tests pass, one toggle per press.</label></li>
+<li><label><input type="checkbox">Checkpoint D: two valid presses per toggle.</label></li>
 </ul>
 </section>
 <section id="individual-oral-check" class="level2">
 <h2 class="anchored" data-anchor-id="individual-oral-check">Individual oral check</h2>
-<p>Be ready for one question and one live change:</p>
+<p>Be ready for <strong>one</strong> question <strong>or</strong> one live change, chosen by your lab assistant. For a live change, predict the result first, then make the change.</p>
+<p>Questions:</p>
 <ul>
 <li>Why does B1 use a falling edge and no internal pull?</li>
 <li>What runs first: <code>EXTI15_10_IRQHandler()</code> or your callback?</li>
 <li>Why must the callback stay short, and why is <code>volatile</code> required?</li>
 <li>What would happen without the 80 ms guard?</li>
 </ul>
+<p>Live changes:</p>
+<ul>
+<li>Set PC13 to the rising edge in CubeMX. When does the LED toggle now?</li>
+<li>Turn off <strong>EXTI line[15:10]</strong> in NVIC. Does the callback still run?</li>
+<li>Change the guard from 80 ms to 1000 ms and press B1 quickly several times.</li>
+</ul>
 </section>
 <section id="submit" class="level2">
 <h2 class="anchored" data-anchor-id="submit">Submit</h2>
-<p>Submit the project source and one debugger screenshot showing the breakpoint inside your callback.</p>
-</section>
-<section id="if-you-are-stuck" class="level2">
-<h2 class="anchored" data-anchor-id="if-you-are-stuck">If you are stuck</h2>
-<p>Fix the <strong>first</strong> failed stage along the path B1/PC13 → EXTI13 → <code>EXTI15_10_IRQn</code> → handler → callback → <code>button_event</code> → main loop. <strong>No callback</strong>: PC13 mode / NVIC checkbox. <strong>Wrong pin</strong>: inspect <code>GPIO_Pin</code>. <strong>Flag never seen</strong>: missing <code>volatile</code>. <strong>Several toggles</strong>: 80 ms guard / <code>last_press_ms</code>. <strong>LED dead</strong>: PA5 output setup.</p>
+<p>Submit <code>main.c</code>, the <code>.ioc</code> file, and one debugger screenshot showing the breakpoint inside <code>HAL_GPIO_EXTI_Callback</code>.</p>
+<p><strong>Marks (10):</strong> pre-lab quiz on CATS 1 · A project and callback proof 2 · B event flag 2 · C debounce tests 2 · D two presses per toggle 1 · oral check (one question or one live change) 2. The two-state LED control is optional and not graded.</p>
 
 
 </section>
