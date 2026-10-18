@@ -4176,7 +4176,7 @@
     "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#the-nvic-chooses-which-request-the-cpu-serves",
     "title": "EE5203 Microprocessors",
     "section": "The NVIC chooses which request the CPU serves",
-    "text": "The NVIC chooses which request the CPU serves\n\n           B1 / PC13     EXTI     PR     NVIC       CPU    flash  vector table  your code: handler → callback\n\nEvery peripheral’s request goes to the NVIC (Nested Vectored Interrupt Controller): one enable switch and one priority per request (0 = most urgent).\n\n\nThe NVIC: many request lines, each with an enable switch and a priority; a chooser sends the highest-priority pending request to the CPU\n\nFour request lines enter the NVIC: SysTick, TIM2, USART2 and EXTI15_10, which is highlighted in orange. Each passes its own enable switch and a priority value. USART2 is drawn with its switch open. A chooser labelled highest priority pending request wins sends request number 40 to the CPU.   NVIC one enable and one priority per request enable priority  highest priority pending request wins  request 40  CPU SysTick      0  TIM2      1  USART2      2  EXTI15_10      0 \n\nOurs is request 40, EXTI15_10_IRQn (lines 10–15 share it). Enable off: pending bit set, nothing runs — the most common lab bug. “Nested”: a more urgent request may interrupt a running handler."
+    "text": "The NVIC chooses which request the CPU serves\n\n           B1 / PC13     EXTI     PR     NVIC       CPU    flash  vector table  your code: handler → callback\n\nEvery peripheral’s request goes to the NVIC (Nested Vectored Interrupt Controller): one enable switch and one priority per request (0 = most urgent).\n\n\nThe NVIC: many request lines, each with an enable switch and a priority; a chooser sends the highest-priority pending request to the CPU\n\nFour request lines enter the NVIC: SysTick, TIM2, USART2 and EXTI15_10, which is highlighted in orange. Each passes its own enable switch and a priority value. USART2 is drawn with its switch open. A chooser labelled highest priority pending request wins sends request number 40 to the CPU.   NVIC one enable and one priority per request enable priority  highest priority pending request wins  request 40  CPU SysTick      0  TIM2      1  USART2      2  EXTI15_10      0 \n\nB1 is request 40, EXTI15_10_IRQn; EXTI lines 10 to 15 share it. If the enable is off, the pending bit is set but nothing runs. This is the most common lab bug. “Nested” means a more urgent request can interrupt a running handler."
   },
   {
     "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#request-40-and-the-vector-table",
@@ -4218,7 +4218,7 @@
     "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#building-the-button-interrupt",
     "title": "EE5203 Microprocessors",
     "section": "Building the Button Interrupt",
-    "text": "Building the Button Interrupt\n\n03\n\n\nStep 3 of 4\n\n\nThree CubeMX choices, one callback, one shared variable: the path becomes a working program.\n\n\n\n01 · Polling\n\n\n02 · The Path\n\n\n03 · Building It\n\n\n04 · Debounce"
+    "text": "Building the Button Interrupt\n\n03\n\n\nStep 3 of 4\n\n\nYou make three choices in CubeMX, write one callback and share one variable. Then the path runs as a program.\n\n\n\n01 · Polling\n\n\n02 · The Path\n\n\n03 · Building It\n\n\n04 · Debounce"
   },
   {
     "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#cubemx-interrupt-setup",
@@ -4239,14 +4239,14 @@
     "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#first-test-toggle-ld2-in-the-callback",
     "title": "EE5203 Microprocessors",
     "section": "First test: toggle LD2 in the callback",
-    "text": "First test: toggle LD2 in the callback\nvoid HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)\n{\n    if (GPIO_Pin == GPIO_PIN_13) {\n        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);\n    }\n}\n\n\nExpected behaviour: each B1 press toggles LD2 once, immediately\n\nUpper lane: B1 presses at 400, 1100 and 1900 ms, each a short low pulse. Lower lane: LD2 changes level at each press and stays until the next press. B1 LD2      one press → one toggle, with no delay\n\nIf one press changes LD2, all six blocks work. Live demo. This is a test, not yet the right place for application code."
+    "text": "First test: toggle LD2 in the callback\nvoid HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)\n{\n    if (GPIO_Pin == GPIO_PIN_13) {\n        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);\n    }\n}\n\n\nExpected behaviour: each B1 press toggles LD2 once, immediately\n\nUpper lane: B1 presses at 400, 1100 and 1900 ms, each a short low pulse. Lower lane: LD2 changes level at each press and stays until the next press. B1 LD2      one press → one toggle, with no delay\n\nIf one press changes LD2, all six blocks work. Live demo. This is only a test: application code does not belong in the callback."
   },
   {
     "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#a-long-callback-freezes-main",
     "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#a-long-callback-freezes-main",
     "title": "EE5203 Microprocessors",
     "section": "A long callback freezes main()",
-    "text": "A long callback freezes main()\n\n\nHeartbeat in main():\nwhile (1) {\n    HAL_GPIO_TogglePin(GPIOA,\n                       GPIO_PIN_5);\n    HAL_Delay(100);\n}\n\nA callback that waits — wrong:\nvoid HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)\n{\n    HAL_Delay(2000);\n}\n\n\n\nLD2 toggles every 100 ms from main(); after the press the callback blocks and LD2 stops toggling\n\nUpper lane: LD2 level toggling every 100 ms, then flat after 800 ms. Lower lane: main() runs until 800 ms, then the callback runs and main() is paused for the rest of the plot. LD2 CPU  heartbeat: toggles every 100 ms frozen: no toggle while the callback runs  main() runs  callback: HAL_Delay(2000) … main() paused  B1 pressed\n\nLive demo: press B1 and the heartbeat stops for good. HAL_Delay counts SysTick interrupts, and SysTick cannot interrupt our handler, so the callback never returns.\nRule: a callback checks the source, records the event, and returns at once. No HAL_Delay(), no loops, no printing."
+    "text": "A long callback freezes main()\n\n\nHeartbeat in main():\nwhile (1) {\n    HAL_GPIO_TogglePin(GPIOA,\n                       GPIO_PIN_5);\n    HAL_Delay(100);\n}\n\nA callback that waits — wrong:\nvoid HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)\n{\n    HAL_Delay(2000);\n}\n\n\n\nLD2 toggles every 100 ms from main(); after the press the callback blocks and LD2 stops toggling\n\nUpper lane: LD2 level toggling every 100 ms, then flat after 800 ms. Lower lane: main() runs until 800 ms, then the callback runs and main() is paused for the rest of the plot. LD2 CPU  heartbeat: toggles every 100 ms frozen: no toggle while the callback runs  main() runs  callback: HAL_Delay(2000) … main() paused  B1 pressed\n\nLive demo: press B1 and the heartbeat stops for good. HAL_Delay() counts SysTick interrupts. SysTick cannot interrupt our handler, so the delay never ends and the callback never returns.\nRule: a callback checks the source, records the event, and returns at once. No HAL_Delay(), no loops, no printing."
   },
   {
     "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#the-volatile-event-variable",
@@ -4274,7 +4274,7 @@
     "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#debounce-and-debugging",
     "title": "EE5203 Microprocessors",
     "section": "Debounce and Debugging",
-    "text": "Debounce and Debugging\n\n04\n\n\nStep 4 of 4\n\n\nOne press must give one event, and every box of the path can be checked in the debugger.\n\n\n\n01 · Polling\n\n\n02 · The Path\n\n\n03 · Building It\n\n\n04 · Debounce"
+    "text": "Debounce and Debugging\n\n04\n\n\nStep 4 of 4\n\n\nOne press must give one event, and every block of the path can be checked in the debugger.\n\n\n\n01 · Polling\n\n\n02 · The Path\n\n\n03 · Building It\n\n\n04 · Debounce"
   },
   {
     "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#button-bounce",
@@ -4295,7 +4295,7 @@
     "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#checking-the-interrupt-path-in-the-debugger",
     "title": "EE5203 Microprocessors",
     "section": "Checking the interrupt path in the debugger",
-    "text": "Checking the interrupt path in the debugger\nCheck the blocks in order; stop at the first that fails. Registers: the SFR view in VS Code.\n\n\n\n\n\n\n\n\n\nBlock\nCheck\nEvidence (SFR view)\nUsual mistake\n\n\n\n\n1 B1\nhigh released, low pressed\nIDR bit 13\ninternal pull fights the board\n\n\n2 EXTI\nfalling edge, unmasked\nFTSR, IMR bit 13 = 1\nrising edge selected\n\n\n3 NVIC\nrequest enabled\nhandler breakpoint is reached\ncheckbox forgotten: PR = 1, no code\n\n\n4–5 CPU\nhandler entered\nPR bit 13 = 1 at the breakpoint\n—\n\n\n6 callback\npin and flag\nwatch GPIO_Pin, button_event\nwrong pin mask; long callback\n\n\n\n\nRegister definitions: RM0368 Rev 6, EXTI_PR — p. 211."
+    "text": "Checking the interrupt path in the debugger\nCheck the blocks in order and stop at the first one that fails. Read the registers in the SFR view in VS Code.\n\n\n\nBlock\nCheck\nEvidence (SFR view)\n\n\n\n\n1 B1\nhigh released, low pressed\nIDR bit 13\n\n\n2 EXTI\nfalling edge, unmasked\nFTSR, IMR bit 13 = 1\n\n\n3 NVIC\nrequest enabled\nhandler breakpoint is reached\n\n\n4–5 CPU\nhandler entered\nPR bit 13 = 1 at the breakpoint\n\n\n6 callback\npin and flag\nwatch GPIO_Pin, button_event\n\n\n\n\nRegister definitions: RM0368 Rev 6, EXTI_PR — p. 211."
   },
   {
     "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#laboratory-mission",
@@ -4309,7 +4309,7 @@
     "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#exit-ticket",
     "title": "EE5203 Microprocessors",
     "section": "Exit ticket",
-    "text": "Exit ticket\n\n\n\n\n01 EXTI: what does it detect and remember?\n\n\n02 NVIC: what does enabling an IRQ allow?\n\n\n03 VECTOR TABLE: what information does it store?\n\n\n04 HANDLER / CALLBACK: which does the processor enter; which does HAL call?\n\n\n05 TWO BITS: EXTI pending bit vs button_event — the difference?\n\n\n\n\nScan before you leave — ungraded; your answers open the next lecture.\n\n\nEvery concept in this lecture, with page-linked sources: academic references."
+    "text": "Exit ticket\n\n\n\n\n01 EXTI: what does it detect and remember?\n\n\n02 NVIC: what does enabling an IRQ allow?\n\n\n03 VECTOR TABLE: what information does it store?\n\n\n04 HANDLER / CALLBACK: which does the processor enter; which does HAL call?\n\n\n05 TWO BITS: EXTI pending bit vs button_event — the difference?\n\n\n\n\nScan the code before you leave. It is not graded; your answers open the next lecture.\n\n\nEvery concept in this lecture, with page-linked sources: academic references."
   },
   {
     "objectID": "lectures/L07_timers/practice/EE5203_Microprocessors_Lecture7_Study_Sheet.html",
@@ -6473,5 +6473,75 @@
     "title": "Term Project Guidelines",
     "section": "9 Project Ideas",
     "text": "9 Project Ideas\nEach idea lists one possible set of parts and course topics, and how you can check your measurement against a known value. You may change the parts or propose your own idea.\n\n\n\n\n\n\n\n\n\n\n#\nProject\nSensors and outputs\nCourse topics\nCheck against\n\n\n\n\n1\nParking assistant\nHC-SR04 ultrasonic sensor; buzzer; LED bar or display\ninput capture, PWM, timers, UART\ntape measure\n\n\n2\nRoom climate monitor with alarm\nBME280 or SHT31 sensor (I2C); I2C OLED or LCD; buzzer\nI2C, timers, EXTI (alarm reset), UART log\nroom thermometer\n\n\n3\nLine-following robot\nIR line sensors; TB6612FNG motor driver; robot chassis\nADC or GPIO, PWM, timers, EXTI (start/stop), UART tuning log\nsensor values on black and white\n\n\n4\nTilt-stabilised camera platform\nMPU6050 IMU; two hobby servos (two-axis gimbal)\nI2C, PWM, timers (control loop), UART tuning\nprotractor angles\n\n\n5\nSunrise alarm clock\nDS3231 real-time clock; light sensor (LDR); LED that brightens before the alarm; display; buzzer\nI2C, ADC, PWM, EXTI (buttons), timers\nphone clock; covered and lit LDR\n\n\n6\nMotion alarm system\nPIR sensor; keypad or buttons for the code; buzzer; display\nEXTI, timers, PWM (siren), UART event log\nwalk-past tests at set distances\n\n\n7\nVibration and tilt monitor\nADXL345 or MPU6050 accelerometer; vibration motor as a test source; buzzer\nI2C or SPI, timers (fixed sampling rate), EXTI (data-ready pin), UART stream to a PC plot\n1 g when flat, 0 g on its side\n\n\n8\nDigital weighing scale\nLoad cell with HX711 amplifier; display; tare button\ntimers, EXTI (tare), I2C display, UART log\nknown weights (water bottle, coins)\n\n\n9\nTemperature-controlled fan\nLM35 or NTC thermistor; DC fan with transistor; LCD\nADC, PWM (fan speed), timers, I2C display\nroom thermometer\n\n\n10\nColour sorter\nTCS34725 colour sensor; servo that sorts objects into bins\nI2C, PWM (servo), timers, UART\nsorting reference cards\n\n\n11\nMotor speed controller\nDC motor with encoder or slotted speed sensor; motor driver\ninput capture (speed), PWM, timers (control loop), UART commands (set speed)\nphone stroboscope or tachometer app\n\n\n12\nUltrasonic radar scanner\nHC-SR04 on a servo that sweeps 0-180°; PC plot of angle and distance\nPWM, input capture, timers, UART to PC\nobjects at measured positions\n\n\n13\nPulse-rate monitor\nMAX30102 (I2C) or analog optical pulse sensor; OLED display\nADC or I2C, timers (sampling), I2C display, UART log\npulse counted by hand for 30 s\n\n\n14\nPlant watering controller\nCapacitive soil-moisture sensor; small pump with transistor; display\nADC, timers, PWM or GPIO (pump), UART commands\ndry soil, wet soil, glass of water\n\n\n\nElectrical rules. The pins work at 3.3 V: a 5 V sensor output needs a voltage divider or a level shifter. Motors, pumps and fans need a driver with a flyback diode and their own supply, never a pin. No mains (230 V) wiring. The pulse-rate monitor is a demonstration, not a medical device."
+  },
+  {
+    "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#the-interrupt-path-has-six-blocks-from-b1-to-your-callback",
+    "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#the-interrupt-path-has-six-blocks-from-b1-to-your-callback",
+    "title": "EE5203 Microprocessors",
+    "section": "The interrupt path has six blocks, from B1 to your callback",
+    "text": "The interrupt path has six blocks, from B1 to your callback\n\n\nThe interrupt path from the B1 button to your code, drawn as a schematic\n\nOn the board, a pull-up resistor and the B1 switch drive the PC13 pin. Inside the STM32F401, the wire enters EXTI, which has an edge detector and the pending register PR, then an IRQ wire reaches the NVIC with its enable switch, then the CPU. A bus from the CPU goes down to flash memory, where vector table entry 40 points to EXTI15_10_IRQHandler, which calls HAL_GPIO_EXTI_Callback.   STM32F401  Arm Cortex-M4 core  3.3 V   pull-up      B1       PC13 1   EXTI 2    edge   PR pending  IRQ  NVIC 3    enable   CPU 4     flash  40 → handler address  EXTI15_10_IRQHandler()  HAL_GPIO_EXTI_Callback() 5 6\n\nBlocks 1 to 3 are ST peripherals; blocks 4 and 5 are the Arm core; block 6 is your code. The wire from block 2 to block 3 carries the interrupt request (IRQ)."
+  },
+  {
+    "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#the-vector-table-maps-request-40-to-a-handler-address",
+    "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#the-vector-table-maps-request-40-to-a-handler-address",
+    "title": "EE5203 Microprocessors",
+    "section": "The vector table maps request 40 to a handler address",
+    "text": "The vector table maps request 40 to a handler address\n\n           B1 / PC13     EXTI     PR     NVIC       CPU    flash  vector table  your code: handler → callback\n\n\n\n\n\nstm32f401xe.hST\n\nUSART2_IRQn       = 38,\nEXTI15_10_IRQn    = 40,\nRTC_Alarm_IRQn    = 41,\n\nST gives every request source a number. Lines 10–15 share number 40.\n\n\n\nThe vector table in flash as a numbered list of handler addresses; row 40 holds the address of EXTI15_10_IRQHandler\n\nA box labelled vector table in flash with rows 38 to 42. Row 40, highlighted, holds the address of EXTI15_10_IRQHandler. An orange arrow labelled NVIC: request 40 enters row 40 from the left; another leaves to the right labelled CPU jumps to the handler.   vector table in flash row address of  38 USART2_IRQHandler  39 (unused)  40 EXTI15_10_IRQHandler  41 RTC_Alarm_IRQHandler  42 OTG_FS_WKUP_IRQHandler one address (4 bytes) per row  NVIC: 40  CPU jumps\n\n\n\n\nstartup_stm32f401xe.sST\n\n.word USART2_IRQHandler\n.word 0\n.word EXTI15_10_IRQHandler\n\nThe startup file fills the rows with handler names before main() runs.\n\nThe vector table is a list of addresses at the start of flash, one row per request number. Request 40 means: run the function whose address is in row 40. Think of a numbered list of phone numbers."
+  },
+  {
+    "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#the-irq-handler-calls-a-hal-helper-which-calls-your-callback",
+    "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#the-irq-handler-calls-a-hal-helper-which-calls-your-callback",
+    "title": "EE5203 Microprocessors",
+    "section": "The IRQ handler calls a HAL helper, which calls your callback",
+    "text": "The IRQ handler calls a HAL helper, which calls your callback\nThree files, three functions: CubeMX wrote the handler, ST wrote the helper, you write the callback.\n\n           B1 / PC13     EXTI     PR     NVIC       CPU    flash  vector table  your code: handler → callback\n\n\n\n\nstm32f4xx_it.cwritten by CubeMX\n\nvoid EXTI15_10_IRQHandler(void)\n{\n    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);\n}\n\n\n\nstm32f4xx_hal_gpio.cHAL library\n\nvoid HAL_GPIO_EXTI_IRQHandler(uint16_t GPIO_Pin)\n{\n    __HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin);   /* PR bit 13 = 1 */\n    HAL_GPIO_EXTI_Callback(GPIO_Pin);\n}\n\n\n\nmain.cwritten by you\n\nvoid HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)\n{\n    /* your code */\n}\n\n\n hardware jump   call  call"
+  },
+  {
+    "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#three-cubemx-choices-configure-the-b1-interrupt",
+    "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#three-cubemx-choices-configure-the-b1-interrupt",
+    "title": "EE5203 Microprocessors",
+    "section": "Three CubeMX choices configure the B1 interrupt",
+    "text": "Three CubeMX choices configure the B1 interrupt\n\n\nFor B1, make three choices:\n\n\n01 Click PC13 and select GPIO_EXTI13.\n\n\n02 GPIO mode: falling-edge interrupt, no internal pull.\n\n\n03 NVIC: enable EXTI line[15:10] interrupts.\n\n\nChoice 3 is the NVIC enable. The vector table and the handler come from ST and CubeMX.\n\n\n\n\n\n\n\n\n\n\n\n\nCubeMX, System Core → NVIC: choice 3 (real screenshot)."
+  },
+  {
+    "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#cubemx-generates-the-setup-code-you-write-only-the-callback",
+    "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#cubemx-generates-the-setup-code-you-write-only-the-callback",
+    "title": "EE5203 Microprocessors",
+    "section": "CubeMX generates the setup code; you write only the callback",
+    "text": "CubeMX generates the setup code; you write only the callback\nGPIO_InitStruct.Pin  = GPIO_PIN_13;\nGPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;     /* block 2: falling edge    */\nGPIO_InitStruct.Pull = GPIO_NOPULL;\nHAL_GPIO_Init(GPIOC, &GPIO_InitStruct);          /* SYSCFG, FTSR, IMR bit 13 */\n\nHAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);      /* block 3: priority        */\nHAL_NVIC_EnableIRQ(EXTI15_10_IRQn);              /* block 3: enable          */\n\n\n\n\n\n\n\n\nBlock\nSet up by\nWhere\n\n\n\n\n2 EXTI (and SYSCFG)\nHAL_GPIO_Init\nmain.c, generated\n\n\n3 NVIC\nHAL_NVIC_EnableIRQ\nmain.c, generated\n\n\n5 vector table\nST startup file\nflash, before main()\n\n\n6 handler · callback\nCubeMX · you\nstm32f4xx_it.c · main.c\n\n\n\nThis setup runs once, before while (1). The path then runs on every press."
+  },
+  {
+    "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#the-callback-records-the-event-main-consumes-it",
+    "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#the-callback-records-the-event-main-consumes-it",
+    "title": "EE5203 Microprocessors",
+    "section": "The callback records the event; main() consumes it",
+    "text": "The callback records the event; main() consumes it\nThe callback records the event: no LED action, no waiting.\nvoid HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)\n{\n    if (GPIO_Pin == GPIO_PIN_13) {\n        button_event = 1;\n    }\n}\nThe main loop consumes the event and no longer polls PC13: reset the variable first, then act.\nwhile (1) {\n    if (button_event == 1) {\n        button_event = 0;\n        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);\n    }\n}"
+  },
+  {
+    "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#the-pending-bit-and-button_event-are-two-different-flags",
+    "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#the-pending-bit-and-button_event-are-two-different-flags",
+    "title": "EE5203 Microprocessors",
+    "section": "The pending bit and button_event are two different flags",
+    "text": "The pending bit and button_event are two different flags\n\n\nThe EXTI pending bit lives in hardware and is cleared by the HAL helper; button_event lives in your program and is cleared by main()\n\nLeft zone, EXTI hardware: a falling edge sets pending to 1. Middle: the HAL helper clears pending to 0 and calls the callback. Right zone, your program: the callback sets button_event to 1 and main() consumes it back to 0.   EXTI HARDWARE (block 2) the pending bit: EXTI-&gt;PR bit 13, cleared by the HAL helper  YOUR C PROGRAM (block 6) button_event: a variable in RAM, cleared by main()  falling edge B1 pressed   pending = 1 edge waits for service   HAL helper clears pending to 0, then calls the callback   button_event = 1 callback records it   button_event = 0 main() consumes it\n\nBoth are called “flags”, but they live in different places and are cleared by different code. The exit ticket asks for this difference."
+  },
+  {
+    "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#a-real-button-bounces-one-press-several-falling-edges",
+    "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#a-real-button-bounces-one-press-several-falling-edges",
+    "title": "EE5203 Microprocessors",
+    "section": "A real button bounces: one press, several falling edges",
+    "text": "A real button bounces: one press, several falling edges\nA mechanical contact does not switch cleanly once:\n\n\n\n\n\nThis is switch bounce. Each extra falling edge can set another interrupt request."
+  },
+  {
+    "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#software-debounce-accepts-one-edge-per-80-ms",
+    "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#software-debounce-accepts-one-edge-per-80-ms",
+    "title": "EE5203 Microprocessors",
+    "section": "Software debounce accepts one edge per 80 ms",
+    "text": "Software debounce accepts one edge per 80 ms\nuint32_t last_press_ms = 0;\n\nvoid HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)\n{\n    uint32_t now = HAL_GetTick();\n\n    if (GPIO_Pin == GPIO_PIN_13 &&\n        (now - last_press_ms) &gt;= 80) {\n        last_press_ms = now;\n        button_event = 1;\n    }\n}\nHAL_GetTick() returns the milliseconds since startup as a uint32_t.\nThe 80 ms guard: bounce settles within about 10 ms, so 80 ms skips every bounce edge. A fast double press takes longer than 80 ms, so it still counts as two presses.\n\nThe 10 ms figure comes from measured data: J. Ganssle, A Guide to Debouncing."
+  },
+  {
+    "objectID": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#lab-5-one-ld2-change-per-press-with-an-exti-interrupt",
+    "href": "lectures/L06_interrupts/theory/EE5203_Microprocessors_Lecture6_Theory.html#lab-5-one-ld2-change-per-press-with-an-exti-interrupt",
+    "title": "EE5203 Microprocessors",
+    "section": "Lab 5: one LD2 change per press with an EXTI interrupt",
+    "text": "Lab 5: one LD2 change per press with an EXTI interrupt\n\nReplace the Lab 4 polling loop with a PC13 falling-edge interrupt: one LD2 change per press.\n\n\n\nconfigure PC13 and enable the correct NVIC request;\nprove that the generated handler and callback run;\npass the event to main() with button_event;\nadd the 80 ms debounce check.\n\n\nNext week the same six blocks serve a timer instead of a button."
   }
 ]

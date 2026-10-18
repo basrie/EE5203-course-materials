@@ -398,15 +398,15 @@ An interrupt pauses main(), runs the handler, then main() continues from the pla
 </div>
 </div>
 </section>
-<section id="the-interrupt-hardware-from-button-to-code" class="slide level2">
-<h2>The interrupt hardware: from button to code</h2>
+<section id="the-interrupt-path-has-six-blocks-from-b1-to-your-callback" class="slide level2">
+<h2>The interrupt path has six blocks, from B1 to your callback</h2>
 <svg class="story-visual path-map" style="max-height:600px" viewbox="0 0 1200 580" role="img" aria-labelledby="sc-title sc-desc">
 <title id="sc-title">
 The interrupt path from the B1 button to your code, drawn as a schematic
 </title>
 <desc id="sc-desc">On the board, a pull-up resistor and the B1 switch drive the PC13 pin. Inside the STM32F401, the wire enters EXTI, which has an edge detector and the pending register PR, then an IRQ wire reaches the NVIC with its enable switch, then the CPU. A bus from the CPU goes down to flash memory, where vector table entry 40 points to EXTI15_10_IRQHandler, which calls HAL_GPIO_EXTI_Callback.</desc> <defs><marker id="sc-full-g" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5a6b76"></path></marker></defs> <rect x="270" y="20" width="930" height="540" rx="14" fill="none" stroke="#5a6b76" stroke-width="2.5" stroke-dasharray="12 8"></rect> <text x="290" y="50" text-anchor="start" fill="#174f73" font-size="22" font-weight="700">STM32F401</text> <rect x="630" y="80" width="420" height="220" rx="12" fill="none" stroke="#c8d8e2" stroke-width="2.5" stroke-dasharray="8 6"></rect> <text x="645" y="104" text-anchor="start" fill="#5a6b76" font-size="19" font-weight="700">Arm Cortex-M4 core</text> <line x1="44" y1="70" x2="76" y2="70" stroke="#174f73" stroke-width="4"></line> <text x="84" y="76" text-anchor="start" fill="#5a6b76" font-size="17" font-weight="400">3.3 V</text> <line x1="60" y1="70" x2="60" y2="100" stroke="#174f73" stroke-width="4"></line> <rect x="50" y="100" width="20" height="50" fill="#ffffff" stroke="#174f73" stroke-width="3"></rect> <text x="80" y="130" text-anchor="start" fill="#5a6b76" font-size="17" font-weight="400">pull-up</text> <line x1="60" y1="150" x2="60" y2="200" stroke="#174f73" stroke-width="4"></line> <circle cx="60" cy="200" r="5" fill="#174f73"></circle> <line x1="60" y1="200" x2="264" y2="200" stroke="#d47b28" stroke-width="5"></line> <line x1="60" y1="200" x2="60" y2="222" stroke="#174f73" stroke-width="4"></line> <line x1="60" y1="222" x2="80" y2="256" stroke="#174f73" stroke-width="5"></line> <text x="92" y="248" text-anchor="start" fill="#174f73" font-size="20" font-weight="700">B1</text> <circle cx="60" cy="266" r="4" fill="#174f73"></circle> <line x1="60" y1="266" x2="60" y2="282" stroke="#174f73" stroke-width="4"></line> <line x1="46" y1="282" x2="74" y2="282" stroke="#174f73" stroke-width="4"></line> <line x1="51" y1="290" x2="69" y2="290" stroke="#174f73" stroke-width="4"></line> <line x1="56" y1="298" x2="64" y2="298" stroke="#174f73" stroke-width="4"></line> <rect x="262" y="190" width="16" height="20" fill="#174f73"></rect> <text x="270" y="178" text-anchor="middle" fill="#174f73" font-size="18" font-weight="700">PC13</text> <circle cx="160" cy="160" r="16" fill="#174f73"></circle><text x="160" y="167" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="700">1</text> <line x1="278" y1="200" x2="330" y2="200" stroke="#d47b28" stroke-width="5"></line> <rect x="330" y="120" width="230" height="160" rx="10" fill="#ffffff" stroke="#174f73" stroke-width="3"></rect> <text x="352" y="152" text-anchor="start" fill="#174f73" font-size="24" font-weight="700">EXTI</text> <circle cx="330" cy="120" r="16" fill="#174f73"></circle><text x="330" y="127" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="700">2</text> <line x1="330" y1="200" x2="366" y2="200" stroke="#d47b28" stroke-width="5"></line> <rect x="366" y="176" width="48" height="48" fill="#ffffff" stroke="#174f73" stroke-width="3"></rect> <path d="M 376 190 H 390 V 212 H 404" fill="none" stroke="#d47b28" stroke-width="3"></path> <text x="390" y="250" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="400">edge</text> <line x1="414" y1="200" x2="446" y2="200" stroke="#d47b28" stroke-width="5"></line> <rect x="446" y="176" width="72" height="48" fill="#ffffff" stroke="#174f73" stroke-width="3"></rect> <text x="482" y="208" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">PR</text> <text x="482" y="250" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="400">pending</text> <line x1="518" y1="200" x2="660" y2="200" stroke="#d47b28" stroke-width="5"></line> <text x="610" y="186" text-anchor="middle" fill="#d47b28" font-size="20" font-weight="700">IRQ</text> <rect x="660" y="120" width="170" height="160" rx="10" fill="#ffffff" stroke="#174f73" stroke-width="3"></rect> <text x="682" y="152" text-anchor="start" fill="#174f73" font-size="24" font-weight="700">NVIC</text> <circle cx="660" cy="120" r="16" fill="#174f73"></circle><text x="660" y="127" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="700">3</text> <line x1="660" y1="200" x2="694" y2="200" stroke="#d47b28" stroke-width="5"></line> <circle cx="694" cy="200" r="6" fill="#174f73"></circle><circle cx="776" cy="200" r="6" fill="#174f73"></circle> <line x1="694" y1="200" x2="770" y2="170" stroke="#174f73" stroke-width="5"></line> <text x="735" y="250" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="400">enable</text> <line x1="776" y1="200" x2="900" y2="200" stroke="#d47b28" stroke-width="5"></line> <rect x="900" y="120" width="130" height="160" rx="10" fill="#ffffff" stroke="#174f73" stroke-width="3"></rect> <text x="965" y="208" text-anchor="middle" fill="#174f73" font-size="26" font-weight="700">CPU</text> <circle cx="900" cy="120" r="16" fill="#174f73"></circle><text x="900" y="127" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="700">4</text> <line x1="965" y1="280" x2="965" y2="350" stroke="#5a6b76" stroke-width="3" marker-end="url(#sc-full-g)"></line> <line x1="955" y1="306" x2="975" y2="306" stroke="#5a6b76" stroke-width="3"></line> <line x1="955" y1="314" x2="975" y2="314" stroke="#5a6b76" stroke-width="3"></line> <rect x="740" y="360" width="400" height="180" rx="10" fill="#ffffff" stroke="#174f73" stroke-width="3"></rect> <text x="758" y="390" text-anchor="start" fill="#174f73" font-size="22" font-weight="700">flash</text> <rect x="758" y="404" width="364" height="38" rx="5" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="940" y="430" text-anchor="middle" fill="#174f73" font-size="18" font-weight="400" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">40 → handler address</text> <rect x="758" y="448" width="364" height="38" rx="5" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="940" y="474" text-anchor="middle" fill="#174f73" font-size="18" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">EXTI15_10_IRQHandler()</text> <rect x="758" y="492" width="364" height="38" rx="5" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="940" y="518" text-anchor="middle" fill="#174f73" font-size="18" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">HAL_GPIO_EXTI_Callback()</text> <circle cx="740" cy="423" r="16" fill="#174f73"></circle><text x="740" y="430" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="700">5</text> <circle cx="740" cy="489" r="16" fill="#174f73"></circle><text x="740" y="496" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="700">6</text>
 </svg>
-<p>ST designed the peripherals, Arm the core. The wire from block 2 to block 3 carries the <strong>IRQ</strong> (interrupt request).</p>
+<p>Blocks 1 to 3 are ST peripherals; blocks 4 and 5 are the Arm core; block 6 is your code. The wire from block 2 to block 3 carries the <strong>interrupt request (IRQ)</strong>.</p>
 </section>
 <section id="b1-is-active-low-a-press-makes-a-falling-edge" class="slide level2">
 <h2>B1 is active-low: a press makes a falling edge</h2>
@@ -478,10 +478,10 @@ The NVIC: many request lines, each with an enable switch and a priority; a choos
 </title>
 <desc id="nv-desc">Four request lines enter the NVIC: SysTick, TIM2, USART2 and EXTI15_10, which is highlighted in orange. Each passes its own enable switch and a priority value. USART2 is drawn with its switch open. A chooser labelled highest priority pending request wins sends request number 40 to the CPU.</desc> <defs><marker id="nv-o" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d47b28"></path></marker></defs> <rect x="380" y="16" width="760" height="288" rx="12" fill="#ffffff" stroke="#174f73" stroke-width="3"></rect> <text x="402" y="50" text-anchor="start" fill="#174f73" font-size="26" font-weight="700">NVIC</text> <text x="1120" y="50" text-anchor="end" fill="#5a6b76" font-size="19" font-weight="400">one enable and one priority per request</text> <text x="590" y="294" text-anchor="middle" fill="#5a6b76" font-size="19" font-weight="600">enable</text> <text x="760" y="294" text-anchor="middle" fill="#5a6b76" font-size="19" font-weight="600">priority</text> <rect x="860" y="76" width="250" height="190" rx="10" fill="#ffffff" stroke="#174f73" stroke-width="3"></rect> <text x="985" y="150" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700">highest priority</text> <text x="985" y="182" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700">pending request</text> <text x="985" y="214" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700">wins</text> <line x1="1140" y1="170" x2="1240" y2="170" stroke="#d47b28" stroke-width="5" marker-end="url(#nv-o)"></line> <text x="1190" y="144" text-anchor="middle" fill="#d47b28" font-size="20" font-weight="700">request 40</text> <rect x="1250" y="120" width="170" height="100" rx="10" fill="#ffffff" stroke="#174f73" stroke-width="3"></rect> <text x="1335" y="180" text-anchor="middle" fill="#174f73" font-size="28" font-weight="700">CPU</text> <text x="362" y="103" text-anchor="end" fill="#9fb0ba" font-size="20" font-weight="600" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">SysTick</text> <line x1="372" y1="96" x2="550" y2="96" stroke="#b9c6cf" stroke-width="3"></line> <circle cx="550" cy="96" r="5" fill="#b9c6cf"></circle><circle cx="630" cy="96" r="5" fill="#b9c6cf"></circle> <line x1="550" y1="96" x2="630" y2="96" stroke="#b9c6cf" stroke-width="3"></line> <line x1="630" y1="96" x2="720" y2="96" stroke="#b9c6cf" stroke-width="3"></line> <rect x="720" y="78" width="80" height="36" rx="6" fill="#f3f5f7" stroke="#b9c6cf" stroke-width="2"></rect> <text x="760" y="103" text-anchor="middle" fill="#9fb0ba" font-size="20" font-weight="700">0</text> <line x1="800" y1="96" x2="860" y2="96" stroke="#b9c6cf" stroke-width="3"></line> <text x="362" y="153" text-anchor="end" fill="#9fb0ba" font-size="20" font-weight="600" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">TIM2</text> <line x1="372" y1="146" x2="550" y2="146" stroke="#b9c6cf" stroke-width="3"></line> <circle cx="550" cy="146" r="5" fill="#b9c6cf"></circle><circle cx="630" cy="146" r="5" fill="#b9c6cf"></circle> <line x1="550" y1="146" x2="630" y2="146" stroke="#b9c6cf" stroke-width="3"></line> <line x1="630" y1="146" x2="720" y2="146" stroke="#b9c6cf" stroke-width="3"></line> <rect x="720" y="128" width="80" height="36" rx="6" fill="#f3f5f7" stroke="#b9c6cf" stroke-width="2"></rect> <text x="760" y="153" text-anchor="middle" fill="#9fb0ba" font-size="20" font-weight="700">1</text> <line x1="800" y1="146" x2="860" y2="146" stroke="#b9c6cf" stroke-width="3"></line> <text x="362" y="203" text-anchor="end" fill="#9fb0ba" font-size="20" font-weight="600" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">USART2</text> <line x1="372" y1="196" x2="550" y2="196" stroke="#b9c6cf" stroke-width="3"></line> <circle cx="550" cy="196" r="5" fill="#b9c6cf"></circle><circle cx="630" cy="196" r="5" fill="#b9c6cf"></circle> <line x1="550" y1="196" x2="624" y2="168" stroke="#b9c6cf" stroke-width="3"></line> <line x1="630" y1="196" x2="720" y2="196" stroke="#b9c6cf" stroke-width="3"></line> <rect x="720" y="178" width="80" height="36" rx="6" fill="#f3f5f7" stroke="#b9c6cf" stroke-width="2"></rect> <text x="760" y="203" text-anchor="middle" fill="#9fb0ba" font-size="20" font-weight="700">2</text> <line x1="800" y1="196" x2="860" y2="196" stroke="#b9c6cf" stroke-width="3"></line> <text x="362" y="253" text-anchor="end" fill="#d47b28" font-size="22" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">EXTI15_10</text> <line x1="372" y1="246" x2="550" y2="246" stroke="#d47b28" stroke-width="5"></line> <circle cx="550" cy="246" r="5" fill="#d47b28"></circle><circle cx="630" cy="246" r="5" fill="#d47b28"></circle> <line x1="550" y1="246" x2="630" y2="246" stroke="#d47b28" stroke-width="5"></line> <line x1="630" y1="246" x2="720" y2="246" stroke="#d47b28" stroke-width="5"></line> <rect x="720" y="228" width="80" height="36" rx="6" fill="#fff4e8" stroke="#d47b28" stroke-width="3"></rect> <text x="760" y="253" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700">0</text> <line x1="800" y1="246" x2="860" y2="246" stroke="#d47b28" stroke-width="5"></line>
 </svg>
-<p>Ours is request 40, <code>EXTI15_10_IRQn</code> (lines 10–15 share it). Enable off: pending bit set, nothing runs — the most common lab bug. “Nested”: a more urgent request may interrupt a running handler.</p>
+<p>B1 is request 40, <code>EXTI15_10_IRQn</code>; EXTI lines 10 to 15 share it. If the enable is off, the pending bit is set but nothing runs. This is the most common lab bug. “Nested” means a more urgent request can interrupt a running handler.</p>
 </section>
-<section id="request-40-and-the-vector-table" class="slide level2">
-<h2>Request 40 and the vector table</h2>
+<section id="the-vector-table-maps-request-40-to-a-handler-address" class="slide level2">
+<h2>The vector table maps request 40 to a handler address</h2>
 <svg class="mini-map " viewbox="0 0 1440 150" aria-hidden="true">
 <defs><marker id="sc-mini-g" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b9c6cf"></path></marker></defs> <line x1="44" y1="20" x2="68" y2="20" stroke="#b9c6cf" stroke-width="3"></line> <line x1="56" y1="20" x2="56" y2="34" stroke="#b9c6cf" stroke-width="3"></line> <rect x="49" y="34" width="14" height="26" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <line x1="56" y1="60" x2="56" y2="84" stroke="#b9c6cf" stroke-width="3"></line> <circle cx="56" cy="84" r="4" fill="#b9c6cf"></circle> <line x1="56" y1="84" x2="56" y2="96" stroke="#b9c6cf" stroke-width="3"></line> <line x1="56" y1="96" x2="70" y2="118" stroke="#b9c6cf" stroke-width="3.5"></line> <line x1="56" y1="124" x2="56" y2="132" stroke="#b9c6cf" stroke-width="3"></line> <line x1="46" y1="132" x2="66" y2="132" stroke="#b9c6cf" stroke-width="3"></line> <line x1="50" y1="138" x2="62" y2="138" stroke="#b9c6cf" stroke-width="3"></line> <text x="100" y="60" text-anchor="start" fill="#9fb0ba" font-size="18" font-weight="600">B1 / PC13</text> <line x1="56" y1="84" x2="212" y2="84" stroke="#d47b28" stroke-width="4"></line> <rect x="212" y="76" width="12" height="16" fill="#b9c6cf"></rect> <line x1="224" y1="84" x2="260" y2="84" stroke="#d47b28" stroke-width="4"></line> <rect x="260" y="30" width="154" height="100" rx="8" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <text x="337" y="54" text-anchor="middle" fill="#9fb0ba" font-size="20" font-weight="600">EXTI</text> <rect x="286" y="66" width="34" height="34" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <path d="M 292 76 H 302 V 92 H 314" fill="none" stroke="#b9c6cf" stroke-width="2.5"></path> <line x1="320" y1="84" x2="340" y2="84" stroke="#b9c6cf" stroke-width="3"></line> <rect x="340" y="66" width="50" height="34" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <text x="365" y="91" text-anchor="middle" fill="#b9c6cf" font-size="17" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">PR</text> <line x1="260" y1="84" x2="286" y2="84" stroke="#b9c6cf" stroke-width="3"></line> <line x1="390" y1="84" x2="414" y2="84" stroke="#b9c6cf" stroke-width="3"></line> <line x1="414" y1="84" x2="500" y2="84" stroke="#d47b28" stroke-width="4"></line> <rect x="500" y="30" width="104" height="100" rx="8" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <text x="552" y="54" text-anchor="middle" fill="#9fb0ba" font-size="20" font-weight="600">NVIC</text> <line x1="500" y1="84" x2="522" y2="84" stroke="#b9c6cf" stroke-width="3"></line> <circle cx="522" cy="84" r="4" fill="#b9c6cf"></circle><circle cx="582" cy="84" r="4" fill="#b9c6cf"></circle> <line x1="522" y1="84" x2="578" y2="62" stroke="#b9c6cf" stroke-width="3.5"></line> <line x1="582" y1="84" x2="604" y2="84" stroke="#b9c6cf" stroke-width="3"></line> <line x1="604" y1="84" x2="690" y2="84" stroke="#d47b28" stroke-width="4"></line> <rect x="690" y="30" width="100" height="100" rx="8" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <text x="740" y="88" text-anchor="middle" fill="#9fb0ba" font-size="20" font-weight="600">CPU</text> <line x1="790" y1="78" x2="850" y2="78" stroke="#174f73" stroke-width="2.5"></line> <line x1="790" y1="90" x2="850" y2="90" stroke="#174f73" stroke-width="2.5" marker-end="url(#sc-mini-g)"></line> <rect x="856" y="14" width="570" height="128" rx="8" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <text x="872" y="38" text-anchor="start" fill="#9fb0ba" font-size="18" font-weight="600">flash</text> <rect x="872" y="46" width="538" height="30" rx="5" fill="#fff4e8" stroke="#174f73" stroke-width="3"></rect> <text x="1141" y="68" text-anchor="middle" fill="#174f73" font-size="21" font-weight="700">vector table</text> <rect x="872" y="82" width="538" height="50" rx="5" fill="#ffffff" stroke="#b9c6cf" stroke-width="2"></rect> <text x="1141" y="114" text-anchor="middle" fill="#9fb0ba" font-size="19" font-weight="600">your code: handler → callback</text>
 </svg>
@@ -514,7 +514,7 @@ The vector table in flash as a numbered list of handler addresses; row 40 holds 
 </div>
 <p>The startup file fills the rows with handler names before <code>main()</code> runs.</p>
 </div></div>
-<p>The vector table is a list of addresses at the start of flash, one row per request number. “Request 40” means: run the function whose address is in row 40 — a numbered list of phone numbers.</p>
+<p>The vector table is a list of addresses at the start of flash, one row per request number. Request 40 means: run the function whose address is in row 40. Think of a numbered list of phone numbers.</p>
 </section>
 <section id="the-cpu-saves-its-place-and-looks-up-the-handler" class="slide level2">
 <h2>The CPU saves its place and looks up the handler</h2>
@@ -540,8 +540,9 @@ When the NVIC passes request 40 on, the CPU marks its place, looks up the handle
 <desc id="tl2-desc">Two lanes over a time axis. main() runs on the lower lane. A dashed vertical marker shows the moment the NVIC passes request 40. A bookmark at the end of main() runs is labelled 1 save place, 2 look up row 40; the handler lane shows handler, HAL helper, callback while a dashed empty box on the lower lane reads main() paused; the same bookmark at the start of main() continues is labelled 3 resume from the mark.</desc> <defs><marker id="tl-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d47b28"></path></marker><marker id="tl-time" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c8d8e2"></path></marker></defs> <text x="20" y="101" text-anchor="start" fill="#d47b28" font-size="30" font-weight="700">handler</text> <text x="20" y="202" text-anchor="start" fill="#174f73" font-size="30" font-weight="700">main()</text> <line x1="590" y1="46" x2="590" y2="250" stroke="#d47b28" stroke-width="3" stroke-dasharray="10 8"></line> <text x="590" y="36" text-anchor="middle" fill="#d47b28" font-size="28" font-weight="700">NVIC passes request 40</text> <rect x="610" y="68" width="410" height="50" rx="8" fill="#d47b28"></rect> <text x="815" y="102" text-anchor="middle" fill="#ffffff" font-size="24" font-weight="700">handler → HAL helper → callback</text> <rect x="150" y="168" width="430" height="48" rx="8" fill="#2b789f"></rect> <text x="365" y="201" text-anchor="middle" fill="#ffffff" font-size="27" font-weight="700">main() runs</text> <rect x="590" y="168" width="450" height="48" rx="8" fill="none" stroke="#b9c6cf" stroke-width="3" stroke-dasharray="12 9"></rect> <text x="815" y="201" text-anchor="middle" fill="#5a6b76" font-size="26" font-weight="400">main() paused</text> <rect x="1050" y="168" width="320" height="48" rx="8" fill="#2b789f"></rect> <text x="1210" y="201" text-anchor="middle" fill="#ffffff" font-size="27" font-weight="700">main() continues</text> <path d="M 562 126 h 20 v 30 l -10 -8 l -10 8 z" fill="#2b789f"></path> <path d="M 1050 126 h 20 v 30 l -10 -8 l -10 8 z" fill="#2b789f"></path> <text x="552" y="148" text-anchor="end" fill="#174f73" font-size="26" font-weight="700">① save place ② look up row 40</text> <text x="1080" y="148" text-anchor="start" fill="#174f73" font-size="26" font-weight="700">③ resume from the mark</text> <path d="M 586 166 L 606 120" fill="none" stroke="#d47b28" stroke-width="4" marker-end="url(#tl-arrow)"></path> <path d="M 1024 120 L 1044 166" fill="none" stroke="#d47b28" stroke-width="4" marker-end="url(#tl-arrow)"></path> <line x1="150" y1="250" x2="1400" y2="250" stroke="#c8d8e2" stroke-width="3" marker-end="url(#tl-time)"></line> <text x="1395" y="240" text-anchor="end" fill="#5a6b76" font-size="22" font-weight="400">time</text>
 </svg>
 </section>
-<section id="from-the-irq-handler-to-your-callback" class="slide level2">
-<h2>From the IRQ handler to your callback</h2>
+<section id="the-irq-handler-calls-a-hal-helper-which-calls-your-callback" class="slide level2">
+<h2>The IRQ handler calls a HAL helper, which calls your callback</h2>
+<p>Three files, three functions: CubeMX wrote the handler, ST wrote the helper, you write the callback.</p>
 <svg class="mini-map " viewbox="0 0 1440 150" aria-hidden="true">
 <defs><marker id="sc-mini-g" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b9c6cf"></path></marker></defs> <line x1="44" y1="20" x2="68" y2="20" stroke="#b9c6cf" stroke-width="3"></line> <line x1="56" y1="20" x2="56" y2="34" stroke="#b9c6cf" stroke-width="3"></line> <rect x="49" y="34" width="14" height="26" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <line x1="56" y1="60" x2="56" y2="84" stroke="#b9c6cf" stroke-width="3"></line> <circle cx="56" cy="84" r="4" fill="#b9c6cf"></circle> <line x1="56" y1="84" x2="56" y2="96" stroke="#b9c6cf" stroke-width="3"></line> <line x1="56" y1="96" x2="70" y2="118" stroke="#b9c6cf" stroke-width="3.5"></line> <line x1="56" y1="124" x2="56" y2="132" stroke="#b9c6cf" stroke-width="3"></line> <line x1="46" y1="132" x2="66" y2="132" stroke="#b9c6cf" stroke-width="3"></line> <line x1="50" y1="138" x2="62" y2="138" stroke="#b9c6cf" stroke-width="3"></line> <text x="100" y="60" text-anchor="start" fill="#9fb0ba" font-size="18" font-weight="600">B1 / PC13</text> <line x1="56" y1="84" x2="212" y2="84" stroke="#d47b28" stroke-width="4"></line> <rect x="212" y="76" width="12" height="16" fill="#b9c6cf"></rect> <line x1="224" y1="84" x2="260" y2="84" stroke="#d47b28" stroke-width="4"></line> <rect x="260" y="30" width="154" height="100" rx="8" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <text x="337" y="54" text-anchor="middle" fill="#9fb0ba" font-size="20" font-weight="600">EXTI</text> <rect x="286" y="66" width="34" height="34" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <path d="M 292 76 H 302 V 92 H 314" fill="none" stroke="#b9c6cf" stroke-width="2.5"></path> <line x1="320" y1="84" x2="340" y2="84" stroke="#b9c6cf" stroke-width="3"></line> <rect x="340" y="66" width="50" height="34" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <text x="365" y="91" text-anchor="middle" fill="#b9c6cf" font-size="17" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">PR</text> <line x1="260" y1="84" x2="286" y2="84" stroke="#b9c6cf" stroke-width="3"></line> <line x1="390" y1="84" x2="414" y2="84" stroke="#b9c6cf" stroke-width="3"></line> <line x1="414" y1="84" x2="500" y2="84" stroke="#d47b28" stroke-width="4"></line> <rect x="500" y="30" width="104" height="100" rx="8" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <text x="552" y="54" text-anchor="middle" fill="#9fb0ba" font-size="20" font-weight="600">NVIC</text> <line x1="500" y1="84" x2="522" y2="84" stroke="#b9c6cf" stroke-width="3"></line> <circle cx="522" cy="84" r="4" fill="#b9c6cf"></circle><circle cx="582" cy="84" r="4" fill="#b9c6cf"></circle> <line x1="522" y1="84" x2="578" y2="62" stroke="#b9c6cf" stroke-width="3.5"></line> <line x1="582" y1="84" x2="604" y2="84" stroke="#b9c6cf" stroke-width="3"></line> <line x1="604" y1="84" x2="690" y2="84" stroke="#d47b28" stroke-width="4"></line> <rect x="690" y="30" width="100" height="100" rx="8" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <text x="740" y="88" text-anchor="middle" fill="#9fb0ba" font-size="20" font-weight="600">CPU</text> <line x1="790" y1="78" x2="850" y2="78" stroke="#174f73" stroke-width="2.5"></line> <line x1="790" y1="90" x2="850" y2="90" stroke="#174f73" stroke-width="2.5" marker-end="url(#sc-mini-g)"></line> <rect x="856" y="14" width="570" height="128" rx="8" fill="#ffffff" stroke="#b9c6cf" stroke-width="2.5"></rect> <text x="872" y="38" text-anchor="start" fill="#9fb0ba" font-size="18" font-weight="600">flash</text> <rect x="872" y="46" width="538" height="30" rx="5" fill="#ffffff" stroke="#b9c6cf" stroke-width="2"></rect> <text x="1141" y="68" text-anchor="middle" fill="#9fb0ba" font-size="19" font-weight="600">vector table</text> <rect x="872" y="82" width="538" height="50" rx="5" fill="#fff4e8" stroke="#174f73" stroke-width="3"></rect> <text x="1141" y="114" text-anchor="middle" fill="#174f73" font-size="21" font-weight="700">your code: handler → callback</text>
 </svg>
@@ -654,7 +655,7 @@ The interrupt path from the B1 button to your code, drawn as a schematic
 <p>Step 3 of 4</p>
 </div>
 <div class="route-tagline">
-<p>Three CubeMX choices, one callback, one shared variable: the path becomes a working program.</p>
+<p>You make three choices in CubeMX, write one callback and share one variable. Then the path runs as a program.</p>
 </div>
 <div class="route-progress">
 <div class="route-seg done">
@@ -671,8 +672,8 @@ The interrupt path from the B1 button to your code, drawn as a schematic
 </div>
 </div>
 </section>
-<section id="cubemx-interrupt-setup" class="slide level2">
-<h2>CubeMX interrupt setup</h2>
+<section id="three-cubemx-choices-configure-the-b1-interrupt" class="slide level2">
+<h2>Three CubeMX choices configure the B1 interrupt</h2>
 <div class="columns">
 <div class="column" style="width:44%;">
 <p>For B1, make three choices:</p>
@@ -704,8 +705,8 @@ The interrupt path from the B1 button to your code, drawn as a schematic
 </div>
 </div></div>
 </section>
-<section id="generated-initialization-code" class="slide level2">
-<h2>Generated initialization code</h2>
+<section id="cubemx-generates-the-setup-code-you-write-only-the-callback" class="slide level2">
+<h2>CubeMX generates the setup code; you write only the callback</h2>
 <div class="sourceCode" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a>GPIO_InitStruct<span class="op">.</span>Pin  <span class="op">=</span> GPIO_PIN_13<span class="op">;</span></span>
 <span id="cb8-2"><a></a>GPIO_InitStruct<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_IT_FALLING<span class="op">;</span>     <span class="co">/* block 2: falling edge    */</span></span>
 <span id="cb8-3"><a></a>GPIO_InitStruct<span class="op">.</span>Pull <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
@@ -765,7 +766,7 @@ Expected behaviour: each B1 press toggles LD2 once, immediately
 </title>
 <desc id="ft-desc">Upper lane: B1 presses at 400, 1100 and 1900 ms, each a short low pulse. Lower lane: LD2 changes level at each press and stays until the next press.</desc> <text x="20" y="60" text-anchor="start" fill="#174f73" font-size="22" font-weight="700">B1</text> <text x="20" y="146" text-anchor="start" fill="#174f73" font-size="22" font-weight="700">LD2</text> <path d="M 150.0 46 H 350.0 V 76 H 425.0 V 46 H 700.0 V 76 H 775.0 V 46 H 1100.0 V 76 H 1175.0 V 46 H 1350.0" fill="none" stroke="#174f73" stroke-width="4"></path> <path d="M 150.0 160 H 350.0 V 130 H 700.0 V 160 H 1100.0 V 130 H 1350.0" fill="none" stroke="#3f7f58" stroke-width="4"></path> <line x1="350.0" y1="82" x2="350.0" y2="126" stroke="#d47b28" stroke-width="3" stroke-dasharray="6 5"></line> <line x1="700.0" y1="82" x2="700.0" y2="126" stroke="#d47b28" stroke-width="3" stroke-dasharray="6 5"></line> <line x1="1100.0" y1="82" x2="1100.0" y2="126" stroke="#d47b28" stroke-width="3" stroke-dasharray="6 5"></line> <text x="750.0" y="110" text-anchor="middle" fill="#d47b28" font-size="19" font-weight="700">one press → one toggle, with no delay</text>
 </svg>
-<p>If one press changes LD2, all six blocks work. <strong>Live demo.</strong> This is a test, not yet the right place for application code.</p>
+<p>If one press changes LD2, all six blocks work. <strong>Live demo.</strong> This is only a test: application code does not belong in the callback.</p>
 </section>
 <section id="a-long-callback-freezes-main" class="slide level2">
 <h2>A long callback freezes <code>main()</code></h2>
@@ -790,7 +791,7 @@ LD2 toggles every 100 ms from main(); after the press the callback blocks and LD
 </title>
 <desc id="hb-desc">Upper lane: LD2 level toggling every 100 ms, then flat after 800 ms. Lower lane: main() runs until 800 ms, then the callback runs and main() is paused for the rest of the plot.</desc> <text x="20" y="70" text-anchor="start" fill="#174f73" font-size="22" font-weight="700">LD2</text> <text x="20" y="160" text-anchor="start" fill="#174f73" font-size="22" font-weight="700">CPU</text> <path d="M 150.0 80 H 200.0 V 50 H 250.0 V 80 H 300.0 V 50 H 350.0 V 80 H 400.0 V 50 H 450.0 V 80 H 500.0 V 50 H 550.0 V 80 H 1350.0" fill="none" stroke="#174f73" stroke-width="4"></path> <text x="350.0" y="36" text-anchor="middle" fill="#2b789f" font-size="19" font-weight="700">heartbeat: toggles every 100 ms</text> <text x="950.0" y="36" text-anchor="middle" fill="#d47b28" font-size="19" font-weight="700">frozen: no toggle while the callback runs</text> <rect x="150.0" y="135" width="400.0" height="40" rx="6" fill="#2b789f"></rect> <text x="350.0" y="162" text-anchor="middle" fill="#ffffff" font-size="19" font-weight="700">main() runs</text> <rect x="550.0" y="135" width="800.0" height="40" rx="6" fill="#d47b28"></rect> <text x="950.0" y="162" text-anchor="middle" fill="#ffffff" font-size="19" font-weight="700">callback: HAL_Delay(2000) … main() paused</text> <line x1="550.0" y1="40" x2="550.0" y2="190" stroke="#d47b28" stroke-width="3" stroke-dasharray="8 6"></line> <text x="550.0" y="206" text-anchor="middle" fill="#d47b28" font-size="18" font-weight="700">B1 pressed</text>
 </svg>
-<p><strong>Live demo:</strong> press B1 and the heartbeat stops for good. <code>HAL_Delay</code> counts SysTick interrupts, and SysTick cannot interrupt our handler, so the callback never returns.</p>
+<p><strong>Live demo:</strong> press B1 and the heartbeat stops for good. <code>HAL_Delay()</code> counts SysTick interrupts. SysTick cannot interrupt our handler, so the delay never ends and the callback never returns.</p>
 <p><strong>Rule:</strong> a callback checks the source, records the event, and returns at once. No <code>HAL_Delay()</code>, no loops, no printing.</p>
 </section>
 <section id="the-volatile-event-variable" class="slide level2">
@@ -823,8 +824,8 @@ LD2 toggles every 100 ms from main(); after the press the callback blocks and LD
 <p>Deep dive: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=140">C11 draft N1570, §6.7.3 — p.&nbsp;140</a> · M. Barr, <a href="https://barrgroup.com/blog/how-use-cs-volatile-keyword"><em>How to Use C’s volatile Keyword</em></a>.</p>
 </div>
 </section>
-<section id="recording-and-consuming-the-event" class="slide level2">
-<h2>Recording and consuming the event</h2>
+<section id="the-callback-records-the-event-main-consumes-it" class="slide level2">
+<h2>The callback records the event; <code>main()</code> consumes it</h2>
 <p><strong>The callback records the event:</strong> no LED action, no waiting.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb13-1"><a></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
 <span id="cb13-2"><a></a><span class="op">{</span></span>
@@ -840,8 +841,8 @@ LD2 toggles every 100 ms from main(); after the press the callback blocks and LD
 <span id="cb14-5"><a></a>    <span class="op">}</span></span>
 <span id="cb14-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="hardware-flag-and-software-flag" class="slide level2">
-<h2>Hardware flag and software flag</h2>
+<section id="the-pending-bit-and-button_event-are-two-different-flags" class="slide level2">
+<h2>The pending bit and <code>button_event</code> are two different flags</h2>
 <svg class="story-visual" style="max-height:380px" viewbox="0 30 1440 400" role="img" aria-labelledby="fg-title fg-desc">
 <title id="fg-title">
 The EXTI pending bit lives in hardware and is cleared by the HAL helper; button_event lives in your program and is cleared by main()
@@ -859,7 +860,7 @@ The EXTI pending bit lives in hardware and is cleared by the HAL helper; button_
 <p>Step 4 of 4</p>
 </div>
 <div class="route-tagline">
-<p>One press must give one event, and every box of the path can be checked in the debugger.</p>
+<p>One press must give one event, and every block of the path can be checked in the debugger.</p>
 </div>
 <div class="route-progress">
 <div class="route-seg done">
@@ -876,19 +877,18 @@ The EXTI pending bit lives in hardware and is cleared by the HAL helper; button_
 </div>
 </div>
 </section>
-<section id="button-bounce" class="slide level2">
-<h2>Button bounce</h2>
-<p>A mechanical contact does not change perfectly once:</p>
+<section id="a-real-button-bounces-one-press-several-falling-edges" class="slide level2">
+<h2>A real button bounces: one press, several falling edges</h2>
+<p>A mechanical contact does not switch cleanly once:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="../assets/images/button_bounce_waveform.svg" class="quarto-figure quarto-figure-center" alt="Ideal press vs real press: the real contact bounces for about 10 ms, producing several falling edges before settling low" height="440"></p>
 </figure>
 </div>
-<p>Several falling edges can set several interrupt requests.</p>
-<p>This electrical behavior is called <strong>switch bounce</strong>.</p>
+<p>This is <strong>switch bounce</strong>. Each extra falling edge can set another interrupt request.</p>
 </section>
-<section id="software-debounce" class="slide level2">
-<h2>Software debounce</h2>
+<section id="software-debounce-accepts-one-edge-per-80-ms" class="slide level2">
+<h2>Software debounce accepts one edge per 80 ms</h2>
 <div class="sourceCode" id="cb15"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a></a><span class="dt">uint32_t</span> last_press_ms <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb15-2"><a></a></span>
 <span id="cb15-3"><a></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
@@ -902,27 +902,20 @@ The EXTI pending bit lives in hardware and is cleared by the HAL helper; button_
 <span id="cb15-11"><a></a>    <span class="op">}</span></span>
 <span id="cb15-12"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>HAL_GetTick()</code> returns the milliseconds since startup as a <code>uint32_t</code>.</p>
-<p><strong>Why 80 ms?</strong> Mechanical bounce settles within about 10 ms. 80 ms safely ignores every bounce edge but is still shorter than a fast intentional double press.</p>
+<p><strong>The 80 ms guard:</strong> bounce settles within about 10 ms, so 80 ms skips every bounce edge. A fast double press takes longer than 80 ms, so it still counts as two presses.</p>
 <div class="source-note">
 <p>The 10 ms figure comes from measured data: J. Ganssle, <a href="http://www.ganssle.com/debouncing.htm"><em>A Guide to Debouncing</em></a>.</p>
 </div>
 </section>
 <section id="checking-the-interrupt-path-in-the-debugger" class="slide level2">
 <h2>Checking the interrupt path in the debugger</h2>
-<p>Check the blocks in order; stop at the first that fails. Registers: the <strong>SFR</strong> view in VS Code.</p>
+<p>Check the blocks in order and stop at the first one that fails. Read the registers in the <strong>SFR</strong> view in VS Code.</p>
 <table class="caption-top">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Block</th>
 <th>Check</th>
 <th>Evidence (SFR view)</th>
-<th>Usual mistake</th>
 </tr>
 </thead>
 <tbody>
@@ -930,31 +923,26 @@ The EXTI pending bit lives in hardware and is cleared by the HAL helper; button_
 <td>1 B1</td>
 <td>high released, low pressed</td>
 <td><code>IDR</code> bit 13</td>
-<td>internal pull fights the board</td>
 </tr>
 <tr class="even">
 <td>2 EXTI</td>
 <td>falling edge, unmasked</td>
 <td><code>FTSR</code>, <code>IMR</code> bit 13 = 1</td>
-<td>rising edge selected</td>
 </tr>
 <tr class="odd">
 <td>3 NVIC</td>
 <td>request enabled</td>
 <td>handler breakpoint is reached</td>
-<td>checkbox forgotten: <code>PR</code> = 1, no code</td>
 </tr>
 <tr class="even">
 <td>4–5 CPU</td>
 <td>handler entered</td>
 <td><code>PR</code> bit 13 = 1 at the breakpoint</td>
-<td>—</td>
 </tr>
 <tr class="odd">
 <td>6 callback</td>
 <td>pin and flag</td>
 <td>watch <code>GPIO_Pin</code>, <code>button_event</code></td>
-<td>wrong pin mask; long callback</td>
 </tr>
 </tbody>
 </table>
@@ -962,10 +950,10 @@ The EXTI pending bit lives in hardware and is cleared by the HAL helper; button_
 <p>Register definitions: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=211">RM0368 Rev 6, <code>EXTI_PR</code> — p.&nbsp;211</a>.</p>
 </div>
 </section>
-<section id="laboratory-mission" class="slide level2">
-<h2>Laboratory mission</h2>
+<section id="lab-5-one-ld2-change-per-press-with-an-exti-interrupt" class="slide level2">
+<h2>Lab 5: one LD2 change per press with an EXTI interrupt</h2>
 <div class="big-question">
-<p>Replace L05 polling with a PC13 falling-edge interrupt and produce one LD2 change per press.</p>
+<p>Replace the Lab 4 polling loop with a PC13 falling-edge interrupt: one LD2 change per press.</p>
 </div>
 <div class="compact-list">
 <ol type="1">
@@ -1000,7 +988,7 @@ The EXTI pending bit lives in hardware and is cleared by the HAL helper; button_
 </div>
 </div><div class="column" style="width:38%;">
 <p><img data-src="../assets/exit_ticket_qr.svg" width="290"></p>
-<p>Scan before you leave — ungraded; your answers open the next lecture.</p>
+<p>Scan the code before you leave. It is not graded; your answers open the next lecture.</p>
 </div></div>
 <div class="source-note">
 <p>Every concept in this lecture, with page-linked sources: <a href="../../../resources/references/academic_references.html">academic references</a>.</p>

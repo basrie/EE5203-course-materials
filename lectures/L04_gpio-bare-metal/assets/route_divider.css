@@ -1,0 +1,75 @@
+/* L04 chapter dividers: light tinted slide in the deck palette, step kicker,
+   watermark step number, and a four-segment route bar. */
+.reveal .slides section.route-divider {
+  color: #355262;
+}
+
+.reveal .slides section.route-divider h2 {
+  position: relative;   /* stays above the watermark number */
+  z-index: 1;
+  margin-top: 210px;
+  color: #174f73;
+  font-size: 2.3em;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.reveal .route-kicker {
+  position: absolute;   /* sits above the h2, which Quarto always places first */
+  top: 165px;
+  left: 0;
+  margin: 0;
+  color: #d47b28;
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.reveal .route-tagline {
+  max-width: 1150px;
+  margin-top: 0.4em;
+  color: #5a6b76;
+  font-size: 0.95em;
+}
+
+.reveal .route-num {
+  position: absolute;
+  top: 110px;
+  right: 0;
+  color: #2b789f;
+  opacity: 0.1;
+  font-size: 360px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.reveal .route-progress {
+  display: flex;
+  gap: 14px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 700px;
+}
+
+.reveal .route-seg {
+  flex: 1;
+  padding-top: 14px;
+  border-top: 8px solid #d9e5eb;
+  color: #9fb2bd;
+  font-size: 0.5em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.reveal .route-seg.done {
+  border-top-color: #7fb3cf;
+  color: #2b789f;
+}
+
+.reveal .route-seg.now {
+  border-top-color: #d47b28;
+  color: #174f73;
+}
