@@ -932,6 +932,14 @@
 
 /* Source-file panes (handler -> HAL helper -> callback slide) */
 
+/* Lead sentence placed in the free corner beside the first pane */
+.reveal .file-note {
+  position: absolute;
+  font-size: 0.72em;
+  line-height: 1.3;
+  color: var(--ee-ink, #22323c);
+}
+
 .reveal .file-stack {
   position: relative;
   width: 100%;
