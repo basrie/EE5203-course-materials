@@ -6,8 +6,8 @@
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.42">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.43">
 
   <meta name="author" content="Basri Erdogan">
   <title>EE5203 Microprocessors</title>
@@ -97,6 +97,7 @@
   <link rel="stylesheet" href="../../../site_libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
   <link rel="stylesheet" href="../../L01_microprocessor-systems-toolchain/assets/styles.css">
   <link rel="stylesheet" href="../../L02_c-for-embedded-systems/assets/week2.css">
+  <link rel="stylesheet" href="../assets/week7.css">
   <link href="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -208,152 +209,72 @@ Basri Erdogan
 </div>
 
 </section>
-<section id="one-update-event-per-second" class="slide level2">
-<h2>One update event per second</h2>
-<div class="big-question">
-<p>These two numbers make the timer hardware raise one event every second—while your program does something else.</p>
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Prescaler <span class="op">=</span> <span class="dv">15999</span><span class="op">;</span>   <span class="co">// why 15999?</span></span>
-<span id="cb1-2"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Period    <span class="op">=</span> <span class="dv">999</span><span class="op">;</span>     <span class="co">// why 999?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>By the end, you will explain both numbers, replace <code>HAL_Delay()</code> with them, and prove the result in the register view.</p>
-</section>
-<section id="the-story-so-far" class="slide level2">
-<h2>The story so far</h2>
-<div class="vertical-list">
-<div class="vertical-item">
-<p><span>01</span> <strong>L04:</strong> write GPIO registers directly.</p>
-</div>
-<div class="vertical-item">
-<p><span>02</span> <strong>L05:</strong> drive the same registers through HAL.</p>
-</div>
-<div class="vertical-item">
-<p><span>03</span> <strong>L06:</strong> let a button interrupt the main loop.</p>
-</div>
-<div class="vertical-item">
-<p><span>04</span> <strong>TODAY:</strong> let hardware count time so the CPU does not have to.</p>
-</div>
-</div>
-</section>
-<section id="todays-objectives" class="slide level2">
-<h2>Today’s objectives</h2>
-<div class="vertical-list compact-list">
-<div class="vertical-item">
-<p><span>01</span> Trace the timer pipeline: clock → prescaler → counter → auto-reload → update event.</p>
-</div>
-<div class="vertical-item">
-<p><span>02</span> Calculate <code>PSC</code> and <code>ARR</code> for a required period from the real clock frequency.</p>
-</div>
-<div class="vertical-item">
-<p><span>03</span> Use a timer update event by polling and by interrupt.</p>
-</div>
-<div class="vertical-item">
-<p><span>04</span> Build a 1 ms tick that schedules several tasks without blocking.</p>
-</div>
-<div class="vertical-item">
-<p><span>05</span> Verify a timer’s configuration and counting in the SFR view.</p>
-</div>
-</div>
-</section>
-<section id="l06-recap-the-blocking-delay" class="slide level2">
-<h2>L06 recap: the blocking delay</h2>
-<p>The L04 blink—and every version since—wastes the CPU while it waits:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-2"><a></a>    HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
-<span id="cb2-3"><a></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span>           <span class="co">// CPU does nothing useful here</span></span>
-<span id="cb2-4"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="prompt-list compact-prompts">
-<div class="prompt-item">
-<p><span>1</span> What is the CPU doing during the 500 ms?</p>
-</div>
-<div class="prompt-item">
-<p><span>2</span> Could the L06 button event be <em>serviced</em> during the delay? Could the main loop <em>react</em> to it?</p>
-</div>
-</div>
-<div class="relationship-strip">
-<p>The interrupt still fires and the callback still runs—but the main loop cannot respond until <code>HAL_Delay</code> returns.</p>
-</div>
-</section>
-<section id="the-cost-of-waiting" class="slide level2">
-<h2>The cost of waiting</h2>
+<section id="a-blocking-delay-wastes-the-cpu" class="slide level2">
+<h2>A blocking delay wastes the CPU</h2>
+<p>The L04 blink, and every version since, stops the CPU while it waits:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-2"><a></a>    HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb1-3"><a></a>    HAL_Delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span>           <span class="co">// CPU does nothing useful here</span></span>
+<span id="cb1-4"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../assets/images/blocking_vs_tick.svg" class="quarto-figure quarto-figure-center" alt="Two CPU timelines: with HAL_Delay the CPU is trapped between LED toggles; with a timer tick and scheduler the CPU stays free except for microsecond ISR ticks" height="400"></p>
+<p><img data-src="../assets/images/blocking_vs_tick.svg" class="quarto-figure quarto-figure-center" alt="Two CPU timelines: with HAL_Delay the CPU is trapped between LED toggles; with a timer tick and scheduler the CPU stays free except for microsecond ISR ticks" height="268"></p>
 </figure>
 </div>
 <div class="relationship-strip">
-<p>Same LED behavior, opposite CPU budgets. Today builds the bottom row.</p>
+<p>Today: a timer counts the time instead. You will calculate <code>PSC</code> and <code>ARR</code>, use the update event by polling and by interrupt, build a 1 ms tick, and prove it in the SFR view.</p>
 </div>
 </section>
-<section id="hal_delay-was-a-timer-all-along" class="slide level2">
-<h2><code>HAL_Delay</code> was a timer all along</h2>
-<div class="big-question">
-<p>SysTick—a timer inside the Cortex-M core—has been ticking every millisecond since L01. <code>HAL_Delay</code> merely <em>waits</em> on it.</p>
-</div>
-<div class="vertical-list compact-list">
-<div class="vertical-item">
-<p><span>01</span> HAL configures SysTick at startup; its interrupt increments HAL’s own millisecond counter.</p>
-</div>
-<div class="vertical-item">
-<p><span>02</span> <code>HAL_Delay(500)</code> reads that counter in a blocking loop—the counting was never the problem, the waiting was.</p>
-</div>
-<div class="vertical-item">
-<p><span>03</span> Today’s tick is the same idea on a timer <em>you</em> control, consumed without trapping the CPU.</p>
-</div>
-</div>
-<div class="source-note">
-<p>Deep dive: <a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=246">PM0214 Rev 10, §4.5 <em>SysTick timer</em> — p.&nbsp;246</a>.</p>
-</div>
-</section>
-<section id="the-timer-pipeline" class="slide level2">
-<h2>The timer pipeline</h2>
+<section id="a-timer-is-a-counter-driven-by-a-clock" class="slide level2">
+<h2>A timer is a counter driven by a clock</h2>
 <div class="big-question">
 <p>A timer is a hardware counter that increments at a fixed rate and raises an event when it reaches a chosen value.</p>
 </div>
-<svg class="story-visual" viewbox="0 0 1440 330" role="img" aria-labelledby="timpipe-title">
+<svg class="story-visual" viewbox="0 0 1440 300" role="img" aria-labelledby="timpipe-title">
 <title id="timpipe-title">
 The timer pipeline: the 16 megahertz clock is divided by the prescaler, the counter counts the divided ticks, the auto-reload register defines the top value, and reaching it produces the update event
 </title>
-<defs> <marker id="tim-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> <filter id="tim-glow" x="-100%" y="-100%" width="300%" height="300%"><fegaussianblur stddeviation="6" result="blur"></fegaussianblur><femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter> </defs> <rect x="30" y="70" width="230" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="30" y="70" width="230" height="8" fill="#174f73"></rect> <text x="145" y="125" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">TIMER CLOCK</text> <text x="145" y="165" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700">16 MHz</text> <g class="fragment"> <line x1="264" y1="145" x2="296" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="305" y="70" width="230" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="305" y="70" width="230" height="8" fill="#2b789f"></rect> <text x="420" y="125" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">PRESCALER</text> <text x="420" y="165" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">PSC</text> <text x="420" y="196" text-anchor="middle" fill="#5a6b76" font-size="16">divide by PSC + 1</text> </g> <g class="fragment"> <line x1="539" y1="145" x2="571" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="580" y="70" width="230" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="580" y="70" width="230" height="8" fill="#2b789f"></rect> <text x="695" y="125" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">COUNTER</text> <text x="695" y="165" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">CNT</text> <text x="695" y="196" text-anchor="middle" fill="#5a6b76" font-size="16">counts 0, 1, 2, …</text> </g> <g class="fragment"> <line x1="814" y1="145" x2="846" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="855" y="70" width="230" height="150" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="855" y="70" width="230" height="8" fill="#2b789f"></rect> <text x="970" y="125" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="1">AUTO-RELOAD</text> <text x="970" y="165" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">ARR</text> <text x="970" y="196" text-anchor="middle" fill="#5a6b76" font-size="16">the top value</text> </g> <g class="fragment"> <line x1="1089" y1="145" x2="1121" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="1130" y="70" width="280" height="150" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect> <rect x="1130" y="70" width="280" height="8" fill="#d47b28"></rect> <text x="1270" y="125" text-anchor="middle" fill="#d47b28" font-size="17" font-weight="700" letter-spacing="1">UPDATE EVENT</text> <text x="1270" y="165" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700">CNT rolls to 0</text> <text x="1270" y="196" text-anchor="middle" fill="#5a6b76" font-size="16">flag UIF = 1 · can interrupt</text> <text x="145" y="268" text-anchor="middle" fill="#5a6b76" font-size="18">what the chip provides</text> <text x="1270" y="268" text-anchor="middle" fill="#5a6b76" font-size="18">what your program consumes</text> <circle class="story-pulse" r="12" fill="#d47b28" filter="url(#tim-glow)"> <animatemotion dur="4.5s" repeatcount="indefinite" calcmode="linear" path="M 145 145 H 1270"></animatemotion> <animate attributename="opacity" values="0;1;1;0" keytimes="0;0.08;0.9;1" dur="4.5s" repeatcount="indefinite"></animate> </circle> </g>
+<defs> <marker id="tim-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> <filter id="tim-glow" x="-100%" y="-100%" width="300%" height="300%"><fegaussianblur stddeviation="6" result="blur"></fegaussianblur><femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter> </defs> <rect x="30" y="60" width="230" height="170" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="30" y="60" width="230" height="8" fill="#174f73"></rect> <text x="145" y="118" text-anchor="middle" fill="#5a6b76" font-size="21" font-weight="700" letter-spacing="1">TIMER CLOCK</text> <text x="145" y="166" text-anchor="middle" fill="#174f73" font-size="30" font-weight="700">16 MHz</text> <g class="fragment"> <line x1="264" y1="145" x2="296" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="305" y="60" width="230" height="170" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="305" y="60" width="230" height="8" fill="#2b789f"></rect> <text x="420" y="118" text-anchor="middle" fill="#5a6b76" font-size="21" font-weight="700" letter-spacing="1">PRESCALER</text> <text x="420" y="166" text-anchor="middle" fill="#174f73" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">PSC</text> <text x="420" y="206" text-anchor="middle" fill="#5a6b76" font-size="21">divide by PSC + 1</text> </g> <g class="fragment"> <line x1="539" y1="145" x2="571" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="580" y="60" width="230" height="170" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="580" y="60" width="230" height="8" fill="#2b789f"></rect> <text x="695" y="118" text-anchor="middle" fill="#5a6b76" font-size="21" font-weight="700" letter-spacing="1">COUNTER</text> <text x="695" y="166" text-anchor="middle" fill="#174f73" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">CNT</text> <text x="695" y="206" text-anchor="middle" fill="#5a6b76" font-size="21">counts 0, 1, 2, …</text> </g> <g class="fragment"> <line x1="814" y1="145" x2="846" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="855" y="60" width="230" height="170" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <rect x="855" y="60" width="230" height="8" fill="#2b789f"></rect> <text x="970" y="118" text-anchor="middle" fill="#5a6b76" font-size="21" font-weight="700" letter-spacing="1">AUTO-RELOAD</text> <text x="970" y="166" text-anchor="middle" fill="#174f73" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">ARR</text> <text x="970" y="206" text-anchor="middle" fill="#5a6b76" font-size="21">the top value</text> </g> <g class="fragment"> <line x1="1089" y1="145" x2="1121" y2="145" stroke="#2b789f" stroke-width="4" marker-end="url(#tim-arrow)"></line> <rect x="1130" y="60" width="280" height="170" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect> <rect x="1130" y="60" width="280" height="8" fill="#d47b28"></rect> <text x="1270" y="118" text-anchor="middle" fill="#d47b28" font-size="21" font-weight="700" letter-spacing="1">UPDATE EVENT</text> <text x="1270" y="166" text-anchor="middle" fill="#174f73" font-size="26" font-weight="700">CNT rolls to 0</text> <text x="1270" y="206" text-anchor="middle" fill="#5a6b76" font-size="21">flag UIF = 1, can interrupt</text> <text x="145" y="268" text-anchor="middle" fill="#5a6b76" font-size="22">what the chip provides</text> <text x="1270" y="268" text-anchor="middle" fill="#5a6b76" font-size="22">what your program consumes</text> <circle class="story-pulse" r="12" fill="#d47b28" filter="url(#tim-glow)"> <animatemotion dur="4.5s" repeatcount="indefinite" calcmode="linear" path="M 145 145 H 1270"></animatemotion> <animate attributename="opacity" values="0;1;1;0" keytimes="0;0.08;0.9;1" dur="4.5s" repeatcount="indefinite"></animate> </circle> </g>
 </svg>
-<p>Every slide today configures or consumes one stage of this pipeline.</p>
+<p>The first four boxes are registers you set once. The last box is what your program lives on.</p>
 </section>
-<section id="the-timer-clock" class="slide level2">
-<h2>The timer clock</h2>
-<p>On our lab configuration—the default 16 MHz HSI with all bus prescalers at 1—<strong>every timer counts 16 000 000 ticks per second</strong> before prescaling.</p>
+<section id="the-timer-clock-is-16-mhz-on-this-board" class="slide level2">
+<h2>The timer clock is 16 MHz on this board</h2>
+<p>With the default 16 MHz HSI and all bus prescalers at 1, <strong>every timer counts 16 000 000 ticks per second</strong> before prescaling.</p>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
 <p><span>01</span> The timer clock comes from the APB bus that carries the timer (<code>TIM2</code> is on APB1).</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> If an APB prescaler is ever set above 1, the timer clock is <em>twice</em> that bus clock—check before calculating.</p>
+<p><span>02</span> If an APB prescaler is ever set above 1, the timer clock is <em>twice</em> that bus clock. Check before calculating.</p>
 </div>
 <div class="vertical-item">
-<p><span>03</span> Every period calculation today starts from the real 16 MHz—not from a number found in an online example.</p>
+<p><span>03</span> Every period calculation today starts from the real 16 MHz, not from a number in an online example.</p>
 </div>
 </div>
 <div class="source-note">
 <p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=94">RM0368 Rev 6, §6.2 clock tree — p.&nbsp;94</a>.</p>
 </div>
 </section>
-<section id="the-prescaler" class="slide level2">
-<h2>The prescaler</h2>
+<section id="the-prescaler-divides-the-timer-clock" class="slide level2">
+<h2>The prescaler divides the timer clock</h2>
 <p>The prescaler divides the timer clock <strong>by <code>PSC + 1</code></strong> before it reaches the counter.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a></a>counting frequency = timer clock / (PSC + 1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a></a>counting frequency = timer clock / (PSC + 1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../assets/images/prescaler_division.svg" class="quarto-figure quarto-figure-center" alt="A fast 16 megahertz square wave on top and the slower divided square wave below it, rising edges aligned; the counter increments on each rising edge of the divided clock, one output cycle for every PSC plus one input cycles" height="340"></p>
+<p><img data-src="../assets/images/prescaler_division.svg" class="quarto-figure quarto-figure-center" alt="A fast 16 megahertz square wave on top and the slower divided square wave below it, rising edges aligned; the counter increments on each rising edge of the divided clock" height="330"></p>
 </figure>
 </div>
-<p><code>PSC</code> is 16-bit (<code>0…65535</code>): <code>15</code> → 1 MHz (one tick per µs) · <code>1599</code> → 10 kHz · <code>15999</code> → 1 kHz (one tick per ms). The reference manual’s name for this is the <strong>counter clock</strong> (CK_CNT).</p>
+<p><code>PSC</code> is 16-bit (<code>0…65535</code>): <code>15</code> → 1 MHz (one tick per µs), <code>1599</code> → 10 kHz, <code>15999</code> → 1 kHz (one tick per ms). The reference manual calls the result the <strong>counter clock</strong> (CK_CNT).</p>
 </section>
-<section id="the-counter" class="slide level2">
-<h2>The counter</h2>
-<p><code>CNT</code> increments once per prescaled tick—in hardware, in parallel with your program:</p>
+<section id="the-counter-increments-once-per-tick" class="slide level2">
+<h2>The counter increments once per tick</h2>
+<p><code>CNT</code> increments once per prescaled tick, in hardware, in parallel with your program:</p>
 <svg id="cnt-anim" class="story-visual" viewbox="0 0 1440 500" style="max-height:455px" role="img" aria-labelledby="cntanim-title">
 <title id="cntanim-title">
 Animated plot of TIM2 CNT versus time: the counter value climbs to ARR equals 999 once per second, snaps back to zero, and the UIF flag flashes at each rollover; a marker on the vertical axis tracks the live counter value
 </title>
-<text x="150" y="42" fill="#5a6b76" font-size="19">counting frequency 1 kHz (PSC = 15999) → one update per second</text> <text x="1380" y="66" text-anchor="end" fill="#5a6b76" font-size="19" font-weight="700">ARR = 999</text> <line x1="150" y1="80" x2="1380" y2="80" stroke="#5a6b76" stroke-width="1.6" stroke-dasharray="7 6"></line> <line x1="150" y1="255" x2="1380" y2="255" stroke="#c8d8e2" stroke-width="1" opacity="0.7"></line> <line x1="150" y1="430" x2="1380" y2="430" stroke="#c8d8e2" stroke-width="2"></line> <line x1="150" y1="430" x2="150" y2="74" stroke="#c8d8e2" stroke-width="2"></line> <text x="136" y="436" text-anchor="end" fill="#5a6b76" font-size="17">0</text> <text x="136" y="261" text-anchor="end" fill="#5a6b76" font-size="17">500</text> <text x="136" y="86" text-anchor="end" fill="#5a6b76" font-size="17">999</text> <text x="60" y="66" fill="#5a6b76" font-size="17" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;CNT</text> <text x="150" y="462" text-anchor="middle" fill="#5a6b76" font-size="17">0</text> <text x="530" y="462" text-anchor="middle" fill="#5a6b76" font-size="17">1</text> <text x="910" y="462" text-anchor="middle" fill="#5a6b76" font-size="17">2</text> <text x="1290" y="462" text-anchor="middle" fill="#5a6b76" font-size="17">3</text> <text x="758.0" y="492" text-anchor="middle" fill="#5a6b76" font-size="18">time (s)</text> <path d="M 150 430 L 530 80 L 530 430 L 910 80 L 910 430 L 1290 80 L 1290 430 L 1366.0 360.0" fill="none" stroke="#c8d8e2" stroke-width="2" opacity="0.65"></path> <path d="M 150 430 L 530 80 L 530 430 L 910 80 L 910 430 L 1290 80 L 1290 430 L 1366.0 360.0" fill="none" stroke="#174f73" stroke-width="3.2" stroke-dasharray="2703.2" stroke-dashoffset="2703.2"> <animate attributename="stroke-dashoffset" values="2703.2;2186.6;1836.6;1320.0;969.9;453.3;103.3;0.0;0.0" keytimes="0;0.2833;0.3003;0.5836;0.6006;0.8839;0.9008;0.9575;1" dur="9s" calcmode="linear" repeatcount="indefinite"></animate> </path> <circle r="9" fill="#174f73"> <animatemotion dur="9s" repeatcount="indefinite" calcmode="linear" keypoints="0.0;0.1911;0.3206;0.5117;0.6412;0.8323;0.9618;1.0;1.0" keytimes="0;0.2833;0.3003;0.5836;0.6006;0.8839;0.9008;0.9575;1" path="M 150 430 L 530 80 L 530 430 L 910 80 L 910 430 L 1290 80 L 1290 430 L 1366.0 360.0"></animatemotion> </circle> <circle r="7" fill="#2b789f"> <animatemotion dur="9s" repeatcount="indefinite" calcmode="linear" keypoints="0.0;0.1613;0.3226;0.4839;0.6452;0.8065;0.9677;1.0;1.0" keytimes="0;0.2833;0.3003;0.5836;0.6006;0.8839;0.9008;0.9575;1" path="M 150 430 L 150 80 L 150 430 L 150 80 L 150 430 L 150 80 L 150 430 L 150 360.0"></animatemotion> </circle> <g opacity="0"> <circle cx="530" cy="80" r="11" fill="#d47b28"></circle> <animate attributename="opacity" values="0;0;1;0;0" keytimes="0;0.2833;0.2953;0.3833;1" dur="9s" repeatcount="indefinite"></animate> </g> <g opacity="0"> <circle cx="910" cy="80" r="11" fill="#d47b28"></circle> <animate attributename="opacity" values="0;0;1;0;0" keytimes="0;0.5836;0.5956;0.6836;1" dur="9s" repeatcount="indefinite"></animate> </g> <g opacity="0"> <circle cx="1290" cy="80" r="11" fill="#d47b28"></circle> <animate attributename="opacity" values="0;0;1;0;0" keytimes="0;0.8839;0.8959;0.9739;1" dur="9s" repeatcount="indefinite"></animate> </g> <text x="556" y="120" fill="#d47b28" font-size="20" font-weight="700" opacity="0">update event — CNT → 0, UIF = 1<animate attributename="opacity" values="0;0;1;0;0;1;0;0;1;0;0" keytimes="0;0.2833;0.2953;0.3833;0.5836;0.5956;0.6836;0.8839;0.8959;0.9739;1" dur="9s" repeatcount="indefinite"></animate></text> <g id="cnt-static-labels" style="transition: opacity 0.4s"> <circle cx="530" cy="80" r="9" fill="#d47b28"></circle> <circle cx="910" cy="80" r="9" fill="#d47b28"></circle> <circle cx="1290" cy="80" r="9" fill="#d47b28"></circle> <line x1="548" y1="94" x2="576" y2="114" stroke="#d47b28" stroke-width="2.5"></line> <rect x="576" y="108" width="342" height="30" fill="#ffffff" opacity="0.88" rx="4"></rect> <text x="584" y="130" fill="#d47b28" font-size="20" font-weight="700">update event — CNT → 0, UIF = 1</text> <circle cx="340" cy="255" r="8" fill="#2b789f"></circle> <text x="386" y="252" fill="#2b789f" font-size="19">CNT climbs 0 → 999 each second</text> </g>
+<text x="150" y="42" fill="#5a6b76" font-size="21">counting frequency 1 kHz (PSC = 15999) → one update per second</text> <text x="1380" y="66" text-anchor="end" fill="#5a6b76" font-size="21" font-weight="700">ARR = 999</text> <line x1="150" y1="80" x2="1380" y2="80" stroke="#5a6b76" stroke-width="1.6" stroke-dasharray="7 6"></line> <line x1="150" y1="255" x2="1380" y2="255" stroke="#c8d8e2" stroke-width="1" opacity="0.7"></line> <line x1="150" y1="430" x2="1380" y2="430" stroke="#c8d8e2" stroke-width="2"></line> <line x1="150" y1="430" x2="150" y2="74" stroke="#c8d8e2" stroke-width="2"></line> <text x="136" y="436" text-anchor="end" fill="#5a6b76" font-size="20">0</text> <text x="136" y="261" text-anchor="end" fill="#5a6b76" font-size="20">500</text> <text x="136" y="86" text-anchor="end" fill="#5a6b76" font-size="20">999</text> <text x="40" y="66" fill="#5a6b76" font-size="20" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;CNT</text> <text x="150" y="464" text-anchor="middle" fill="#5a6b76" font-size="20">0</text> <text x="530" y="464" text-anchor="middle" fill="#5a6b76" font-size="20">1</text> <text x="910" y="464" text-anchor="middle" fill="#5a6b76" font-size="20">2</text> <text x="1290" y="464" text-anchor="middle" fill="#5a6b76" font-size="20">3</text> <text x="758.0" y="494" text-anchor="middle" fill="#5a6b76" font-size="20">time (s)</text> <path d="M 150 430 L 530 80 L 530 430 L 910 80 L 910 430 L 1290 80 L 1290 430 L 1366.0 360.0" fill="none" stroke="#c8d8e2" stroke-width="2" opacity="0.65"></path> <path d="M 150 430 L 530 80 L 530 430 L 910 80 L 910 430 L 1290 80 L 1290 430 L 1366.0 360.0" fill="none" stroke="#174f73" stroke-width="3.2" stroke-dasharray="2703.2" stroke-dashoffset="2703.2"> <animate attributename="stroke-dashoffset" values="2703.2;2186.6;1836.6;1320.0;969.9;453.3;103.3;0.0;0.0" keytimes="0;0.2833;0.3003;0.5836;0.6006;0.8839;0.9008;0.9575;1" dur="9s" calcmode="linear" repeatcount="indefinite"></animate> </path> <circle r="9" fill="#174f73"> <animatemotion dur="9s" repeatcount="indefinite" calcmode="linear" keypoints="0.0;0.1911;0.3206;0.5117;0.6412;0.8323;0.9618;1.0;1.0" keytimes="0;0.2833;0.3003;0.5836;0.6006;0.8839;0.9008;0.9575;1" path="M 150 430 L 530 80 L 530 430 L 910 80 L 910 430 L 1290 80 L 1290 430 L 1366.0 360.0"></animatemotion> </circle> <circle r="7" fill="#2b789f"> <animatemotion dur="9s" repeatcount="indefinite" calcmode="linear" keypoints="0.0;0.1613;0.3226;0.4839;0.6452;0.8065;0.9677;1.0;1.0" keytimes="0;0.2833;0.3003;0.5836;0.6006;0.8839;0.9008;0.9575;1" path="M 150 430 L 150 80 L 150 430 L 150 80 L 150 430 L 150 80 L 150 430 L 150 360.0"></animatemotion> </circle> <g opacity="0"> <circle cx="530" cy="80" r="11" fill="#d47b28"></circle> <animate attributename="opacity" values="0;0;1;0;0" keytimes="0;0.2833;0.2953;0.3833;1" dur="9s" repeatcount="indefinite"></animate> </g> <g opacity="0"> <circle cx="910" cy="80" r="11" fill="#d47b28"></circle> <animate attributename="opacity" values="0;0;1;0;0" keytimes="0;0.5836;0.5956;0.6836;1" dur="9s" repeatcount="indefinite"></animate> </g> <g opacity="0"> <circle cx="1290" cy="80" r="11" fill="#d47b28"></circle> <animate attributename="opacity" values="0;0;1;0;0" keytimes="0;0.8839;0.8959;0.9739;1" dur="9s" repeatcount="indefinite"></animate> </g> <text x="556" y="120" fill="#d47b28" font-size="24" font-weight="700" opacity="0">update event: CNT → 0, UIF = 1<animate attributename="opacity" values="0;0;1;0;0;1;0;0;1;0;0" keytimes="0;0.2833;0.2953;0.3833;0.5836;0.5956;0.6836;0.8839;0.8959;0.9739;1" dur="9s" repeatcount="indefinite"></animate></text> <g id="cnt-static-labels" style="transition: opacity 0.4s"> <circle cx="530" cy="80" r="9" fill="#d47b28"></circle> <circle cx="910" cy="80" r="9" fill="#d47b28"></circle> <circle cx="1290" cy="80" r="9" fill="#d47b28"></circle> <line x1="548" y1="94" x2="576" y2="114" stroke="#d47b28" stroke-width="2.5"></line> <rect x="576" y="104" width="400" height="36" fill="#ffffff" opacity="0.88" rx="4"></rect> <text x="584" y="131" fill="#d47b28" font-size="24" font-weight="700">update event: CNT → 0, UIF = 1</text> <circle cx="340" cy="255" r="8" fill="#2b789f"></circle> <text x="386" y="253" fill="#2b789f" font-size="22">CNT climbs 0 → 999 each second</text> </g>
 </svg>
 <p class="source-note fragment fade-out" id="cnt-anim-trigger">
 ▸ advance to run the counter
@@ -385,62 +306,41 @@ window.addEventListener("load", function () {
 });
 </script>
 <div class="relationship-strip">
-<p><code>UIF</code> is a pending bit in <code>TIM2-&gt;SR</code>—the same idea as the EXTI pending bit in L06.</p>
+<p><code>UIF</code> is a pending bit in <code>TIM2-&gt;SR</code>, the same idea as the EXTI pending bit in L06.</p>
 </div>
 <div class="source-note">
 <p>In-lecture demo: <a href="../assets/animations/counter_animation.html">interactive counter animation</a>.</p>
 </div>
 </section>
-<section id="the-auto-reload-register" class="slide level2">
-<h2>The auto-reload register</h2>
+<section id="arr-sets-the-timer-period" class="slide level2">
+<h2>ARR sets the timer period</h2>
 <p><code>ARR</code> holds the top value, so the counter visits <code>ARR + 1</code> states (0 through ARR):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a></a>period = (ARR + 1) / counting frequency</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a></a>period = (ARR + 1) / counting frequency</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../assets/images/arr_comparison.svg" class="quarto-figure quarto-figure-center" alt="Three sawtooth plots at the same one kilohertz counting frequency: ARR 999 gives a one second period, ARR 499 gives 500 milliseconds, ARR 99 gives 100 milliseconds" height="330"></p>
+<p><img data-src="../assets/images/arr_comparison.svg" class="quarto-figure quarto-figure-center" alt="Three sawtooth plots at the same one kilohertz counting frequency: ARR 999 gives a one second period, ARR 499 gives 500 milliseconds, ARR 249 gives 250 milliseconds" height="370"></p>
 </figure>
 </div>
 </section>
-<section id="two-knobs-one-period" class="slide level2">
-<h2>Two knobs, one period</h2>
-<p>For one update per second from 16 MHz:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a></a>16 000 000 Hz  ÷ (15999 + 1)  =  1000 Hz        (prescaler)</span>
-<span id="cb5-2"><a></a>1000 Hz        ÷ (999 + 1)    =  1 Hz → 1 s     (auto-reload)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="relationship-strip">
-<p>Split the division so both values fit in 16 bits and the intermediate frequency is a round number you can reuse—1 kHz gives millisecond resolution for free.</p>
-</div>
-<p>The opener’s two numbers are exactly these: <code>Prescaler = 15999</code>, <code>Period = 999</code>.</p>
-</section>
-<section id="the-1-rule" class="slide level2">
-<h2>The +1 rule</h2>
-<p>Both divisions use <strong>the register value plus one</strong>:</p>
+<section id="period-formula-and-the-1-rule" class="slide level2">
+<h2>Period formula and the +1 rule</h2>
+<p>For one update per second from 16 MHz, split the division in two:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a></a>16 000 000 Hz  ÷ (15999 + 1)  =  1000 Hz        prescaler</span>
+<span id="cb4-2"><a></a>1000 Hz        ÷ (999 + 1)    =  1 Hz → 1 s     auto-reload</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> A prescaler of <code>0</code> divides by 1—dividing by zero would be meaningless.</p>
+<p><span>01</span> Both divisions use <strong>the register value plus one</strong>. <code>PSC = 0</code> divides by 1; <code>ARR = 999</code> means 1000 states.</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> <code>ARR = 999</code> means the counter visits 1000 states: <code>0</code> through <code>999</code>.</p>
+<p><span>02</span> Split so that both values fit in 16 bits. 1 kHz in the middle gives millisecond resolution for free.</p>
 </div>
 <div class="vertical-item">
-<p><span>03</span> Forgetting a <code>+1</code> makes every period slightly wrong—a classic timer bug.</p>
+<p><span>03</span> A forgotten <code>+1</code> makes every period slightly wrong. It is the classic timer bug.</p>
 </div>
 </div>
 </section>
-<section id="the-timer-block-in-hardware" class="slide level2">
-<h2>The timer block, in hardware</h2>
-<svg class="story-visual" viewbox="0 0 1440 520" style="max-height:470px" role="img" aria-labelledby="timhw-title">
-<title id="timhw-title">
-Simplified hardware diagram of the TIM2 time base: the 16 megahertz timer clock enters the prescaler, which divides it using the PSC register; the divided clock advances the counter register CNT; a comparator matches CNT against the auto-reload register ARR, and a match produces the update event, setting UIF, reloading CNT to zero, and — if UIE is set — raising TIM2’s interrupt request to the NVIC
-</title>
-<defs> <marker id="hw2-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> <marker id="hw2-arrow-o" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d47b28"></path></marker> </defs> <rect x="170" y="50" width="1080" height="420" rx="16" fill="#fbfdfe" stroke="#c8d8e2" stroke-width="4"></rect> <text x="192" y="86" fill="#174f73" font-size="21" font-weight="700">TIM2 — the time base (simplified)</text> <text x="36" y="180" fill="#174f73" font-size="18" font-weight="700">timer clock</text> <text x="36" y="205" fill="#5a6b76" font-size="17">16 MHz (APB1)</text> <line x1="36" y1="230" x2="222" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <rect x="230" y="175" width="210" height="110" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect> <text x="335" y="220" text-anchor="middle" fill="#5a6b76" font-size="16" font-weight="700" letter-spacing="1">PRESCALER</text> <text x="335" y="255" text-anchor="middle" fill="#174f73" font-size="21" font-weight="700">÷ (PSC + 1)</text> <rect x="230" y="315" width="210" height="42" rx="6" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="335" y="342" text-anchor="middle" fill="#174f73" font-size="17" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;PSC = 15999</text> <line x1="335" y1="315" x2="335" y2="290" stroke="#c8d8e2" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#hw2-arrow)"></line> <line x1="440" y1="230" x2="497" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <text x="468" y="212" text-anchor="middle" fill="#5a6b76" font-size="16">1 kHz</text> <rect x="505" y="175" width="210" height="110" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect> <text x="610" y="220" text-anchor="middle" fill="#5a6b76" font-size="16" font-weight="700" letter-spacing="1">COUNTER</text> <text x="610" y="255" text-anchor="middle" fill="#174f73" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CNT ++</text> <rect x="505" y="315" width="210" height="42" rx="6" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="610" y="342" text-anchor="middle" fill="#174f73" font-size="17" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;CNT</text> <line x1="610" y1="315" x2="610" y2="290" stroke="#c8d8e2" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#hw2-arrow)"></line> <text x="610" y="382" text-anchor="middle" fill="#5a6b76" font-size="15">runs while CR1.CEN = 1</text> <line x1="715" y1="230" x2="746" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <circle cx="790" cy="230" r="37" fill="#ffffff" stroke="#174f73" stroke-width="3"></circle> <text x="790" y="240" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700">=?</text> <rect x="685" y="390" width="210" height="42" rx="6" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="790" y="417" text-anchor="middle" fill="#174f73" font-size="17" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;ARR = 999</text> <line x1="790" y1="390" x2="790" y2="272" stroke="#2b789f" stroke-width="3" marker-end="url(#hw2-arrow)"></line> <text x="806" y="330" fill="#5a6b76" font-size="15">top value</text> <path d="M 790 190 C 790 110, 650 110, 615 170" fill="none" stroke="#d47b28" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#hw2-arrow-o)"></path> <text x="712" y="122" text-anchor="middle" fill="#d47b28" font-size="16" font-weight="700">match → reload CNT to 0</text> <line x1="827" y1="230" x2="872" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <rect x="880" y="170" width="240" height="120" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect> <text x="1000" y="212" text-anchor="middle" fill="#d47b28" font-size="16" font-weight="700" letter-spacing="1">UPDATE EVENT</text> <text x="1000" y="245" text-anchor="middle" fill="#174f73" font-size="18" font-weight="700" font-family="ui-monospace, Menlo, monospace">UIF = 1 (SR)</text> <text x="1000" y="272" text-anchor="middle" fill="#5a6b76" font-size="15">pending until cleared</text> <line x1="1120" y1="230" x2="1147" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <rect x="1155" y="190" width="80" height="80" rx="8" fill="#ffffff" stroke="#c8d8e2" stroke-width="2.5"></rect> <text x="1195" y="224" text-anchor="middle" fill="#174f73" font-size="18" font-weight="700" font-family="ui-monospace, Menlo, monospace">UIE?</text> <text x="1195" y="250" text-anchor="middle" fill="#5a6b76" font-size="14">(DIER)</text> <line x1="1235" y1="230" x2="1310" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <text x="1320" y="212" fill="#174f73" font-size="17" font-weight="700" font-family="ui-monospace, Menlo, monospace">TIM2_IRQn</text> <text x="1320" y="238" fill="#5a6b76" font-size="16">→ NVIC</text> <text x="1320" y="262" fill="#5a6b76" font-size="15">(L06 path)</text>
-</svg>
-<p>Registers you write once (<code>PSC</code>, <code>ARR</code>), one that never stops (<code>CNT</code>), and one bit the hardware sets for you (<code>UIF</code>).</p>
-<div class="source-note">
-<p>The real thing: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=317">RM0368 Rev 6, Fig. 87 <em>General-purpose timer block diagram</em> — p.&nbsp;317</a> — find every block from this slide in it.</p>
-</div>
-</section>
-<section id="practice-pick-the-values" class="slide level2">
-<h2>Practice: pick the values</h2>
+<section id="practice-choose-psc-and-arr-for-200-ms" class="slide level2">
+<h2>Practice: choose PSC and ARR for 200 ms</h2>
 <p>Required: one update event every <strong>200 ms</strong> from the 16 MHz timer clock.</p>
 <div class="prompt-list compact-prompts">
 <div class="prompt-item">
@@ -457,18 +357,31 @@ Simplified hardware diagram of the TIM2 time base: the 16 megahertz timer clock 
 <p><code>PSC = 15999</code>, <code>ARR = 199</code>. Alternatives abound: <code>PSC = 1599</code> (10 kHz) with <code>ARR = 1999</code> also gives 200 ms.</p>
 </div>
 </section>
-<section id="configuring-the-time-base" class="slide level2">
-<h2>Configuring the time base</h2>
-<div class="sourceCode" id="cb6" data-code-line-numbers="1-7|4|6|7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a>TIM_HandleTypeDef htim2<span class="op">;</span></span>
-<span id="cb6-2"><a></a></span>
-<span id="cb6-3"><a></a>htim2<span class="op">.</span>Instance           <span class="op">=</span> TIM2<span class="op">;</span></span>
-<span id="cb6-4"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Prescaler     <span class="op">=</span> <span class="dv">15999</span><span class="op">;</span>              <span class="co">// 16 MHz -&gt; 1 kHz</span></span>
-<span id="cb6-5"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>CounterMode   <span class="op">=</span> TIM_COUNTERMODE_UP<span class="op">;</span></span>
-<span id="cb6-6"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Period        <span class="op">=</span> <span class="dv">999</span><span class="op">;</span>                <span class="co">// 1 kHz -&gt; 1 s</span></span>
-<span id="cb6-7"><a></a>HAL_TIM_Base_Init<span class="op">(&amp;</span>htim2<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="the-timer-registers-behind-the-time-base" class="slide level2">
+<h2>The timer registers behind the time base</h2>
+<svg class="story-visual" viewbox="0 0 1440 520" style="max-height:500px" role="img" aria-labelledby="timhw-title">
+<title id="timhw-title">
+Simplified hardware diagram of the TIM2 time base: the 16 megahertz timer clock enters the prescaler, which divides it using the PSC register; the divided clock advances the counter register CNT; a comparator matches CNT against the auto-reload register ARR, and a match produces the update event, setting UIF, reloading CNT to zero, and, if UIE is set, raising TIM2’s interrupt request to the NVIC
+</title>
+<defs> <marker id="hw2-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> <marker id="hw2-arrow-o" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d47b28"></path></marker> </defs> <rect x="170" y="50" width="1080" height="420" rx="16" fill="#fbfdfe" stroke="#c8d8e2" stroke-width="4"></rect> <text x="192" y="88" fill="#174f73" font-size="24" font-weight="700">TIM2 time base (simplified)</text> <text x="30" y="178" fill="#174f73" font-size="22" font-weight="700">timer clock</text> <text x="30" y="206" fill="#5a6b76" font-size="20">16 MHz (APB1)</text> <line x1="30" y1="230" x2="222" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <rect x="220" y="175" width="230" height="110" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect> <text x="335" y="218" text-anchor="middle" fill="#5a6b76" font-size="19" font-weight="700" letter-spacing="1">PRESCALER</text> <text x="335" y="256" text-anchor="middle" fill="#174f73" font-size="25" font-weight="700">÷ (PSC + 1)</text> <rect x="220" y="315" width="230" height="44" rx="6" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="335" y="344" text-anchor="middle" fill="#174f73" font-size="19" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;PSC = 15999</text> <line x1="335" y1="315" x2="335" y2="290" stroke="#c8d8e2" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#hw2-arrow)"></line> <line x1="450" y1="230" x2="497" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <text x="473" y="210" text-anchor="middle" fill="#5a6b76" font-size="19">1 kHz</text> <rect x="505" y="175" width="210" height="110" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect> <text x="610" y="218" text-anchor="middle" fill="#5a6b76" font-size="19" font-weight="700" letter-spacing="1">COUNTER</text> <text x="610" y="256" text-anchor="middle" fill="#174f73" font-size="25" font-weight="700" font-family="ui-monospace, Menlo, monospace">CNT ++</text> <rect x="505" y="315" width="210" height="44" rx="6" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="610" y="344" text-anchor="middle" fill="#174f73" font-size="19" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;CNT</text> <line x1="610" y1="315" x2="610" y2="290" stroke="#c8d8e2" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#hw2-arrow)"></line> <text x="610" y="388" text-anchor="middle" fill="#5a6b76" font-size="18">runs while CR1.CEN = 1</text> <line x1="715" y1="230" x2="746" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <circle cx="790" cy="230" r="37" fill="#ffffff" stroke="#174f73" stroke-width="3"></circle> <text x="790" y="241" text-anchor="middle" fill="#174f73" font-size="28" font-weight="700">=?</text> <rect x="675" y="390" width="230" height="44" rx="6" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="790" y="419" text-anchor="middle" fill="#174f73" font-size="19" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;ARR = 999</text> <line x1="790" y1="390" x2="790" y2="272" stroke="#2b789f" stroke-width="3" marker-end="url(#hw2-arrow)"></line> <text x="808" y="332" fill="#5a6b76" font-size="18">top value</text> <path d="M 790 190 C 790 110, 650 110, 615 170" fill="none" stroke="#d47b28" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#hw2-arrow-o)"></path> <text x="712" y="120" text-anchor="middle" fill="#d47b28" font-size="19" font-weight="700">match → reload CNT to 0</text> <line x1="827" y1="230" x2="872" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <rect x="880" y="170" width="240" height="120" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect> <text x="1000" y="210" text-anchor="middle" fill="#d47b28" font-size="19" font-weight="700" letter-spacing="1">UPDATE EVENT</text> <text x="1000" y="246" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">UIF = 1 (SR)</text> <text x="1000" y="276" text-anchor="middle" fill="#5a6b76" font-size="18">pending until cleared</text> <line x1="1120" y1="230" x2="1147" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <rect x="1155" y="190" width="80" height="80" rx="8" fill="#ffffff" stroke="#c8d8e2" stroke-width="2.5"></rect> <text x="1195" y="224" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">UIE?</text> <text x="1195" y="252" text-anchor="middle" fill="#5a6b76" font-size="16">(DIER)</text> <line x1="1235" y1="230" x2="1310" y2="230" stroke="#2b789f" stroke-width="4" marker-end="url(#hw2-arrow)"></line> <text x="1318" y="210" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">TIM2_IRQn</text> <text x="1318" y="240" fill="#5a6b76" font-size="19">→ NVIC</text> <text x="1318" y="266" fill="#5a6b76" font-size="18">(L06 path)</text>
+</svg>
+<p>Registers you write once (<code>PSC</code>, <code>ARR</code>), one that never stops (<code>CNT</code>), and one bit the hardware sets for you (<code>UIF</code>).</p>
+<div class="source-note">
+<p>The real thing: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=317">RM0368 Rev 6, Fig. 87 <em>General-purpose timer block diagram</em> — p.&nbsp;317</a>. Find every block from this slide in it.</p>
+</div>
+</section>
+<section id="configure-the-timer-time-base-in-hal" class="slide level2">
+<h2>Configure the timer time base in HAL</h2>
+<div class="sourceCode" id="cb5" data-code-line-numbers="1-7|4|6|7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a></a>TIM_HandleTypeDef htim2<span class="op">;</span></span>
+<span id="cb5-2"><a></a></span>
+<span id="cb5-3"><a></a>htim2<span class="op">.</span>Instance           <span class="op">=</span> TIM2<span class="op">;</span></span>
+<span id="cb5-4"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Prescaler     <span class="op">=</span> <span class="dv">15999</span><span class="op">;</span>              <span class="co">// 16 MHz -&gt; 1 kHz</span></span>
+<span id="cb5-5"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>CounterMode   <span class="op">=</span> TIM_COUNTERMODE_UP<span class="op">;</span></span>
+<span id="cb5-6"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Period        <span class="op">=</span> <span class="dv">999</span><span class="op">;</span>                <span class="co">// 1 kHz -&gt; 1 s</span></span>
+<span id="cb5-7"><a></a>HAL_TIM_Base_Init<span class="op">(&amp;</span>htim2<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> The handle structure collects the timer’s settings—<code>GPIO_InitTypeDef</code>’s pattern again.</p>
+<p><span>01</span> The handle structure collects the timer’s settings, the <code>GPIO_InitTypeDef</code> pattern again.</p>
 </div>
 <div class="vertical-item">
 <p><span>02</span> <code>Period</code> is the HAL’s name for the <code>ARR</code> value.</p>
@@ -481,85 +394,140 @@ Simplified hardware diagram of the TIM2 time base: the 16 megahertz timer clock 
 <p>Deep dive: <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=1065">UM1725 Rev 8, TIM base functions — p.&nbsp;1065</a>.</p>
 </div>
 </section>
-<section id="preload-and-egr" class="slide level2">
-<h2>Preload and <code>EGR</code></h2>
+<section id="preload-when-new-psc-and-arr-values-apply" class="slide level2">
+<h2>Preload: when new PSC and ARR values apply</h2>
 <p>New <code>PSC</code> and <code>ARR</code> values do not necessarily act immediately:</p>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> <code>PSC</code> is <em>always buffered</em>: the new value is copied into use at the next update event—up to one full period later.</p>
+<p><span>01</span> <code>PSC</code> is <em>always buffered</em>: the new value is copied into use at the next update event, up to one full period later.</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> <code>ARR</code> is buffered only when auto-reload preload (<code>ARPE</code>) is enabled—the HAL default writes it immediately.</p>
+<p><span>02</span> <code>ARR</code> is buffered only when auto-reload preload (<code>ARPE</code>) is enabled. The HAL default writes it immediately.</p>
 </div>
 <div class="vertical-item">
-<p><span>03</span> Writing the <code>UG</code> bit in <code>TIM2-&gt;EGR</code> <em>forces an update event now</em>: the buffered prescaler loads and <code>CNT</code> resets. This is exactly why the lab’s bare-metal init writes <code>TIM2-&gt;EGR</code>.</p>
+<p><span>03</span> Writing the <code>UG</code> bit in <code>TIM2-&gt;EGR</code> <em>forces an update event now</em>: the buffered prescaler loads and <code>CNT</code> resets. This is why the lab’s bare-metal init writes <code>TIM2-&gt;EGR</code>.</p>
 </div>
 </div>
 <div class="relationship-strip">
 <p>Changing a running timer’s speed? First ask <em>when</em> the new values take effect.</p>
 </div>
 </section>
-<section id="polling-the-update-flag" class="slide level2">
-<h2>Polling the update flag</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a></a>HAL_TIM_Base_Start<span class="op">(&amp;</span>htim2<span class="op">);</span></span>
-<span id="cb7-2"><a></a></span>
-<span id="cb7-3"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb7-4"><a></a>    <span class="co">/* other work runs freely here */</span></span>
-<span id="cb7-5"><a></a></span>
-<span id="cb7-6"><a></a>    <span class="cf">if</span> <span class="op">(</span>__HAL_TIM_GET_FLAG<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_FLAG_UPDATE<span class="op">)</span> <span class="op">!=</span> RESET<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb7-7"><a></a>        __HAL_TIM_CLEAR_FLAG<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_FLAG_UPDATE<span class="op">);</span></span>
-<span id="cb7-8"><a></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span>   <span class="co">// once per second</span></span>
-<span id="cb7-9"><a></a>    <span class="op">}</span></span>
-<span id="cb7-10"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="../assets/images/uif_polling_timeline.svg" class="quarto-figure quarto-figure-center" alt="The UIF flag as a signal set by each update event and cleared shortly after by the polling loop; below it, the loop's repeated checks, with the check that finds the flag highlighted" height="210"></p>
-</figure>
+<section id="polling-the-timer-update-flag" class="slide level2 spot-rest-all">
+<h2>Polling the timer update flag</h2>
+<div class="spot-sub">
+<span class="spot-line g0"><span class="spot-tag">Polling</span>The main loop asks the timer on every pass. <span class="spot-mark">1</span> start the counter, no interrupt. <span class="spot-mark">2</span> read <code>UIF</code>. <span class="spot-mark">3</span> clear it. <span class="spot-mark">4</span> do the work.</span>
+<span class="spot-line fragment custom g1" data-fragment-index="1"><span class="spot-tag">Ask</span>Every pass reads <code>UIF</code> with <code>__HAL_TIM_GET_FLAG()</code>. Most passes see 0 and move on. The loop never waits.</span>
+<span class="spot-line fragment custom g2" data-fragment-index="2"><span class="spot-tag">Act</span>When <code>UIF</code> is 1: clear it first with <code>__HAL_TIM_CLEAR_FLAG()</code>, then toggle LD2. An uncleared <code>UIF</code> reads as a new event on the very next pass.</span>
+<span class="spot-line fragment custom g3 spot-all" data-fragment-index="3"><span class="spot-tag">Cost</span>Polling keeps the loop free but spends one read on every pass, and a slow pass sees the event late. The interrupt path on the next slide removes the asking.</span>
 </div>
-<p>Check the flag, act, <strong>clear the flag</strong>—an uncleared <code>UIF</code> reads as an instant new event.</p>
+<div class="spot-grid flow-svg">
+<svg class="story-visual" viewbox="0 0 640 600" role="img" aria-labelledby="poll-flow-title">
+<title id="poll-flow-title">Flowchart of the polling loop: start the timer, do other work, test whether UIF is 1; if not, go back to other work; if yes, clear UIF, toggle the LED, and go back to other work</title>
+<defs>
+<marker id="pf-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker>
+</defs>
+<g class="spot">
+<rect x="150" y="14" width="340" height="62" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect>
+<text x="320" y="54" text-anchor="middle" fill="#174f73" font-size="27" font-weight="700" font-family="ui-monospace, Menlo, monospace">HAL_TIM_Base_Start</text>
+<line x1="320" y1="76" x2="320" y2="118" stroke="#2b789f" stroke-width="4" marker-end="url(#pf-arrow)"></line>
+</g>
+<g class="fragment custom spot g1" data-fragment-index="1">
+<rect x="150" y="124" width="340" height="62" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="2.5"></rect>
+<text x="320" y="165" text-anchor="middle" fill="#174f73" font-size="28" font-weight="700">other work</text>
+<line x1="320" y1="186" x2="320" y2="226" stroke="#2b789f" stroke-width="4" marker-end="url(#pf-arrow)"></line>
+<polygon points="320,232 470,300 320,368 170,300" fill="#ffffff" stroke="#174f73" stroke-width="3"></polygon>
+<text x="320" y="310" text-anchor="middle" fill="#174f73" font-size="28" font-weight="700" font-family="ui-monospace, Menlo, monospace">UIF = 1 ?</text>
+<path d="M 470 300 H 560 V 155 H 496" fill="none" stroke="#2b789f" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#pf-arrow)"></path>
+<text x="520" y="286" fill="#5a6b76" font-size="24">no</text>
+</g>
+<g class="fragment custom spot g2" data-fragment-index="2">
+<line x1="320" y1="368" x2="320" y2="410" stroke="#3f7f58" stroke-width="4" marker-end="url(#pf-arrow)"></line>
+<text x="338" y="398" fill="#3f7f58" font-size="24" font-weight="700">yes</text>
+<rect x="150" y="416" width="340" height="62" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect>
+<text x="320" y="457" text-anchor="middle" fill="#b8621a" font-size="28" font-weight="700">clear UIF</text>
+<line x1="320" y1="478" x2="320" y2="518" stroke="#3f7f58" stroke-width="4" marker-end="url(#pf-arrow)"></line>
+<rect x="150" y="524" width="340" height="62" rx="10" fill="#edf6f0" stroke="#3f7f58" stroke-width="3"></rect>
+<text x="320" y="565" text-anchor="middle" fill="#2f7a4c" font-size="28" font-weight="700">toggle LD2</text>
+<path d="M 150 555 H 80 V 155 H 144" fill="none" stroke="#2b789f" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#pf-arrow)"></path>
+</g>
+</svg>
+<div class="spot-stack">
+<div class="spot-card dense">
+<div class="spot-head">Runs in main() <em>polling, no interrupt enabled</em></div>
+<pre><code><span class="spot-row spot"><span class="tk-blue">HAL_TIM_Base_Start</span>(&amp;htim2);<span class="spot-n">1</span></span><span class="spot-row spot-frame"></span><span class="spot-row spot-frame">while (1) {</span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">    <span class="tk-dim">/* other work runs freely here */</span></span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">    if (<span class="tk-navy">__HAL_TIM_GET_FLAG</span>(&amp;htim2, <span class="tk-navy">TIM_FLAG_UPDATE</span>)) {<span class="spot-n">2</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">        <span class="tk-tim">__HAL_TIM_CLEAR_FLAG</span>(&amp;htim2, <span class="tk-tim">TIM_FLAG_UPDATE</span>);<span class="spot-n">3</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">        <span class="tk-gpio">HAL_GPIO_TogglePin</span>(<span class="tk-gpio">GPIOA</span>, <span class="tk-gpio">GPIO_PIN_5</span>);<span class="spot-n">4</span></span><span class="spot-row spot-frame">    }</span><span class="spot-row spot-frame">}</span></code></pre>
+</div>
+</div>
+</div>
 </section>
-<section id="from-polling-to-the-l06-path" class="slide level2">
-<h2>From polling to the L06 path</h2>
-<p>Polling still spends loop time asking. The update event can instead take the exact path B1’s press took:</p>
-<svg class="story-visual" viewbox="0 0 1440 275" role="img" aria-labelledby="timirq-title">
+<section id="the-update-event-can-raise-an-interrupt" class="slide level2">
+<h2>The update event can raise an interrupt</h2>
+<p>Polling still spends loop time asking. The update event can instead take the exact path B1’s press took in L06:</p>
+<svg class="story-visual" viewbox="0 0 1440 300" role="img" aria-labelledby="timirq-title">
 <title id="timirq-title">
 The timer update event follows the same interrupt path as the L06 button: the update flag raises TIM2’s interrupt request, the NVIC accepts it, the vector table selects the handler, the HAL helper clears the flag and calls the period-elapsed callback
 </title>
-<defs> <marker id="ti-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> </defs> <rect x="7" y="45" width="215" height="155" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect> <text x="114" y="97" text-anchor="middle" fill="#d47b28" font-size="17" font-weight="700" letter-spacing="0.5">UPDATE EVENT</text> <text x="114" y="140" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">UIF = 1</text> <g class="fragment"> <line x1="225" y1="122" x2="242" y2="122" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="248" y="45" width="205" height="155" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="350" y="97" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="0.5">REQUEST</text> <text x="350" y="140" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">TIM2_IRQn</text> </g> <g class="fragment"> <line x1="456" y1="122" x2="473" y2="122" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="479" y="45" width="175" height="155" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="566" y="97" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="0.5">NVIC</text> <text x="566" y="140" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700">enable · priority</text> </g> <g class="fragment"> <line x1="657" y1="122" x2="674" y2="122" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="680" y="45" width="210" height="155" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="785" y="97" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="0.5">VECTOR TABLE</text> <text x="785" y="140" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700">finds the handler</text> </g> <g class="fragment"> <line x1="893" y1="122" x2="910" y2="122" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="916" y="45" width="265" height="155" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1048" y="97" text-anchor="middle" fill="#5a6b76" font-size="17" font-weight="700" letter-spacing="0.5">HANDLER + HELPER</text> <text x="1048" y="140" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">TIM2_IRQHandler()</text> <text x="1048" y="173" text-anchor="middle" fill="#5a6b76" font-size="16">clears UIF</text> </g> <g class="fragment"> <line x1="1184" y1="122" x2="1201" y2="122" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="1207" y="45" width="225" height="155" rx="10" fill="#edf6f0" stroke="#3f7f58" stroke-width="3"></rect> <text x="1319" y="97" text-anchor="middle" fill="#3f7f58" font-size="17" font-weight="700" letter-spacing="0.5">YOUR CALLBACK</text> <text x="1319" y="140" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">PeriodElapsed…()</text> </g> <text x="720" y="252" text-anchor="middle" fill="#5a6b76" font-size="21">L06 taught this path with EXTI13. Today only the first box changes.</text>
+<defs> <marker id="ti-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> </defs> <rect x="7" y="40" width="215" height="170" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect> <text x="114" y="96" text-anchor="middle" fill="#d47b28" font-size="20" font-weight="700" letter-spacing="0.5">UPDATE EVENT</text> <text x="114" y="146" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">UIF = 1</text> <g class="fragment"> <line x1="225" y1="125" x2="242" y2="125" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="248" y="40" width="205" height="170" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="350" y="96" text-anchor="middle" fill="#5a6b76" font-size="20" font-weight="700" letter-spacing="0.5">REQUEST</text> <text x="350" y="146" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">TIM2_IRQn</text> </g> <g class="fragment"> <line x1="456" y1="125" x2="473" y2="125" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="479" y="40" width="175" height="170" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="566" y="96" text-anchor="middle" fill="#5a6b76" font-size="20" font-weight="700" letter-spacing="0.5">NVIC</text> <text x="566" y="146" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700">enable, priority</text> </g> <g class="fragment"> <line x1="657" y1="125" x2="674" y2="125" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="680" y="40" width="210" height="170" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="785" y="96" text-anchor="middle" fill="#5a6b76" font-size="20" font-weight="700" letter-spacing="0.5">VECTOR TABLE</text> <text x="785" y="146" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700">finds the handler</text> </g> <g class="fragment"> <line x1="893" y1="125" x2="910" y2="125" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="916" y="40" width="265" height="170" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1048" y="96" text-anchor="middle" fill="#5a6b76" font-size="20" font-weight="700" letter-spacing="0.5">HANDLER + HAL</text> <text x="1048" y="146" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">TIM2_IRQHandler()</text> <text x="1048" y="184" text-anchor="middle" fill="#5a6b76" font-size="19">clears UIF</text> </g> <g class="fragment"> <line x1="1184" y1="125" x2="1201" y2="125" stroke="#2b789f" stroke-width="4" marker-end="url(#ti-arrow)"></line> <rect x="1207" y="40" width="225" height="170" rx="10" fill="#edf6f0" stroke="#3f7f58" stroke-width="3"></rect> <text x="1319" y="96" text-anchor="middle" fill="#3f7f58" font-size="20" font-weight="700" letter-spacing="0.5">YOUR CALLBACK</text> <text x="1319" y="146" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">PeriodElapsed…()</text> </g> <text x="720" y="272" text-anchor="middle" fill="#5a6b76" font-size="24">L06 taught this path with EXTI13. Today only the first box changes.</text>
 </svg>
-</section>
-<section id="interrupt-mode-setup-and-callback" class="slide level2">
-<h2>Interrupt mode: setup and callback</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a>HAL_NVIC_SetPriority<span class="op">(</span>TIM2_IRQn<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
-<span id="cb8-2"><a></a>HAL_NVIC_EnableIRQ<span class="op">(</span>TIM2_IRQn<span class="op">);</span></span>
-<span id="cb8-3"><a></a>HAL_TIM_Base_Start_IT<span class="op">(&amp;</span>htim2<span class="op">);</span>     <span class="co">// start + enable update interrupt</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a><span class="dt">void</span> HAL_TIM_PeriodElapsedCallback<span class="op">(</span>TIM_HandleTypeDef <span class="op">*</span>htim<span class="op">)</span></span>
-<span id="cb9-2"><a></a><span class="op">{</span></span>
-<span id="cb9-3"><a></a>    <span class="cf">if</span> <span class="op">(</span>htim<span class="op">-&gt;</span>Instance <span class="op">==</span> TIM2<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb9-4"><a></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
-<span id="cb9-5"><a></a>    <span class="op">}</span></span>
-<span id="cb9-6"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="vertical-list compact-list">
-<div class="vertical-item fragment">
-<p><span>01</span> <code>Start_IT</code> sets <code>UIE</code> in <code>TIM2-&gt;DIER</code>; the NVIC lines are L06’s checklist with a new request name.</p>
-</div>
-<div class="vertical-item fragment">
-<p><span>02</span> HAL clears <code>UIF</code>, then calls the one shared callback—check <code>htim-&gt;Instance</code>.</p>
-</div>
-<div class="vertical-item fragment">
-<p><span>03</span> CubeMX generates <code>TIM2_IRQHandler()</code> in <code>stm32f4xx_it.c</code>—verify it exists; do not write your own.</p>
-</div>
+<div class="relationship-strip">
+<p>Hardware raises the request; HAL clears <code>UIF</code> and calls your callback. The main loop no longer asks at all.</p>
 </div>
 </section>
-<section id="rules-for-the-callback" class="slide level2">
-<h2>Rules for the callback</h2>
+<section id="timer-interrupt-mode-start-and-callback" class="slide level2">
+<h2>Timer interrupt mode: start and callback</h2>
+<div class="spot-sub">
+<span class="spot-line g0"><span class="spot-tag">Setup</span>Three lines in <code>main()</code> arm the timer once. <span class="spot-mark">1</span> highest priority. <span class="spot-mark">2</span> unmask <code>TIM2_IRQn</code> in the NVIC. <span class="spot-mark">3</span> start the counter and set <code>UIE</code> in <code>TIM2-&gt;DIER</code>.</span>
+<span class="spot-line fragment custom g1" data-fragment-index="1"><span class="spot-tag">Hardware</span>TIM2 counts up to <code>ARR</code>, overflows and sets <code>UIF</code>. The NVIC accepts the request. No code of yours runs here.</span>
+<span class="spot-line fragment custom g2" data-fragment-index="2"><span class="spot-tag">Generated</span>The NVIC jumps to <code>TIM2_IRQHandler()</code>, which calls <code>HAL_TIM_IRQHandler()</code>. CubeMX wrote both in <code>stm32f4xx_it.c</code>. They clear <code>UIF</code> and pick your callback. Do not write your own.</span>
+<span class="spot-line fragment custom g3" data-fragment-index="3"><span class="spot-tag">Your code</span>The HAL calls <code>HAL_TIM_PeriodElapsedCallback()</code> on every period. <span class="spot-mark">4</span> one callback serves all timers, so check the instance. <span class="spot-mark">5</span> do the work and return.</span>
+<span class="spot-line fragment custom g4 spot-all" data-fragment-index="4"><span class="spot-tag">Whole path</span>One setup block, one hardware event, two generated handlers, one callback you write. The colours in the path match the colours in the code.</span>
+</div>
+
+<div class="spot-grid">
+<div class="spot-flow">
+<span class="spot-pill p-setup spot g0">main() setup</span>
+<span class="spot-arrow fragment custom spot g1" data-fragment-index="1">↓</span>
+<span class="spot-pill p-timer fragment custom spot g1" data-fragment-index="1">TIM2 counts to ARR</span>
+<span class="spot-arrow fragment custom spot g1" data-fragment-index="1">↓</span>
+<span class="spot-pill p-timer mono fragment custom spot g1" data-fragment-index="1">UIF = 1</span>
+<span class="spot-arrow fragment custom spot g1" data-fragment-index="1">↓</span>
+<span class="spot-pill p-nvic fragment custom spot g1" data-fragment-index="1">NVIC accepts TIM2_IRQn</span>
+<span class="spot-arrow fragment custom spot g2" data-fragment-index="2">↓</span>
+<span class="spot-pill p-gen mono fragment custom spot g2" data-fragment-index="2">TIM2_IRQHandler()</span>
+<span class="spot-arrow fragment custom spot g2" data-fragment-index="2">↓</span>
+<span class="spot-pill p-gen mono fragment custom spot g2" data-fragment-index="2">HAL_TIM_IRQHandler()</span>
+<span class="spot-arrow fragment custom spot g3" data-fragment-index="3">↓</span>
+<span class="spot-pill p-cb mono fragment custom spot g3" data-fragment-index="3">PeriodElapsedCallback()</span>
+<span class="spot-arrow loop fragment custom spot g3" data-fragment-index="3">↻ back to the main loop</span>
+</div>
+<div class="spot-stack">
+<div class="spot-card spot g0">
+<div class="spot-head">Runs once <em>in main(), before the while loop</em></div>
+<pre><code><span class="tk-nvic">HAL_NVIC_SetPriority</span>(<span class="tk-nvic">TIM2_IRQn</span>, 0, 0);<span class="spot-n">1</span>
+<span class="tk-nvic">HAL_NVIC_EnableIRQ</span>(<span class="tk-nvic">TIM2_IRQn</span>);<span class="spot-n">2</span>
+<span class="tk-tim">HAL_TIM_Base_Start_IT</span>(&amp;<span class="tk-tim">htim2</span>);<span class="spot-n">3</span></code></pre>
+</div>
+<div class="spot-card fragment custom spot g3" data-fragment-index="3">
+<div class="spot-head">Runs every period <em>called by the HAL, not by you</em></div>
+<pre><code><span class="tk-dim">void</span> <span class="tk-tim">HAL_TIM_PeriodElapsedCallback</span>(
+        <span class="tk-dim">TIM_HandleTypeDef *htim</span>)
+{
+    <span class="tk-dim">if</span> (htim-&gt;Instance == <span class="tk-tim">TIM2</span>) {<span class="spot-n">4</span>
+        <span class="tk-gpio">HAL_GPIO_TogglePin</span>(<span class="tk-gpio">GPIOA</span>, <span class="tk-gpio">GPIO_PIN_5</span>);<span class="spot-n">5</span>
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="rules-for-code-inside-the-callback" class="slide level2">
+<h2>Rules for code inside the callback</h2>
 <p>L06’s rules apply unchanged:</p>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
 <p><span>01</span> Check which instance caused the interrupt.</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> Record that the event happened—set a flag, count a tick.</p>
+<p><span>02</span> Record that the event happened: set a flag, count a tick.</p>
 </div>
 <div class="vertical-item">
 <p><span>03</span> Return quickly. No <code>HAL_Delay()</code>, no printing, no application logic.</p>
@@ -569,60 +537,108 @@ The timer update event follows the same interrupt path as the L06 button: the up
 <p>A 1 ms timer callback that takes 2 ms to run is a program that falls behind forever.</p>
 </div>
 </section>
-<section id="the-1-ms-tick" class="slide level2">
-<h2>The 1 ms tick</h2>
-<p>The most useful timer configuration in embedded practice—one fast timer, one counter:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a></a><span class="dt">volatile</span> <span class="dt">uint32_t</span> ms <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb10-2"><a></a></span>
-<span id="cb10-3"><a></a><span class="co">/* PSC = 15  -&gt; 16 MHz / 16   = 1 MHz</span></span>
-<span id="cb10-4"><a></a><span class="co">   ARR = 999 -&gt; 1 MHz / 1000  = 1 kHz -&gt; update every 1 ms */</span></span>
-<span id="cb10-5"><a></a></span>
-<span id="cb10-6"><a></a><span class="dt">void</span> HAL_TIM_PeriodElapsedCallback<span class="op">(</span>TIM_HandleTypeDef <span class="op">*</span>htim<span class="op">)</span></span>
-<span id="cb10-7"><a></a><span class="op">{</span></span>
-<span id="cb10-8"><a></a>    <span class="cf">if</span> <span class="op">(</span>htim<span class="op">-&gt;</span>Instance <span class="op">==</span> TIM2<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb10-9"><a></a>        ms<span class="op">++;</span></span>
-<span id="cb10-10"><a></a>    <span class="op">}</span></span>
-<span id="cb10-11"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>ms</code> is the L06 <code>button_event</code> pattern generalized: the callback reports, <code>main()</code> consumes. <code>volatile</code> for the same reason.</p>
-</section>
-<section id="many-intervals-one-timer" class="slide level2">
-<h2>Many intervals, one timer</h2>
-<div class="sourceCode" id="cb11" data-code-line-numbers="1-14|4-7|8-11"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a></a><span class="dt">uint32_t</span> t_led <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> t_sample <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb11-2"><a></a></span>
-<span id="cb11-3"><a></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb11-4"><a></a>    <span class="cf">if</span> <span class="op">((</span>ms <span class="op">-</span> t_led<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">500</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span>          <span class="co">// every 500 ms</span></span>
-<span id="cb11-5"><a></a>        t_led <span class="op">=</span> ms<span class="op">;</span></span>
-<span id="cb11-6"><a></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
-<span id="cb11-7"><a></a>    <span class="op">}</span></span>
-<span id="cb11-8"><a></a>    <span class="cf">if</span> <span class="op">((</span>ms <span class="op">-</span> t_sample<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">100</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span>       <span class="co">// every 100 ms</span></span>
-<span id="cb11-9"><a></a>        t_sample <span class="op">=</span> ms<span class="op">;</span></span>
-<span id="cb11-10"><a></a>        <span class="co">/* read a sensor */</span></span>
-<span id="cb11-11"><a></a>    <span class="op">}</span></span>
-<span id="cb11-12"><a></a>    <span class="co">/* other work continues */</span></span>
-<span id="cb11-13"><a></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="relationship-strip">
-<p>Unsigned subtraction keeps every schedule correct when <code>ms</code> eventually wraps—the same arithmetic as L06’s debounce.</p>
+<section id="a-1-ms-tick-counter-from-the-timer" class="slide level2 spot-rest-all">
+<h2>A 1 ms tick counter from the timer</h2>
+<div class="spot-sub">
+<span class="spot-line g0"><span class="spot-tag">Tick counter</span>The timer interrupt counts milliseconds for <code>main()</code>. <span class="spot-mark">1</span> one shared counter. <span class="spot-mark">2</span> the callback checks the instance <span class="spot-mark">3</span> and adds one.</span>
+<span class="spot-line fragment custom g1" data-fragment-index="1"><span class="spot-tag">Hardware</span><code>PSC = 15</code>, <code>ARR = 999</code>: 16 MHz → 1 MHz → 1 kHz. One update event per millisecond. The generated handler and the HAL clear <code>UIF</code> and call the callback.</span>
+<span class="spot-line fragment custom g2" data-fragment-index="2"><span class="spot-tag">Your callback</span>The callback does one thing: <code>ms++</code>. It reports that a millisecond passed and returns. No waiting, no application logic.</span>
+<span class="spot-line fragment custom g3" data-fragment-index="3"><span class="spot-tag">Main loop</span><code>main()</code> reads <code>ms</code> whenever it likes. The ISR writes it and <code>main()</code> reads it, so it is <code>volatile</code>, for the same reason as L06's <code>button_event</code>.</span>
+<span class="spot-line fragment custom g4 spot-all" data-fragment-index="4"><span class="spot-tag">Pattern</span>The L06 pattern again: the callback reports, <code>main()</code> consumes. From here on, every delay in the program becomes a subtraction on <code>ms</code>.</span>
 </div>
-</section>
-<section id="one-tick-two-schedules" class="slide level2">
-<h2>One tick, two schedules</h2>
-<svg class="story-visual" viewbox="0 0 1440 225" style="max-height:200px" role="img" aria-labelledby="looppass-title">
-<title id="looppass-title">
-One pass of the scheduler loop: check whether 500 milliseconds have elapsed and toggle the LED if so, check whether 100 milliseconds have elapsed and read the sensor if so, do other work, and repeat
-</title>
-<defs> <marker id="lp-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker> </defs> <text x="66" y="72" text-anchor="middle" fill="#174f73" font-size="19" font-weight="700">each</text> <text x="66" y="96" text-anchor="middle" fill="#174f73" font-size="19" font-weight="700">pass</text> <line x1="112" y1="82" x2="152" y2="82" stroke="#2b789f" stroke-width="4" marker-end="url(#lp-arrow)"></line> <rect x="160" y="42" width="330" height="80" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect> <text x="325" y="90" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">ms − t_led ≥ 500 ?</text> <text x="510" y="70" fill="#5a6b76" font-size="16">no</text> <line x1="494" y1="82" x2="546" y2="82" stroke="#2b789f" stroke-width="4" marker-end="url(#lp-arrow)"></line> <line x1="325" y1="122" x2="325" y2="146" stroke="#3f7f58" stroke-width="3" marker-end="url(#lp-arrow)"></line> <text x="345" y="142" fill="#3f7f58" font-size="16" font-weight="700">yes</text> <rect x="170" y="152" width="310" height="52" rx="8" fill="#edf6f0" stroke="#3f7f58" stroke-width="2"></rect> <text x="325" y="185" text-anchor="middle" fill="#3f7f58" font-size="18" font-weight="700">toggle LD2 · t_led = ms</text> <rect x="554" y="42" width="360" height="80" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect> <text x="734" y="90" text-anchor="middle" fill="#174f73" font-size="20" font-weight="700" font-family="ui-monospace, Menlo, monospace">ms − t_sample ≥ 100 ?</text> <text x="934" y="70" fill="#5a6b76" font-size="16">no</text> <line x1="918" y1="82" x2="970" y2="82" stroke="#2b789f" stroke-width="4" marker-end="url(#lp-arrow)"></line> <line x1="734" y1="122" x2="734" y2="146" stroke="#3f7f58" stroke-width="3" marker-end="url(#lp-arrow)"></line> <text x="754" y="142" fill="#3f7f58" font-size="16" font-weight="700">yes</text> <rect x="580" y="152" width="308" height="52" rx="8" fill="#edf6f0" stroke="#3f7f58" stroke-width="2"></rect> <text x="734" y="185" text-anchor="middle" fill="#3f7f58" font-size="18" font-weight="700">read sensor · t_sample = ms</text> <rect x="978" y="42" width="250" height="80" rx="10" fill="#ffffff" stroke="#c8d8e2" stroke-width="2"></rect> <text x="1103" y="90" text-anchor="middle" fill="#5a6b76" font-size="19">other work</text> <path d="M 1232 82 H 1300 C 1360 82, 1360 12, 1300 12 H 150 C 100 12, 90 45, 90 70" fill="none" stroke="#2b789f" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#lp-arrow)"></path> <text x="1330" y="42" text-anchor="middle" fill="#5a6b76" font-size="16">repeat</text>
+<div class="spot-grid flow-svg">
+<svg class="story-visual" viewbox="0 0 640 560" role="img" aria-labelledby="tick-flow-title">
+<title id="tick-flow-title">Flow of the one millisecond tick: TIM2 raises an update event every millisecond, the interrupt handler and HAL clear the flag, the callback increments the ms counter, and main reads ms whenever it needs the time</title>
+<defs>
+<marker id="tk-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker>
+</defs>
+<g class="fragment custom spot g1" data-fragment-index="1">
+<rect x="110" y="14" width="420" height="92" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect>
+<text x="320" y="50" text-anchor="middle" fill="#b8621a" font-size="22" font-weight="700" letter-spacing="0.5">TIM2 UPDATE EVENT</text>
+<text x="320" y="87" text-anchor="middle" fill="#174f73" font-size="26" font-weight="700">every 1 ms (PSC 15, ARR 999)</text>
+<line x1="320" y1="106" x2="320" y2="150" stroke="#2b789f" stroke-width="4" marker-end="url(#tk-arrow)"></line>
+<rect x="110" y="156" width="420" height="92" rx="10" fill="#ffffff" stroke="#9fb3bf" stroke-width="2.5" stroke-dasharray="10 7"></rect>
+<text x="320" y="192" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" letter-spacing="0.5">HANDLER + HAL (generated)</text>
+<text x="320" y="229" text-anchor="middle" fill="#174f73" font-size="26" font-weight="700">clears UIF, calls the callback</text>
+<line x1="320" y1="248" x2="320" y2="292" stroke="#2b789f" stroke-width="4" marker-end="url(#tk-arrow)"></line>
+</g>
+<g class="fragment custom spot g2" data-fragment-index="2">
+<rect x="110" y="298" width="420" height="92" rx="10" fill="#edf6f0" stroke="#3f7f58" stroke-width="3"></rect>
+<text x="320" y="334" text-anchor="middle" fill="#2f7a4c" font-size="22" font-weight="700" letter-spacing="0.5">YOUR CALLBACK</text>
+<text x="320" y="374" text-anchor="middle" fill="#174f73" font-size="30" font-weight="700" font-family="ui-monospace, Menlo, monospace">ms++</text>
+</g>
+<g class="fragment custom spot g3" data-fragment-index="3">
+<line x1="320" y1="390" x2="320" y2="434" stroke="#2b789f" stroke-width="4" marker-end="url(#tk-arrow)"></line>
+<text x="340" y="420" fill="#5a6b76" font-size="22" font-style="italic">shared → volatile</text>
+<rect x="110" y="440" width="420" height="92" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="2.5"></rect>
+<text x="320" y="476" text-anchor="middle" fill="#2b789f" font-size="22" font-weight="700" letter-spacing="0.5">MAIN LOOP</text>
+<text x="320" y="513" text-anchor="middle" fill="#174f73" font-size="26" font-weight="700">reads ms whenever it likes</text>
+</g>
 </svg>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="../assets/images/tick_scheduler.svg" class="quarto-figure quarto-figure-center" alt="A millisecond timeline with LED toggles marked every 500 milliseconds and sensor reads every 100 milliseconds, both derived from the same g underscore ms counter" height="300"></p>
-</figure>
+<div class="spot-stack">
+<div class="spot-card">
+<div class="spot-head">Shared counter <em>in main.c; the HAL callback adds one every 1 ms</em></div>
+<pre><code><span class="spot-row spot g3 fragment custom" data-fragment-index="3"><span class="tk-blue">volatile</span> uint32_t <span class="tk-blue">ms</span> = 0;<span class="spot-n">1</span></span><span class="spot-row spot-frame"></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2"><span class="tk-dim">void</span> <span class="tk-gpio">HAL_TIM_PeriodElapsedCallback</span>(</span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">        <span class="tk-dim">TIM_HandleTypeDef *htim</span>)</span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">{</span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">    <span class="tk-dim">if</span> (htim-&gt;Instance == <span class="tk-tim">TIM2</span>) {<span class="spot-n">2</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">        <span class="tk-gpio">ms++</span>;<span class="spot-n">3</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">    }</span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">}</span></code></pre>
 </div>
-<div class="relationship-strip">
-<p>Add a third interval and the timer configuration does not change—only one more subtraction in the loop.</p>
+</div>
 </div>
 </section>
-<section id="practice-does-it-drift" class="slide level2">
-<h2>Practice: does it drift?</h2>
+<section id="many-intervals-from-one-tick-counter" class="slide level2 spot-rest-all">
+<h2>Many intervals from one tick counter</h2>
+<div class="spot-sub">
+<span class="spot-line g0"><span class="spot-tag">Scheduler</span>One pass of the main loop checks how much time each task has waited. <span class="spot-mark">1</span> the 500 ms task, <span class="spot-mark">2</span> the 100 ms task, <span class="spot-mark">3</span> other work, then repeat.</span>
+<span class="spot-line fragment custom g1" data-fragment-index="1"><span class="spot-tag">500 ms task</span><code>ms − t_led ≥ 500</code>: half a second has passed since the last toggle. Record the time first, <code>t_led = ms</code>, then toggle LD2.</span>
+<span class="spot-line fragment custom g2" data-fragment-index="2"><span class="spot-tag">100 ms task</span><code>ms − t_sample ≥ 100</code>: the same shape with a different interval. A third interval is one more subtraction. The timer setup does not change.</span>
+<span class="spot-line fragment custom g3" data-fragment-index="3"><span class="spot-tag">Other work</span>Nothing in this loop waits. Other work runs on every pass, and each task runs only when its time has come.</span>
+<span class="spot-line fragment custom g4 spot-all" data-fragment-index="4"><span class="spot-tag">Wrap-around</span>Unsigned subtraction keeps every schedule correct when <code>ms</code> wraps around after 49.7 days, the same arithmetic as L06's debounce.</span>
+</div>
+<div class="spot-grid flow-svg">
+<svg class="story-visual" viewbox="0 0 640 620" role="img" aria-labelledby="sched-flow-title">
+<title id="sched-flow-title">Flowchart of one pass of the scheduler loop: if 500 milliseconds have elapsed, toggle the LED and record the time; if 100 milliseconds have elapsed, read the sensor and record the time; do other work; repeat</title>
+<defs>
+<marker id="sc-arrow" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2b789f"></path></marker>
+</defs>
+<g class="fragment custom spot g1" data-fragment-index="1">
+<polygon points="250,20 440,90 250,160 60,90" fill="#ffffff" stroke="#174f73" stroke-width="3"></polygon>
+<text x="250" y="99" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">ms − t_led ≥ 500 ?</text>
+<line x1="440" y1="90" x2="478" y2="90" stroke="#3f7f58" stroke-width="4" marker-end="url(#sc-arrow)"></line>
+<text x="448" y="76" fill="#3f7f58" font-size="21" font-weight="700">yes</text>
+<rect x="484" y="46" width="146" height="88" rx="10" fill="#edf6f0" stroke="#3f7f58" stroke-width="3"></rect>
+<text x="557" y="82" text-anchor="middle" fill="#2f7a4c" font-size="22" font-weight="700">toggle LD2</text>
+<text x="557" y="114" text-anchor="middle" fill="#2f7a4c" font-size="20" font-family="ui-monospace, Menlo, monospace">t_led = ms</text>
+<path d="M 557 134 V 190 H 250" fill="none" stroke="#3f7f58" stroke-width="2.5" stroke-dasharray="8 6"></path>
+</g>
+<g class="fragment custom spot g2" data-fragment-index="2">
+<line x1="250" y1="160" x2="250" y2="214" stroke="#2b789f" stroke-width="4" marker-end="url(#sc-arrow)"></line>
+<text x="262" y="196" fill="#5a6b76" font-size="21">no</text>
+<polygon points="250,220 440,290 250,360 60,290" fill="#ffffff" stroke="#174f73" stroke-width="3"></polygon>
+<text x="250" y="299" text-anchor="middle" fill="#174f73" font-size="23" font-weight="700" font-family="ui-monospace, Menlo, monospace">ms − t_sample ≥ 100 ?</text>
+<line x1="440" y1="290" x2="478" y2="290" stroke="#3f7f58" stroke-width="4" marker-end="url(#sc-arrow)"></line>
+<text x="448" y="276" fill="#3f7f58" font-size="21" font-weight="700">yes</text>
+<rect x="484" y="246" width="146" height="88" rx="10" fill="#edf6f0" stroke="#3f7f58" stroke-width="3"></rect>
+<text x="557" y="282" text-anchor="middle" fill="#2f7a4c" font-size="22" font-weight="700">read sensor</text>
+<text x="557" y="314" text-anchor="middle" fill="#2f7a4c" font-size="19" font-family="ui-monospace, Menlo, monospace">t_sample = ms</text>
+<path d="M 557 334 V 390 H 250" fill="none" stroke="#3f7f58" stroke-width="2.5" stroke-dasharray="8 6"></path>
+</g>
+<g class="fragment custom spot g3" data-fragment-index="3">
+<line x1="250" y1="360" x2="250" y2="414" stroke="#2b789f" stroke-width="4" marker-end="url(#sc-arrow)"></line>
+<text x="262" y="396" fill="#5a6b76" font-size="21">no</text>
+<rect x="100" y="420" width="300" height="70" rx="10" fill="#e8f2f7" stroke="#2b789f" stroke-width="2.5"></rect>
+<text x="250" y="465" text-anchor="middle" fill="#174f73" font-size="27" font-weight="700">other work</text>
+<path d="M 250 490 V 540 H 24 V 90 H 54" fill="none" stroke="#2b789f" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#sc-arrow)"></path>
+<text x="300" y="570" text-anchor="middle" fill="#5a6b76" font-size="23">one pass, then repeat</text>
+</g>
+</svg>
+<div class="spot-stack">
+<div class="spot-card dense">
+<div class="spot-head">Runs in main() <em>one pass per loop, reads the shared ms</em></div>
+<pre><code><span class="spot-row spot">uint32_t <span class="tk-gpio">t_led</span> = 0, <span class="tk-gpio">t_sample</span> = 0;</span><span class="spot-row spot-frame"></span><span class="spot-row spot-frame">while (1) {</span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">    if ((<span class="tk-blue">ms</span> - <span class="tk-gpio">t_led</span>) &gt;= 500U) {        <span class="tk-dim">// 500 ms</span><span class="spot-n">1</span></span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">        <span class="tk-gpio">t_led</span> = <span class="tk-blue">ms</span>;</span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);</span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">    }</span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">    if ((<span class="tk-blue">ms</span> - <span class="tk-gpio">t_sample</span>) &gt;= 100U) {     <span class="tk-dim">// 100 ms</span><span class="spot-n">2</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">        <span class="tk-gpio">t_sample</span> = <span class="tk-blue">ms</span>;</span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">        <span class="tk-dim">/* read a sensor */</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">    }</span><span class="spot-row spot g3 fragment custom" data-fragment-index="3">    <span class="tk-dim">/* other work continues */</span><span class="spot-n">3</span></span><span class="spot-row spot-frame">}</span></code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="practice-does-the-schedule-drift" class="slide level2">
+<h2>Practice: does the schedule drift?</h2>
 <p>The scheduler reschedules with <code>t_led = ms;</code>. Suppose one loop pass occasionally takes <strong>30 ms</strong> because of other work.</p>
 <div class="prompt-list compact-prompts">
 <div class="prompt-item">
@@ -636,32 +652,52 @@ One pass of the scheduler loop: check whether 500 milliseconds have elapsed and 
 </div>
 </div>
 <div class="fragment relationship-strip">
-<p>Both versions can be up to 30 ms late once. <code>t_led = ms</code> re-anchors to the late moment, so every delay pushes all later toggles—error accumulates. <code>t_led += 500U</code> keeps deadlines anchored: one late toggle, no long-term drift.</p>
+<p>Both can be 30 ms late once. <code>t_led = ms</code> re-anchors to the late moment, so the error accumulates. <code>t_led += 500U</code> keeps the deadlines fixed: one late toggle, no drift.</p>
+</div>
+</section>
+<section id="systick-is-the-timer-behind-hal_delay" class="slide level2">
+<h2>SysTick is the timer behind <code>HAL_Delay</code></h2>
+<div class="big-question">
+<p>SysTick, a timer inside the Cortex-M core, has been ticking every millisecond since L01. <code>HAL_Delay</code> only <em>waits</em> on it.</p>
+</div>
+<div class="vertical-list compact-list">
+<div class="vertical-item">
+<p><span>01</span> HAL configures SysTick at startup; its interrupt increments HAL’s own millisecond counter.</p>
+</div>
+<div class="vertical-item">
+<p><span>02</span> <code>HAL_Delay(500)</code> reads that counter in a blocking loop. The counting was never the problem; the waiting was.</p>
+</div>
+<div class="vertical-item">
+<p><span>03</span> Today’s tick is the same idea on a timer <em>you</em> control, consumed without trapping the CPU.</p>
+</div>
+</div>
+<div class="source-note">
+<p>Deep dive: <a href="https://www.st.com/resource/en/programming_manual/pm0214-stm32-cortexm4-mcus-and-mpus-programming-manual-stmicroelectronics.pdf#page=246">PM0214 Rev 10, §4.5 <em>SysTick timer</em> — p.&nbsp;246</a>.</p>
 </div>
 </section>
 <section id="a-free-running-microsecond-timer" class="slide level2">
 <h2>A free-running microsecond timer</h2>
 <p>Leave <code>ARR</code> at its 32-bit maximum and the counter itself becomes a clock:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a></a><span class="co">/* PSC = 15 -&gt; 1 MHz: CNT increments once per microsecond */</span></span>
-<span id="cb12-2"><a></a><span class="dt">uint32_t</span> start <span class="op">=</span> TIM2<span class="op">-&gt;</span>CNT<span class="op">;</span></span>
-<span id="cb12-3"><a></a></span>
-<span id="cb12-4"><a></a>do_work<span class="op">();</span></span>
-<span id="cb12-5"><a></a></span>
-<span id="cb12-6"><a></a><span class="dt">uint32_t</span> elapsed_us <span class="op">=</span> TIM2<span class="op">-&gt;</span>CNT <span class="op">-</span> start<span class="op">;</span>   <span class="co">// wrap-safe</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a><span class="co">/* PSC = 15 -&gt; 1 MHz: CNT increments once per microsecond */</span></span>
+<span id="cb6-2"><a></a><span class="dt">uint32_t</span> start <span class="op">=</span> TIM2<span class="op">-&gt;</span>CNT<span class="op">;</span></span>
+<span id="cb6-3"><a></a></span>
+<span id="cb6-4"><a></a>do_work<span class="op">();</span></span>
+<span id="cb6-5"><a></a></span>
+<span id="cb6-6"><a></a><span class="dt">uint32_t</span> elapsed_us <span class="op">=</span> TIM2<span class="op">-&gt;</span>CNT <span class="op">-</span> start<span class="op">;</span>   <span class="co">// wrap-safe</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> No interrupts at all—just read the counter twice and subtract.</p>
+<p><span>01</span> No interrupts at all. Read the counter twice and subtract.</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> <code>TIM2</code> and <code>TIM5</code> are the F401’s 32-bit timers: at 1 MHz they wrap after ~71 minutes.</p>
+<p><span>02</span> <code>TIM2</code> and <code>TIM5</code> are the F401’s 32-bit timers: at 1 MHz they wrap after about 71 minutes.</p>
 </div>
 <div class="vertical-item">
 <p><span>03</span> This is how you <em>measure</em> code instead of guessing.</p>
 </div>
 </div>
 </section>
-<section id="the-timer-family" class="slide level2">
-<h2>The timer family</h2>
+<section id="the-stm32f401-timer-family" class="slide level2">
+<h2>The STM32F401 timer family</h2>
 <table class="caption-top">
 <colgroup>
 <col style="width: 33%">
@@ -697,112 +733,50 @@ One pass of the scheduler loop: check whether 500 milliseconds have elapsed and 
 <p>Every family shares today’s time base: clock → <code>PSC</code> → <code>CNT</code> → <code>ARR</code> → update. PWM and input capture (L08) are additions to it, not replacements.</p>
 </div>
 <div class="source-note">
-<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=316">RM0368 Rev 6, §13 <em>TIM2 to TIM5</em> — p.&nbsp;316</a>.</p>
+<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=316">RM0368 Rev 6, §13 <em>TIM2 to TIM5</em> — p.&nbsp;316</a>; register map §13.4 — p.&nbsp;353.</p>
 </div>
 </section>
-<section id="the-timer-registers" class="slide level2">
-<h2>The timer registers</h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Register</th>
-<th>Holds</th>
-<th>Today’s use</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>TIM2-&gt;PSC</code></td>
-<td>prescaler value</td>
-<td>set once</td>
-</tr>
-<tr class="even">
-<td><code>TIM2-&gt;ARR</code></td>
-<td>top value</td>
-<td>set once</td>
-</tr>
-<tr class="odd">
-<td><code>TIM2-&gt;CNT</code></td>
-<td>live count</td>
-<td>watch it move</td>
-</tr>
-<tr class="even">
-<td><code>TIM2-&gt;SR</code></td>
-<td>status flags — <code>UIF</code> is bit 0</td>
-<td>hardware sets, software clears</td>
-</tr>
-<tr class="odd">
-<td><code>TIM2-&gt;DIER</code></td>
-<td>interrupt enables — <code>UIE</code> is bit 0</td>
-<td>lets <code>UIF</code> raise the request</td>
-</tr>
-<tr class="even">
-<td><code>TIM2-&gt;CR1</code></td>
-<td>control — <code>CEN</code> is bit 0</td>
-<td>starts the counter</td>
-</tr>
-</tbody>
-</table>
-<div class="source-note">
-<p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=353">RM0368 Rev 6, §13.4 <em>TIM2 to TIM5 registers</em> — p.&nbsp;353</a>.</p>
-</div>
-</section>
-<section id="hal-vs-bare-metal" class="slide level2">
-<h2>HAL vs bare-metal</h2>
+<section id="timer-configuration-seen-in-the-registers" class="slide level2">
+<h2>Timer configuration seen in the registers</h2>
 <div class="columns">
 <div class="column" style="width:48%;">
 <p><strong>STM32 HAL</strong></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb13-1"><a></a>htim2<span class="op">.</span>Instance       <span class="op">=</span> TIM2<span class="op">;</span></span>
-<span id="cb13-2"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Prescaler <span class="op">=</span> <span class="dv">15999</span><span class="op">;</span></span>
-<span id="cb13-3"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Period    <span class="op">=</span> <span class="dv">999</span><span class="op">;</span></span>
-<span id="cb13-4"><a></a>HAL_TIM_Base_Init<span class="op">(&amp;</span>htim2<span class="op">);</span></span>
-<span id="cb13-5"><a></a>HAL_TIM_Base_Start<span class="op">(&amp;</span>htim2<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a></a>htim2<span class="op">.</span>Instance       <span class="op">=</span> TIM2<span class="op">;</span></span>
+<span id="cb7-2"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Prescaler <span class="op">=</span> <span class="dv">15999</span><span class="op">;</span></span>
+<span id="cb7-3"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Period    <span class="op">=</span> <span class="dv">999</span><span class="op">;</span></span>
+<span id="cb7-4"><a></a>HAL_TIM_Base_Init<span class="op">(&amp;</span>htim2<span class="op">);</span></span>
+<span id="cb7-5"><a></a>HAL_TIM_Base_Start<span class="op">(&amp;</span>htim2<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:48%;">
 <p><strong>DIRECT CMSIS ACCESS</strong></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a></a>RCC<span class="op">-&gt;</span>APB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span>  <span class="co">// TIM2EN</span></span>
-<span id="cb14-2"><a></a>TIM2<span class="op">-&gt;</span>PSC <span class="op">=</span> <span class="dv">15999</span><span class="op">;</span></span>
-<span id="cb14-3"><a></a>TIM2<span class="op">-&gt;</span>ARR <span class="op">=</span> <span class="dv">999</span><span class="op">;</span></span>
-<span id="cb14-4"><a></a>TIM2<span class="op">-&gt;</span>CR1 <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span>     <span class="co">// CEN</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a>RCC<span class="op">-&gt;</span>APB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span>  <span class="co">// TIM2EN</span></span>
+<span id="cb8-2"><a></a>TIM2<span class="op">-&gt;</span>PSC <span class="op">=</span> <span class="dv">15999</span><span class="op">;</span></span>
+<span id="cb8-3"><a></a>TIM2<span class="op">-&gt;</span>ARR <span class="op">=</span> <span class="dv">999</span><span class="op">;</span></span>
+<span id="cb8-4"><a></a>TIM2<span class="op">-&gt;</span>CR1 <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span>     <span class="co">// CEN</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
-<div class="relationship-strip">
-<p>L05’s conclusion holds: same registers, different interface. The clock-enable-first rule from L04 also holds—<code>TIM2</code> is on <code>APB1</code>, not <code>AHB1</code>.</p>
-</div>
-</section>
-<section id="register-evidence" class="slide level2">
-<h2>Register evidence</h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> Pause after init: <code>TIM2-&gt;PSC</code> and <code>TIM2-&gt;ARR</code> hold your two numbers.</p>
+<p><span>01</span> <strong>SFR PROOF:</strong> pause after init, <code>TIM2-&gt;PSC</code> and <code>TIM2-&gt;ARR</code> hold your two numbers. Resume, pause again, <code>TIM2-&gt;CNT</code> has moved.</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> Resume, pause again: <code>TIM2-&gt;CNT</code> has <em>moved</em>—hardware counted while the CPU was halted-and-resumed.</p>
-</div>
-<div class="vertical-item">
-<p><span>03</span> Watch <code>TIM2-&gt;SR</code> bit 0: <code>UIF</code> sets on each rollover; your code (or HAL) clears it.</p>
-</div>
-<div class="vertical-item">
-<p><span>04</span> In interrupt mode, a breakpoint in the callback proves the whole path.</p>
+<p><span>02</span> <strong>UIF:</strong> <code>TIM2-&gt;SR</code> bit 0 sets at each rollover; your code or HAL clears it. A successful build proves none of this.</p>
 </div>
 </div>
-<p>A successful build proves none of this. The SFR view does.</p>
-<!-- TODO: replace list with an annotated SFR (PERIPHERALS panel) screenshot from VS Code (instructor capture pending) -->
+<div class="relationship-strip">
+<p>Same registers, different interface. The clock-enable-first rule from L04 holds: <code>TIM2</code> is on <code>APB1</code>, not <code>AHB1</code>.</p>
+</div>
+<!-- TODO: replace the SFR PROOF item with an annotated PERIPHERALS panel screenshot from VS Code (instructor capture pending) -->
 </section>
 <section id="common-timer-mistakes" class="slide level2">
 <h2>Common timer mistakes</h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> <strong>WRONG CLOCK ASSUMED:</strong> an online example’s 84 MHz math on our 16 MHz configuration—periods 5× too long.</p>
+<p><span>01</span> <strong>WRONG CLOCK ASSUMED:</strong> an online example’s 84 MHz math on our 16 MHz configuration, periods 5× too long.</p>
 </div>
 <div class="vertical-item fragment">
 <p><span>02</span> <strong>MISSING +1:</strong> <code>PSC = 16000</code> or <code>ARR = 1000</code> where 15999/999 was meant.</p>
 </div>
 <div class="vertical-item fragment">
-<p><span>03</span> <strong>CLOCK NOT ENABLED:</strong> <code>TIM2</code> needs its <code>APB1ENR</code> bit—AHB1 was the GPIO bus.</p>
+<p><span>03</span> <strong>CLOCK NOT ENABLED:</strong> <code>TIM2</code> needs its <code>APB1ENR</code> bit. AHB1 was the GPIO bus.</p>
 </div>
 <div class="vertical-item fragment">
 <p><span>04</span> <strong>NVIC FORGOTTEN:</strong> the update event fires, <code>UIF</code> sets, and nothing runs.</p>
@@ -815,22 +789,11 @@ One pass of the scheduler loop: check whether 500 milliseconds have elapsed and 
 </div>
 </div>
 </section>
-<section id="laboratory-mission" class="slide level2">
-<h2>Laboratory mission</h2>
+<section id="timer-lab-preview-and-summary" class="slide level2">
+<h2>Timer lab preview and summary</h2>
 <div class="big-question">
-<p>Blink LD2 every 500 ms from a TIM2 update interrupt—no <code>HAL_Delay()</code> anywhere—then build the 1 ms tick and schedule two independent intervals.</p>
+<p>Lab: blink LD2 every 500 ms from a TIM2 update interrupt with no <code>HAL_Delay()</code>, then build the 1 ms tick and schedule two intervals. The SFR proof is required.</p>
 </div>
-<p>You will show:</p>
-<ol type="1">
-<li><code>PSC</code>/<code>ARR</code> calculated from 16 MHz, with the +1s explained;</li>
-<li>a breakpoint proving <code>HAL_TIM_PeriodElapsedCallback</code> runs;</li>
-<li><code>TIM2-&gt;CNT</code> moving and <code>UIF</code> setting in the SFR view;</li>
-<li>two software intervals driven by one <code>ms</code> counter;</li>
-<li>one individual period change, predicted before flashing.</li>
-</ol>
-</section>
-<section id="mastery-checklist" class="slide level2">
-<h2>Mastery checklist</h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
 <p><span>✓</span> Trace the pipeline: clock → <code>PSC</code> → <code>CNT</code> → <code>ARR</code> → update event.</p>
@@ -845,15 +808,15 @@ One pass of the scheduler loop: check whether 500 milliseconds have elapsed and 
 <p><span>✓</span> Build and use a 1 ms tick with wrap-safe scheduling.</p>
 </div>
 <div class="vertical-item">
-<p><span>✓</span> Verify timer behavior in the register view.</p>
+<p><span>✓</span> Verify timer behaviour in the register view.</p>
 </div>
 </div>
-<p>Next: PWM—the same counter, with an output pin attached to a compare value.</p>
+<p>Next: PWM, the same counter with an output pin attached to a compare value.</p>
 </section>
 <section id="exit-ticket" class="slide level2">
 <h2>Exit ticket</h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Prescaler <span class="op">=</span> <span class="dv">1599</span><span class="op">;</span></span>
-<span id="cb15-2"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Period    <span class="op">=</span> <span class="dv">249</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Prescaler <span class="op">=</span> <span class="dv">1599</span><span class="op">;</span></span>
+<span id="cb9-2"><a></a>htim2<span class="op">.</span>Init<span class="op">.</span>Period    <span class="op">=</span> <span class="dv">249</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="vertical-list ticket-list">
 <div class="vertical-item">
 <p><span>01</span> <strong>FREQUENCY:</strong> What is the counting frequency from the 16 MHz timer clock?</p>

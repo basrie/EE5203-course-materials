@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 230" font-family="Segoe UI, Helvetica, Arial, sans-serif" role="img" aria-label="Find the last digit of your student number. Digit 0 gives 100 ms delay, each digit adds 100 ms, digit 9 gives 1000 ms. Digits 0 to 2 answer question Q1, 3 to 5 Q2, 6 and 7 Q3, 8 and 9 Q4.">
+  <rect width="900" height="230" fill="#ffffff"/>
+  <text x="20" y="30" font-size="19" font-weight="700" fill="#202b38">Last digit of your student number</text>
+  <g font-size="26" font-weight="700" text-anchor="middle">
+    <rect x="20"  y="44" width="80" height="56" rx="8" fill="#e8f1fb" stroke="#2f6db5" stroke-width="2"/><text x="60"  y="82" fill="#1d4f8a">0</text>
+    <rect x="108" y="44" width="80" height="56" rx="8" fill="#e8f1fb" stroke="#2f6db5" stroke-width="2"/><text x="148" y="82" fill="#1d4f8a">1</text>
+    <rect x="196" y="44" width="80" height="56" rx="8" fill="#e8f1fb" stroke="#2f6db5" stroke-width="2"/><text x="236" y="82" fill="#1d4f8a">2</text>
+    <rect x="284" y="44" width="80" height="56" rx="8" fill="#eef7ee" stroke="#2e7d32" stroke-width="2"/><text x="324" y="82" fill="#1b5e20">3</text>
+    <rect x="372" y="44" width="80" height="56" rx="8" fill="#eef7ee" stroke="#2e7d32" stroke-width="2"/><text x="412" y="82" fill="#1b5e20">4</text>
+    <rect x="460" y="44" width="80" height="56" rx="8" fill="#eef7ee" stroke="#2e7d32" stroke-width="2"/><text x="500" y="82" fill="#1b5e20">5</text>
+    <rect x="548" y="44" width="80" height="56" rx="8" fill="#fff4e5" stroke="#e8a317" stroke-width="2"/><text x="588" y="82" fill="#8a5200">6</text>
+    <rect x="636" y="44" width="80" height="56" rx="8" fill="#fff4e5" stroke="#e8a317" stroke-width="2"/><text x="676" y="82" fill="#8a5200">7</text>
+    <rect x="724" y="44" width="80" height="56" rx="8" fill="#f3ecfb" stroke="#7b3fb5" stroke-width="2"/><text x="764" y="82" fill="#4a1d8a">8</text>
+    <rect x="812" y="44" width="80" height="56" rx="8" fill="#f3ecfb" stroke="#7b3fb5" stroke-width="2"/><text x="852" y="82" fill="#4a1d8a">9</text>
+  </g>
+  
+  <g font-size="19" text-anchor="middle" fill="#202b38" font-family="Consolas, Menlo, monospace">
+    <text x="60" y="128">100</text><text x="148" y="128">200</text><text x="236" y="128">300</text><text x="324" y="128">400</text><text x="412" y="128">500</text>
+    <text x="500" y="128">600</text><text x="588" y="128">700</text><text x="676" y="128">800</text><text x="764" y="128">900</text><text x="852" y="128">1000</text>
+  </g>
+  <text x="896" y="146" text-anchor="end" font-size="15" fill="#4a5968">ms, for both HAL_Delay calls</text>
+  <rect x="20"  y="158" width="256" height="40" rx="8" fill="#2f6db5"/><text x="148" y="184" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">Q1  declaration vs definition</text>
+  <rect x="284" y="158" width="256" height="40" rx="8" fill="#2e7d32"/><text x="412" y="184" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">Q2  why the count parameter</text>
+  <rect x="548" y="158" width="168" height="40" rx="8" fill="#e8a317"/><text x="632" y="184" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">Q3  |= or =</text>
+  <rect x="724" y="158" width="168" height="40" rx="8" fill="#7b3fb5"/><text x="808" y="184" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">Q4  3U &lt;&lt; 10</text>
+  <text x="20" y="224" font-size="17" fill="#4a5968">Example: number ends in 7 → HAL_Delay(800) and question Q3.</text>
+</svg>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -180,13 +180,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre class="text"><code>B1 press  -&gt;  PC13 falls          (active-low: released=1, pressed=0)
           -&gt;  EXTI13 edge detect  (SYSCFG-&gt;EXTICR[3] field = 0010 routes PC13)
           -&gt;  pending bit set     (EXTI-&gt;PR bit 13 = 1)
+          -&gt;  switch 1: EXTI mask (EXTI-&gt;IMR bit 13 = 1)
           -&gt;  EXTI15_10_IRQn      (one request shared by lines 10-15)
-          -&gt;  NVIC                (enable + priority, delivers to CPU)
+          -&gt;  switch 2: NVIC      (enable + priority, delivers to CPU)
+          -&gt;  CPU accepts         (finishes instruction, saves its place)
           -&gt;  vector table        (IRQ number -&gt; handler address)
           -&gt;  EXTI15_10_IRQHandler()        (processor enters this)
           -&gt;  HAL_GPIO_EXTI_IRQHandler()    (clears PR, then...)
           -&gt;  HAL_GPIO_EXTI_Callback(pin)   (your code - HAL calls this)</code></pre>
-<p>Only one port can drive a given EXTI line at a time — the SYSCFG routing field stores exactly one choice.</p>
+<p>EXTI is an ST peripheral; NVIC, CPU and the vector table belong to the Arm Cortex-M4 core. The request reaches the CPU only when both enable switches are closed (bit = 1). Only one port can drive a given EXTI line at a time — the SYSCFG routing field stores exactly one choice (<code>0000</code> PA13, <code>0001</code> PB13, <code>0010</code> PC13).</p>
 </section>
 <section id="vocabulary-table" class="level2">
 <h2 class="anchored" data-anchor-id="vocabulary-table">Vocabulary table</h2>

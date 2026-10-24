@@ -526,3 +526,27 @@
   color: #5f7380;
   font-size: 0.58em;
 }
+
+/* Line highlighting (code-line-numbers="a|b|c"), all decks (2026-10-24).
+   Quarto's line-highlight plugin only drops the other lines to 40% opacity,
+   which is not enough contrast on a projector. Same look as the L07
+   spotlight slides: other lines faint and grey, highlighted lines on a
+   tinted band with a left bar (band only while some lines are dimmed). */
+.reveal .slides section div.sourceCode pre code.has-line-highlights > span {
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 0.45em;
+  border-radius: 4px;
+  transition: opacity 0.3s ease, filter 0.3s ease, background-color 0.3s ease;
+}
+.reveal .slides section div.sourceCode pre code.has-line-highlights > span:not(.highlight-line) {
+  opacity: 0.18;
+  filter: grayscale(1);
+}
+.reveal .slides section div.sourceCode pre code.has-line-highlights:has(> span:not(.highlight-line)) > span.highlight-line {
+  background: rgba(23, 79, 115, 0.08);
+  box-shadow: inset 6px 0 0 #174f73;
+}
+/* reveal's own highlight.js table variant, for completeness */
+.reveal .hljs.has-highlights tr:not(.highlight-line) { opacity: 0.18; filter: grayscale(1); }

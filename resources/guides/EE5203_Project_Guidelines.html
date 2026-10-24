@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Basri Erdogan">
+
+<title>Term Project Guidelines – EE5203 Microprocessors</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">EE5203 Microprocessors</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../SYLLABUS.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resources/companions/EE5203_Toolchain_Boot_Companion.html"> 
+<span class="menu-text">From C to Silicon</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resources/references/academic_references.html"> 
+<span class="menu-text">References</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#what-you-will-build" id="toc-what-you-will-build" class="nav-link active" data-scroll-target="#what-you-will-build"><span class="header-section-number">1</span> What You Will Build</a></li>
+  <li><a href="#key-dates" id="toc-key-dates" class="nav-link" data-scroll-target="#key-dates"><span class="header-section-number">2</span> Key Dates</a></li>
+  <li><a href="#rules-for-teams-and-topics" id="toc-rules-for-teams-and-topics" class="nav-link" data-scroll-target="#rules-for-teams-and-topics"><span class="header-section-number">3</span> Rules for Teams and Topics</a></li>
+  <li><a href="#technical-requirements" id="toc-technical-requirements" class="nav-link" data-scroll-target="#technical-requirements"><span class="header-section-number">4</span> Technical Requirements</a></li>
+  <li><a href="#what-you-submit" id="toc-what-you-submit" class="nav-link" data-scroll-target="#what-you-submit"><span class="header-section-number">5</span> What You Submit</a></li>
+  <li><a href="#demonstration-and-oral-defence" id="toc-demonstration-and-oral-defence" class="nav-link" data-scroll-target="#demonstration-and-oral-defence"><span class="header-section-number">6</span> Demonstration and Oral Defence</a></li>
+  <li><a href="#sec-ai" id="toc-sec-ai" class="nav-link" data-scroll-target="#sec-ai"><span class="header-section-number">7</span> Use of AI Tools</a></li>
+  <li><a href="#sec-grading" id="toc-sec-grading" class="nav-link" data-scroll-target="#sec-grading"><span class="header-section-number">8</span> Grading</a></li>
+  <li><a href="#sec-ideas" id="toc-sec-ideas" class="nav-link" data-scroll-target="#sec-ideas"><span class="header-section-number">9</span> Project Ideas</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="EE5203_Project_Guidelines.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Term Project Guidelines</h1>
+<p class="subtitle lead">EE5203 Microprocessors — 2026-2027 Fall</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Basri Erdogan </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="what-you-will-build" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="what-you-will-build"><span class="header-section-number">1</span> What You Will Build</h2>
+<p>In a team of <strong>2 or 3 students</strong>, you will build an embedded system on the <strong>ST Nucleo-F401RE</strong> board. The system reads data from at least one sensor, processes it, shows or uses the result, and communicates over a serial bus. You develop it step by step through milestones that are checked in your lab sessions, and you finish with a demonstration and an individual oral defence. The project is <strong>20%</strong> of your course grade.</p>
+</section>
+<section id="key-dates" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="key-dates"><span class="header-section-number">2</span> Key Dates</h2>
+<p>Every team has a <strong>home section</strong>: the lab section you name when you register (Lab 1: Tuesday 13:00, Lab 2: Tuesday 15:00, Lab 3: Wednesday 13:00). Your milestones are checked in the lab of your home section.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 20%">
+<col style="width: 51%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Week</th>
+<th>Milestone</th>
+<th>What you show</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5</td>
+<td>Team registration</td>
+<td>E-mail your team members (names, student numbers, lab sections), your home section and your topic to the milestone assistant of your home section</td>
+<td><strong>18 October 2026, 23:59</strong></td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>Proposal</td>
+<td>One-page PDF on CATS: problem, block diagram, components, minimum working system (<a href="#sec-mws" class="quarto-xref">Section&nbsp;4.1</a>)</td>
+<td>Before the theory lecture, <strong>Monday 26 October, 11:00</strong></td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>Design review and first hardware</td>
+<td>Design document on CATS before the lab: pin and peripheral table, data flow, who does what, risks. In the lab: one input or output part working</td>
+<td>Lab, <strong>10/11 November</strong></td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>Data acquisition</td>
+<td>Sensor data read on the board and checked against a known value</td>
+<td>Lab, <strong>17/18 November</strong></td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>Communication</td>
+<td>UART log or command interface (or your I2C/SPI device) working</td>
+<td>Lab, <strong>24/25 November</strong></td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>Submission</td>
+<td>Report, slides and source code on CATS</td>
+<td><strong>29 November 2026, 23:59</strong></td>
+</tr>
+<tr class="odd">
+<td>12</td>
+<td>Demonstration and oral defence</td>
+<td>Live demonstration, presentation and individual defence, in one joint session for all teams in our laboratory room</td>
+<td><strong>Tuesday 1 December, from 13:00</strong></td>
+</tr>
+</tbody>
+</table>
+<p>There is no make-up for a missed milestone or the demonstration, and late submissions are not accepted.</p>
+<p><strong>Milestone assistants.</strong> The milestone assistant of your home section registers your team, receives your uploads and checks your milestones:</p>
+<ul>
+<li>Lab 1 and Lab 2: Res. Asst. Ahmet Aytuğ Ayrancı (ahmet.ayranci@iku.edu.tr)</li>
+<li>Lab 3: Res. Asst. Ahmet Can Tanık (a.tanik@iku.edu.tr)</li>
+</ul>
+<p><strong>How the checks in weeks 9, 10 and 11 work.</strong> The check takes the first part of the lab of your home section. Right after the opening brief, your milestone assistant calls the teams one at a time, in team-number order, for a 3-minute check: you show the milestone working on your hardware. At least one team member must be there with the hardware; members from other sections attend their own lab as usual. Have your hardware connected and your code flashed before your team is called. A team that is not ready when called misses the milestone. The result is pass or miss. The rest of the lab runs as usual.</p>
+</section>
+<section id="rules-for-teams-and-topics" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="rules-for-teams-and-topics"><span class="header-section-number">3</span> Rules for Teams and Topics</h2>
+<ul>
+<li>A team has <strong>2 or 3 members</strong>. Members may come from different lab sections; the team names one <strong>home section</strong> when it registers.</li>
+<li>Choose a topic from <a href="#sec-ideas" class="quarto-xref">Section&nbsp;9</a> or propose your own. Your proposal (due 26 October) must be approved before you continue.</li>
+<li>No two teams in the course can build the same project. The first team to register a topic gets it.</li>
+<li>After the proposal you cannot change your team or topic without the instructor’s approval.</li>
+<li><strong>Parts:</strong> the course kit has no sensors. Your team buys the sensors, displays and actuators your project needs. Order them <strong>before the proposal</strong>; parts that arrive late do not move a milestone. Until a part arrives, you may use the potentiometer as a stand-in if you say so.</li>
+</ul>
+</section>
+<section id="technical-requirements" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="technical-requirements"><span class="header-section-number">4</span> Technical Requirements</h2>
+<p>Your system <strong>must</strong> have all of these parts:</p>
+<ol type="1">
+<li><strong>Board and tools:</strong> Nucleo-F401RE, programmed in C with STM32CubeMX and VS Code (HAL or register level).</li>
+<li><strong>Data acquisition:</strong> at least one sensor, read through the ADC or a digital interface.</li>
+<li><strong>Processing:</strong> a clear method that turns raw data into a decision or a result (for example averaging and thresholds, a state machine, a controller).</li>
+<li><strong>Output:</strong> show or use the result on a suitable device (display, LEDs, buzzer, servo or motor).</li>
+<li><strong>Communication:</strong> at least one serial protocol — UART, I2C or SPI — between the board and a sensor, a display or a PC.</li>
+</ol>
+<p><strong>Minimum complexity.</strong> A sensor connected to one LED is not enough. Your system must use <strong>at least three</strong> of the course topics below, and its timing must not depend on <code>HAL_Delay()</code> in the main loop:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 70%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Course topic</th>
+<th>Lecture</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>External interrupts (EXTI)</td>
+<td>L06</td>
+</tr>
+<tr class="even">
+<td>Timers and non-blocking timing</td>
+<td>L07</td>
+</tr>
+<tr class="odd">
+<td>PWM, output compare or input capture</td>
+<td>L08</td>
+</tr>
+<tr class="even">
+<td>ADC</td>
+<td>L09</td>
+</tr>
+<tr class="odd">
+<td>UART</td>
+<td>L10</td>
+</tr>
+<tr class="even">
+<td>I2C or SPI</td>
+<td>L11</td>
+</tr>
+</tbody>
+</table>
+<section id="sec-mws" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="sec-mws"><span class="header-section-number">4.1</span> Minimum working system</h3>
+<p>Your <strong>minimum working system</strong> is the smallest version of your project that you promise will work at the demonstration on 1 December. If everything else fails, this part must still run. In your proposal, name its five parts:</p>
+<ol type="1">
+<li><strong>Sensor:</strong> which one, and how you read it (ADC, I2C, …).</li>
+<li><strong>Processing:</strong> what your code does with the data (average, threshold, state machine, …).</li>
+<li><strong>Output:</strong> what shows or uses the result (LED, display, buzzer, motor, …).</li>
+<li><strong>Serial link:</strong> UART, I2C or SPI, and between which devices.</li>
+<li><strong>Course topics:</strong> the three or more topics from the table above that it uses.</li>
+</ol>
+<p>The minimum working system alone must meet all five requirements above and the minimum complexity rule. List any other features separately, under “If time allows”. They are not promised.</p>
+</section>
+</section>
+<section id="what-you-submit" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="what-you-submit"><span class="header-section-number">5</span> What You Submit</h2>
+<p>Upload <strong>one ZIP file per team</strong> to CATS by 29 November, 23:59. Name it <code>EE5203_Project_TeamNN.zip</code>. It contains:</p>
+<ol type="1">
+<li><strong>Source code:</strong> the CubeMX project (<code>.ioc</code> file and the <code>Core</code> folder). Do not include the <code>build</code> folder.</li>
+<li><strong>Report (PDF, 10-15 pages)</strong> using the report template on CATS. It must contain:
+<ul>
+<li>the <strong>requirements table</strong>: each requirement, how you test it, and the measured result;</li>
+<li>the <strong>resource map</strong>: every pin, timer, interrupt and peripheral you use, and what it does;</li>
+<li>the <strong>timing budget</strong>: how often each task runs and how long it takes;</li>
+<li>design decisions, wiring diagram, evidence (photos, logs, measurements) and known issues;</li>
+<li><strong>work distribution</strong>: which member wrote which part;</li>
+<li><strong>AI use</strong>: which tools you used and for what (see <a href="#sec-ai" class="quarto-xref">Section&nbsp;7</a>). Write “none” if you used none.</li>
+</ul></li>
+<li><strong>Slides (PDF): 6 to 8 slides per team, not counting the title slide.</strong> Every member presents at least 2 of them.</li>
+</ol>
+<p>Keep a working copy of your final code that you can flash in under two minutes on the day.</p>
+</section>
+<section id="demonstration-and-oral-defence" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="demonstration-and-oral-defence"><span class="header-section-number">6</span> Demonstration and Oral Defence</h2>
+<p>All teams demonstrate in <strong>one joint session on Tuesday 1 December, from 13:00, in our laboratory room</strong>. The running order is announced on CATS. Every member must be present for the whole session.</p>
+<p><strong>15 minutes per team in total, presentation, demonstration and questions included.</strong> Set up while the team before you presents: your system must already be running when your slot starts. A slot that runs over is stopped.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 82%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Time</th>
+<th>What you do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0-8 min</td>
+<td>Presentation with live demonstration: every member presents at least 2 slides; show each requirement on the running system as you present it (one requirement, one test, one observed result)</td>
+</tr>
+<tr class="even">
+<td>8-9 min</td>
+<td><strong>One fault you inject on purpose</strong> (say first what you expect)</td>
+</tr>
+<tr class="odd">
+<td>9-15 min</td>
+<td>Individual questions: about 3 minutes per member in a team of two, 2 minutes in a team of three</td>
+</tr>
+</tbody>
+</table>
+<p>Your known issues belong in the report; you may be asked about them.</p>
+<p><strong>Individual questions.</strong> Each member answers short questions about their own contribution, at up to three levels:</p>
+<ol type="1">
+<li><strong>Your contribution:</strong> “Which parts did you write? Walk me through one.”</li>
+<li><strong>The mechanism:</strong> “Which register does that configure? What does the hardware do with it?”</li>
+<li><strong>The alternative:</strong> “Why this way? What would happen if you did it differently?”</li>
+</ol>
+<p>Be ready to open the code and the register view and point to the answer.</p>
+</section>
+<section id="sec-ai" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="sec-ai"><span class="header-section-number">7</span> Use of AI Tools</h2>
+<p>These rules come from the course syllabus.</p>
+<ul>
+<li><strong>Allowed:</strong> asking an AI tool to explain a concept, a compiler or debugger message, or a datasheet passage; help with report wording; review of code you wrote yourself.</li>
+<li><strong>Not allowed:</strong> generating project code; producing the analysis or conclusions of the report with AI.</li>
+<li><strong>Disclosure:</strong> state in the report how you used AI tools.</li>
+<li><strong>Check:</strong> the oral defence. Work you cannot explain and change yourself earns no credit.</li>
+</ul>
+</section>
+<section id="sec-grading" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="sec-grading"><span class="header-section-number">8</span> Grading</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 64%">
+<col style="width: 14%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Part</th>
+<th>Points</th>
+<th>Graded per</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Demonstration against your requirements</td>
+<td>35</td>
+<td>team</td>
+</tr>
+<tr class="even">
+<td>Report</td>
+<td>25</td>
+<td>team</td>
+</tr>
+<tr class="odd">
+<td>Presentation (the slides you present)</td>
+<td>15</td>
+<td>member</td>
+</tr>
+<tr class="even">
+<td>Individual oral defence</td>
+<td>25</td>
+<td>member</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Milestones.</strong> Each milestone in weeks 6, 9, 10 and 11 that is missed costs the team <strong>5 points</strong>. A milestone is missed when the upload is not on CATS when the lab of your home section starts, or when the check in that lab does not pass.</p>
+<p><strong>Team points</strong> = demonstration + report (at most 60). <strong>Your share of the team points depends on your defence:</strong></p>
+<p><strong>Your project grade = (team points − milestone deductions) × defence multiplier + your presentation points + your defence points</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Your result in the oral defence</th>
+<th>Defence multiplier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>You explain your contribution <strong>and</strong> the hardware mechanism behind it</td>
+<td>× 1</td>
+</tr>
+<tr class="even">
+<td>You explain your contribution, but not the mechanism (register, peripheral)</td>
+<td>× 0.5</td>
+</tr>
+<tr class="odd">
+<td>You cannot explain your own contribution</td>
+<td>× 0 (project grade = 0)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example.</strong> A team scores 30 (demonstration) + 20 (report) = 50 team points and missed no milestone.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 44%">
+<col style="width: 26%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Member</th>
+<th>Presentation and defence</th>
+<th>Calculation</th>
+<th>Project grade</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>presentation 12; explains contribution and mechanism, defence 22</td>
+<td>50 × 1 + 12 + 22</td>
+<td>84</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>presentation 10; explains contribution, not the mechanism, defence 12</td>
+<td>50 × 0.5 + 10 + 12</td>
+<td>47</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>cannot explain own contribution</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sec-ideas" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="sec-ideas"><span class="header-section-number">9</span> Project Ideas</h2>
+<p>Each idea lists one possible set of parts and course topics, and how you can check your measurement against a known value. You may change the parts or propose your own idea.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 4%">
+<col style="width: 20%">
+<col style="width: 30%">
+<col style="width: 28%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Project</th>
+<th>Sensors and outputs</th>
+<th>Course topics</th>
+<th>Check against</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Parking assistant</td>
+<td>HC-SR04 ultrasonic sensor; buzzer; LED bar or display</td>
+<td>input capture, PWM, timers, UART</td>
+<td>tape measure</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Room climate monitor with alarm</td>
+<td>BME280 or SHT31 sensor (I2C); I2C OLED or LCD; buzzer</td>
+<td>I2C, timers, EXTI (alarm reset), UART log</td>
+<td>room thermometer</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Line-following robot</td>
+<td>IR line sensors; TB6612FNG motor driver; robot chassis</td>
+<td>ADC or GPIO, PWM, timers, EXTI (start/stop), UART tuning log</td>
+<td>sensor values on black and white</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Tilt-stabilised camera platform</td>
+<td>MPU6050 IMU; two hobby servos (two-axis gimbal)</td>
+<td>I2C, PWM, timers (control loop), UART tuning</td>
+<td>protractor angles</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Sunrise alarm clock</td>
+<td>DS3231 real-time clock; light sensor (LDR); LED that brightens before the alarm; display; buzzer</td>
+<td>I2C, ADC, PWM, EXTI (buttons), timers</td>
+<td>phone clock; covered and lit LDR</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Motion alarm system</td>
+<td>PIR sensor; keypad or buttons for the code; buzzer; display</td>
+<td>EXTI, timers, PWM (siren), UART event log</td>
+<td>walk-past tests at set distances</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Vibration and tilt monitor</td>
+<td>ADXL345 or MPU6050 accelerometer; vibration motor as a test source; buzzer</td>
+<td>I2C or SPI, timers (fixed sampling rate), EXTI (data-ready pin), UART stream to a PC plot</td>
+<td>1 g when flat, 0 g on its side</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>Digital weighing scale</td>
+<td>Load cell with HX711 amplifier; display; tare button</td>
+<td>timers, EXTI (tare), I2C display, UART log</td>
+<td>known weights (water bottle, coins)</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>Temperature-controlled fan</td>
+<td>LM35 or NTC thermistor; DC fan with transistor; LCD</td>
+<td>ADC, PWM (fan speed), timers, I2C display</td>
+<td>room thermometer</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>Colour sorter</td>
+<td>TCS34725 colour sensor; servo that sorts objects into bins</td>
+<td>I2C, PWM (servo), timers, UART</td>
+<td>sorting reference cards</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>Motor speed controller</td>
+<td>DC motor with encoder or slotted speed sensor; motor driver</td>
+<td>input capture (speed), PWM, timers (control loop), UART commands (set speed)</td>
+<td>phone stroboscope or tachometer app</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>Ultrasonic radar scanner</td>
+<td>HC-SR04 on a servo that sweeps 0-180°; PC plot of angle and distance</td>
+<td>PWM, input capture, timers, UART to PC</td>
+<td>objects at measured positions</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>Pulse-rate monitor</td>
+<td>MAX30102 (I2C) or analog optical pulse sensor; OLED display</td>
+<td>ADC or I2C, timers (sampling), I2C display, UART log</td>
+<td>pulse counted by hand for 30 s</td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td>Plant watering controller</td>
+<td>Capacitive soil-moisture sensor; small pump with transistor; display</td>
+<td>ADC, timers, PWM or GPIO (pump), UART commands</td>
+<td>dry soil, wet soil, glass of water</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Electrical rules.</strong> The pins work at 3.3 V: a 5 V sensor output needs a voltage divider or a level shifter. Motors, pumps and fans need a driver with a flyback diode and their own supply, never a pin. No mains (230 V) wiring. The pulse-rate monitor is a demonstration, not a medical device.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

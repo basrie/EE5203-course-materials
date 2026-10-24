@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 255" font-family="Segoe UI, Helvetica, Arial, sans-serif" role="img" aria-label="The debugging method in three steps that repeat: 1 predict the value before you press a key, 2 step one line, 3 check the value. If the value is different from your prediction, the line you just ran is the line to look at.">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4a5968"/></marker>
+  </defs>
+  <rect width="900" height="255" fill="#ffffff"/>
+  <rect x="10" y="10" width="250" height="130" rx="14" fill="#e8f1fb" stroke="#2f6db5" stroke-width="3"/>
+  <text x="135" y="54" text-anchor="middle" font-size="27" font-weight="700" fill="#1d4f8a">1 Predict</text>
+  <text x="135" y="90" text-anchor="middle" font-size="19" fill="#202b38">write the value</text>
+  <text x="135" y="116" text-anchor="middle" font-size="19" fill="#202b38">you expect</text>
+  <line x1="264" y1="75" x2="318" y2="75" stroke="#4a5968" stroke-width="4" marker-end="url(#ar)"/>
+  <rect x="325" y="10" width="250" height="130" rx="14" fill="#fff4e5" stroke="#e8a317" stroke-width="3"/>
+  <text x="450" y="54" text-anchor="middle" font-size="27" font-weight="700" fill="#8a5200">2 Step</text>
+  <text x="450" y="90" text-anchor="middle" font-size="19" fill="#202b38">run one line</text>
+  <text x="450" y="116" text-anchor="middle" font-size="19" fill="#202b38">(F10 or F11)</text>
+  <line x1="579" y1="75" x2="633" y2="75" stroke="#4a5968" stroke-width="4" marker-end="url(#ar)"/>
+  <rect x="640" y="10" width="250" height="130" rx="14" fill="#eef7ee" stroke="#2e7d32" stroke-width="3"/>
+  <text x="765" y="54" text-anchor="middle" font-size="27" font-weight="700" fill="#1b5e20">3 Check</text>
+  <text x="765" y="90" text-anchor="middle" font-size="19" fill="#202b38">compare with</text>
+  <text x="765" y="116" text-anchor="middle" font-size="19" fill="#202b38">your prediction</text>
+  <path d="M765 144 C 765 220, 135 220, 135 148" fill="none" stroke="#4a5968" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#ar)"/>
+  <text x="450" y="176" text-anchor="middle" font-size="18" fill="#4a5968">same: predict the next line</text>
+  <rect x="200" y="216" width="500" height="32" rx="8" fill="#fdecea" stroke="#c62828" stroke-width="2"/>
+  <text x="450" y="239" text-anchor="middle" font-size="18" fill="#8e1b1b"><tspan font-weight="700">different:</tspan> the line you just ran is the line to look at</text>
+</svg>

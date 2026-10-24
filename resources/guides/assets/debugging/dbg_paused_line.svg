@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" font-family="Segoe UI, Helvetica, Arial, sans-serif" role="img" aria-label="The program is paused at a breakpoint on line 3. The yellow arrow marks line 3: it has NOT run yet. Lines 1 and 2 have run, so x is 5 and y is still 0. Press F10 and line 3 runs: y becomes 10.">
+  <rect width="900" height="330" fill="#ffffff"/>
+  <!-- code box -->
+  <rect x="10" y="10" width="520" height="230" rx="10" fill="#1e1e1e"/>
+  <g font-size="21" font-family="Consolas, Menlo, monospace">
+    <text x="40" y="56" fill="#858585">1</text><text x="90" y="56" fill="#d4d4d4">int x = 5;</text>
+    <text x="40" y="100" fill="#858585">2</text><text x="90" y="100" fill="#d4d4d4">int y = 0;</text>
+    <rect x="14" y="118" width="512" height="38" fill="#4b4b18"/>
+    <circle cx="26" cy="137" r="8" fill="#e51400"/>
+    <text x="40" y="144" fill="#858585">3</text><text x="64" y="144" fill="#ffcc00">➜</text><text x="90" y="144" fill="#d4d4d4">y = x * 2;</text>
+    <text x="40" y="188" fill="#858585">4</text><text x="90" y="188" fill="#d4d4d4">x = x + 1;</text>
+  </g>
+  <!-- labels -->
+  <text x="300" y="66" font-size="18" fill="#89d185">✓ ran</text>
+  <text x="300" y="110" font-size="18" fill="#89d185">✓ ran</text>
+  <text x="300" y="144" font-size="18" font-weight="700" fill="#ffcc00">NOT run yet</text>
+  <text x="300" y="198" font-size="18" fill="#9aa7b4">not run yet</text>
+  <!-- variables box -->
+  <rect x="560" y="10" width="330" height="230" rx="10" fill="#e8f1fb" stroke="#2f6db5" stroke-width="3"/>
+  <text x="725" y="48" text-anchor="middle" font-size="22" font-weight="700" fill="#1d4f8a">VARIABLES now</text>
+  <text x="600" y="100" font-size="26" font-family="Consolas, Menlo, monospace" fill="#202b38">x = <tspan font-weight="700">5</tspan></text>
+  <text x="600" y="146" font-size="26" font-family="Consolas, Menlo, monospace" fill="#202b38">y = <tspan font-weight="700">0</tspan></text>
+  <text x="725" y="205" text-anchor="middle" font-size="18" fill="#4a5968">y is still 0: line 3</text>
+  <text x="725" y="228" text-anchor="middle" font-size="18" fill="#4a5968">has not run</text>
+  <!-- bottom -->
+  <rect x="10" y="262" width="880" height="58" rx="10" fill="#fff4e5" stroke="#e8a317" stroke-width="3"/>
+  <text x="450" y="299" text-anchor="middle" font-size="22" fill="#202b38">Press <tspan font-weight="700">F10</tspan>: line 3 runs, the arrow moves to line 4, and <tspan font-family="Consolas, Menlo, monospace" font-weight="700">y = 10</tspan>.</text>
+</svg>
