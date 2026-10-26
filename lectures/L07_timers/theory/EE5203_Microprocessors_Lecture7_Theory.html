@@ -507,6 +507,9 @@ Simplified hardware diagram of the TIM2 time base: the 16 megahertz timer clock 
 </div>
 </div>
 </div>
+<div class="source-note">
+<p><code>__HAL_TIM_GET_FLAG(&amp;htim2, TIM_FLAG_UPDATE)</code> is a macro: it reads <code>TIM2-&gt;SR</code> and tests one bit. <code>TIM_FLAG_UPDATE</code> is the HAL’s name for that bit, <code>UIF</code> (bit 0). <code>__HAL_TIM_CLEAR_FLAG</code> writes 0 to the same bit. Bare metal, the same bit: <code>TIM2-&gt;SR &amp; TIM_SR_UIF</code>.</p>
+</div>
 </section>
 <section id="the-update-event-can-raise-an-interrupt" class="slide level2">
 <h2>The update event can raise an interrupt</h2>
