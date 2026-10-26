@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -4876,6 +4876,7 @@ pre { font-size: 8.7pt; }
 <h2 class="anchored" data-anchor-id="prepare-before-class">Prepare before class</h2>
 <ul class="task-list">
 <li><label><input type="checkbox">Bring your board and a USB <strong>data</strong> cable.</label></li>
+<li><label><input type="checkbox">Do the <strong>Lab 6 pre-lab quiz</strong> on CATS (two attempts; the higher score counts).</label></li>
 <li><label><input type="checkbox">Re-read the theory slides up to “A 1 ms tick counter from the timer.”</label></li>
 <li><label><input type="checkbox">Compute from 16 MHz: which <code>PSC</code>/<code>ARR</code> give a 1 ms update event?</label></li>
 <li><label><input type="checkbox">Know which register bit records the update event and who clears it.</label></li>
@@ -5000,9 +5001,19 @@ New syntax: <code>condition ? a : b</code> (the conditional operator)
 </div>
 <p>The unsigned subtraction stays correct when <code>g_ms</code> wraps: Lab 5’s debounce arithmetic again.</p>
 <p><strong>Evidence for Checkpoint B:</strong> the 100/900 pattern is visible and <code>main.c</code> contains no <code>HAL_Delay()</code> call. <strong>Screenshot <code>B_scheduler.png</code>:</strong> your <code>USER CODE BEGIN 3</code> lines.</p>
-</section>
-<section id="individual-extension---button-selected-speed" class="level2">
-<h2 class="anchored" data-anchor-id="individual-extension---button-selected-speed">Individual extension - Button-selected speed</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Individual extension - Button-selected speed (optional, click)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Optional.</strong> Open this only after Checkpoint B is shown and time remains; otherwise go straight to Checkpoint C.</p>
 <p>Each valid press of B1 cycles the blink period through 500 → 200 → 50 ms. B1 is the Lab 5 interrupt again, but the 50 ms guard is now timed by your own tick. Three additions in <code>main.c</code>, then show it before Checkpoint C, which replaces this loop:</p>
 <ol type="1">
 <li><p><strong>In <code>USER CODE BEGIN PV</code></strong>, below <code>g_ms</code>:</p>
@@ -5034,7 +5045,10 @@ New syntax: <code>condition ? a : b</code> (the conditional operator)
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ol>
-<p>Optional: add <code>__WFI();</code> at the loop end and confirm timing still holds: the tick interrupt wakes the core every millisecond.</p>
+<p>Stretch: add <code>__WFI();</code> at the loop end and confirm timing still holds: the tick interrupt wakes the core every millisecond.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="checkpoint-c---bare-metal-microsecond-timer" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-c---bare-metal-microsecond-timer">Checkpoint C - Bare-metal microsecond timer</h2>
@@ -5055,9 +5069,9 @@ New syntax: <code>condition ? a : b</code> (the conditional operator)
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint32_t</span> start <span class="op">=</span> TIM2<span class="op">-&gt;</span>CNT<span class="op">;</span></span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">((</span>TIM2<span class="op">-&gt;</span>CNT <span class="op">-</span> start<span class="op">)</span> <span class="op">&lt;</span> us<span class="op">)</span> <span class="op">{</span> <span class="op">}</span>   <span class="co">/* wait for us counts */</span></span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p><strong>In <code>USER CODE BEGIN 2</code></strong>, delete the line <code>HAL_TIM_Base_Start_IT(&amp;htim2);</code> and the Checkpoint B / extension variables, and write instead:</p>
+<li><p><strong>In <code>USER CODE BEGIN 2</code></strong>, delete the line <code>HAL_TIM_Base_Start_IT(&amp;htim2);</code> and the Checkpoint B variables (and the extension variables, if you did it), and write instead:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tim2_us_init<span class="op">();</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p><strong>In <code>USER CODE BEGIN 3</code></strong>, delete all your Checkpoint B and extension lines (they are in <code>B_scheduler.png</code>) and write instead:</p>
+<li><p><strong>In <code>USER CODE BEGIN 3</code></strong>, delete all your Checkpoint B lines (and extension lines, if any; they are in <code>B_scheduler.png</code>) and write instead:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>delay_us<span class="op">(</span><span class="dv">250000</span><span class="bu">U</span><span class="op">);</span>                     <span class="co">/* 250 000 us = 250 ms */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>delay_us()</code> waits like <code>HAL_Delay()</code>, but it counts on <code>TIM2-&gt;CNT</code>, not on the SysTick interrupt. <code>g_ms</code> no longer grows: the update interrupt is off. Build, flash, Continue.</p></li>
@@ -5072,7 +5086,7 @@ New syntax: <code>condition ? a : b</code> (the conditional operator)
 <li><label><input type="checkbox">SFR evidence: PSC, ARR, moving CNT shown for Checkpoint A.</label></li>
 <li><label><input type="checkbox">No <code>HAL_Delay()</code> anywhere in the HAL tasks.</label></li>
 <li><label><input type="checkbox">Bare-metal version explained register by register.</label></li>
-<li><label><input type="checkbox">Extension: one speed step per press; the EXTI callback only sets <code>button_event</code>.</label></li>
+<li><label><input type="checkbox">Extension (optional): one speed step per press; the EXTI callback only sets <code>button_event</code>.</label></li>
 </ul>
 </section>
 <section id="individual-oral-check" class="level2">
