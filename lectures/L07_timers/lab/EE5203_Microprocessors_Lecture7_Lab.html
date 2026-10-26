@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.43">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -4875,7 +4875,7 @@ pre { font-size: 8.7pt; }
 <section id="prepare-before-class" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-before-class">Prepare before class</h2>
 <ul class="task-list">
-<li><label><input type="checkbox">Re-read the theory slides up to “The 1 ms tick.”</label></li>
+<li><label><input type="checkbox">Re-read the theory slides up to “A 1 ms tick counter from the timer.”</label></li>
 <li><label><input type="checkbox">Compute from 16 MHz: which <code>PSC</code>/<code>ARR</code> give a 1 ms update event?</label></li>
 <li><label><input type="checkbox">Know which register bit records the update event and who clears it.</label></li>
 </ul>
@@ -4910,7 +4910,7 @@ pre { font-size: 8.7pt; }
 </tr>
 <tr class="even">
 <td>Clock</td>
-<td>Default HSI: <code>SYSCLK</code> = <code>PCLK1</code> = timer clock = <strong>16 MHz</strong></td>
+<td><strong>HSI, PLL off</strong> (you set this in CubeMX, step 1 below): <code>SYSCLK</code> = <code>PCLK1</code> = timer clock = <strong>16 MHz</strong></td>
 </tr>
 <tr class="odd">
 <td>Project</td>
@@ -4926,6 +4926,7 @@ pre { font-size: 8.7pt; }
 <section id="configure-in-cubemx" class="level2">
 <h2 class="anchored" data-anchor-id="configure-in-cubemx">Configure in CubeMX</h2>
 <ol type="1">
+<li><strong>Clock Configuration tab</strong> (next to Pinout): set <strong>System Clock Mux</strong> to <strong>HSI</strong> and the <strong>AHB</strong>, <strong>APB1</strong> and <strong>APB2</strong> prescalers to <strong>/1</strong>. Every box on the right now reads <strong>16</strong>, including <strong>APB1 Timer clocks (MHz)</strong>. The board default runs the chip at 84 MHz through the PLL; with that setting every time in this lab is 5.25 times too short.</li>
 <li><code>PA5</code> → <code>GPIO_Output</code> (defaults: push-pull, no pull, low speed).</li>
 <li><strong>Timers → TIM2</strong>: Clock Source = <code>Internal Clock</code>; Prescaler <code>15</code> (16 MHz ÷ 16 = 1 MHz), Counter Period <code>999</code> (1 MHz ÷ 1000 → 1 ms).</li>
 <li><strong>System Core → NVIC</strong>: enable <strong>TIM2 global interrupt</strong>.</li>
@@ -5012,7 +5013,7 @@ pre { font-size: 8.7pt; }
 </section>
 <section id="if-you-are-stuck" class="level2">
 <h2 class="anchored" data-anchor-id="if-you-are-stuck">If you are stuck</h2>
-<p>Walk the pipeline left to right and fix the <strong>first</strong> silent stage: <code>PSC</code>/<code>ARR</code> values in the SFR view → <code>CNT</code> moving → <code>UIF</code> setting in <code>SR</code> → NVIC enabled → breakpoint in the callback → <code>g_ms</code> growing → your loop condition. <strong>CNT frozen?</strong> Timer never started or clock not enabled. <strong>Callback never runs?</strong> NVIC checkbox or <code>Start_IT</code> missing. <strong>Pattern timing drifts?</strong> You reset <code>t_phase</code> to <code>g_ms</code> somewhere other than the phase change.</p>
+<p>Walk the pipeline left to right and fix the <strong>first</strong> silent stage: <code>PSC</code>/<code>ARR</code> values in the SFR view → <code>CNT</code> moving → <code>UIF</code> setting in <code>SR</code> → NVIC enabled → breakpoint in the callback → <code>g_ms</code> growing → your loop condition. <strong>CNT frozen?</strong> Timer never started or clock not enabled. <strong>Callback never runs?</strong> NVIC checkbox or <code>Start_IT</code> missing. <strong>Everything about 5 times too fast</strong> (the heartbeat, the tick)? The Clock Configuration tab is still on the PLL at 84 MHz: System Clock Mux = HSI, prescalers /1, generate code again. <strong>Pattern timing drifts?</strong> You reset <code>t_phase</code> to <code>g_ms</code> somewhere other than the phase change.</p>
 
 
 </section>

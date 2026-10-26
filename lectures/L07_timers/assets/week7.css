@@ -254,3 +254,29 @@
 .reveal .slides section svg .fragment.spot.current-fragment polygon {
   stroke-width: 7;
 }
+
+/* Timer mechanism slides (2, 4, 5): shared drawing language */
+.reveal .formula-line {
+  width: 92%;
+  margin: 0.25em auto 0.35em;
+  padding: 0.3em 0.6em;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 5px 16px rgba(23, 79, 115, 0.09);
+  color: #174f73;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.78em;
+  font-weight: 700;
+  text-align: center;
+}
+.reveal .formula-line p { margin: 0; }
+.reveal .psc-table { width: 92%; margin: 0 auto; font-size: 0.78em; }
+.reveal .psc-table table { width: 100%; margin: 0; }
+.reveal .psc-table th { background: #e8f2f7; color: #174f73; }
+.reveal .psc-table td, .reveal .psc-table th { padding: 0.28em 0.5em; text-align: center; }
+.reveal .psc-table td:first-child { font-family: ui-monospace, Menlo, Consolas, monospace; font-weight: 700; color: #3f7f58; }
+.reveal .lead-line { font-size: 0.82em; color: #355262; margin: 0.1em 0 0.3em; }
+.reveal .lead-line p { margin: 0; }
+.reveal .lead-line.small { font-size: 0.62em; margin-top: 0.3em; }
+.reveal .cnt-cue { font-size: 0.6em; color: #5a6b76; margin: 0; text-align: left; }
+.reveal .cnt-cue p { margin: 0; }
