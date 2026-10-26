@@ -691,7 +691,15 @@ The timer update event follows the same interrupt path as the L06 button: the up
 </section>
 <section id="practice-does-the-schedule-drift" class="slide level2">
 <h2>Practice: does the schedule drift?</h2>
-<p>The scheduler reschedules with <code>t_led = ms;</code>. Suppose one loop pass occasionally takes <strong>30 ms</strong> because of other work.</p>
+<div class="lead-line">
+<p>One loop pass takes <strong>30 ms</strong> just before the toggle due at 1000 ms. Then what?</p>
+</div>
+<svg class="story-visual" viewbox="0 0 1440 330" style="max-height:330px" role="img" aria-labelledby="drift-title">
+<title id="drift-title">
+Time line from 0 to 2000 ms with deadlines every 500 ms as dashed lines. Row 1: toggles at 500 and, after a grey 30 ms busy block starting at 1000, a late toggle at 1030. Row 2, t_led = ms: the next toggles land at 1530 and 2030, each 30 ms right of its dashed line, labelled drift. Row 3, t_led += 500: the next toggles land back on 1500 and 2000.
+</title>
+<defs><marker id="drift-ah" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5a6b76"></path></marker></defs> <!-- axis --> <line x1="150" y1="40" x2="1400" y2="40" stroke="#5a6b76" stroke-width="2" marker-end="url(#drift-ah)"></line> <g fill="#5a6b76" font-size="24" text-anchor="middle"> <text x="150" y="28">0</text><text x="450" y="28">500</text><text x="750" y="28">1000</text><text x="1050" y="28">1500</text><text x="1350" y="28">2000 ms</text> </g> <!-- deadline grid --> <g stroke="#2b789f" stroke-width="2.5" stroke-dasharray="8 7" opacity="0.6"> <line x1="450" y1="46" x2="450" y2="300"></line><line x1="750" y1="46" x2="750" y2="300"></line><line x1="1050" y1="46" x2="1050" y2="300"></line><line x1="1350" y1="46" x2="1350" y2="300"></line> </g> <text x="1400" y="66" text-anchor="end" fill="#2b789f" font-size="22">dashed = a toggle is due</text> <!-- row 1: what happens --> <text x="20" y="118" fill="#355262" font-size="25" font-weight="700">the stall</text> <line x1="150" y1="110" x2="1400" y2="110" stroke="#c8d8e2" stroke-width="2"></line> <line x1="450" y1="86" x2="450" y2="134" stroke="#3f7f58" stroke-width="8" stroke-linecap="round"></line> <rect x="750" y="82" width="18" height="56" fill="#b4b2a9"></rect> <text x="740" y="164" text-anchor="end" fill="#5a6b76" font-size="22">loop busy 30 ms</text> <line x1="768" y1="86" x2="768" y2="134" stroke="#d47b28" stroke-width="8" stroke-linecap="round"></line> <text x="800" y="102" fill="#b8621a" font-size="24" font-weight="700">toggle at 1030: 30 ms late</text> <!-- row 2: t_led = ms --> <g class="fragment" data-fragment-index="1"> <text x="20" y="210" fill="#355262" font-size="25" font-weight="700" font-family="ui-monospace, Menlo, monospace">t_led = ms</text> <line x1="150" y1="202" x2="1400" y2="202" stroke="#c8d8e2" stroke-width="2"></line> <line x1="768" y1="178" x2="768" y2="226" stroke="#d47b28" stroke-width="8" stroke-linecap="round"></line> <line x1="1068" y1="178" x2="1068" y2="226" stroke="#d47b28" stroke-width="8" stroke-linecap="round"></line> <line x1="1368" y1="178" x2="1368" y2="226" stroke="#d47b28" stroke-width="8" stroke-linecap="round"></line> <text x="1086" y="196" fill="#b8621a" font-size="22">1530</text><text x="1386" y="196" fill="#b8621a" font-size="22">2030</text> <text x="1040" y="196" text-anchor="end" fill="#b8621a" font-size="24" font-weight="700">30 ms late every time: drift</text> </g> <!-- row 3: t_led += 500 --> <g class="fragment" data-fragment-index="2"> <text x="20" y="300" fill="#355262" font-size="25" font-weight="700" font-family="ui-monospace, Menlo, monospace">t_led += 500</text> <line x1="150" y1="292" x2="1400" y2="292" stroke="#c8d8e2" stroke-width="2"></line> <line x1="768" y1="268" x2="768" y2="316" stroke="#d47b28" stroke-width="8" stroke-linecap="round"></line> <line x1="1050" y1="268" x2="1050" y2="316" stroke="#3f7f58" stroke-width="8" stroke-linecap="round"></line> <line x1="1350" y1="268" x2="1350" y2="316" stroke="#3f7f58" stroke-width="8" stroke-linecap="round"></line> <text x="1030" y="262" text-anchor="end" fill="#3f7f58" font-size="24" font-weight="700">back on the grid: no drift</text> </g>
+</svg>
 <div class="prompt-list compact-prompts">
 <div class="prompt-item">
 <p><span>1</span> Can a toggle be late? By how much, at worst?</p>
@@ -703,8 +711,8 @@ The timer update event follows the same interrupt path as the L06 button: the up
 <p><span>3</span> What changes if the reschedule line becomes <code>t_led += 500U;</code>?</p>
 </div>
 </div>
-<div class="fragment relationship-strip">
-<p>Both can be 30 ms late once. <code>t_led = ms</code> re-anchors to the late moment, so the error accumulates. <code>t_led += 500U</code> keeps the deadlines fixed: one late toggle, no drift.</p>
+<div class="fragment relationship-strip" data-fragment-index="3">
+<p><code>t_led = ms</code> remembers when you <em>did</em> it; <code>t_led += 500U</code> remembers when you <em>should have</em>.</p>
 </div>
 </section>
 <section id="systick-is-the-timer-behind-hal_delay" class="slide level2">
