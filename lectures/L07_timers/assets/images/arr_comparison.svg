@@ -944,7 +944,7 @@ z
    </g>
   </g>
   <g id="text_19">
-   <!-- same 1 kHz counting frequency — only the top value changes -->
+   <!-- same 1 kHz counter frequency — only the top value changes -->
    <g style="fill: #5a6b76" transform="translate(114.975938 250.348875) scale(0.19 -0.19)">
     <defs>
      <path id="DejaVuSans-61" d="M 2194 1759 

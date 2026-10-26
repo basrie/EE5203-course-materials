@@ -270,6 +270,7 @@
   text-align: center;
 }
 .reveal .formula-line p { margin: 0; }
+.reveal .formula-line.big { font-size: 0.95em; line-height: 1.45; padding: 0.4em 0.8em; }
 .reveal .psc-table { width: 92%; margin: 0 auto; font-size: 0.78em; }
 .reveal .psc-table table { width: 100%; margin: 0; }
 .reveal .psc-table th { background: #e8f2f7; color: #174f73; }
