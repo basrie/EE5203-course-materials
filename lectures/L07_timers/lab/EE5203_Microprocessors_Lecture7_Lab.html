@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>EE5203 L07 Lab Guide – EE5203 Microprocessors</title>
+<title>EE5203 Lab 6 Guide – EE5203 Microprocessors</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -4866,15 +4866,17 @@ pre { font-size: 8.7pt; }
 
 
 
-<section id="ee5203-l07-lab-guide" class="level1">
-<h1>EE5203 L07 Lab Guide</h1>
-<p><em>Timer interrupts — a 1 ms tick instead of <code>HAL_Delay()</code> - Basri Erdogan</em></p>
+<section id="ee5203-lab-6-guide" class="level1">
+<h1>EE5203 Lab 6 Guide</h1>
+<p><em>Timer interrupts: a 1 ms tick instead of <code>HAL_Delay()</code> - Basri Erdogan</em></p>
 <div class="mission">
 <p><strong>Mission:</strong> Build a 1 ms tick from a TIM2 update interrupt, drive a heartbeat blink from it with no <code>HAL_Delay()</code> anywhere, and prove in the SFR view that the hardware counts while your loop stays free.</p>
 </div>
+<p>This lab uses Lecture 7 (timer time base, <code>PSC</code>/<code>ARR</code>, update interrupt, millisecond tick, bare-metal timer registers).</p>
 <section id="prepare-before-class" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-before-class">Prepare before class</h2>
 <ul class="task-list">
+<li><label><input type="checkbox">Bring your board and a USB <strong>data</strong> cable.</label></li>
 <li><label><input type="checkbox">Re-read the theory slides up to “A 1 ms tick counter from the timer.”</label></li>
 <li><label><input type="checkbox">Compute from 16 MHz: which <code>PSC</code>/<code>ARR</code> give a 1 ms update event?</label></li>
 <li><label><input type="checkbox">Know which register bit records the update event and who clears it.</label></li>
@@ -4900,92 +4902,142 @@ pre { font-size: 8.7pt; }
 <thead>
 <tr class="header">
 <th>Item</th>
-<th>Required value</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Board</td>
-<td>Nucleo-F401RE — onboard LD2 (PA5) only, <strong>no wiring</strong></td>
+<td>Nucleo-F401RE: LED on PA5, <strong>no wiring</strong></td>
 </tr>
 <tr class="even">
 <td>Clock</td>
-<td><strong>HSI, PLL off</strong> (you set this in CubeMX, step 1 below): <code>SYSCLK</code> = <code>PCLK1</code> = timer clock = <strong>16 MHz</strong></td>
+<td><strong>HSI, PLL off</strong> (you set this in CubeMX, step 2 below): <code>SYSCLK</code> = <code>PCLK1</code> = timer clock = <strong>16 MHz</strong></td>
 </tr>
 <tr class="odd">
-<td>Project</td>
-<td>New CubeMX project <code>L07_Timer_Tick</code> (Toolchain = CMake), opened in VS Code</td>
-</tr>
-<tr class="even">
 <td>Timer</td>
 <td>TIM2, internal clock source</td>
+</tr>
+<tr class="even">
+<td>Tools</td>
+<td>STM32CubeMX (new project) + VS Code</td>
+</tr>
+<tr class="odd">
+<td>Project name</td>
+<td><code>EE5203_L06_&lt;studentnumber&gt;</code></td>
+</tr>
+<tr class="even">
+<td>File you edit</td>
+<td><code>main.c</code>, only inside the <code>USER CODE</code> regions</td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="configure-in-cubemx" class="level2">
 <h2 class="anchored" data-anchor-id="configure-in-cubemx">Configure in CubeMX</h2>
+<p><strong>Start of the session:</strong> if <code>C:\Work\&lt;studentnumber&gt;</code> does not contain your Lab 5 project, copy <strong>all</strong> your project folders from <code>H:\EE_Labs</code> into it first.</p>
 <ol type="1">
+<li><strong>STM32CubeMX:</strong> Board Selector → <strong>NUCLEO-F401RE</strong> → accept the default initialization.</li>
 <li><strong>Clock Configuration tab</strong> (next to Pinout): set <strong>System Clock Mux</strong> to <strong>HSI</strong> and the <strong>AHB</strong>, <strong>APB1</strong> and <strong>APB2</strong> prescalers to <strong>/1</strong>. Every box on the right now reads <strong>16</strong>, including <strong>APB1 Timer clocks (MHz)</strong>. The board default runs the chip at 84 MHz through the PLL; with that setting every time in this lab is 5.25 times too short.</li>
-<li><code>PA5</code> → <code>GPIO_Output</code> (defaults: push-pull, no pull, low speed).</li>
+<li><strong>PA5</strong> as in Lab 4: <strong>Reset_State</strong>, then <strong><code>GPIO_Output</code></strong> (defaults: push-pull, no pull, low speed).</li>
 <li><strong>Timers → TIM2</strong>: Clock Source = <code>Internal Clock</code>; Prescaler <code>15</code> (16 MHz ÷ 16 = 1 MHz), Counter Period <code>999</code> (1 MHz ÷ 1000 → 1 ms).</li>
 <li><strong>System Core → NVIC</strong>: enable <strong>TIM2 global interrupt</strong>.</li>
-<li>Generate code, then <strong>verify — do not add</strong>: <code>MX_TIM2_Init()</code> in <code>main.c</code> and <code>TIM2_IRQHandler()</code> calling <code>HAL_TIM_IRQHandler(&amp;htim2)</code> in <code>stm32f4xx_it.c</code>.</li>
+<li>Project Manager: name <strong><code>EE5203_L06_&lt;studentnumber&gt;</code></strong>, location <code>C:\Work\&lt;studentnumber&gt;</code>, Toolchain/IDE = <strong>CMake</strong> → Generate Code.</li>
+<li><strong>Copy <code>C:\Users\Public\EE5203_template\.vscode</code> into the project folder</strong>, as in every lab. Without it the build stops with <code>...FLASH.ld: syntax error</code>. (Own laptop: skip this step and use <strong>Set Up STM32Cube project(s)</strong>, as in Lab 5.)</li>
+<li><strong>Verify, do not add:</strong> <code>MX_TIM2_Init()</code> in <code>main.c</code>, and <code>TIM2_IRQHandler()</code> calling <code>HAL_TIM_IRQHandler(&amp;htim2)</code> in <code>stm32f4xx_it.c</code>. CubeMX wrote both.</li>
 </ol>
 </section>
 <section id="checkpoint-a---the-tick-runs" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-a---the-tick-runs">Checkpoint A - The tick runs</h2>
-<p>In <code>USER CODE BEGIN PV</code> and <code>USER CODE BEGIN 4</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint32_t</span> g_ms <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_TIM_PeriodElapsedCallback<span class="op">(</span>TIM_HandleTypeDef <span class="op">*</span>htim<span class="op">)</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>htim<span class="op">-&gt;</span>Instance <span class="op">==</span> TIM2<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        g_ms<span class="op">++;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>In <code>USER CODE BEGIN 2</code>: <code>HAL_TIM_Base_Start_IT(&amp;htim2);</code></p>
-<p><strong>Evidence for Checkpoint A:</strong> a breakpoint in the callback is hit; <code>g_ms</code> grows between pauses; in the SFR view <code>TIM2-&gt;PSC</code> = 15, <code>TIM2-&gt;ARR</code> = 999, and <code>TIM2-&gt;CNT</code> is moving.</p>
+<p>Three additions in <code>main.c</code>, each in its own <code>USER CODE</code> region:</p>
+<ol type="1">
+<li><p><strong>In <code>USER CODE BEGIN PV</code></strong>, the millisecond counter:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint32_t</span> g_ms <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>In <code>USER CODE BEGIN 4</code></strong> (near the end of <code>main.c</code>), the callback. The HAL calls it at every update event:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_TIM_PeriodElapsedCallback<span class="op">(</span>TIM_HandleTypeDef <span class="op">*</span>htim<span class="op">)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>htim<span class="op">-&gt;</span>Instance <span class="op">==</span> TIM2<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        g_ms<span class="op">++;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>In <code>USER CODE BEGIN 2</code></strong> (before <code>while (1)</code>), start the timer in interrupt mode:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>HAL_TIM_Base_Start_IT<span class="op">(&amp;</span>htim2<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>MX_TIM2_Init()</code> only writes <code>PSC</code> and <code>ARR</code>. Without this line <code>CNT</code> stays at 0 and the callback never runs.</p></li>
+<li><p>Build (<strong>Ctrl+Shift+B</strong>), start the debugger (<strong>F5</strong>), put a breakpoint on <code>g_ms++</code>, Continue.</p></li>
+</ol>
+<p><strong>Evidence for Checkpoint A:</strong> the breakpoint in the callback is hit; <code>g_ms</code> grows between pauses; in the SFR view <code>TIM2-&gt;PSC</code> = 15, <code>TIM2-&gt;ARR</code> = 999, and <code>TIM2-&gt;CNT</code> is moving.</p>
 </section>
 <section id="checkpoint-b---heartbeat-without-delay" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-b---heartbeat-without-delay">Checkpoint B - Heartbeat without delay</h2>
-<p>Blink a heartbeat — LD2 <strong>on for 100 ms, off for 900 ms</strong> — using only <code>g_ms</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> t_phase <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint8_t</span>  led_on  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint32_t</span> wait <span class="op">=</span> led_on <span class="op">?</span> <span class="dv">100</span><span class="bu">U</span> <span class="op">:</span> <span class="dv">900</span><span class="bu">U</span><span class="op">;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">((</span>g_ms <span class="op">-</span> t_phase<span class="op">)</span> <span class="op">&gt;=</span> wait<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        t_phase <span class="op">=</span> g_ms<span class="op">;</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        led_on <span class="op">=</span> <span class="op">!</span>led_on<span class="op">;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                          led_on <span class="op">?</span> GPIO_PIN_SET <span class="op">:</span> GPIO_PIN_RESET<span class="op">);</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* the loop stays free for other work */</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The unsigned subtraction stays correct when <code>g_ms</code> wraps — L06’s debounce arithmetic again.</p>
+<p>Blink a heartbeat, LD2 <strong>on for 100 ms, off for 900 ms</strong>, timed only from <code>g_ms</code>. Two additions in <code>main.c</code>:</p>
+<ol type="1">
+<li><p><strong>In <code>USER CODE BEGIN 2</code></strong>, below <code>HAL_TIM_Base_Start_IT(&amp;htim2);</code>, the two state variables:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> t_phase <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>        <span class="co">/* g_ms value at the last LED change */</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint8_t</span>  led_on  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>In <code>USER CODE BEGIN 3</code></strong> (inside <code>while (1)</code>), the scheduler. Nothing here waits; the loop stays free for other work:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> wait <span class="op">=</span> led_on <span class="op">?</span> <span class="dv">100</span><span class="bu">U</span> <span class="op">:</span> <span class="dv">900</span><span class="bu">U</span><span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">((</span>g_ms <span class="op">-</span> t_phase<span class="op">)</span> <span class="op">&gt;=</span> wait<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    t_phase <span class="op">=</span> g_ms<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    led_on <span class="op">=</span> <span class="op">!</span>led_on<span class="op">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                      led_on <span class="op">?</span> GPIO_PIN_SET <span class="op">:</span> GPIO_PIN_RESET<span class="op">);</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+New syntax: <code>condition ? a : b</code> (the conditional operator)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>wait = led_on ? 100U : 900U;</code> means: if <code>led_on</code> is true, <code>wait</code> gets <code>100U</code>, otherwise <code>900U</code>. It is the same as</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>led_on<span class="op">)</span> <span class="op">{</span> wait <span class="op">=</span> <span class="dv">100</span><span class="bu">U</span><span class="op">;</span> <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span> wait <span class="op">=</span> <span class="dv">900</span><span class="bu">U</span><span class="op">;</span> <span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Read <code>?</code> as “then” and <code>:</code> as “else”. The <code>if</code> form is also accepted.</p>
+</div>
+</div>
+<p>The unsigned subtraction stays correct when <code>g_ms</code> wraps: Lab 5’s debounce arithmetic again.</p>
 <p><strong>Evidence for Checkpoint B:</strong> the 100/900 pattern is visible and <code>main.c</code> contains no <code>HAL_Delay()</code> call.</p>
 </section>
 <section id="checkpoint-c---bare-metal-microsecond-timer" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-c---bare-metal-microsecond-timer">Checkpoint C - Bare-metal microsecond timer</h2>
-<p>In a separate source file or <code>#ifdef</code> block, rebuild the blink at 250 ms on/off with <strong>no HAL timer calls</strong>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>RCC<span class="op">-&gt;</span>APB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span>   <span class="co">// TIM2 clock (APB1, not AHB1!)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>TIM2<span class="op">-&gt;</span>PSC <span class="op">=</span> <span class="dv">15</span><span class="op">;</span>              <span class="co">// 16 MHz / 16 = 1 MHz: 1 tick = 1 us</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>TIM2<span class="op">-&gt;</span>ARR <span class="op">=</span> <span class="bn">0xFFFFFFFF</span><span class="bu">U</span><span class="op">;</span>     <span class="co">// free-run: TIM2 is 32-bit</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>TIM2<span class="op">-&gt;</span>EGR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span>       <span class="co">// force update: load PSC now</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>TIM2<span class="op">-&gt;</span>CR1 <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span>      <span class="co">// CEN: start counting</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="kw">inline</span> <span class="dt">void</span> delay_us<span class="op">(</span><span class="dt">uint32_t</span> us<span class="op">)</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint32_t</span> start <span class="op">=</span> TIM2<span class="op">-&gt;</span>CNT<span class="op">;</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">((</span>TIM2<span class="op">-&gt;</span>CNT <span class="op">-</span> start<span class="op">)</span> <span class="op">&lt;</span> us<span class="op">)</span> <span class="op">{</span> <span class="op">}</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Evidence for Checkpoint C:</strong> the blink runs; you can explain the <code>EGR</code> write and why the subtraction survives counter wrap (~71 minutes at 1 MHz).</p>
+<p>Now program TIM2 with register writes only, as a free-running <strong>microsecond clock</strong>, and blink LD2 <strong>250 ms on / 250 ms off</strong> from it with <strong>no HAL timer calls</strong>. TIM2 cannot be the 1 ms tick and the microsecond clock at the same time, so this checkpoint switches the HAL tick off. Three changes in <code>main.c</code>:</p>
+<ol type="1">
+<li><p><strong>In <code>USER CODE BEGIN 0</code></strong> (above <code>main()</code>), the init and the wait function:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> tim2_us_init<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    RCC<span class="op">-&gt;</span>APB1ENR <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span>   <span class="co">/* TIM2 clock enable: APB1, not AHB1  */</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    TIM2<span class="op">-&gt;</span>PSC <span class="op">=</span> <span class="dv">15</span><span class="op">;</span>              <span class="co">/* 16 MHz / 16 = 1 MHz: 1 count = 1 us */</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    TIM2<span class="op">-&gt;</span>ARR <span class="op">=</span> <span class="bn">0xFFFFFFFF</span><span class="bu">U</span><span class="op">;</span>     <span class="co">/* free-running: TIM2 is 32-bit        */</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    TIM2<span class="op">-&gt;</span>EGR <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span>       <span class="co">/* UG: load PSC now                    */</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    TIM2<span class="op">-&gt;</span>CR1 <span class="op">|=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">);</span>      <span class="co">/* CEN: start counting                 */</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> delay_us<span class="op">(</span><span class="dt">uint32_t</span> us<span class="op">)</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint32_t</span> start <span class="op">=</span> TIM2<span class="op">-&gt;</span>CNT<span class="op">;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">((</span>TIM2<span class="op">-&gt;</span>CNT <span class="op">-</span> start<span class="op">)</span> <span class="op">&lt;</span> us<span class="op">)</span> <span class="op">{</span> <span class="op">}</span>   <span class="co">/* wait for us counts */</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>In <code>USER CODE BEGIN 2</code></strong>, replace the HAL start with your init. Keep the old line as a comment; you switch back for the extension:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* HAL_TIM_Base_Start_IT(&amp;htim2); */</span>   <span class="co">/* off: Checkpoint C owns TIM2 */</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>tim2_us_init<span class="op">();</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>In <code>USER CODE BEGIN 3</code></strong>, switch the Checkpoint B scheduler off and add the blink. <code>#if 0</code> … <code>#endif</code> makes the compiler skip the lines between them, so your Checkpoint B code stays in the file for the checkoff:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#if 0</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">    /* your Checkpoint B lines stay here, unchanged */</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>delay_us<span class="op">(</span><span class="dv">250000</span><span class="bu">U</span><span class="op">);</span>                     <span class="co">/* 250 000 us = 250 ms */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>delay_us()</code> waits like <code>HAL_Delay()</code>, but it counts on <code>TIM2-&gt;CNT</code>, not on the SysTick interrupt. <code>g_ms</code> no longer grows here: the update interrupt is off.</p></li>
+</ol>
+<p>Build, flash, Continue.</p>
+<p><strong>Evidence for Checkpoint C:</strong> the 250/250 blink runs; in the SFR view <code>TIM2-&gt;ARR</code> = <code>0xFFFFFFFF</code> and <code>CNT</code> is moving; you can explain the <code>EGR</code> write and why the subtraction survives counter wrap (~71 minutes at 1 MHz).</p>
 </section>
 <section id="individual-extension---button-selected-speed" class="level2">
 <h2 class="anchored" data-anchor-id="individual-extension---button-selected-speed">Individual extension - Button-selected speed</h2>
-<p>Using the Checkpoint B loop: B1 (PC13, input, <strong>no pull</strong> — the external resistor is on the board) cycles the blink period through 500 → 200 → 50 ms. Debounce with 50 ms of <code>g_ms</code>, exactly as in L06. Optional: add <code>__WFI();</code> at the loop end and confirm timing still holds.</p>
+<p>Switch back to the HAL tick first: restore <code>HAL_TIM_Base_Start_IT(&amp;htim2);</code>, delete <code>tim2_us_init();</code>, delete the two blink lines and the <code>#if 0</code> / <code>#endif</code> pair. Then, in the Checkpoint B loop: B1 (PC13, input, <strong>no pull</strong>; the external resistor is on the board) cycles the blink period through 500 → 200 → 50 ms. Debounce with 50 ms of <code>g_ms</code>, exactly as in Lab 5. Optional: add <code>__WFI();</code> at the loop end and confirm timing still holds.</p>
 </section>
 <section id="acceptance-checklist" class="level2">
 <h2 class="anchored" data-anchor-id="acceptance-checklist">Acceptance checklist</h2>
@@ -5001,7 +5053,7 @@ pre { font-size: 8.7pt; }
 <section id="individual-oral-check" class="level2">
 <h2 class="anchored" data-anchor-id="individual-oral-check">Individual oral check</h2>
 <ul>
-<li>Why 15 and 999 — and what breaks without the two +1s?</li>
+<li>Why 15 and 999, and what breaks without the two +1s?</li>
 <li>What would happen if the callback did the LED writes and took 2 ms?</li>
 <li>Why is <code>g_ms</code> declared <code>volatile</code>, and why is the subtraction wrap-safe?</li>
 <li><code>TIM2</code> is on which bus, and which register enables its clock?</li>
@@ -5009,11 +5061,11 @@ pre { font-size: 8.7pt; }
 </section>
 <section id="submit" class="level2">
 <h2 class="anchored" data-anchor-id="submit">Submit</h2>
-<p>Submit <code>main.c</code> (plus the bare-metal file), and one SFR-view screenshot showing <code>TIM2-&gt;PSC</code>, <code>TIM2-&gt;ARR</code>, and a nonzero <code>TIM2-&gt;CNT</code>.</p>
+<p>Submit <code>main.c</code> as it is at the end of the session (the Checkpoint C functions stay in <code>USER CODE BEGIN 0</code>), and one SFR-view screenshot showing <code>TIM2-&gt;PSC</code>, <code>TIM2-&gt;ARR</code>, and a nonzero <code>TIM2-&gt;CNT</code>.</p>
 </section>
 <section id="if-you-are-stuck" class="level2">
 <h2 class="anchored" data-anchor-id="if-you-are-stuck">If you are stuck</h2>
-<p>Walk the pipeline left to right and fix the <strong>first</strong> silent stage: <code>PSC</code>/<code>ARR</code> values in the SFR view → <code>CNT</code> moving → <code>UIF</code> setting in <code>SR</code> → NVIC enabled → breakpoint in the callback → <code>g_ms</code> growing → your loop condition. <strong>CNT frozen?</strong> Timer never started or clock not enabled. <strong>Callback never runs?</strong> NVIC checkbox or <code>Start_IT</code> missing. <strong>Everything about 5 times too fast</strong> (the heartbeat, the tick)? The Clock Configuration tab is still on the PLL at 84 MHz: System Clock Mux = HSI, prescalers /1, generate code again. <strong>Pattern timing drifts?</strong> You reset <code>t_phase</code> to <code>g_ms</code> somewhere other than the phase change.</p>
+<p>Walk the pipeline left to right and fix the <strong>first</strong> silent stage: <code>PSC</code>/<code>ARR</code> values in the SFR view → <code>CNT</code> moving → <code>UIF</code> setting in <code>SR</code> → NVIC enabled → breakpoint in the callback → <code>g_ms</code> growing → your loop condition. <strong><code>...FLASH.ld: syntax error</code> at build?</strong> <code>.vscode</code> is missing from the project folder (step 7). <strong>CNT frozen?</strong> Timer never started or clock not enabled. <strong>Callback never runs?</strong> NVIC checkbox or <code>Start_IT</code> missing. <strong>Everything about 5 times too fast</strong> (the heartbeat, the tick)? The Clock Configuration tab is still on the PLL at 84 MHz: System Clock Mux = HSI, prescalers /1, generate code again. <strong>Pattern timing drifts?</strong> You reset <code>t_phase</code> to <code>g_ms</code> somewhere other than the phase change. <strong>Checkpoint C blink never changes?</strong> <code>tim2_us_init()</code> is not called before the loop, so <code>CNT</code> is frozen and <code>delay_us()</code> never returns.</p>
 
 
 </section>
