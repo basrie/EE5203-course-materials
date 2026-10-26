@@ -5000,11 +5000,15 @@ New syntax: <code>condition ? a : b</code> (the conditional operator)
 </div>
 </div>
 <p>The unsigned subtraction stays correct when <code>g_ms</code> wraps: Lab 5’s debounce arithmetic again.</p>
-<p><strong>Evidence for Checkpoint B:</strong> the 100/900 pattern is visible and <code>main.c</code> contains no <code>HAL_Delay()</code> call.</p>
+<p><strong>Evidence for Checkpoint B:</strong> the 100/900 pattern is visible and <code>main.c</code> contains no <code>HAL_Delay()</code> call. <strong>Screenshot <code>B_scheduler.png</code>:</strong> your <code>USER CODE BEGIN 3</code> lines.</p>
+</section>
+<section id="individual-extension---button-selected-speed" class="level2">
+<h2 class="anchored" data-anchor-id="individual-extension---button-selected-speed">Individual extension - Button-selected speed</h2>
+<p>In the Checkpoint B loop: B1 (PC13, input, <strong>no pull</strong>; the external resistor is on the board) cycles the blink period through 500 → 200 → 50 ms. Debounce with 50 ms of <code>g_ms</code>, exactly as in Lab 5. Optional: add <code>__WFI();</code> at the loop end and confirm timing still holds. Show it to your assistant before Checkpoint C, which replaces this loop.</p>
 </section>
 <section id="checkpoint-c---bare-metal-microsecond-timer" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-c---bare-metal-microsecond-timer">Checkpoint C - Bare-metal microsecond timer</h2>
-<p>Now program TIM2 with register writes only, as a free-running <strong>microsecond clock</strong>, and blink LD2 <strong>250 ms on / 250 ms off</strong> from it with <strong>no HAL timer calls</strong>. TIM2 cannot be the 1 ms tick and the microsecond clock at the same time, so this checkpoint switches the HAL tick off. Three changes in <code>main.c</code>:</p>
+<p>Now program TIM2 with register writes only, as a free-running <strong>microsecond clock</strong>, and blink LD2 <strong>250 ms on / 250 ms off</strong> from it with <strong>no HAL timer calls</strong>. TIM2 cannot be the 1 ms tick and the microsecond clock at the same time, so this checkpoint replaces the HAL tick. Do it last: three changes in <code>main.c</code>:</p>
 <ol type="1">
 <li><p><strong>In <code>USER CODE BEGIN 0</code></strong> (above <code>main()</code>), the init and the wait function:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> tim2_us_init<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
@@ -5021,23 +5025,15 @@ New syntax: <code>condition ? a : b</code> (the conditional operator)
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint32_t</span> start <span class="op">=</span> TIM2<span class="op">-&gt;</span>CNT<span class="op">;</span></span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">((</span>TIM2<span class="op">-&gt;</span>CNT <span class="op">-</span> start<span class="op">)</span> <span class="op">&lt;</span> us<span class="op">)</span> <span class="op">{</span> <span class="op">}</span>   <span class="co">/* wait for us counts */</span></span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p><strong>In <code>USER CODE BEGIN 2</code></strong>, replace the HAL start with your init. Keep the old line as a comment; you switch back for the extension:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* HAL_TIM_Base_Start_IT(&amp;htim2); */</span>   <span class="co">/* off: Checkpoint C owns TIM2 */</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>tim2_us_init<span class="op">();</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p><strong>In <code>USER CODE BEGIN 3</code></strong>, switch the Checkpoint B scheduler off and add the blink. <code>#if 0</code> … <code>#endif</code> makes the compiler skip the lines between them, so your Checkpoint B code stays in the file for the checkoff:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#if 0</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">    /* your Checkpoint B lines stay here, unchanged */</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>delay_us<span class="op">(</span><span class="dv">250000</span><span class="bu">U</span><span class="op">);</span>                     <span class="co">/* 250 000 us = 250 ms */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>delay_us()</code> waits like <code>HAL_Delay()</code>, but it counts on <code>TIM2-&gt;CNT</code>, not on the SysTick interrupt. <code>g_ms</code> no longer grows here: the update interrupt is off.</p></li>
+<li><p><strong>In <code>USER CODE BEGIN 2</code></strong>, delete the line <code>HAL_TIM_Base_Start_IT(&amp;htim2);</code> and the two Checkpoint B variables, and write instead:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tim2_us_init<span class="op">();</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>In <code>USER CODE BEGIN 3</code></strong>, delete all your Checkpoint B and extension lines (they are in <code>B_scheduler.png</code>) and write instead:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>delay_us<span class="op">(</span><span class="dv">250000</span><span class="bu">U</span><span class="op">);</span>                     <span class="co">/* 250 000 us = 250 ms */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>delay_us()</code> waits like <code>HAL_Delay()</code>, but it counts on <code>TIM2-&gt;CNT</code>, not on the SysTick interrupt. <code>g_ms</code> no longer grows: the update interrupt is off.</p></li>
 </ol>
 <p>Build, flash, Continue.</p>
 <p><strong>Evidence for Checkpoint C:</strong> the 250/250 blink runs; in the SFR view <code>TIM2-&gt;ARR</code> = <code>0xFFFFFFFF</code> and <code>CNT</code> is moving; you can explain the <code>EGR</code> write and why the subtraction survives counter wrap (~71 minutes at 1 MHz).</p>
-</section>
-<section id="individual-extension---button-selected-speed" class="level2">
-<h2 class="anchored" data-anchor-id="individual-extension---button-selected-speed">Individual extension - Button-selected speed</h2>
-<p>Switch back to the HAL tick first: restore <code>HAL_TIM_Base_Start_IT(&amp;htim2);</code>, delete <code>tim2_us_init();</code>, delete the two blink lines and the <code>#if 0</code> / <code>#endif</code> pair. Then, in the Checkpoint B loop: B1 (PC13, input, <strong>no pull</strong>; the external resistor is on the board) cycles the blink period through 500 → 200 → 50 ms. Debounce with 50 ms of <code>g_ms</code>, exactly as in Lab 5. Optional: add <code>__WFI();</code> at the loop end and confirm timing still holds.</p>
 </section>
 <section id="acceptance-checklist" class="level2">
 <h2 class="anchored" data-anchor-id="acceptance-checklist">Acceptance checklist</h2>
@@ -5061,11 +5057,11 @@ New syntax: <code>condition ? a : b</code> (the conditional operator)
 </section>
 <section id="submit" class="level2">
 <h2 class="anchored" data-anchor-id="submit">Submit</h2>
-<p>Submit <code>main.c</code> as it is at the end of the session (the Checkpoint C functions stay in <code>USER CODE BEGIN 0</code>), and one SFR-view screenshot showing <code>TIM2-&gt;PSC</code>, <code>TIM2-&gt;ARR</code>, and a nonzero <code>TIM2-&gt;CNT</code>.</p>
+<p>Submit <code>main.c</code> as it is at the end of the session (Checkpoint C in the loop, the callback still in <code>USER CODE BEGIN 4</code>), <code>B_scheduler.png</code>, and one SFR-view screenshot showing <code>TIM2-&gt;PSC</code>, <code>TIM2-&gt;ARR</code>, and a nonzero <code>TIM2-&gt;CNT</code>.</p>
 </section>
 <section id="if-you-are-stuck" class="level2">
 <h2 class="anchored" data-anchor-id="if-you-are-stuck">If you are stuck</h2>
-<p>Walk the pipeline left to right and fix the <strong>first</strong> silent stage: <code>PSC</code>/<code>ARR</code> values in the SFR view → <code>CNT</code> moving → <code>UIF</code> setting in <code>SR</code> → NVIC enabled → breakpoint in the callback → <code>g_ms</code> growing → your loop condition. <strong><code>...FLASH.ld: syntax error</code> at build?</strong> <code>.vscode</code> is missing from the project folder (step 7). <strong>CNT frozen?</strong> Timer never started or clock not enabled. <strong>Callback never runs?</strong> NVIC checkbox or <code>Start_IT</code> missing. <strong>Everything about 5 times too fast</strong> (the heartbeat, the tick)? The Clock Configuration tab is still on the PLL at 84 MHz: System Clock Mux = HSI, prescalers /1, generate code again. <strong>Pattern timing drifts?</strong> You reset <code>t_phase</code> to <code>g_ms</code> somewhere other than the phase change. <strong>Checkpoint C blink never changes?</strong> <code>tim2_us_init()</code> is not called before the loop, so <code>CNT</code> is frozen and <code>delay_us()</code> never returns.</p>
+<p>Walk the pipeline left to right and fix the <strong>first</strong> silent stage: <code>PSC</code>/<code>ARR</code> values in the SFR view → <code>CNT</code> moving → <code>UIF</code> setting in <code>SR</code> → NVIC enabled → breakpoint in the callback → <code>g_ms</code> growing → your loop condition. <strong><code>...FLASH.ld: syntax error</code> at build?</strong> <code>.vscode</code> is missing from the project folder (step 7). <strong>CNT frozen?</strong> Timer never started or clock not enabled. <strong>Callback never runs?</strong> NVIC checkbox or <code>Start_IT</code> missing. <strong>Everything about 5 times too fast</strong> (the heartbeat, the tick)? The Clock Configuration tab is still on the PLL at 84 MHz: System Clock Mux = HSI, prescalers /1, generate code again. <strong>Pattern timing drifts?</strong> You reset <code>t_phase</code> to <code>g_ms</code> somewhere other than the phase change. <strong>Checkpoint C blink never changes?</strong> Nothing started TIM2: <code>tim2_us_init()</code> is not called before the loop, so <code>CNT</code> is frozen and <code>delay_us()</code> never returns. <strong>Checkpoint C blink is far too fast?</strong> <code>tim2_us_init();</code> is missing and <code>HAL_TIM_Base_Start_IT(&amp;htim2);</code> still runs TIM2 as the 1 ms time base, so <code>CNT</code> wraps at 999.</p>
 
 
 </section>
