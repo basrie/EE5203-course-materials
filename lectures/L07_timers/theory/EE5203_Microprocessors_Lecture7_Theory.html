@@ -799,7 +799,7 @@ Chain from left to right: SysTick, a 24-bit down-counter inside the Cortex-M cor
 </div></div>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> <strong>SFR PROOF:</strong> pause after init, <code>TIM2-&gt;PSC</code> and <code>TIM2-&gt;ARR</code> hold your two numbers. Resume, pause again, <code>TIM2-&gt;CNT</code> has moved.</p>
+<p><span>01</span> <strong>SFR PROOF:</strong> pause after <code>Init</code>: <code>TIM2-&gt;PSC</code> and <code>TIM2-&gt;ARR</code> hold your two numbers, <code>CNT</code> is 0. Pause twice after <code>Start</code>: <code>TIM2-&gt;CNT</code> differs each time.</p>
 </div>
 <div class="vertical-item">
 <p><span>02</span> <strong>UIF:</strong> <code>TIM2-&gt;SR</code> bit 0 sets at each rollover; your code or HAL clears it. A successful build proves none of this.</p>
