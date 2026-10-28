@@ -560,7 +560,7 @@ f_{\text{update}} = \frac{f_{\text{timer clock}}}{(\text{PSC}+1)(\text{ARR}+1)}\
 </section>
 <section id="practice-set" class="level2">
 <h2 class="anchored" data-anchor-id="practice-set">Practice set</h2>
-<p>Work on paper. Cover the answers. Each item has the shape of one exam question.</p>
+<p>Work on paper. Cover the answers. Part A practises Section A, Part B Section B, Part C Section C and Part D Section D. There are more practice items than exam questions: practise all of them.</p>
 <section id="part-a-trace-the-execution" class="level3">
 <h3 class="anchored" data-anchor-id="part-a-trace-the-execution">Part A — Trace the execution</h3>
 <p><strong>A1.</strong> What is printed?</p>
@@ -716,6 +716,60 @@ f_{\text{update}} = \frac{f_{\text{timer clock}}}{(\text{PSC}+1)(\text{ARR}+1)}\
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> ________<span class="op">);</span>     <span class="co">/* LD2 */</span></span>
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>C5.</strong> A button on <strong>PC6</strong> connects the pin to GND when pressed and has no external resistor. GPIOC’s clock enable is <code>RCC-&gt;AHB1ENR</code> bit 2. In MODER, <code>00</code> means input; in PUPDR, <code>01</code> means pull-up.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> button_init<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    RCC<span class="op">-&gt;</span>AHB1ENR <span class="op">|=</span> <span class="op">(</span>________<span class="op">);</span>      <span class="co">/* GPIOC clock                 */</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    GPIOC<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span>________<span class="op">);</span>     <span class="co">/* 00 = input: clear the field */</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    GPIOC<span class="op">-&gt;</span>PUPDR <span class="op">&amp;=</span> <span class="op">~(</span>________<span class="op">);</span>     <span class="co">/* clear the PC6 pull field    */</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    GPIOC<span class="op">-&gt;</span>PUPDR <span class="op">|=</span>  <span class="op">(</span>________<span class="op">);</span>     <span class="co">/* 01 = pull-up                */</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> button_pressed<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>GPIOC<span class="op">-&gt;</span>IDR <span class="op">&amp;</span> <span class="op">(</span>________<span class="op">))</span> <span class="op">==</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span>   <span class="co">/* pressed = pin low */</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>C6.</strong> <strong>PA9</strong> becomes a UART transmit pin, so its MODER field gets <code>10</code> (alternate function). An LED on <strong>PA8</strong> is toggled through <code>ODR</code> and switched off through <code>BSRR</code>. Pins above 7 work the same way: pin <em>n</em> owns MODER bits 2<em>n</em>+1:2<em>n</em>.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">&amp;=</span> <span class="op">~(</span>________<span class="op">);</span>     <span class="co">/* clear the PA9 field              */</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>MODER <span class="op">|=</span>  <span class="op">(</span>________<span class="op">);</span>     <span class="co">/* write 10: alternate function     */</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>ODR ____ <span class="op">(</span>________<span class="op">);</span>      <span class="co">/* toggle PA8 (XOR), other pins kept */</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>GPIOA<span class="op">-&gt;</span>BSRR <span class="op">=</span> <span class="op">(</span>________<span class="op">);</span>        <span class="co">/* PA8 low                          */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>C7.</strong> Timer clock 16 MHz. Goal: counter frequency 10 kHz, one update event every 0.5 s, <strong>no interrupt</strong>: <code>main()</code> polls the update flag.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>htim3<span class="op">.</span>Instance       <span class="op">=</span> TIM3<span class="op">;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>htim3<span class="op">.</span>Init<span class="op">.</span>Prescaler <span class="op">=</span> ________<span class="op">;</span>     <span class="co">/* 16 MHz / (PSC + 1) = 10 kHz */</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>htim3<span class="op">.</span>Init<span class="op">.</span>Period    <span class="op">=</span> ________<span class="op">;</span>     <span class="co">/* 10 kHz / (ARR + 1) = 2 Hz   */</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>HAL_TIM_Base_Init<span class="op">(&amp;</span>htim3<span class="op">);</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>________<span class="op">(&amp;</span>htim3<span class="op">);</span>                    <span class="co">/* start the counter only      */</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>TIM3<span class="op">-&gt;</span>SR <span class="op">&amp;</span> ________<span class="op">)</span> <span class="op">{</span>       <span class="co">/* update flag set?            */</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        TIM3<span class="op">-&gt;</span>SR <span class="op">&amp;=</span> <span class="op">~</span>TIM_SR_UIF<span class="op">;</span>     <span class="co">/* clear it                    */</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOB<span class="op">,</span> GPIO_PIN_0<span class="op">);</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">/* The PB0 LED changes state ____ times per second. */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>C8.</strong> Two buttons with EXTI interrupts: START on PA0 and STOP on PA1. The callback only records which button was pressed; <code>main()</code> acts on it.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>________ <span class="dt">uint8_t</span> start_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>________ <span class="dt">uint8_t</span> stop_event  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_0<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        start_event <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> ________<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        stop_event <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>start_event <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        start_event <span class="op">=</span> ________<span class="op">;</span>      <span class="co">/* consume the event */</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>        motor_on<span class="op">();</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>stop_event <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>        stop_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>        ________<span class="op">;</span>                    <span class="co">/* switch the motor off */</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="part-d-write-the-code" class="level3">
 <h3 class="anchored" data-anchor-id="part-d-write-the-code">Part D — Write the code</h3>
@@ -725,17 +779,21 @@ f_{\text{update}} = \frac{f_{\text{timer clock}}}{(\text{PSC}+1)(\text{ARR}+1)}\
 <p><strong>D4.</strong> With HAL, configure PB0 as a push-pull output (external LED) and PA0 as an input for a button that connects PA0 to 3.3 V when pressed (no external resistor). Fill a <code>GPIO_InitTypeDef</code> for each and call <code>HAL_GPIO_Init</code>.</p>
 <p><strong>D5.</strong> PC13 is <code>GPIO_MODE_IT_FALLING</code> with its NVIC line enabled. Write the callback (record a PC13 falling edge in a <code>volatile</code> flag; no debouncing needed, the callback must not wait or touch the LED) and the <code>while (1)</code> body that toggles LD2 on <strong>every third</strong> press. No polling, no <code>HAL_Delay()</code>.</p>
 <p><strong>D6.</strong> <code>g_ms</code> is the 1 ms tick counter. The loop below already toggles LD2 every <strong>250 ms</strong> without <code>HAL_Delay()</code>:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> t_led <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">((</span>g_ms <span class="op">-</span> t_led<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">250</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        t_led <span class="op">=</span> g_ms<span class="op">;</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* your code */</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> t_led <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">((</span>g_ms <span class="op">-</span> t_led<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">250</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        t_led <span class="op">=</span> g_ms<span class="op">;</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* your code */</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Add a second task with the same pattern so that <code>log_values()</code> runs every <strong>1 s</strong>, still with no <code>HAL_Delay()</code>. Then explain in one sentence what changes if you write <code>t_led += 250U</code> instead of <code>t_led = g_ms</code>, and why <code>g_ms</code> must be <code>volatile</code>.</p>
 <p><strong>D7.</strong> Without interrupts: write a <code>while (1)</code> body that toggles LD2 on every TIM2 update event by <strong>polling</strong> <code>TIM2-&gt;SR</code> (<code>TIM_SR_UIF</code> is bit 0).</p>
+<p><strong>D8.</strong> Write <code>int first_over(uint16_t values[], int count, uint16_t limit)</code> that returns the index of the <strong>first</strong> element greater than <code>limit</code>, or <code>-1</code> when there is none. <code>first_over(values, 6, 3000)</code> with <code>{1200, 2900, 3100, 3500, 800, 3100}</code> returns <code>2</code>.</p>
+<p><strong>D9.</strong> Write two more port-pointer helpers. <code>void gpio_toggle(GPIO_TypeDef *port, uint32_t pin)</code> inverts the pin through <code>ODR</code> without changing other pins. <code>void gpio_set_open_drain(GPIO_TypeDef *port, uint32_t pin, uint32_t on)</code> writes the <strong>1-bit</strong> <code>OTYPER</code> field of <code>pin</code> (<code>1</code> = open-drain, <code>0</code> = push-pull): clear the bit first, then OR the new value in.</p>
+<p><strong>D10.</strong> Two buttons, two LEDs. B1 (PC13) toggles LD2 (PA5); an external button on PA0 toggles an LED on PB0. Both pins are <code>GPIO_MODE_IT_FALLING</code> with their NVIC lines enabled. Write the callback (one <code>volatile</code> flag per button) and the <code>while (1)</code> body. No polling, no <code>HAL_Delay()</code>.</p>
+<p><strong>D11.</strong> A press of B1 turns LD2 <strong>on</strong>, and LD2 turns <strong>off</strong> by itself 2 s after the <strong>last</strong> press (a new press restarts the 2 s). <code>g_ms</code> is the 1 ms tick counter and the callback already sets <code>volatile uint8_t button_event = 1</code> on each press. Write the declarations and the <code>while (1)</code> body, with no <code>HAL_Delay()</code>.</p>
 <div style="page-break-after: always;"></div>
 </section>
 </section>
@@ -771,95 +829,162 @@ f_{\text{update}} = \frac{f_{\text{timer clock}}}{(\text{PSC}+1)(\text{ARR}+1)}\
 <p><strong>C2.</strong> <code>0</code>, <code>count</code>, <code>&gt;</code>, <code>++</code>, <code>n</code>.</p>
 <p><strong>C3.</strong> <code>volatile</code>, <code>GPIO_PIN_13</code>, <code>++</code>, <code>10</code>, <code>press_count</code> (or <code>shown</code>).</p>
 <p><strong>C4.</strong> <code>799</code> (16 MHz / 800 = 20 kHz), <code>499</code> (20 kHz / 500 = 40 Hz = 25 ms), <code>HAL_TIM_Base_Start_IT</code>, <code>TIM3</code>, <code>GPIO_PIN_5</code>.</p>
+<p><strong>C5.</strong> <code>1U &lt;&lt; 2</code>, <code>3U &lt;&lt; 12</code>, <code>3U &lt;&lt; 12</code>, <code>1U &lt;&lt; 12</code>, <code>1U &lt;&lt; 6</code>. PC6 owns bits 13:12 in MODER and in PUPDR (2 × 6 = 12); <code>IDR</code> has one bit per pin, so the read mask is <code>1U &lt;&lt; 6</code>.</p>
+<p><strong>C6.</strong> <code>3U &lt;&lt; 18</code>, <code>2U &lt;&lt; 18</code>, <code>^=</code>, <code>1U &lt;&lt; 8</code>, <code>1U &lt;&lt; 24</code>. PA9 owns bits 19:18 (2 × 9 = 18), and <code>10</code> shifted there is <code>2U &lt;&lt; 18</code>. In BSRR, bit 8 + 16 = 24 drives PA8 low.</p>
+<p><strong>C7.</strong> <code>1599</code> (16 MHz / 1600 = 10 kHz), <code>4999</code> (10 kHz / 5000 = 2 Hz = 0.5 s), <code>HAL_TIM_Base_Start</code>, <code>TIM_SR_UIF</code>, <code>2</code> (one toggle per update event).</p>
+<p><strong>C8.</strong> <code>volatile</code>, <code>volatile</code>, <code>GPIO_PIN_1</code>, <code>0</code>, <code>motor_off()</code>. Both flags are written by the interrupt and read by <code>main()</code>, so both need <code>volatile</code>; <code>main()</code> clears a flag before acting on it, so a press that arrives during <code>motor_on()</code> is not lost.</p>
 </section>
 <section id="part-d" class="level3">
 <h3 class="anchored" data-anchor-id="part-d">Part D</h3>
 <p><strong>D1.</strong></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> minimum_sample<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">)</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>count <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint16_t</span> minimum <span class="op">=</span> values<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> i <span class="op">&lt;</span> count<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>values<span class="op">[</span>i<span class="op">]</span> <span class="op">&lt;</span> minimum<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>            minimum <span class="op">=</span> values<span class="op">[</span>i<span class="op">];</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> minimum<span class="op">;</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> minimum_sample<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">)</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>count <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span><span class="bu">U</span><span class="op">;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint16_t</span> minimum <span class="op">=</span> values<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> i <span class="op">&lt;</span> count<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>values<span class="op">[</span>i<span class="op">]</span> <span class="op">&lt;</span> minimum<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>            minimum <span class="op">=</span> values<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> minimum<span class="op">;</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>D2.</strong></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> text_length<span class="op">(</span><span class="dt">char</span> text<span class="op">[])</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>text<span class="op">[</span>i<span class="op">]</span> <span class="op">!=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        i<span class="op">++;</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> i<span class="op">;</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> text_length<span class="op">(</span><span class="dt">char</span> text<span class="op">[])</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>text<span class="op">[</span>i<span class="op">]</span> <span class="op">!=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>        i<span class="op">++;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> i<span class="op">;</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>"STOP"</code> occupies <strong>5</strong> bytes: four characters and the <code>'\0'</code> terminator.</p>
 <p><strong>D3.</strong></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> gpio_set_pull<span class="op">(</span>GPIO_TypeDef <span class="op">*</span>port<span class="op">,</span> <span class="dt">uint32_t</span> pin<span class="op">,</span> <span class="dt">uint32_t</span> pull<span class="op">)</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    port<span class="op">-&gt;</span>PUPDR <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="op">(</span><span class="dv">2</span><span class="bu">U</span> <span class="op">*</span> pin<span class="op">));</span>           <span class="co">/* clear the field */</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    port<span class="op">-&gt;</span>PUPDR <span class="op">|=</span>  <span class="op">((</span>pull <span class="op">&amp;</span> <span class="dv">3</span><span class="bu">U</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="op">(</span><span class="dv">2</span><span class="bu">U</span> <span class="op">*</span> pin<span class="op">));</span>  <span class="co">/* write the pattern */</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> gpio_read<span class="op">(</span>GPIO_TypeDef <span class="op">*</span>port<span class="op">,</span> <span class="dt">uint32_t</span> pin<span class="op">)</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>port<span class="op">-&gt;</span>IDR <span class="op">&gt;&gt;</span> pin<span class="op">)</span> <span class="op">&amp;</span> <span class="dv">1</span><span class="bu">U</span><span class="op">;</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> gpio_set_pull<span class="op">(</span>GPIO_TypeDef <span class="op">*</span>port<span class="op">,</span> <span class="dt">uint32_t</span> pin<span class="op">,</span> <span class="dt">uint32_t</span> pull<span class="op">)</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    port<span class="op">-&gt;</span>PUPDR <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">3</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> <span class="op">(</span><span class="dv">2</span><span class="bu">U</span> <span class="op">*</span> pin<span class="op">));</span>           <span class="co">/* clear the field */</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    port<span class="op">-&gt;</span>PUPDR <span class="op">|=</span>  <span class="op">((</span>pull <span class="op">&amp;</span> <span class="dv">3</span><span class="bu">U</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="op">(</span><span class="dv">2</span><span class="bu">U</span> <span class="op">*</span> pin<span class="op">));</span>  <span class="co">/* write the pattern */</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> gpio_read<span class="op">(</span>GPIO_TypeDef <span class="op">*</span>port<span class="op">,</span> <span class="dt">uint32_t</span> pin<span class="op">)</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>port<span class="op">-&gt;</span>IDR <span class="op">&gt;&gt;</span> pin<span class="op">)</span> <span class="op">&amp;</span> <span class="dv">1</span><span class="bu">U</span><span class="op">;</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>D4.</strong></p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>GPIO_InitTypeDef cfg <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>Pin  <span class="op">=</span> GPIO_PIN_0<span class="op">;</span>               <span class="co">/* PB0: external LED        */</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_OUTPUT_PP<span class="op">;</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>Pull <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_Init<span class="op">(</span>GPIOB<span class="op">,</span> <span class="op">&amp;</span>cfg<span class="op">);</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>Pin  <span class="op">=</span> GPIO_PIN_0<span class="op">;</span>               <span class="co">/* PA0: button to 3.3 V     */</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_INPUT<span class="op">;</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>Pull <span class="op">=</span> GPIO_PULLDOWN<span class="op">;</span>            <span class="co">/* released reads low       */</span></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>cfg<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>GPIO_InitTypeDef cfg <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>Pin  <span class="op">=</span> GPIO_PIN_0<span class="op">;</span>               <span class="co">/* PB0: external LED        */</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_OUTPUT_PP<span class="op">;</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>Pull <span class="op">=</span> GPIO_NOPULL<span class="op">;</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_Init<span class="op">(</span>GPIOB<span class="op">,</span> <span class="op">&amp;</span>cfg<span class="op">);</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>Pin  <span class="op">=</span> GPIO_PIN_0<span class="op">;</span>               <span class="co">/* PA0: button to 3.3 V     */</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>Mode <span class="op">=</span> GPIO_MODE_INPUT<span class="op">;</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>Pull <span class="op">=</span> GPIO_PULLDOWN<span class="op">;</span>            <span class="co">/* released reads low       */</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_Init<span class="op">(</span>GPIOA<span class="op">,</span> <span class="op">&amp;</span>cfg<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>D5.</strong></p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint8_t</span> button_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint8_t</span>  presses <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_13<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        button_event <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>                 <span class="co">/* record only */</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>button_event <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>        button_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>                 <span class="co">/* consume first */</span></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>        presses<span class="op">++;</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>presses <span class="op">==</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>            presses <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>            HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint8_t</span> button_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint8_t</span>  presses <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_13<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>        button_event <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>                 <span class="co">/* record only */</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>button_event <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>        button_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>                 <span class="co">/* consume first */</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>        presses<span class="op">++;</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>presses <span class="op">==</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>            presses <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>            HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The L06 lab’s 50 ms guard (<code>uint32_t now = HAL_GetTick();</code> and <code>(now - last_press_ms) &gt;= 50U</code> in the callback, with <code>last_press_ms = now;</code> on an accepted edge) is a good extra, but the exam does not ask for it in the code question; the trace question (A5) covers it.</p>
 <p><strong>D6.</strong></p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> t_log <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>                   <span class="co">/* declared next to t_led */</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* at the "your code" comment, a sibling of the LED block */</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">((</span>g_ms <span class="op">-</span> t_log<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">1000</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>        t_log <span class="op">=</span> g_ms<span class="op">;</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        log_values<span class="op">();</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> t_log <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>                   <span class="co">/* declared next to t_led */</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* at the "your code" comment, a sibling of the LED block */</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">((</span>g_ms <span class="op">-</span> t_log<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">1000</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>        t_log <span class="op">=</span> g_ms<span class="op">;</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>        log_values<span class="op">();</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>t_led += 250U</code> keeps every deadline on the original 250 ms grid, so a late pass delays one toggle but not the following ones; <code>t_led = g_ms</code> re-anchors to the late moment and the lateness accumulates. <code>g_ms</code> is written by the TIM2 interrupt outside the flow of <code>main()</code>; <code>volatile</code> forces every read to go to memory, so the loop sees each new value instead of a copy the compiler kept in a register.</p>
 <p><strong>D7.</strong></p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>TIM2<span class="op">-&gt;</span>SR <span class="op">&amp;</span> TIM_SR_UIF<span class="op">)</span> <span class="op">{</span>        <span class="co">/* 1. test the flag  */</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>        TIM2<span class="op">-&gt;</span>SR <span class="op">&amp;=</span> <span class="op">~</span>TIM_SR_UIF<span class="op">;</span>        <span class="co">/* 2. clear it       */</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>TIM2<span class="op">-&gt;</span>SR <span class="op">&amp;</span> TIM_SR_UIF<span class="op">)</span> <span class="op">{</span>        <span class="co">/* 1. test the flag  */</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>        TIM2<span class="op">-&gt;</span>SR <span class="op">&amp;=</span> <span class="op">~</span>TIM_SR_UIF<span class="op">;</span>        <span class="co">/* 2. clear it       */</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The counter must be running (<code>HAL_TIM_Base_Start(&amp;htim2)</code> or <code>TIM2-&gt;CR1 |= 1U</code>).</p>
+<p><strong>D8.</strong></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> first_over<span class="op">(</span><span class="dt">uint16_t</span> values<span class="op">[],</span> <span class="dt">int</span> count<span class="op">,</span> <span class="dt">uint16_t</span> limit<span class="op">)</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> count<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>values<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> limit<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> i<span class="op">;</span>                 <span class="co">/* stop at the first match */</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span>                        <span class="co">/* after the loop: none found */</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>D9.</strong></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> gpio_toggle<span class="op">(</span>GPIO_TypeDef <span class="op">*</span>port<span class="op">,</span> <span class="dt">uint32_t</span> pin<span class="op">)</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    port<span class="op">-&gt;</span>ODR <span class="op">^=</span> <span class="op">(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> pin<span class="op">);</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> gpio_set_open_drain<span class="op">(</span>GPIO_TypeDef <span class="op">*</span>port<span class="op">,</span> <span class="dt">uint32_t</span> pin<span class="op">,</span> <span class="dt">uint32_t</span> on<span class="op">)</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    port<span class="op">-&gt;</span>OTYPER <span class="op">&amp;=</span> <span class="op">~(</span><span class="dv">1</span><span class="bu">U</span> <span class="op">&lt;&lt;</span> pin<span class="op">);</span>              <span class="co">/* clear the bit   */</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    port<span class="op">-&gt;</span>OTYPER <span class="op">|=</span>  <span class="op">((</span>on <span class="op">&amp;</span> <span class="dv">1</span><span class="bu">U</span><span class="op">)</span> <span class="op">&lt;&lt;</span> pin<span class="op">);</span>       <span class="co">/* write 0 or 1    */</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A 1-bit field uses the mask <code>1U &lt;&lt; pin</code>; a 2-bit field (MODER, PUPDR) uses <code>3U &lt;&lt; (2U * pin)</code>. The method is the same: clear first, then OR.</p>
+<p><strong>D10.</strong></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint8_t</span> b1_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint8_t</span> ext_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_13<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>        b1_event <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_0<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>        ext_event <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>b1_event <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>        b1_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">);</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>ext_event <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>        ext_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_TogglePin<span class="op">(</span>GPIOB<span class="op">,</span> GPIO_PIN_0<span class="op">);</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>One callback serves every EXTI line, so it must look at <code>GPIO_Pin</code>.</p>
+<p><strong>D11.</strong></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> t_press <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint8_t</span>  led_on  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>button_event <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>        button_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>        t_press <span class="op">=</span> g_ms<span class="op">;</span>                         <span class="co">/* restart the 2 s */</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>        led_on <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span> GPIO_PIN_SET<span class="op">);</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>led_on <span class="op">==</span> <span class="dv">1</span> <span class="op">&amp;&amp;</span> <span class="op">(</span>g_ms <span class="op">-</span> t_press<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">2000</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>        led_on <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>        HAL_GPIO_WritePin<span class="op">(</span>GPIOA<span class="op">,</span> GPIO_PIN_5<span class="op">,</span> GPIO_PIN_RESET<span class="op">);</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The same subtraction test as the scheduler, but the timestamp is set by an event (the press) instead of by the task itself.</p>
 <hr>
 <p><em>If you can do every item here without looking at the answers, you are ready for the exam. If one lecture gives you trouble, go back to that lecture’s study sheet and worksheet.</em></p>
 
