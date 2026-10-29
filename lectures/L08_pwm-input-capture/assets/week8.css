@@ -1,0 +1,19 @@
+/* L08 theory deck additions (2026-10-29). Builds on L07's week7.css
+   (spotlight slides, formula-line, psc-table, lead-line). */
+
+/* Register table: both directions of one capture/compare channel */
+.reveal .reg-table { width: 96%; margin: 0.1em auto 0.2em; font-size: 0.76em; }
+.reveal .reg-table table { width: 100%; margin: 0; }
+.reveal .reg-table th { background: #e8f2f7; color: #174f73; }
+.reveal .reg-table td, .reveal .reg-table th { padding: 0.24em 0.5em; text-align: left; vertical-align: top; }
+.reveal .reg-table td:first-child { font-family: ui-monospace, Menlo, Consolas, monospace; font-weight: 700; color: #174f73; white-space: nowrap; }
+
+/* CubeMX field table */
+.reveal .cube-table { width: 96%; margin: 0.1em auto 0.3em; font-size: 0.8em; }
+.reveal .cube-table table { width: 100%; margin: 0; }
+.reveal .cube-table th { background: #fff7ed; color: #8a4a12; }
+.reveal .cube-table td, .reveal .cube-table th { padding: 0.24em 0.5em; text-align: left; }
+.reveal .cube-table td:first-child { font-weight: 700; color: #174f73; }
+
+/* Flow column a little narrower when the code lines are long */
+.reveal .spot-grid.flow-svg.narrow { grid-template-columns: 470px minmax(0, 1fr); gap: 32px; }
