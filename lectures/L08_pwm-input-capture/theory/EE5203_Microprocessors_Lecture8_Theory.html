@@ -6,8 +6,8 @@
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.43">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.42">
 
   <meta name="author" content="Basri Erdogan">
   <title>EE5203 Microprocessors</title>
@@ -99,6 +99,7 @@
   <link rel="stylesheet" href="../../L02_c-for-embedded-systems/assets/week2.css">
   <link rel="stylesheet" href="../../L07_timers/assets/week7.css">
   <link rel="stylesheet" href="../assets/week8.css">
+  <link rel="stylesheet" href="../../L04_gpio-bare-metal/assets/route_divider.css">
   <link href="../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -210,8 +211,8 @@ Basri Erdogan
 </div>
 
 </section>
-<section id="a-gpio-pin-cannot-dim-an-led-or-time-a-signal" class="slide level2">
-<h2>A GPIO pin cannot dim an LED or time a signal</h2>
+<section id="a-gpio-pin-is-only-on-or-off" class="slide level2">
+<h2>A GPIO pin is only on or off</h2>
 <div class="lead-line">
 <p>Since L04 a pin has been either 0 V or 3.3 V. Two jobs in this course need more than that:</p>
 </div>
@@ -227,8 +228,8 @@ Three lanes. A pin driven by HAL_GPIO_WritePin is either off or at full brightne
 <p>Today the L07 timer takes over a pin: it <em>drives</em> the pin (PWM) and it <em>timestamps</em> the pin (input capture). You will choose <code>PSC</code>, <code>ARR</code>, <code>CCR</code> and turn timestamps into period and duty.</p>
 </div>
 </section>
-<section id="retrieval-the-timer-time-base-from-l07" class="slide level2">
-<h2>Retrieval: the timer time base from L07</h2>
+<section id="l07-exit-ticket---the-answers" class="slide level2">
+<h2>L07 exit ticket - the answers</h2>
 <div class="lead-line">
 <p>L07 exit ticket: <code>Prescaler = 1599</code>, <code>Period = 249</code>, timer clock 16 MHz.</p>
 </div>
@@ -244,25 +245,48 @@ The L07 time base as a pipeline: a 16 megahertz timer clock, a prescaler dividin
 <p>Nothing from L07 changes today. <code>PSC</code>, <code>CNT</code>, <code>ARR</code> and the update event stay; one register per channel is added: <code>CCR</code>.</p>
 </div>
 </section>
-<section id="pwm-switches-a-pin-fast-with-a-chosen-duty-cycle" class="slide level2">
-<h2>PWM switches a pin fast with a chosen duty cycle</h2>
+<section id="pulse-width-modulation" class="slide level2 route-divider" data-background-color="#e8f2f7">
+<h2>Pulse-Width Modulation</h2>
+<div class="route-num">
+<p>01</p>
+</div>
+<div class="route-kicker">
+<p>Part 1 of 3</p>
+</div>
+<div class="route-tagline">
+<p>A timer switches a pin on and off very fast. The share of time it is on sets the LED brightness.</p>
+</div>
+<div class="route-progress">
+<div class="route-seg now">
+<p>01 · PWM</p>
+</div>
+<div class="route-seg">
+<p>02 · Servo</p>
+</div>
+<div class="route-seg">
+<p>03 · Capture</p>
+</div>
+</div>
+</section>
+<section id="pwm-is-a-fast-on-off-signal" class="slide level2">
+<h2>PWM is a fast on-off signal</h2>
 <div class="formula-line">
-<p>duty cycle D = tₕ ÷ T · average voltage = D × 3.3 V</p>
+<p><span class="math display">\[\text{duty cycle } D = \frac{t_h}{T} \qquad\qquad \text{average voltage} = D \times 3.3\ \text{V}\]</span></p>
 </div>
 <!-- svg:duty -->
 <svg class="story-visual" viewbox="0 0 1440 420" style="max-height:410px" role="img" aria-labelledby="duty-title">
 <title id="duty-title">
 Three PWM waveforms with the same 1 millisecond period. High 25, 50 and 75 percent of each period. A dashed orange line marks each average level: 0.8, 1.65 and 2.5 volts. On the first waveform a bracket marks the period T and the high time.
 </title>
-<g> <text x="20" y="132" text-anchor="start" fill="#174f73" font-size="36" font-weight="700" font-family="Quicksand, system-ui, sans-serif">25 %</text> <text x="20" y="162" text-anchor="start" fill="#5a6b76" font-size="20" font-weight="400" font-family="Quicksand, system-ui, sans-serif">LD2 looks dim</text> <rect x="250.0" y="90.0" width="59.4" height="72.0" fill="#e8f2f7"></rect> <rect x="487.5" y="90.0" width="59.4" height="72.0" fill="#e8f2f7"></rect> <rect x="725.0" y="90.0" width="59.4" height="72.0" fill="#e8f2f7"></rect> <rect x="962.5" y="90.0" width="59.4" height="72.0" fill="#e8f2f7"></rect> <path d="M250.0 90.0 H309.4 V162.0 H487.5 V90.0 H546.9 V162.0 H725.0 V90.0 H784.4 V162.0 H962.5 V90.0 H1021.9 V162.0 H1200.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <line x1="250.0" y1="144.0" x2="1200.0" y2="144.0" stroke="#d47b28" stroke-width="4" stroke-linecap="round" stroke-dasharray="14 10"></line> <text x="1225" y="152" text-anchor="start" fill="#b8621a" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">average 0.8 V</text> <path d="M487.5 70 v-10 H725.0 v10" fill="none" stroke="#2b789f" stroke-width="3" stroke-linejoin="round"></path> <text x="606" y="48" text-anchor="middle" fill="#2b789f" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">period T = 1 ms</text> <path d="M725.0 70 v-10 H784.375 v10" fill="none" stroke="#3f7f58" stroke-width="3" stroke-linejoin="round"></path> <text x="798" y="48" text-anchor="start" fill="#2b5a3e" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">high time tₕ</text> </g> <g class="fragment" data-fragment-index="1"> <text x="20" y="257" text-anchor="start" fill="#174f73" font-size="36" font-weight="700" font-family="Quicksand, system-ui, sans-serif">50 %</text> <text x="20" y="287" text-anchor="start" fill="#5a6b76" font-size="20" font-weight="400" font-family="Quicksand, system-ui, sans-serif">LD2 looks half</text> <rect x="250.0" y="215.0" width="118.8" height="72.0" fill="#e8f2f7"></rect> <rect x="487.5" y="215.0" width="118.8" height="72.0" fill="#e8f2f7"></rect> <rect x="725.0" y="215.0" width="118.8" height="72.0" fill="#e8f2f7"></rect> <rect x="962.5" y="215.0" width="118.8" height="72.0" fill="#e8f2f7"></rect> <path d="M250.0 215.0 H368.8 V287.0 H487.5 V215.0 H606.2 V287.0 H725.0 V215.0 H843.8 V287.0 H962.5 V215.0 H1081.2 V287.0 H1200.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <line x1="250.0" y1="251.0" x2="1200.0" y2="251.0" stroke="#d47b28" stroke-width="4" stroke-linecap="round" stroke-dasharray="14 10"></line> <text x="1225" y="259" text-anchor="start" fill="#b8621a" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">average 1.65 V</text> </g> <g class="fragment" data-fragment-index="2"> <text x="20" y="382" text-anchor="start" fill="#174f73" font-size="36" font-weight="700" font-family="Quicksand, system-ui, sans-serif">75 %</text> <text x="20" y="412" text-anchor="start" fill="#5a6b76" font-size="20" font-weight="400" font-family="Quicksand, system-ui, sans-serif">LD2 looks bright</text> <rect x="250.0" y="340.0" width="178.1" height="72.0" fill="#e8f2f7"></rect> <rect x="487.5" y="340.0" width="178.1" height="72.0" fill="#e8f2f7"></rect> <rect x="725.0" y="340.0" width="178.1" height="72.0" fill="#e8f2f7"></rect> <rect x="962.5" y="340.0" width="178.1" height="72.0" fill="#e8f2f7"></rect> <path d="M250.0 340.0 H428.1 V412.0 H487.5 V340.0 H665.6 V412.0 H725.0 V340.0 H903.1 V412.0 H962.5 V340.0 H1140.6 V412.0 H1200.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <line x1="250.0" y1="358.0" x2="1200.0" y2="358.0" stroke="#d47b28" stroke-width="4" stroke-linecap="round" stroke-dasharray="14 10"></line> <text x="1225" y="366" text-anchor="start" fill="#b8621a" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">average 2.5 V</text> </g>
+<g> <text x="20" y="132" text-anchor="start" fill="#174f73" font-size="36" font-weight="700" font-family="Quicksand, system-ui, sans-serif">25 %</text> <text x="20" y="162" text-anchor="start" fill="#5a6b76" font-size="20" font-weight="400" font-family="Quicksand, system-ui, sans-serif">LD2 looks dim</text> <rect x="250.0" y="90.0" width="59.4" height="72.0" fill="#e8f2f7"></rect> <rect x="487.5" y="90.0" width="59.4" height="72.0" fill="#e8f2f7"></rect> <rect x="725.0" y="90.0" width="59.4" height="72.0" fill="#e8f2f7"></rect> <rect x="962.5" y="90.0" width="59.4" height="72.0" fill="#e8f2f7"></rect> <path d="M250.0 90.0 H309.4 V162.0 H487.5 V90.0 H546.9 V162.0 H725.0 V90.0 H784.4 V162.0 H962.5 V90.0 H1021.9 V162.0 H1200.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <line x1="250.0" y1="144.0" x2="1200.0" y2="144.0" stroke="#d47b28" stroke-width="4" stroke-linecap="round" stroke-dasharray="14 10"></line> <text x="1225" y="152" text-anchor="start" fill="#b8621a" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">average 0.8 V</text> <path d="M487.5 70 v-10 H725.0 v10" fill="none" stroke="#2b789f" stroke-width="3" stroke-linejoin="round"></path> <text x="606" y="48" text-anchor="middle" fill="#2b789f" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">period T = 1 ms</text> <path d="M725.0 70 v-10 H784.375 v10" fill="none" stroke="#3f7f58" stroke-width="3" stroke-linejoin="round"></path> <text x="798" y="48" text-anchor="start" fill="#2b5a3e" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">high time tₕ</text> </g> <g class="fragment" data-fragment-index="1"> <text x="20" y="257" text-anchor="start" fill="#174f73" font-size="36" font-weight="700" font-family="Quicksand, system-ui, sans-serif">50 %</text> <text x="20" y="287" text-anchor="start" fill="#5a6b76" font-size="20" font-weight="400" font-family="Quicksand, system-ui, sans-serif">LD2 looks medium</text> <rect x="250.0" y="215.0" width="118.8" height="72.0" fill="#e8f2f7"></rect> <rect x="487.5" y="215.0" width="118.8" height="72.0" fill="#e8f2f7"></rect> <rect x="725.0" y="215.0" width="118.8" height="72.0" fill="#e8f2f7"></rect> <rect x="962.5" y="215.0" width="118.8" height="72.0" fill="#e8f2f7"></rect> <path d="M250.0 215.0 H368.8 V287.0 H487.5 V215.0 H606.2 V287.0 H725.0 V215.0 H843.8 V287.0 H962.5 V215.0 H1081.2 V287.0 H1200.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <line x1="250.0" y1="251.0" x2="1200.0" y2="251.0" stroke="#d47b28" stroke-width="4" stroke-linecap="round" stroke-dasharray="14 10"></line> <text x="1225" y="259" text-anchor="start" fill="#b8621a" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">average 1.65 V</text> </g> <g class="fragment" data-fragment-index="2"> <text x="20" y="382" text-anchor="start" fill="#174f73" font-size="36" font-weight="700" font-family="Quicksand, system-ui, sans-serif">75 %</text> <text x="20" y="412" text-anchor="start" fill="#5a6b76" font-size="20" font-weight="400" font-family="Quicksand, system-ui, sans-serif">LD2 looks bright</text> <rect x="250.0" y="340.0" width="178.1" height="72.0" fill="#e8f2f7"></rect> <rect x="487.5" y="340.0" width="178.1" height="72.0" fill="#e8f2f7"></rect> <rect x="725.0" y="340.0" width="178.1" height="72.0" fill="#e8f2f7"></rect> <rect x="962.5" y="340.0" width="178.1" height="72.0" fill="#e8f2f7"></rect> <path d="M250.0 340.0 H428.1 V412.0 H487.5 V340.0 H665.6 V412.0 H725.0 V340.0 H903.1 V412.0 H962.5 V340.0 H1140.6 V412.0 H1200.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <line x1="250.0" y1="358.0" x2="1200.0" y2="358.0" stroke="#d47b28" stroke-width="4" stroke-linecap="round" stroke-dasharray="14 10"></line> <text x="1225" y="366" text-anchor="start" fill="#b8621a" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">average 2.5 V</text> </g>
 </svg>
 <!-- /svg:duty -->
 <div class="source-note">
 <p><strong>T</strong>: the period, one full cycle. <strong>tₕ</strong>: the high time in each period. In-lecture demos: <a href="../assets/htmls/pwm_animation.html">duty and average</a> · <a href="../assets/htmls/pwm_adjustable_rc_filter.html">PWM through an RC filter</a>.</p>
 </div>
 </section>
-<section id="a-compare-register-ccr-turns-the-counter-into-pwm" class="slide level2">
-<h2>A compare register CCR turns the counter into PWM</h2>
+<section id="ccr-sets-where-the-pin-goes-low" class="slide level2">
+<h2>CCR sets where the pin goes low</h2>
 <div class="lead-line">
 <p><strong>PWM mode 1:</strong> the pin is HIGH while <code>CNT &lt; CCR1</code>, and LOW from the match until the update event.</p>
 </div>
@@ -278,10 +302,10 @@ Top: the TIM2 counter as a sawtooth from 0 to ARR 999, three periods. A dashed o
 <p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=336">RM0368 Rev 6, §13.3.9 <em>PWM mode</em> — p.&nbsp;336</a>.</p>
 </div>
 </section>
-<section id="pwm-frequency-comes-from-arr-duty-from-ccr" class="slide level2">
-<h2>PWM frequency comes from ARR, duty from CCR</h2>
+<section id="pwm-formulas-and-the-1-rule" class="slide level2">
+<h2>PWM formulas and the +1 rule</h2>
 <div class="formula-line big">
-<p>PWM frequency = timer clock ÷ ((PSC + 1) × (ARR + 1))<br>duty cycle = CCR ÷ (ARR + 1)</p>
+<p><span class="math display">\[\begin{aligned} \text{PWM frequency} &amp;= \frac{\text{timer clock frequency}}{(\text{PSC} + 1)\,(\text{ARR} + 1)} \\[4pt] \text{duty cycle} &amp;= \frac{\text{CCR}}{\text{ARR} + 1} \end{aligned}\]</span></p>
 </div>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -328,8 +352,8 @@ Top: the TIM2 counter as a sawtooth from 0 to ARR 999, three periods. A dashed o
 <p>The +1 rule again: LD2 fully on needs <code>CCR = ARR + 1</code>, not <code>CCR = ARR</code>.</p>
 </div>
 </section>
-<section id="practice-choose-psc-arr-and-ccr-for-pwm" class="slide level2">
-<h2>Practice: choose PSC, ARR and CCR for PWM</h2>
+<section id="practice-choose-psc-arr-and-ccr-for-2-khz" class="slide level2">
+<h2>Practice: choose PSC, ARR and CCR for 2 kHz</h2>
 <p>Required: <strong>2 kHz</strong> PWM at <strong>30 %</strong> duty from the 16 MHz timer clock, keeping the 1 µs count.</p>
 <div class="prompt-list compact-prompts">
 <div class="prompt-item">
@@ -349,8 +373,8 @@ Top: the TIM2 counter as a sawtooth from 0 to ARR 999, three periods. A dashed o
 <p><code>PSC = 15</code> (1 µs per count) · period 500 µs, so <code>ARR = 499</code> · <code>CCR1 = 0.30 × 500 = 150</code> · fully on: <code>CCR1 = 500</code>, which is <code>ARR + 1</code>.</p>
 </div>
 </section>
-<section id="pwm-output-reaches-pa5-through-af1" class="slide level2">
-<h2>PWM output reaches PA5 through AF1</h2>
+<section id="pa5-becomes-a-timer-pin" class="slide level2">
+<h2>PA5 becomes a timer pin</h2>
 <div class="lead-line">
 <p>PA5 must be handed over from GPIO to TIM2. Two GPIO registers do it, both from L04.</p>
 </div>
@@ -369,15 +393,15 @@ One TIM2 channel drawn as a pipeline. The time base feeds a comparator that asks
 <p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=162">RM0368 Rev 6, <code>GPIOx_AFRL</code> — p.&nbsp;162</a>; which AF number belongs to which pin: STM32F401RE datasheet (DS10086), <em>Alternate function mapping</em>.</p>
 </div>
 </section>
-<section id="pwm-setup-cubemx-fields-and-the-generated-code" class="slide level2 spot-rest-all">
-<h2>PWM setup: CubeMX fields and the generated code</h2>
+<section id="configure-pwm-in-cubemx" class="slide level2 spot-rest-all">
+<h2>Configure PWM in CubeMX</h2>
 <div class="spot-sub">
 <span class="spot-line g0"><span class="spot-tag">CubeMX</span>Four settings make the PWM channel. CubeMX writes the code; you find each setting in it. <span class="spot-mark">1</span> pin <span class="spot-mark">2</span> channel <span class="spot-mark">3</span> frequency <span class="spot-mark">4</span> duty.</span>
 <span class="spot-line fragment custom g1" data-fragment-index="1"><span class="spot-tag">Pin</span>Click <code>PA5</code>, choose <code>TIM2_CH1</code>. The generated pin setup is <code>GPIO_MODE_AF_PP</code> with <code>GPIO_AF1_TIM2</code>: <code>MODER</code> = 10, <code>AFR</code> = AF1.</span>
 <span class="spot-line fragment custom g2" data-fragment-index="2"><span class="spot-tag">Channel</span>TIM2 Channel1 = <em>PWM Generation CH1</em>. CubeMX then calls <code>HAL_TIM_PWM_Init()</code> and <code>HAL_TIM_PWM_ConfigChannel()</code> for channel 1.</span>
 <span class="spot-line fragment custom g3" data-fragment-index="3"><span class="spot-tag">Frequency</span>Prescaler 15, Counter Period 999: the L07 numbers. 1 µs per count, 1000 counts, a 1 kHz PWM. The 1 ms tick stays.</span>
 <span class="spot-line fragment custom g4" data-fragment-index="4"><span class="spot-tag">Duty</span><code>Pulse</code> is the HAL's name for <code>CCR1</code>. <code>Pulse = 0</code> starts with LD2 dark. <code>TIM_OCMODE_PWM1</code>: HIGH while <code>CNT &lt; CCR1</code>.</span>
-<span class="spot-line fragment custom g5 spot-all" data-fragment-index="5"><span class="spot-tag">Check</span><code>Pulse</code> is to <code>CCR</code> what <code>Period</code> is to <code>ARR</code>. Find these lines in the generated files and check the numbers. Write nothing here.</span>
+<span class="spot-line fragment custom g5 spot-all" data-fragment-index="5"><span class="spot-tag">Check</span><code>Pulse</code> is the HAL name for <code>CCR</code>. <code>Period</code> is the HAL name for <code>ARR</code>. Find these lines in the generated files and check the numbers. Write nothing here.</span>
 </div>
 <div class="spot-grid">
 <div class="spot-flow">
@@ -401,11 +425,11 @@ One TIM2 channel drawn as a pipeline. The time base feeds a comparator that asks
 </div>
 </div>
 </section>
-<section id="change-the-pwm-duty-by-writing-ccr" class="slide level2">
-<h2>Change the PWM duty by writing CCR</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a>HAL_TIM_PWM_Start<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span>            <span class="co">// once, after the init</span></span>
-<span id="cb1-2"><a></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="dv">250</span><span class="op">);</span>   <span class="co">// 25 %</span></span>
-<span id="cb1-3"><a></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="dv">800</span><span class="op">);</span>   <span class="co">// 80 %, from the next period</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="writing-ccr-changes-the-duty-cycle" class="slide level2">
+<h2>Writing CCR changes the duty cycle</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a></a>HAL_TIM_PWM_Start<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span>   <span class="co">// once, after the init</span></span>
+<span id="cb1-2"><a></a>TIM2<span class="op">-&gt;</span>CCR1 <span class="op">=</span> <span class="dv">250</span><span class="op">;</span>                           <span class="co">// 25 %</span></span>
+<span id="cb1-3"><a></a>TIM2<span class="op">-&gt;</span>CCR1 <span class="op">=</span> <span class="dv">800</span><span class="op">;</span>                           <span class="co">// 80 %, from the next period</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <!-- svg:ccr-change -->
 <svg class="story-visual" viewbox="0 0 1440 400" style="max-height:370px" role="img" aria-labelledby="pre-title">
 <title id="pre-title">
@@ -418,19 +442,19 @@ The counter sawtooth over four PWM periods with CCR1 at 250 and the pin high 25 
 <p>After <code>Start</code> the hardware makes the waveform by itself. A new duty is one register write, used from the next update event: no half-length pulse.</p>
 </div>
 </section>
-<section id="a-breathing-led-the-1-ms-tick-changes-the-pwm-duty" class="slide level2 spot-rest-all">
-<h2>A breathing LED: the 1 ms tick changes the PWM duty</h2>
+<section id="a-button-steps-the-led-brightness" class="slide level2 spot-rest-all">
+<h2>A button steps the LED brightness</h2>
 <div class="spot-sub">
-<span class="spot-line g0"><span class="spot-tag">Breathing LED</span>Every 10 ms the duty steps up or down by 5. <span class="spot-mark">1</span> check the time <span class="spot-mark">2</span> step the duty <span class="spot-mark">3</span> write it to <code>CCR1</code>.</span>
-<span class="spot-line fragment custom g1" data-fragment-index="1"><span class="spot-tag">Time</span><code>g_ms</code> is the L07 tick from the TIM2 update interrupt. The same TIM2 also makes the 1 kHz PWM: same <code>PSC</code>, same <code>ARR</code>.</span>
-<span class="spot-line fragment custom g2" data-fragment-index="2"><span class="spot-tag">Step</span>Record the time first, then step the duty by 5. At 999 or 0 the direction turns. 0 to 999 and back takes 400 steps, 4 seconds.</span>
-<span class="spot-line fragment custom g3" data-fragment-index="3"><span class="spot-tag">Write</span>One register write per step. Between the writes the hardware keeps the waveform running on its own.</span>
-<span class="spot-line fragment custom g4 spot-all" data-fragment-index="4"><span class="spot-tag">Pattern</span>The timer makes the light; the tick schedules the changes. Nothing waits, and there is no <code>HAL_Delay()</code> anywhere.</span>
+<span class="spot-line g0"><span class="spot-tag">Brightness levels</span>Each press of B1 moves LD2 to the next level in a table. <span class="spot-mark">1</span> check the press <span class="spot-mark">2</span> go to the next level <span class="spot-mark">3</span> write it to <code>CCR1</code>.</span>
+<span class="spot-line fragment custom g1" data-fragment-index="1"><span class="spot-tag">Press</span>The L06 button interrupt sets <code>button_event</code>. It ignores a second edge within 50 ms of the first one, timed by <code>g_ms</code> from TIM2.</span>
+<span class="spot-line fragment custom g2" data-fragment-index="2"><span class="spot-tag">Next level</span>Clear the flag, then move to the next table entry. After the last entry, <code>% 5</code> goes back to the first.</span>
+<span class="spot-line fragment custom g3" data-fragment-index="3"><span class="spot-tag">Write</span>One register write per press. Between presses, TIM2 holds the brightness with no code running.</span>
+<span class="spot-line fragment custom g4 spot-all" data-fragment-index="4"><span class="spot-tag">Why these numbers</span>Each level is about 3 times the one before. The eye sees equal ratios as equal steps, so 0, 250, 500, 750, 1000 would look uneven.</span>
 </div>
 <div class="spot-grid flow-svg narrow">
 <!-- svg:breathe-flow -->
 <svg class="story-visual" viewbox="0 0 640 580" role="img" aria-labelledby="bf-title">
-<title id="bf-title">Flowchart of the breathing LED loop: start PWM, do other work, test whether 10 milliseconds have passed since t_fade; if not, go back to other work; if yes, record t_fade, step the duty by 5 and turn round at 0 and 999, write the new duty into CCR1, and go back to other work.</title>
+<title id="bf-title">Flowchart of the brightness-level loop: start PWM, do other work, test whether B1 was pressed (button_event); if not, go back to other work; if yes, clear button_event, move idx to the next level, write level[idx] into TIM2 CCR1, and go back to other work.</title>
 <defs><marker id="bf-ah" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2b789f"></path></marker></defs>
 <g class="spot">
 <rect x="140.0" y="14.0" width="360.0" height="60.0" rx="10" fill="#ffffff" stroke="#2b789f" stroke-width="2.5"></rect>
@@ -442,8 +466,8 @@ The counter sawtooth over four PWM periods with CCR1 at 250 and the pin high 25 
 <g class="fragment custom spot g1" data-fragment-index="1">
 <line x1="320.0" y1="172.0" x2="320.0" y2="202.0" stroke="#2b789f" stroke-width="4" stroke-linecap="round" marker-end="url(#bf-ah)"></line>
 <polygon points="320,208 490,268 320,328 150,268" fill="#ffffff" stroke="#174f73" stroke-width="3"></polygon>
-<text x="320" y="262" text-anchor="middle" fill="#174f73" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">10 ms since</text>
-<text x="320" y="290" text-anchor="middle" fill="#174f73" font-size="23" font-weight="700" font-family="ui-monospace, Menlo, monospace">t_fade ?</text>
+<text x="320" y="262" text-anchor="middle" fill="#174f73" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">B1 pressed?</text>
+<text x="320" y="290" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">button_event</text>
 <path d="M490 268 H580 V142 H506" fill="none" stroke="#2b789f" stroke-width="3.5" stroke-linejoin="round" stroke-dasharray="9 7" marker-end="url(#bf-ah)"></path>
 <text x="538" y="256" text-anchor="start" fill="#5a6b76" font-size="23" font-weight="400" font-family="Quicksand, system-ui, sans-serif">no</text>
 </g>
@@ -451,53 +475,93 @@ The counter sawtooth over four PWM periods with CCR1 at 250 and the pin high 25 
 <line x1="320.0" y1="328.0" x2="320.0" y2="362.0" stroke="#3f7f58" stroke-width="4" stroke-linecap="round" marker-end="url(#bf-ah)"></line>
 <text x="336" y="352" text-anchor="start" fill="#3f7f58" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">yes</text>
 <rect x="140.0" y="368.0" width="360.0" height="92.0" rx="10" fill="#edf6f0" stroke="#3f7f58" stroke-width="3"></rect>
-<text x="320" y="404" text-anchor="middle" fill="#2b5a3e" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">t_fade = g_ms</text>
-<text x="320" y="440" text-anchor="middle" fill="#2b5a3e" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">duty ± 5, turn at 0, 999</text>
+<text x="320" y="404" text-anchor="middle" fill="#2b5a3e" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">button_event = 0</text>
+<text x="320" y="440" text-anchor="middle" fill="#2b5a3e" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">idx = next level</text>
 </g>
 <g class="fragment custom spot g3" data-fragment-index="3">
 <line x1="320.0" y1="460.0" x2="320.0" y2="494.0" stroke="#3f7f58" stroke-width="4" stroke-linecap="round" marker-end="url(#bf-ah)"></line>
 <rect x="140.0" y="500.0" width="360.0" height="62.0" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect>
-<text x="320" y="540" text-anchor="middle" fill="#b8621a" font-size="25" font-weight="700" font-family="ui-monospace, Menlo, monospace">SET_COMPARE(duty)</text>
+<text x="320" y="540" text-anchor="middle" fill="#b8621a" font-size="25" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR1 = level[idx]</text>
 <path d="M140 531 H70 V142 H134" fill="none" stroke="#2b789f" stroke-width="3.5" stroke-linejoin="round" stroke-dasharray="9 7" marker-end="url(#bf-ah)"></path>
 </g>
 </svg>
 <!-- /svg:breathe-flow -->
 <div class="spot-stack">
 <div class="spot-card dense">
-<div class="spot-head">Runs in main() <em>one pass per loop, reads g_ms</em></div>
-<pre><code><span class="spot-row spot">uint32_t t_fade = 0;</span><span class="spot-row spot">int32_t  duty = 0, dir = +1;</span><span class="spot-row spot"><span class="tk-tim">HAL_TIM_PWM_Start</span>(&amp;htim2, TIM_CHANNEL_1);</span><span class="spot-row spot-frame"></span><span class="spot-row spot-frame">while (1) {</span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">    if ((<span class="tk-blue">g_ms</span> - t_fade) &gt;= 10U) {<span class="spot-n">1</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">        t_fade = <span class="tk-blue">g_ms</span>;<span class="spot-n">2</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">        <span class="tk-gpio">duty += dir * 5;</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">        if (duty &gt;= 999) { duty = 999; dir = -1; }</span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">        if (duty &lt;= 0)   { duty = 0;   dir = +1; }</span><span class="spot-row spot g3 fragment custom" data-fragment-index="3">        <span class="tk-tim">__HAL_TIM_SET_COMPARE</span>(&amp;htim2, TIM_CHANNEL_1, duty);<span class="spot-n">3</span></span><span class="spot-row spot-frame">    }</span><span class="spot-row spot-frame">    <span class="tk-dim">/* other work continues */</span></span><span class="spot-row spot-frame">}</span></code></pre>
+<div class="spot-head">Runs in main() <em>one pass per loop, reads button_event</em></div>
+<pre><code><span class="spot-row spot">static const uint16_t level[5] = { 0, 30, 120, 350, 1000 };</span><span class="spot-row spot">uint32_t idx = 3;                 <span class="tk-dim">// level[3] = 350</span></span><span class="spot-row spot"><span class="tk-tim">HAL_TIM_PWM_Start</span>(&amp;htim2, TIM_CHANNEL_1);</span><span class="spot-row spot-frame"></span><span class="spot-row spot-frame">while (1) {</span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">    if (<span class="tk-blue">button_event</span>) {<span class="spot-n">1</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">        <span class="tk-blue">button_event</span> = 0;<span class="spot-n">2</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">        <span class="tk-gpio">idx = (idx + 1) % 5;</span></span><span class="spot-row spot g3 fragment custom" data-fragment-index="3">        <span class="tk-tim">TIM2</span>-&gt;<span class="tk-tim">CCR1</span> = level[idx];<span class="spot-n">3</span></span><span class="spot-row spot-frame">    }</span><span class="spot-row spot-frame">    <span class="tk-dim">/* other work continues */</span></span><span class="spot-row spot-frame">}</span></code></pre>
 </div>
 </div>
 </div>
 </section>
-<section id="four-pwm-channels-share-one-timer-frequency" class="slide level2">
-<h2>Four PWM channels share one timer frequency</h2>
+<section id="four-pwm-channels-share-one-frequency" class="slide level2">
+<h2>Four PWM channels share one frequency</h2>
 <div class="lead-line">
 <p>TIM2 to TIM5 have four channels each: <code>CCR1</code> to <code>CCR4</code>, one comparator each, one shared counter.</p>
 </div>
 <!-- svg:channels -->
-<svg class="story-visual" viewbox="0 0 1440 610" style="max-height:470px" role="img" aria-labelledby="ch4-title">
+<svg class="story-visual" viewbox="0 0 1440 580" style="max-height:510px" role="img" aria-labelledby="ch4-title">
 <title id="ch4-title">
 One TIM2 counter sawtooth with four dashed compare levels, CCR1 to CCR4 at 250, 500, 750 and 900. Below, four channel outputs: all switch high at the same update events, so they share one period, and each stays high for its own duty: 25, 50, 75 and 90 percent.
 </title>
-<g> <text x="20" y="60" text-anchor="start" fill="#2b789f" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;CNT</text> <text x="20" y="90" text-anchor="start" fill="#5a6b76" font-size="20" font-weight="400" font-family="Quicksand, system-ui, sans-serif">one counter</text> <path d="M330 190 L665.0 40 V190 L1000.0 40 V190 L1335.0 40 V190 Z" fill="#2b789f" opacity="0.12"></path> <path d="M330 190 L665.0 40 V190 L1000.0 40 V190 L1335.0 40 V190" fill="none" stroke="#2b789f" stroke-width="4" stroke-linejoin="round"></path> <line x1="330.0" y1="190.0" x2="1335.0" y2="190.0" stroke="#174f73" stroke-width="2" stroke-linecap="round"></line> </g> <g class="fragment" data-fragment-index="1"> <line x1="330.0" y1="152.5" x2="1335.0" y2="152.5" stroke="#174f73" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="10 8"></line> <line x1="330.0" y1="115.0" x2="1335.0" y2="115.0" stroke="#3f7f58" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="10 8"></line> <line x1="330.0" y1="77.5" x2="1335.0" y2="77.5" stroke="#d47b28" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="10 8"></line> <line x1="330.0" y1="55.0" x2="1335.0" y2="55.0" stroke="#7f77dd" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="10 8"></line> <text x="20" y="272" text-anchor="start" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">CH1</text> <text x="92" y="272" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR1 = 250</text> <rect x="330.0" y="236.0" width="83.8" height="46.0" fill="#e8f2f7"></rect> <rect x="665.0" y="236.0" width="83.8" height="46.0" fill="#e8f2f7"></rect> <rect x="1000.0" y="236.0" width="83.8" height="46.0" fill="#e8f2f7"></rect> <path d="M330.0 236.0 H413.8 V282.0 H665.0 V236.0 H748.8 V282.0 H1000.0 V236.0 H1083.8 V282.0 H1335.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <text x="1351" y="270" text-anchor="start" fill="#174f73" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">25 %</text> <text x="20" y="344" text-anchor="start" fill="#3f7f58" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">CH2</text> <text x="92" y="344" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR2 = 500</text> <rect x="330.0" y="308.0" width="167.5" height="46.0" fill="#e8f2f7"></rect> <rect x="665.0" y="308.0" width="167.5" height="46.0" fill="#e8f2f7"></rect> <rect x="1000.0" y="308.0" width="167.5" height="46.0" fill="#e8f2f7"></rect> <path d="M330.0 308.0 H497.5 V354.0 H665.0 V308.0 H832.5 V354.0 H1000.0 V308.0 H1167.5 V354.0 H1335.0" fill="none" stroke="#3f7f58" stroke-width="4" stroke-linejoin="round"></path> <text x="1351" y="342" text-anchor="start" fill="#3f7f58" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">50 %</text> <text x="20" y="416" text-anchor="start" fill="#d47b28" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">CH3</text> <text x="92" y="416" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR3 = 750</text> <rect x="330.0" y="380.0" width="251.2" height="46.0" fill="#e8f2f7"></rect> <rect x="665.0" y="380.0" width="251.2" height="46.0" fill="#e8f2f7"></rect> <rect x="1000.0" y="380.0" width="251.2" height="46.0" fill="#e8f2f7"></rect> <path d="M330.0 380.0 H581.2 V426.0 H665.0 V380.0 H916.2 V426.0 H1000.0 V380.0 H1251.2 V426.0 H1335.0" fill="none" stroke="#d47b28" stroke-width="4" stroke-linejoin="round"></path> <text x="1351" y="414" text-anchor="start" fill="#d47b28" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">75 %</text> <text x="20" y="488" text-anchor="start" fill="#7f77dd" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">CH4</text> <text x="92" y="488" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR4 = 900</text> <rect x="330.0" y="452.0" width="301.5" height="46.0" fill="#e8f2f7"></rect> <rect x="665.0" y="452.0" width="301.5" height="46.0" fill="#e8f2f7"></rect> <rect x="1000.0" y="452.0" width="301.5" height="46.0" fill="#e8f2f7"></rect> <path d="M330.0 452.0 H631.5 V498.0 H665.0 V452.0 H966.5 V498.0 H1000.0 V452.0 H1301.5 V498.0 H1335.0" fill="none" stroke="#7f77dd" stroke-width="4" stroke-linejoin="round"></path> <text x="1351" y="486" text-anchor="start" fill="#7f77dd" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">90 %</text> </g> <g class="fragment" data-fragment-index="2"> <line x1="330.0" y1="34.0" x2="330.0" y2="540.0" stroke="#2b789f" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 6" opacity="0.8"></line> <line x1="665.0" y1="34.0" x2="665.0" y2="540.0" stroke="#2b789f" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 6" opacity="0.8"></line> <line x1="1000.0" y1="34.0" x2="1000.0" y2="540.0" stroke="#2b789f" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 6" opacity="0.8"></line> <line x1="1335.0" y1="34.0" x2="1335.0" y2="540.0" stroke="#2b789f" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 6" opacity="0.8"></line> <path d="M330 560 v10 H665 v-10" fill="none" stroke="#2b789f" stroke-width="3" stroke-linejoin="round"></path> <text x="498" y="600" text-anchor="middle" fill="#2b789f" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">same period for all four: ARR</text> </g>
+<g> <text x="20" y="60" text-anchor="start" fill="#2b789f" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">TIM2-&gt;CNT</text> <text x="20" y="90" text-anchor="start" fill="#5a6b76" font-size="20" font-weight="400" font-family="Quicksand, system-ui, sans-serif">one counter</text> <path d="M330 190 L665.0 40 V190 L1000.0 40 V190 L1335.0 40 V190 Z" fill="#2b789f" opacity="0.12"></path> <path d="M330 190 L665.0 40 V190 L1000.0 40 V190 L1335.0 40 V190" fill="none" stroke="#2b789f" stroke-width="4" stroke-linejoin="round"></path> <line x1="330.0" y1="190.0" x2="1335.0" y2="190.0" stroke="#174f73" stroke-width="2" stroke-linecap="round"></line> </g> <g class="fragment" data-fragment-index="1"> <line x1="330.0" y1="152.5" x2="1335.0" y2="152.5" stroke="#174f73" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="10 8"></line> <line x1="330.0" y1="115.0" x2="1335.0" y2="115.0" stroke="#3f7f58" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="10 8"></line> <line x1="330.0" y1="77.5" x2="1335.0" y2="77.5" stroke="#d47b28" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="10 8"></line> <line x1="330.0" y1="55.0" x2="1335.0" y2="55.0" stroke="#7f77dd" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="10 8"></line> <text x="20" y="272" text-anchor="start" fill="#174f73" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">CH1</text> <text x="92" y="272" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR1 = 250</text> <rect x="330.0" y="236.0" width="83.8" height="46.0" fill="#e8f2f7"></rect> <rect x="665.0" y="236.0" width="83.8" height="46.0" fill="#e8f2f7"></rect> <rect x="1000.0" y="236.0" width="83.8" height="46.0" fill="#e8f2f7"></rect> <path d="M330.0 236.0 H413.8 V282.0 H665.0 V236.0 H748.8 V282.0 H1000.0 V236.0 H1083.8 V282.0 H1335.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <text x="1351" y="270" text-anchor="start" fill="#174f73" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">25 %</text> <text x="20" y="344" text-anchor="start" fill="#3f7f58" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">CH2</text> <text x="92" y="344" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR2 = 500</text> <rect x="330.0" y="308.0" width="167.5" height="46.0" fill="#e8f2f7"></rect> <rect x="665.0" y="308.0" width="167.5" height="46.0" fill="#e8f2f7"></rect> <rect x="1000.0" y="308.0" width="167.5" height="46.0" fill="#e8f2f7"></rect> <path d="M330.0 308.0 H497.5 V354.0 H665.0 V308.0 H832.5 V354.0 H1000.0 V308.0 H1167.5 V354.0 H1335.0" fill="none" stroke="#3f7f58" stroke-width="4" stroke-linejoin="round"></path> <text x="1351" y="342" text-anchor="start" fill="#3f7f58" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">50 %</text> <text x="20" y="416" text-anchor="start" fill="#d47b28" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">CH3</text> <text x="92" y="416" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR3 = 750</text> <rect x="330.0" y="380.0" width="251.2" height="46.0" fill="#e8f2f7"></rect> <rect x="665.0" y="380.0" width="251.2" height="46.0" fill="#e8f2f7"></rect> <rect x="1000.0" y="380.0" width="251.2" height="46.0" fill="#e8f2f7"></rect> <path d="M330.0 380.0 H581.2 V426.0 H665.0 V380.0 H916.2 V426.0 H1000.0 V380.0 H1251.2 V426.0 H1335.0" fill="none" stroke="#d47b28" stroke-width="4" stroke-linejoin="round"></path> <text x="1351" y="414" text-anchor="start" fill="#d47b28" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">75 %</text> <text x="20" y="488" text-anchor="start" fill="#7f77dd" font-size="24" font-weight="700" font-family="ui-monospace, Menlo, monospace">CH4</text> <text x="92" y="488" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR4 = 900</text> <rect x="330.0" y="452.0" width="301.5" height="46.0" fill="#e8f2f7"></rect> <rect x="665.0" y="452.0" width="301.5" height="46.0" fill="#e8f2f7"></rect> <rect x="1000.0" y="452.0" width="301.5" height="46.0" fill="#e8f2f7"></rect> <path d="M330.0 452.0 H631.5 V498.0 H665.0 V452.0 H966.5 V498.0 H1000.0 V452.0 H1301.5 V498.0 H1335.0" fill="none" stroke="#7f77dd" stroke-width="4" stroke-linejoin="round"></path> <text x="1351" y="486" text-anchor="start" fill="#7f77dd" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">90 %</text> </g> <g class="fragment" data-fragment-index="2"> <line x1="330.0" y1="34.0" x2="330.0" y2="516.0" stroke="#2b789f" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 6" opacity="0.8"></line> <line x1="665.0" y1="34.0" x2="665.0" y2="516.0" stroke="#2b789f" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 6" opacity="0.8"></line> <line x1="1000.0" y1="34.0" x2="1000.0" y2="516.0" stroke="#2b789f" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 6" opacity="0.8"></line> <line x1="1335.0" y1="34.0" x2="1335.0" y2="516.0" stroke="#2b789f" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 6" opacity="0.8"></line> <path d="M330 528 v10 H665 v-10" fill="none" stroke="#2b789f" stroke-width="3" stroke-linejoin="round"></path> <text x="498" y="568" text-anchor="middle" fill="#2b789f" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">same period for all four: ARR</text> </g>
 </svg>
 <!-- /svg:channels -->
 <div class="relationship-strip">
 <p>One timer gives one frequency and up to four duty cycles. A 1 kHz LED and a 50 Hz servo need two different timers.</p>
 </div>
 </section>
-<section id="a-servo-reads-the-pwm-pulse-width-as-an-angle" class="slide level2">
-<h2>A servo reads the PWM pulse width as an angle</h2>
+<section id="servo-control" class="slide level2 route-divider" data-background-color="#e8f2f7">
+<h2>Servo Control</h2>
+<div class="route-num">
+<p>02</p>
+</div>
+<div class="route-kicker">
+<p>Part 2 of 3</p>
+</div>
+<div class="route-tagline">
+<p>A servo uses the same PWM signal. Here the pulse width sets an angle, not a brightness.</p>
+</div>
+<div class="route-progress">
+<div class="route-seg done">
+<p>01 · PWM</p>
+</div>
+<div class="route-seg now">
+<p>02 · Servo</p>
+</div>
+<div class="route-seg">
+<p>03 · Capture</p>
+</div>
+</div>
+</section>
+<section id="a-servo-turns-to-a-set-angle" class="slide level2">
+<h2>A servo turns to a set angle</h2>
+<div class="lead-line">
+<p>A hobby servo is a small motor in a box. It turns its arm, the horn, to an angle between 0° and 180°. Then it holds that angle.</p>
+</div>
+<!-- svg:servo-intro -->
+<svg class="story-visual" viewbox="0 0 1440 420" style="max-height:460px" role="img" aria-labelledby="servo-intro-title">
+<title id="servo-intro-title">
+Left: a hobby servo seen from above, a dark case with a mounting tab at each end, a white arm called the horn on the output shaft, and three wires: brown GND, red +5 V and orange signal. Right: inside the case, the PWM signal goes to a control board, which drives a DC motor. Gears turn the fast motor into a slow, strong turn of the horn. A potentiometer on the same shaft measures the angle and reports it back to the control board.
+</title>
+<defs><marker id="si-or" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#d47b28"></path></marker><marker id="si-ink" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#174f73"></path></marker><marker id="si-gr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#3f7f58"></path></marker></defs> <g> <g transform="translate(255 215) scale(1.45) translate(-255 -215)"> <path d="M163 215 A92 92 0 0 1 347 215" fill="none" stroke="#c8d8e2" stroke-width="2.5" stroke-dasharray="7 7"></path> <path d="M380 237 H460" fill="none" stroke="#6b4226" stroke-width="4" stroke-linejoin="round"></path> <path d="M380 243 H460" fill="none" stroke="#c0392b" stroke-width="4" stroke-linejoin="round"></path> <path d="M380 249 H460" fill="none" stroke="#d47b28" stroke-width="4" stroke-linejoin="round"></path> <rect x="167" y="197" width="34" height="36" rx="5" fill="#3d5566" stroke="#1d3342" stroke-width="2"></rect> <rect x="379" y="197" width="34" height="36" rx="5" fill="#3d5566" stroke="#1d3342" stroke-width="2"></rect> <circle cx="181" cy="215" r="5" fill="#ffffff"></circle> <circle cx="399" cy="215" r="5" fill="#ffffff"></circle> <rect x="197" y="179" width="186" height="72" rx="8" fill="#3d5566" stroke="#1d3342" stroke-width="2"></rect> <circle cx="255" cy="215" r="27" fill="#4f6a7c" stroke="#1d3342" stroke-width="2"></circle> <g transform="translate(255 215) rotate(-90)"><path d="M0 -16 L76 -8 A8 8 0 0 1 76 8 L0 16 Z" fill="#ffffff" stroke="#174f73" stroke-width="2.5"></path><circle cx="0" cy="0" r="21" fill="#ffffff" stroke="#174f73" stroke-width="2.5"></circle><circle cx="38" cy="0" r="3" fill="#5a6b76"></circle><circle cx="54" cy="0" r="3" fill="#5a6b76"></circle><circle cx="70" cy="0" r="3" fill="#5a6b76"></circle><circle cx="0" cy="0" r="8" fill="#d47b28" stroke="#8a4a12" stroke-width="2"></circle></g> </g> <text x="277" y="103" text-anchor="start" fill="#174f73" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">horn (the arm)</text> <text x="203" y="293" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">case</text> <line x1="95.0" y1="345.0" x2="135.0" y2="345.0" stroke="#6b4226" stroke-width="6" stroke-linecap="round"></line> <text x="147" y="353" text-anchor="start" fill="#6b4226" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">GND</text> <line x1="235.0" y1="345.0" x2="275.0" y2="345.0" stroke="#c0392b" stroke-width="6" stroke-linecap="round"></line> <text x="287" y="353" text-anchor="start" fill="#c0392b" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">+5 V</text> <line x1="385.0" y1="345.0" x2="425.0" y2="345.0" stroke="#d47b28" stroke-width="6" stroke-linecap="round"></line> <text x="437" y="353" text-anchor="start" fill="#d47b28" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">signal</text> <text x="315" y="400" text-anchor="middle" fill="#5a6b76" font-size="21" font-weight="400" font-family="Quicksand, system-ui, sans-serif">hobby servo seen from above</text> </g> <g class="fragment" data-fragment-index="1"> <rect x="640.0" y="70.0" width="780.0" height="330.0" rx="18" fill="#e8f2f7" stroke="#c8d8e2" stroke-width="2" stroke-dasharray="8 8"></rect> <text x="664" y="104" text-anchor="start" fill="#5a6b76" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">inside the case</text> <rect x="690.0" y="150.0" width="200.0" height="80.0" rx="12" fill="#ffffff" stroke="#174f73" stroke-width="2.5"></rect> <text x="790" y="198" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700" font-family="Quicksand, system-ui, sans-serif">control board</text> <rect x="945.0" y="150.0" width="160.0" height="80.0" rx="12" fill="#ffffff" stroke="#174f73" stroke-width="2.5"></rect> <text x="1025" y="186" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700" font-family="Quicksand, system-ui, sans-serif">DC motor</text> <text x="1025" y="214" text-anchor="middle" fill="#5a6b76" font-size="19" font-weight="400" font-family="Quicksand, system-ui, sans-serif">fast, weak</text> <rect x="1160.0" y="150.0" width="200.0" height="80.0" rx="12" fill="#ffffff" stroke="#174f73" stroke-width="2.5"></rect> <text x="1260" y="186" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700" font-family="Quicksand, system-ui, sans-serif">gears</text> <text x="1260" y="214" text-anchor="middle" fill="#5a6b76" font-size="19" font-weight="400" font-family="Quicksand, system-ui, sans-serif">slow, strong</text> <rect x="1160.0" y="300.0" width="200.0" height="80.0" rx="12" fill="#ffffff" stroke="#174f73" stroke-width="2.5"></rect> <text x="1260" y="336" text-anchor="middle" fill="#174f73" font-size="24" font-weight="700" font-family="Quicksand, system-ui, sans-serif">potentiometer</text> <text x="1260" y="364" text-anchor="middle" fill="#5a6b76" font-size="19" font-weight="400" font-family="Quicksand, system-ui, sans-serif">angle sensor</text> <line x1="586.0" y1="190.0" x2="686.0" y2="190.0" stroke="#d47b28" stroke-width="4" stroke-linecap="round" marker-end="url(#si-or)"></line> <text x="641" y="178" text-anchor="middle" fill="#b8621a" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">PWM</text> <line x1="890.0" y1="190.0" x2="941.0" y2="190.0" stroke="#174f73" stroke-width="3" stroke-linecap="round" marker-end="url(#si-ink)"></line> <line x1="1105.0" y1="190.0" x2="1156.0" y2="190.0" stroke="#174f73" stroke-width="3" stroke-linecap="round" marker-end="url(#si-ink)"></line> <line x1="1260.0" y1="150.0" x2="1260.0" y2="22.0" stroke="#174f73" stroke-width="3" stroke-linecap="round" marker-end="url(#si-ink)"></line> <text x="1276" y="40" text-anchor="start" fill="#174f73" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">turns the horn</text> <line x1="1260.0" y1="230.0" x2="1260.0" y2="296.0" stroke="#5a6b76" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 6"></line> <text x="1272" y="270" text-anchor="start" fill="#5a6b76" font-size="19" font-weight="400" font-family="Quicksand, system-ui, sans-serif">same shaft</text> <path d="M1160 340 H790 V236" fill="none" stroke="#3f7f58" stroke-width="3.5" stroke-linejoin="round" marker-end="url(#si-gr)"></path> <text x="975" y="330" text-anchor="middle" fill="#2b5a3e" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">measured angle</text> </g>
+</svg>
+<!-- /svg:servo-intro -->
+<div class="relationship-strip fragment" data-fragment-index="2">
+<p>The board turns the motor until the measured angle matches the angle set by the pulse width.</p>
+</div>
+</section>
+<section id="pulse-width-sets-the-servo-angle" class="slide level2">
+<h2>Pulse width sets the servo angle</h2>
 <div class="formula-line">
-<p>PSC = 15 → 1 µs · ARR = 19999 → 20 ms, 50 Hz · CCR = pulse width in µs</p>
+<p>PSC = 15 → 1 µs · ARR = 19999 → 20 ms, 50 Hz · CCR = pulse width (the high time) in µs</p>
 </div>
 <!-- svg:servo -->
 <svg class="story-visual" viewbox="0 0 1440 480" style="max-height:440px" role="img" aria-labelledby="servo-title">
 <title id="servo-title">
-Three servo signals with a 20 millisecond frame. A 1.0 millisecond pulse holds the arm at 0 degrees, 1.5 milliseconds at 90 degrees and 2.0 milliseconds at 180 degrees. A small dial on the right of each lane shows the arm angle.
+Three servo signals with a 20 millisecond frame. A 1.0 millisecond pulse holds the arm at 0 degrees, 1.5 milliseconds at 90 degrees and 2.0 milliseconds at 180 degrees. On the right of each lane a hobby servo, seen from above, shows its horn at that angle.
 </title>
-<g> <text x="20" y="114" text-anchor="start" fill="#174f73" font-size="36" font-weight="700" font-family="Quicksand, system-ui, sans-serif">0°</text> <rect x="190.0" y="70" width="22.0" height="60" fill="#fff7ed"></rect> <rect x="630.0" y="70" width="22.0" height="60" fill="#fff7ed"></rect> <path d="M190 130 H190.0 V70 H212.0 V130 H630.0 V70 H652.0 V130 H1092.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <text x="226" y="94" text-anchor="start" fill="#b8621a" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">1.0 ms</text> <text x="226" y="122" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR = 1000</text> <path d="M1190 140 A70 70 0 0 1 1330 140" fill="#e8f2f7" stroke="#c8d8e2" stroke-width="2"></path> <line x1="1178.0" y1="140.0" x2="1342.0" y2="140.0" stroke="#5a6b76" stroke-width="2" stroke-linecap="round"></line> <line x1="1260.0" y1="140.0" x2="1194.0" y2="140.0" stroke="#d47b28" stroke-width="8" stroke-linecap="round"></line> <circle cx="1260.0" cy="140.0" r="9" fill="#174f73" stroke="#ffffff" stroke-width="3"></circle> <path d="M190 48 v-10 H630.0 v10" fill="none" stroke="#5a6b76" stroke-width="3" stroke-linejoin="round"></path> <text x="410" y="28" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">frame = 20 ms (50 Hz)</text> <text x="1092" y="470" text-anchor="end" fill="#5a6b76" font-size="20" font-weight="400" font-family="Quicksand, system-ui, sans-serif">time →</text> </g> <g class="fragment" data-fragment-index="1"> <text x="20" y="249" text-anchor="start" fill="#174f73" font-size="36" font-weight="700" font-family="Quicksand, system-ui, sans-serif">90°</text> <rect x="190.0" y="205" width="33.0" height="60" fill="#fff7ed"></rect> <rect x="630.0" y="205" width="33.0" height="60" fill="#fff7ed"></rect> <path d="M190 265 H190.0 V205 H223.0 V265 H630.0 V205 H663.0 V265 H1092.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <text x="237" y="229" text-anchor="start" fill="#b8621a" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">1.5 ms</text> <text x="237" y="257" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR = 1500</text> <path d="M1190 275 A70 70 0 0 1 1330 275" fill="#e8f2f7" stroke="#c8d8e2" stroke-width="2"></path> <line x1="1178.0" y1="275.0" x2="1342.0" y2="275.0" stroke="#5a6b76" stroke-width="2" stroke-linecap="round"></line> <line x1="1260.0" y1="275.0" x2="1260.0" y2="209.0" stroke="#d47b28" stroke-width="8" stroke-linecap="round"></line> <circle cx="1260.0" cy="275.0" r="9" fill="#174f73" stroke="#ffffff" stroke-width="3"></circle> </g> <g class="fragment" data-fragment-index="2"> <text x="20" y="384" text-anchor="start" fill="#174f73" font-size="36" font-weight="700" font-family="Quicksand, system-ui, sans-serif">180°</text> <rect x="190.0" y="340" width="44.0" height="60" fill="#fff7ed"></rect> <rect x="630.0" y="340" width="44.0" height="60" fill="#fff7ed"></rect> <path d="M190 400 H190.0 V340 H234.0 V400 H630.0 V340 H674.0 V400 H1092.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <text x="248" y="364" text-anchor="start" fill="#b8621a" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">2.0 ms</text> <text x="248" y="392" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR = 2000</text> <path d="M1190 410 A70 70 0 0 1 1330 410" fill="#e8f2f7" stroke="#c8d8e2" stroke-width="2"></path> <line x1="1178.0" y1="410.0" x2="1342.0" y2="410.0" stroke="#5a6b76" stroke-width="2" stroke-linecap="round"></line> <line x1="1260.0" y1="410.0" x2="1326.0" y2="410.0" stroke="#d47b28" stroke-width="8" stroke-linecap="round"></line> <circle cx="1260.0" cy="410.0" r="9" fill="#174f73" stroke="#ffffff" stroke-width="3"></circle> </g>
+<g> <text x="20" y="114" text-anchor="start" fill="#174f73" font-size="36" font-weight="700" font-family="Quicksand, system-ui, sans-serif">0°</text> <rect x="190.0" y="70" width="22.0" height="60" fill="#fff7ed"></rect> <rect x="630.0" y="70" width="22.0" height="60" fill="#fff7ed"></rect> <path d="M190 130 H190.0 V70 H212.0 V130 H630.0 V70 H652.0 V130 H1092.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <text x="226" y="94" text-anchor="start" fill="#b8621a" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">1.0 ms</text> <text x="226" y="122" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR = 1000</text> <g transform="translate(1225 140) scale(0.85) translate(-1225 -140)"> <path d="M1133 140 A92 92 0 0 1 1317 140" fill="none" stroke="#c8d8e2" stroke-width="2.5" stroke-dasharray="7 7"></path> <path d="M1350 162 H1430" fill="none" stroke="#6b4226" stroke-width="4" stroke-linejoin="round"></path> <path d="M1350 168 H1430" fill="none" stroke="#c0392b" stroke-width="4" stroke-linejoin="round"></path> <path d="M1350 174 H1430" fill="none" stroke="#d47b28" stroke-width="4" stroke-linejoin="round"></path> <rect x="1137" y="122" width="34" height="36" rx="5" fill="#3d5566" stroke="#1d3342" stroke-width="2"></rect> <rect x="1349" y="122" width="34" height="36" rx="5" fill="#3d5566" stroke="#1d3342" stroke-width="2"></rect> <circle cx="1151" cy="140" r="5" fill="#ffffff"></circle> <circle cx="1369" cy="140" r="5" fill="#ffffff"></circle> <rect x="1167" y="104" width="186" height="72" rx="8" fill="#3d5566" stroke="#1d3342" stroke-width="2"></rect> <circle cx="1225" cy="140" r="27" fill="#4f6a7c" stroke="#1d3342" stroke-width="2"></circle> <g transform="translate(1225 140) rotate(-180)"><path d="M0 -16 L76 -8 A8 8 0 0 1 76 8 L0 16 Z" fill="#ffffff" stroke="#174f73" stroke-width="2.5"></path><circle cx="0" cy="0" r="21" fill="#ffffff" stroke="#174f73" stroke-width="2.5"></circle><circle cx="38" cy="0" r="3" fill="#5a6b76"></circle><circle cx="54" cy="0" r="3" fill="#5a6b76"></circle><circle cx="70" cy="0" r="3" fill="#5a6b76"></circle><circle cx="0" cy="0" r="8" fill="#d47b28" stroke="#8a4a12" stroke-width="2"></circle></g> </g> <path d="M190 48 v-10 H630.0 v10" fill="none" stroke="#5a6b76" stroke-width="3" stroke-linejoin="round"></path> <text x="410" y="28" text-anchor="middle" fill="#5a6b76" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">frame = 20 ms (50 Hz)</text> <text x="1092" y="470" text-anchor="end" fill="#5a6b76" font-size="20" font-weight="400" font-family="Quicksand, system-ui, sans-serif">time →</text> </g> <g class="fragment" data-fragment-index="1"> <text x="20" y="249" text-anchor="start" fill="#174f73" font-size="36" font-weight="700" font-family="Quicksand, system-ui, sans-serif">90°</text> <rect x="190.0" y="205" width="33.0" height="60" fill="#fff7ed"></rect> <rect x="630.0" y="205" width="33.0" height="60" fill="#fff7ed"></rect> <path d="M190 265 H190.0 V205 H223.0 V265 H630.0 V205 H663.0 V265 H1092.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <text x="237" y="229" text-anchor="start" fill="#b8621a" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">1.5 ms</text> <text x="237" y="257" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR = 1500</text> <g transform="translate(1225 275) scale(0.85) translate(-1225 -275)"> <path d="M1133 275 A92 92 0 0 1 1317 275" fill="none" stroke="#c8d8e2" stroke-width="2.5" stroke-dasharray="7 7"></path> <path d="M1350 297 H1430" fill="none" stroke="#6b4226" stroke-width="4" stroke-linejoin="round"></path> <path d="M1350 303 H1430" fill="none" stroke="#c0392b" stroke-width="4" stroke-linejoin="round"></path> <path d="M1350 309 H1430" fill="none" stroke="#d47b28" stroke-width="4" stroke-linejoin="round"></path> <rect x="1137" y="257" width="34" height="36" rx="5" fill="#3d5566" stroke="#1d3342" stroke-width="2"></rect> <rect x="1349" y="257" width="34" height="36" rx="5" fill="#3d5566" stroke="#1d3342" stroke-width="2"></rect> <circle cx="1151" cy="275" r="5" fill="#ffffff"></circle> <circle cx="1369" cy="275" r="5" fill="#ffffff"></circle> <rect x="1167" y="239" width="186" height="72" rx="8" fill="#3d5566" stroke="#1d3342" stroke-width="2"></rect> <circle cx="1225" cy="275" r="27" fill="#4f6a7c" stroke="#1d3342" stroke-width="2"></circle> <g transform="translate(1225 275) rotate(-90)"><path d="M0 -16 L76 -8 A8 8 0 0 1 76 8 L0 16 Z" fill="#ffffff" stroke="#174f73" stroke-width="2.5"></path><circle cx="0" cy="0" r="21" fill="#ffffff" stroke="#174f73" stroke-width="2.5"></circle><circle cx="38" cy="0" r="3" fill="#5a6b76"></circle><circle cx="54" cy="0" r="3" fill="#5a6b76"></circle><circle cx="70" cy="0" r="3" fill="#5a6b76"></circle><circle cx="0" cy="0" r="8" fill="#d47b28" stroke="#8a4a12" stroke-width="2"></circle></g> </g> </g> <g class="fragment" data-fragment-index="2"> <text x="20" y="384" text-anchor="start" fill="#174f73" font-size="36" font-weight="700" font-family="Quicksand, system-ui, sans-serif">180°</text> <rect x="190.0" y="340" width="44.0" height="60" fill="#fff7ed"></rect> <rect x="630.0" y="340" width="44.0" height="60" fill="#fff7ed"></rect> <path d="M190 400 H190.0 V340 H234.0 V400 H630.0 V340 H674.0 V400 H1092.0" fill="none" stroke="#174f73" stroke-width="4" stroke-linejoin="round"></path> <text x="248" y="364" text-anchor="start" fill="#b8621a" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">2.0 ms</text> <text x="248" y="392" text-anchor="start" fill="#5a6b76" font-size="21" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR = 2000</text> <g transform="translate(1225 410) scale(0.85) translate(-1225 -410)"> <path d="M1133 410 A92 92 0 0 1 1317 410" fill="none" stroke="#c8d8e2" stroke-width="2.5" stroke-dasharray="7 7"></path> <path d="M1350 432 H1430" fill="none" stroke="#6b4226" stroke-width="4" stroke-linejoin="round"></path> <path d="M1350 438 H1430" fill="none" stroke="#c0392b" stroke-width="4" stroke-linejoin="round"></path> <path d="M1350 444 H1430" fill="none" stroke="#d47b28" stroke-width="4" stroke-linejoin="round"></path> <rect x="1137" y="392" width="34" height="36" rx="5" fill="#3d5566" stroke="#1d3342" stroke-width="2"></rect> <rect x="1349" y="392" width="34" height="36" rx="5" fill="#3d5566" stroke="#1d3342" stroke-width="2"></rect> <circle cx="1151" cy="410" r="5" fill="#ffffff"></circle> <circle cx="1369" cy="410" r="5" fill="#ffffff"></circle> <rect x="1167" y="374" width="186" height="72" rx="8" fill="#3d5566" stroke="#1d3342" stroke-width="2"></rect> <circle cx="1225" cy="410" r="27" fill="#4f6a7c" stroke="#1d3342" stroke-width="2"></circle> <g transform="translate(1225 410) rotate(0)"><path d="M0 -16 L76 -8 A8 8 0 0 1 76 8 L0 16 Z" fill="#ffffff" stroke="#174f73" stroke-width="2.5"></path><circle cx="0" cy="0" r="21" fill="#ffffff" stroke="#174f73" stroke-width="2.5"></circle><circle cx="38" cy="0" r="3" fill="#5a6b76"></circle><circle cx="54" cy="0" r="3" fill="#5a6b76"></circle><circle cx="70" cy="0" r="3" fill="#5a6b76"></circle><circle cx="0" cy="0" r="8" fill="#d47b28" stroke="#8a4a12" stroke-width="2"></circle></g> </g> </g>
 </svg>
 <!-- /svg:servo -->
 <div class="relationship-strip">
@@ -512,14 +576,37 @@ Three servo signals with a 20 millisecond frame. A 1.0 millisecond pulse holds t
 <p><span>1</span> Which <code>CCR1</code> value sets 45°?</p>
 </div>
 <div class="prompt-item">
-<p><span>2</span> A program writes <code>CCR1 = 2600</code>. What happens to the servo?</p>
+<p><span>2</span> A program writes <code>CCR1 = 2600</code>. What does the servo do? Write a, b or c.<br><strong>a</strong> it turns to 288°   <strong>b</strong> it pushes against its end stop   <strong>c</strong> it ignores the pulse</p>
 </div>
 <div class="prompt-item">
 <p><span>3</span> Can this servo share TIM2 with the 1 kHz LED? Yes / No.&nbsp;Explain in one sentence.</p>
 </div>
 </div>
 <div class="fragment relationship-strip">
-<p>45° is a quarter of 180°: 1000 + 0.25 × 1000 = <strong>1250</strong>. 2600 µs is outside the 1000–2000 contract: the servo strains against its end stop. <strong>No</strong>: the channels of one timer share <code>ARR</code>, and the LED needs 1 kHz while the servo needs 50 Hz.</p>
+<p>45° is a quarter of 180°: 1000 + 0.25 × 1000 = <strong>1250</strong>. <strong>b</strong>: 2600 µs is outside the 1000–2000 range, so the servo pushes against its end stop. <strong>No</strong>: the channels of one timer share <code>ARR</code>, and the LED needs 1 kHz while the servo needs 50 Hz.</p>
+</div>
+</section>
+<section id="input-capture" class="slide level2 route-divider" data-background-color="#e8f2f7">
+<h2>Input Capture</h2>
+<div class="route-num">
+<p>03</p>
+</div>
+<div class="route-kicker">
+<p>Part 3 of 3</p>
+</div>
+<div class="route-tagline">
+<p>Now the signal goes into the timer, not out of it. An edge on a pin saves the counter value as a timestamp.</p>
+</div>
+<div class="route-progress">
+<div class="route-seg done">
+<p>01 · PWM</p>
+</div>
+<div class="route-seg done">
+<p>02 · Servo</p>
+</div>
+<div class="route-seg now">
+<p>03 · Capture</p>
+</div>
 </div>
 </section>
 <section id="input-capture-a-pin-edge-copies-cnt-into-ccr" class="slide level2">
@@ -542,8 +629,8 @@ The same channel drawn in the capture direction on TIM4. A signal enters on pin 
 <p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=333">RM0368 Rev 6, §13.3.5 <em>Input capture mode</em> — p.&nbsp;333</a>.</p>
 </div>
 </section>
-<section id="input-capture-timestamps-an-incoming-signal" class="slide level2">
-<h2>Input capture timestamps an incoming signal</h2>
+<section id="each-capture-is-a-timestamp" class="slide level2">
+<h2>Each capture is a timestamp</h2>
 <div class="lead-line">
 <p><code>PSC = 15</code>, <code>ARR = 65535</code>: <code>CNT</code> runs freely, one count per µs. A capture is the time of an edge.</p>
 </div>
@@ -556,14 +643,14 @@ Top: a signal on PB6 with rising edges at 2.45, 12.45 and 22.45 milliseconds. Bo
 </svg>
 <!-- /svg:capture -->
 <div class="source-note">
-<p>In-lecture demo: <a href="../assets/htmls/timer_input_capture_animation.html">interactive capture animation</a>. The HAL call that reads <code>CCR1</code>: <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=1097">UM1725 Rev 8, <code>HAL_TIM_ReadCapturedValue</code> — p.&nbsp;1097</a>.</p>
+<p>In-lecture demo: <a href="../assets/htmls/timer_input_capture_animation.html">interactive capture animation</a>. The code reads the timestamp straight from <code>TIM4-&gt;CCR1</code>. HAL alternative: <a href="https://www.st.com/resource/en/user_manual/um1725-description-of-stm32f4-hal-and-lowlayer-drivers-stmicroelectronics.pdf#page=1097">UM1725 Rev 8, <code>HAL_TIM_ReadCapturedValue</code> — p.&nbsp;1097</a>.</p>
 </div>
 </section>
-<section id="input-capture-interrupt-start-and-capture-callback" class="slide level2">
-<h2>Input capture interrupt: start and capture callback</h2>
+<section id="capture-interrupt-mode-start-and-callback" class="slide level2">
+<h2>Capture interrupt mode: start and callback</h2>
 <div class="spot-sub">
-<span class="spot-line g0"><span class="spot-tag">Setup</span>One line in <code>main()</code> arms the capture. <span class="spot-mark">1</span> start channel 1 and set <code>CC1IE</code>. CubeMX already enabled <code>TIM4_IRQn</code> in the NVIC.</span>
-<span class="spot-line fragment custom g1" data-fragment-index="1"><span class="spot-tag">Hardware</span>A rising edge on PB6: the hardware copies <code>CNT</code> into <code>CCR1</code> and sets <code>CC1IF</code>. No code has run yet, and the timestamp is already exact.</span>
+<span class="spot-line g0"><span class="spot-tag">Setup</span>One line in <code>main()</code> starts the capture. <span class="spot-mark">1</span> start channel 1 and set <code>CC1IE</code>. CubeMX already enabled <code>TIM4_IRQn</code> in the NVIC.</span>
+<span class="spot-line fragment custom g1" data-fragment-index="1"><span class="spot-tag">Hardware</span>A rising edge on PB6: the hardware copies <code>CNT</code> into <code>CCR1</code> and sets <code>CC1IF</code>. No code has run yet, and the timestamp is already exact. <strong>Read it in time:</strong> the next edge overwrites <code>CCR1</code>.</span>
 <span class="spot-line fragment custom g2" data-fragment-index="2"><span class="spot-tag">Generated</span>The NVIC jumps to <code>TIM4_IRQHandler()</code>, which calls <code>HAL_TIM_IRQHandler()</code>. It clears <code>CC1IF</code> and calls your callback, as in L07.</span>
 <span class="spot-line fragment custom g3" data-fragment-index="3"><span class="spot-tag">Your code</span><span class="spot-mark">2</span> one callback for all capture channels: check timer and channel. <span class="spot-mark">3</span> read <code>CCR1</code>. <span class="spot-mark">4</span> subtract the last timestamp as <code>uint16_t</code>.</span>
 <span class="spot-line fragment custom g4 spot-all" data-fragment-index="4"><span class="spot-tag">Whole path</span>The L06 interrupt path again: only the first box is new. <code>period_us</code> is <code>volatile</code> because the callback writes it and <code>main()</code> reads it.</span>
@@ -598,8 +685,7 @@ Top: a signal on PB6 with rising edges at 2.45, 12.45 and 22.45 milliseconds. Bo
 {
     <span class="tk-dim">if</span> (htim-&gt;Instance == <span class="tk-tim">TIM4</span> &amp;&amp;
         htim-&gt;Channel == <span class="tk-tim">HAL_TIM_ACTIVE_CHANNEL_1</span>) {<span class="spot-n">2</span>
-        uint16_t now = <span class="tk-gpio">HAL_TIM_ReadCapturedValue</span>(
-                           htim, TIM_CHANNEL_1);<span class="spot-n">3</span>
+        uint16_t now = <span class="tk-tim">TIM4</span>-&gt;<span class="tk-tim">CCR1</span>;<span class="spot-n">3</span>
         <span class="tk-blue">period_us</span> = (uint16_t)(now - last);<span class="spot-n">4</span>
         last = now;
     }
@@ -608,10 +694,10 @@ Top: a signal on PB6 with rising edges at 2.45, 12.45 and 22.45 milliseconds. Bo
 </div>
 </div>
 </section>
-<section id="period-and-frequency-from-two-capture-timestamps" class="slide level2">
-<h2>Period and frequency from two capture timestamps</h2>
+<section id="period-from-two-timestamps" class="slide level2">
+<h2>Period from two timestamps</h2>
 <div class="formula-line">
-<p>period_us = (uint16_t)(new − last) · frequency = 1 000 000 ÷ period_us</p>
+<p>period_us = (uint16_t)(now − last) &nbsp;·&nbsp; <span class="math inline">\(\text{frequency} = \dfrac{1\,000\,000}{\texttt{period_us}}\ \text{Hz}\)</span></p>
 </div>
 <!-- svg:wrap -->
 <svg class="story-visual" viewbox="0 0 1440 410" style="max-height:350px" role="img" aria-labelledby="wrap-title">
@@ -648,8 +734,8 @@ A 16-bit counter sawtooth that climbs to 65535 and wraps to 0 after 65.5 millise
 </table>
 </div>
 </section>
-<section id="practice-compute-a-period-from-capture-values" class="slide level2">
-<h2>Practice: compute a period from capture values</h2>
+<section id="practice-compute-a-period-from-two-captures" class="slide level2">
+<h2>Practice: compute a period from two captures</h2>
 <p>TIM4, <code>PSC = 15</code> (1 µs per count), rising edges. Two consecutive captures: <code>64000</code>, then <code>1500</code>.</p>
 <div class="prompt-list compact-prompts">
 <div class="prompt-item">
@@ -669,10 +755,10 @@ A 16-bit counter sawtooth that climbs to 65535 and wraps to 0 after 65.5 millise
 <p><code>(uint16_t)(1500 − 64000)</code> = 65536 − 64000 + 1500 = <strong>3036 µs</strong> · 1 000 000 ÷ 3036 ≈ <strong>329 Hz</strong> · periods up to 65 535 µs, about <strong>15 Hz</strong> · a 32-bit timer (<code>TIM2</code>, <code>TIM5</code>), or a slower count, for example <code>PSC = 159</code> (10 µs).</p>
 </div>
 </section>
-<section id="duty-cycle-needs-two-capture-channels-on-one-pin" class="slide level2">
-<h2>Duty cycle needs two capture channels on one pin</h2>
+<section id="duty-cycle-needs-two-channels" class="slide level2">
+<h2>Duty cycle needs two channels</h2>
 <div class="lead-line">
-<p>CH1 (<em>direct</em>) captures rising edges on PB6. CH2 (<em>indirect</em>) captures falling edges on the same pin.</p>
+<p>CH1 (<em>direct</em>) captures rising edges on PB6. CH2 (<em>indirect</em>: it reads the pin of CH1) captures falling edges on the same pin.</p>
 </div>
 <!-- svg:duty2 -->
 <svg class="story-visual" viewbox="0 0 1440 430" style="max-height:400px" role="img" aria-labelledby="d2-title">
@@ -683,11 +769,11 @@ One PWM signal on PB6. Channel 1 in direct mode captures each rising edge into C
 </svg>
 <!-- /svg:duty2 -->
 <div class="source-note">
-<p>The hardware can also do this pair by itself, with a counter reset on every rising edge: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=334">RM0368 Rev 6, §13.3.6 <em>PWM input mode</em> — p.&nbsp;334</a>. It costs the whole timer.</p>
+<p>The hardware can also do this pair by itself, with a counter reset on every rising edge: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=334">RM0368 Rev 6, §13.3.6 <em>PWM input mode</em> — p.&nbsp;334</a>. This mode uses the whole timer for one signal.</p>
 </div>
 </section>
-<section id="input-capture-setup-in-cubemx-for-tim4" class="slide level2">
-<h2>Input capture setup in CubeMX for TIM4</h2>
+<section id="configure-input-capture-in-cubemx" class="slide level2">
+<h2>Configure input capture in CubeMX</h2>
 <div class="cube-table">
 <table class="caption-top">
 <colgroup>
@@ -737,8 +823,8 @@ One PWM signal on PB6. Channel 1 in direct mode captures each rising edge into C
 <p>Lab wiring: one jumper from PA5 (D13, the PWM output) to PB6 (D10, the capture input). The board measures its own signal.</p>
 </div>
 </section>
-<section id="input-filter-and-overcapture-in-input-capture" class="slide level2">
-<h2>Input filter and overcapture in input capture</h2>
+<section id="the-input-filter-and-lost-captures" class="slide level2">
+<h2>The input filter and lost captures</h2>
 <!-- svg:filter-ovr -->
 <svg class="story-visual" viewbox="0 0 1440 390" style="max-height:360px" role="img" aria-labelledby="flt-title">
 <title id="flt-title">
@@ -817,7 +903,7 @@ Left: a noisy rising edge with three short glitches on the pin; the input filter
 <h2>Common PWM and input capture mistakes</h2>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
-<p><span>01</span> <strong>WRONG CLOCK:</strong> 84 MHz numbers on our 16 MHz timers: every frequency 5.25× off.</p>
+<p><span>01</span> <strong>WRONG CLOCK:</strong> the project runs the timers at 84 MHz, not 16 MHz. Every frequency is 5.25 times too high.</p>
 </div>
 <div class="vertical-item fragment">
 <p><span>02</span> <strong>PIN STILL GPIO:</strong> PA5 still <code>GPIO_Output</code>, <code>MODER</code> = 01: <code>WritePin</code> works, PWM does not.</p>
@@ -826,7 +912,7 @@ Left: a noisy rising edge with three short glitches on the pin; the input filter
 <p><span>03</span> <strong>MISSING +1:</strong> <code>CCR = ARR</code> gives 99.9 %. Fully on needs <code>CCR = ARR + 1</code>.</p>
 </div>
 <div class="vertical-item fragment">
-<p><span>04</span> <strong>SHARED ARR:</strong> the 1 kHz LED and the 50 Hz servo on one timer. They share <code>ARR</code>.</p>
+<p><span>04</span> <strong>SHARED ARR:</strong> the 1 kHz LED and the 50 Hz servo on one timer. They share <code>ARR</code>, so one of them gets the wrong frequency.</p>
 </div>
 <div class="vertical-item fragment">
 <p><span>05</span> <strong>WRONG WIDTH:</strong> <code>uint32_t p = now - last;</code> reads 4294911296 after a wrap. Cast to <code>(uint16_t)</code>.</p>
@@ -839,7 +925,7 @@ Left: a noisy rising edge with three short glitches on the pin; the input filter
 <section id="pwm-and-input-capture-lab-preview-and-summary" class="slide level2">
 <h2>PWM and input capture lab preview and summary</h2>
 <div class="big-question">
-<p>Lab: dim and breathe LD2 with TIM2 PWM on PA5, then wire PA5 to PB6 and measure the signal back with TIM4 input capture. SFR proof required.</p>
+<p>Lab: dim LD2 with TIM2 PWM on PA5 and step its brightness with B1, then wire PA5 to PB6 and measure the signal back with TIM4 input capture. SFR proof required.</p>
 </div>
 <div class="vertical-list compact-list">
 <div class="vertical-item">
@@ -864,14 +950,14 @@ Left: a noisy rising edge with three short glitches on the pin; the input filter
 <h2>Exit ticket</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a></a>htim3<span class="op">.</span>Init<span class="op">.</span>Prescaler <span class="op">=</span> <span class="dv">15</span><span class="op">;</span>      <span class="co">// 16 MHz timer clock</span></span>
 <span id="cb3-2"><a></a>htim3<span class="op">.</span>Init<span class="op">.</span>Period    <span class="op">=</span> <span class="dv">4999</span><span class="op">;</span></span>
-<span id="cb3-3"><a></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim3<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="dv">1250</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a></a>TIM3<span class="op">-&gt;</span>CCR1 <span class="op">=</span> <span class="dv">1250</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>TIM4, 1 µs per count: rising <code>4000</code> and <code>9000</code>, falling <code>5250</code> between them.</p>
 <div class="vertical-list ticket-list">
 <div class="vertical-item">
 <p><span>01</span> <strong>GENERATE:</strong> What frequency and duty cycle does the TIM3 code produce?</p>
 </div>
 <div class="vertical-item">
-<p><span>02</span> <strong>KNOBS:</strong> Which register sets the frequency, and which sets the duty?</p>
+<p><span>02</span> <strong>REGISTERS:</strong> Which register sets the frequency, and which sets the duty?</p>
 </div>
 <div class="vertical-item">
 <p><span>03</span> <strong>MEASURE:</strong> From the TIM4 captures: period, frequency and duty?</p>

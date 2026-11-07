@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.43">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -310,8 +310,9 @@ window.Quarto = {
 </section>
 <section id="the-pin-handover" class="level2">
 <h2 class="anchored" data-anchor-id="the-pin-handover">The pin handover</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HAL_TIM_PWM_Start<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span>            <span class="co">/* enables CC1E   */</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="dv">350</span><span class="op">);</span>   <span class="co">/* writes CCR1    */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HAL_TIM_PWM_Start<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span>   <span class="co">/* enables CC1E                */</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>TIM2<span class="op">-&gt;</span>CCR1 <span class="op">=</span> <span class="dv">350</span><span class="op">;</span>                           <span class="co">/* HAL macro for the same write:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">                     __HAL_TIM_SET_COMPARE(&amp;htim2, TIM_CHANNEL_1, 350) */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>CubeMX sets <code>MODER</code> bits for PA5 to <code>10</code> (alternate function) and selects AF1 for TIM2. Until that happens the pin still belongs to <code>HAL_GPIO_WritePin</code> and PWM does nothing visible — the classic silent failure.</p>
 </section>
 <section id="servo-contract" class="level2">
@@ -347,12 +348,12 @@ window.Quarto = {
 <section id="capture-the-arithmetic" class="level2">
 <h2 class="anchored" data-anchor-id="capture-the-arithmetic">Capture: the arithmetic</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* rising edges, channel 1 direct */</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> now <span class="op">=</span> HAL_TIM_ReadCapturedValue<span class="op">(</span>htim<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> now <span class="op">=</span> TIM4<span class="op">-&gt;</span>CCR1<span class="op">;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>period_us <span class="op">=</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>now <span class="op">-</span> last<span class="op">);</span>     <span class="co">/* cast: wrap-safe on 16 bits */</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>last <span class="op">=</span> now<span class="op">;</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">/* falling edge, channel 2 indirect - high time since the last rising edge */</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>high_us <span class="op">=</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>HAL_TIM_ReadCapturedValue<span class="op">(</span>htim<span class="op">,</span> TIM_CHANNEL_2<span class="op">)</span> <span class="op">-</span> last<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>high_us <span class="op">=</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>TIM4<span class="op">-&gt;</span>CCR2 <span class="op">-</span> last<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><span class="math display">\[f_{\text{signal}} = \frac{1}{\text{period}} \qquad
 \text{duty} = \frac{\text{high\_us}}{\text{period\_us}}\]</span></p>
 <ul>

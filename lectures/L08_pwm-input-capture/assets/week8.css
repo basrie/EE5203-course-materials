@@ -17,3 +17,10 @@
 
 /* Flow column a little narrower when the code lines are long */
 .reveal .spot-grid.flow-svg.narrow { grid-template-columns: 470px minmax(0, 1fr); gap: 32px; }
+
+/* Typeset formulas in the formula box. The reveal.js math plugin runs
+   MathJax 2, which gives display math a 1em top and bottom margin; that
+   left the box mostly empty. Trim it and set the math larger. */
+.reveal .formula-line .MathJax_Display { margin: 0.05em 0 !important; }
+.reveal .formula-line .MathJax_Display .MathJax { font-size: 125% !important; }
+.reveal .formula-line.big .MathJax_Display .MathJax { font-size: 115% !important; }

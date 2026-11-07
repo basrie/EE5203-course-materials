@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.43">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -35,7 +35,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -249,7 +249,7 @@ ul.task-list li input[type="checkbox"] {
 <ol start="20" type="1">
 <li><p>Describe an experiment, using only the debugger and the SFR view, that makes <code>CC1OF</code> become set on purpose. Explain what was lost.</p></li>
 <li><p>You flip <code>CC1P</code> for the capture channel while the program runs. Predict what happens to the measured <strong>period</strong>, and to the measured <strong>duty</strong>. Justify both answers.</p></li>
-<li><p>The generating side sweeps its duty continuously (the breathing LED) while the measuring side reports duty. Explain why the reported duty tracks smoothly rather than jumping, and what would happen if the generator’s <code>ARR</code> changed at the same time.</p></li>
+<li><p>The generating side changes its duty with B1 (one <code>CCR1</code> write per press) while the measuring side reports duty. How soon after a press does the reported duty show the new level? What would happen if the generator’s <code>ARR</code> changed at the same moment?</p></li>
 </ol>
 </section>
 <section id="exit-self-assessment" class="level2">

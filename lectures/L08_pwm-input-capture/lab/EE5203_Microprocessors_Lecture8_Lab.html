@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.43">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -4870,14 +4870,14 @@ pre { font-size: 8.7pt; }
 <h1>EE5203 Lab 7 Guide</h1>
 <p><em>PWM and input capture: dim LD2, then measure the signal back - Basri Erdogan</em></p>
 <div class="mission">
-<p><strong>Mission:</strong> Dim LD2 with a TIM2 PWM channel and make it breathe from the 1 ms tick, with no <code>HAL_Delay()</code> anywhere. Then connect PA5 to PB6 with one jumper, measure the same signal with TIM4 input capture, and show that the measured period and duty match the values you set.</p>
+<p><strong>Mission:</strong> Dim LD2 with a TIM2 PWM channel and step its brightness with button B1, with no <code>HAL_Delay()</code> anywhere. Then connect PA5 to PB6 with one jumper, measure the same signal with TIM4 input capture, and show that the measured period and duty match the values you set.</p>
 </div>
 <section id="prepare-before-class" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-before-class">Prepare before class</h2>
 <ul class="task-list">
 <li><label><input type="checkbox">Bring your board, a USB <strong>data</strong> cable and <strong>one male-to-male jumper wire</strong>.</label></li>
 <li><label><input type="checkbox">Do the <strong>Lab 7 pre-lab quiz</strong> on CATS (two attempts; the higher score counts).</label></li>
-<li><label><input type="checkbox">Re-read the theory slides up to “Input capture setup in CubeMX for TIM4.”</label></li>
+<li><label><input type="checkbox">Re-read the theory slides up to “Configure input capture in CubeMX.”</label></li>
 <li><label><input type="checkbox">Compute from 16 MHz: which <code>PSC</code>, <code>ARR</code> and <code>CCR1</code> give 1 kHz PWM at 35 %?</label></li>
 <li><label><input type="checkbox">Know who writes <code>CCR1</code> in PWM mode and who writes it in input capture mode.</label></li>
 </ul>
@@ -4919,22 +4919,26 @@ pre { font-size: 8.7pt; }
 <td>TIM2: 1 ms tick <strong>and</strong> PWM on channel 1, <code>PSC</code> 15, <code>ARR</code> 999</td>
 </tr>
 <tr class="even">
+<td>Button</td>
+<td>B1 on PC13 (<code>GPIO_EXTI13</code>, as in Lab 5)</td>
+</tr>
+<tr class="odd">
 <td>Analyzer</td>
 <td>TIM4 CH1 + CH2 on PB6, <code>PSC</code> 15 (1 µs per count), <code>ARR</code> 65535</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Wiring</td>
 <td>from Checkpoint C on: <strong>one jumper, D13 → D10</strong> (figure below)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Tools</td>
 <td>STM32CubeMX (new project) + VS Code</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Project name</td>
 <td><code>EE5203_L07_&lt;studentnumber&gt;</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>File you edit</td>
 <td><code>main.c</code>, only inside the <code>USER CODE</code> regions</td>
 </tr>
@@ -4950,10 +4954,10 @@ pre { font-size: 8.7pt; }
 <li><strong>PA5:</strong> click the pin and choose <strong><code>TIM2_CH1</code></strong>. It replaces the <code>GPIO_Output</code> (LD2) setting. Do this before step 4, or CubeMX may put channel 1 on PA0.</li>
 <li><strong>Timers → TIM2:</strong> Clock Source = <code>Internal Clock</code>; Channel1 = <code>PWM Generation CH1</code>. Parameter Settings: Prescaler <code>15</code>, Counter Period <code>999</code>; PWM Generation Channel 1: Mode <code>PWM mode 1</code>, Pulse <code>0</code>.</li>
 <li><strong>Timers → TIM4:</strong> Clock Source = <code>Internal Clock</code>; Channel1 = <code>Input Capture direct mode</code>; Channel2 = <code>Input Capture indirect mode</code>. Prescaler <code>15</code>, Counter Period <code>65535</code>. Input Capture Channel 1: Polarity <strong>Rising Edge</strong>. Input Capture Channel 2: Polarity <strong>Falling Edge</strong>. Check that <strong>PB6</strong> is now green as <code>TIM4_CH1</code>.</li>
-<li><strong>System Core → NVIC</strong>: enable <strong>TIM2 global interrupt</strong> and <strong>TIM4 global interrupt</strong>.</li>
+<li><strong>System Core → NVIC</strong>: enable <strong>TIM2 global interrupt</strong>, <strong>TIM4 global interrupt</strong> and <strong>EXTI line[15:10] interrupts</strong> (B1 on PC13 stays <code>GPIO_EXTI13</code>).</li>
 <li>Project Manager: name <strong><code>EE5203_L07_&lt;studentnumber&gt;</code></strong>, location <code>C:\Work\&lt;studentnumber&gt;</code>, Toolchain/IDE = <strong>CMake</strong> → Generate Code.</li>
 <li><strong>Copy <code>C:\Users\Public\EE5203_template\.vscode</code> into the project folder</strong>, as in every lab. (Own laptop: use <strong>Set Up STM32Cube project(s)</strong>, as in Lab 5.)</li>
-<li><strong>Verify, do not add:</strong> in <code>main.c</code>, <code>MX_TIM2_Init()</code> with <code>TIM_OCMODE_PWM1</code> and <code>MX_TIM4_Init()</code> with <code>TIM_ICSELECTION_DIRECTTI</code> and <code>..._INDIRECTTI</code>; in <code>stm32f4xx_hal_msp.c</code>, <code>GPIO_AF1_TIM2</code> (PA5) and <code>GPIO_AF2_TIM4</code> (PB6); in <code>stm32f4xx_it.c</code>, <code>TIM2_IRQHandler()</code> and <code>TIM4_IRQHandler()</code>.</li>
+<li><strong>Verify, do not add:</strong> in <code>main.c</code>, <code>MX_TIM2_Init()</code> with <code>TIM_OCMODE_PWM1</code> and <code>MX_TIM4_Init()</code> with <code>TIM_ICSELECTION_DIRECTTI</code> and <code>..._INDIRECTTI</code>; in <code>stm32f4xx_hal_msp.c</code>, <code>GPIO_AF1_TIM2</code> (PA5) and <code>GPIO_AF2_TIM4</code> (PB6); in <code>stm32f4xx_it.c</code>, <code>TIM2_IRQHandler()</code>, <code>TIM4_IRQHandler()</code> and <code>EXTI15_10_IRQHandler()</code>.</li>
 </ol>
 </section>
 <section id="checkpoint-a---ld2-dimmed-by-pwm" class="level2">
@@ -4972,33 +4976,40 @@ pre { font-size: 8.7pt; }
 <li><p><strong>In <code>USER CODE BEGIN 2</code></strong>, start both jobs and set the duty:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>HAL_TIM_Base_Start_IT<span class="op">(&amp;</span>htim2<span class="op">);</span>                      <span class="co">/* 1 ms tick: g_ms   */</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>HAL_TIM_PWM_Start<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span>           <span class="co">/* PWM on PA5 (LD2)  */</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>__HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="dv">350</span><span class="op">);</span>  <span class="co">/* CCR1 = 350: 35 %  */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>TIM2<span class="op">-&gt;</span>CCR1 <span class="op">=</span> <span class="dv">350</span><span class="op">;</span>                                   <span class="co">/* 35 % duty         */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>Build (<strong>Ctrl+Shift+B</strong>), start the debugger (<strong>F5</strong>), Continue.</p></li>
 </ol>
 <p><strong>Evidence for Checkpoint A:</strong> LD2 glows, dimmer than full on. Pause; in the SFR view <code>TIM2-&gt;PSC</code> = 15, <code>TIM2-&gt;ARR</code> = 999, <code>TIM2-&gt;CCR1</code> = 350. Write <strong>50</strong> into <code>TIM2-&gt;CCR1</code> and Continue: LD2 is almost dark. Then write <strong>1000</strong>: full on (<code>CCR = ARR + 1</code>). No code changed. <code>GPIOA-&gt;MODER</code> bits 11:10 read <code>10</code>: PA5 belongs to the timer now. <code>g_ms</code> grows between pauses.</p>
 </section>
-<section id="checkpoint-b---the-breathing-led" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-b---the-breathing-led">Checkpoint B - The breathing LED</h2>
-<p>Make LD2 fade up and down. Every 10 ms the duty steps by 5, timed only from <code>g_ms</code>. Two additions:</p>
+<section id="checkpoint-b---brightness-levels-with-b1" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-b---brightness-levels-with-b1">Checkpoint B - Brightness levels with B1</h2>
+<p>Each press of B1 moves LD2 to the next brightness level in a table. The button interrupt is the Lab 5 one; the 50 ms guard uses <code>g_ms</code>. Three additions:</p>
 <ol type="1">
-<li><p><strong>In <code>USER CODE BEGIN PV</code></strong>, below <code>g_ms</code>, a switch you will use in Checkpoint D:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint8_t</span> breathe <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>   <span class="co">/* 1: breathing on, 0: duty stays */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p><strong>In <code>USER CODE BEGIN 2</code></strong>, below the three start lines, the state variables; <strong>in <code>USER CODE BEGIN 3</code></strong>, the fade step:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* USER CODE </span><span class="re">BEGIN</span><span class="co"> 2 */</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> t_fade <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int32_t</span>  duty <span class="op">=</span> <span class="dv">350</span><span class="op">,</span> dir <span class="op">=</span> <span class="op">+</span><span class="dv">1</span><span class="op">;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">/* USER CODE </span><span class="re">BEGIN</span><span class="co"> 3 */</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>breathe <span class="op">&amp;&amp;</span> <span class="op">(</span>g_ms <span class="op">-</span> t_fade<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">10</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    t_fade <span class="op">=</span> g_ms<span class="op">;</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    duty <span class="op">+=</span> dir <span class="op">*</span> <span class="dv">5</span><span class="op">;</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>duty <span class="op">&gt;=</span> <span class="dv">999</span><span class="op">)</span> <span class="op">{</span> duty <span class="op">=</span> <span class="dv">999</span><span class="op">;</span> dir <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span> <span class="op">}</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>duty <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">)</span>   <span class="op">{</span> duty <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   dir <span class="op">=</span> <span class="op">+</span><span class="dv">1</span><span class="op">;</span> <span class="op">}</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    __HAL_TIM_SET_COMPARE<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">,</span> <span class="op">(</span><span class="dt">uint32_t</span><span class="op">)</span>duty<span class="op">);</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>In <code>USER CODE BEGIN PV</code></strong>, below <code>g_ms</code>, the press flag and the level table:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint8_t</span>  button_event  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint32_t</span> last_press_ms <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">const</span> <span class="dt">uint16_t</span> level<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">30</span><span class="op">,</span> <span class="dv">120</span><span class="op">,</span> <span class="dv">350</span><span class="op">,</span> <span class="dv">1000</span> <span class="op">};</span>  <span class="co">/* CCR1 values */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>In <code>USER CODE BEGIN 4</code></strong>, next to the tick callback, the button callback:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_13 <span class="op">&amp;&amp;</span> <span class="op">(</span>g_ms <span class="op">-</span> last_press_ms<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">50</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        last_press_ms <span class="op">=</span> g_ms<span class="op">;</span>         <span class="co">/* B1: one press per 50 ms */</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        button_event <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>In <code>USER CODE BEGIN 2</code></strong>, below the three start lines, the level index; <strong>in <code>USER CODE BEGIN 3</code></strong>, the step:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* USER CODE </span><span class="re">BEGIN</span><span class="co"> 2 */</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> idx <span class="op">=</span> <span class="dv">3</span><span class="op">;</span>                     <span class="co">/* level[3] = 350, as in Checkpoint A */</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">/* USER CODE </span><span class="re">BEGIN</span><span class="co"> 3 */</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>button_event<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    button_event <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> <span class="op">(</span>idx <span class="op">+</span> <span class="dv">1</span><span class="op">)</span> <span class="op">%</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    TIM2<span class="op">-&gt;</span>CCR1 <span class="op">=</span> level<span class="op">[</span>idx<span class="op">];</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ol>
-<p>The timer makes the light; the tick only schedules the changes. Nothing waits.</p>
-<p><strong>Evidence for Checkpoint B:</strong> smooth breathing, about 4 s per breath, and no <code>HAL_Delay()</code> in <code>main.c</code>. <strong>Predict, then check:</strong> what does a step of 20 instead of 5 do to one breath? <strong>Screenshot <code>B_breathing.png</code>:</strong> your <code>USER CODE BEGIN 3</code> lines.</p>
+<p>TIM2 holds the brightness between presses; the code runs only after a press.</p>
+<p><strong>Evidence for Checkpoint B:</strong> each press moves LD2 one level, 350 → 1000 → 0 → 30 → 120 → 350, and <code>TIM2-&gt;CCR1</code> in the SFR view shows the same values. No <code>HAL_Delay()</code> in <code>main.c</code>. <strong>Predict, then check:</strong> change the table to <code>{ 0, 250, 500, 750, 1000 }</code>. Which press changes the brightness most? Write one sentence: why does the first table look more even? Then put the first table back. <strong>Screenshot <code>B_levels.png</code>:</strong> the level table and your <code>USER CODE BEGIN 3</code> lines.</p>
 </section>
 <section id="checkpoint-c---captures-arrive" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-c---captures-arrive">Checkpoint C - Captures arrive</h2>
@@ -5007,26 +5018,26 @@ pre { font-size: 8.7pt; }
 <p>Three additions:</p>
 <ol type="1">
 <li><p><strong>In <code>USER CODE BEGIN PV</code></strong>, the results and the last rising timestamp:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint16_t</span> period_us <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> high_us <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> last <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint16_t</span> period_us <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> high_us <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint16_t</span> last <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p><strong>In <code>USER CODE BEGIN 2</code></strong>, below the PWM lines, start both capture channels:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>HAL_TIM_IC_Start_IT<span class="op">(&amp;</span>htim4<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span>   <span class="co">/* rising,  direct   */</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>HAL_TIM_IC_Start_IT<span class="op">(&amp;</span>htim4<span class="op">,</span> TIM_CHANNEL_2<span class="op">);</span>   <span class="co">/* falling, indirect */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>HAL_TIM_IC_Start_IT<span class="op">(&amp;</span>htim4<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span>   <span class="co">/* rising,  direct   */</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>HAL_TIM_IC_Start_IT<span class="op">(&amp;</span>htim4<span class="op">,</span> TIM_CHANNEL_2<span class="op">);</span>   <span class="co">/* falling, indirect */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p><strong>In <code>USER CODE BEGIN 4</code></strong>, next to the tick callback, the capture callback. One callback serves every capture channel, so it checks the timer and the channel:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_TIM_IC_CaptureCallback<span class="op">(</span>TIM_HandleTypeDef <span class="op">*</span>htim<span class="op">)</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>htim<span class="op">-&gt;</span>Instance <span class="op">!=</span> TIM4<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>htim<span class="op">-&gt;</span>Channel <span class="op">==</span> HAL_TIM_ACTIVE_CHANNEL_1<span class="op">)</span> <span class="op">{</span>         <span class="co">/* rising  */</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">uint16_t</span> now <span class="op">=</span> HAL_TIM_ReadCapturedValue<span class="op">(</span>htim<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        period_us <span class="op">=</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>now <span class="op">-</span> last<span class="op">);</span>                  <span class="co">/* wrap-safe */</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        last <span class="op">=</span> now<span class="op">;</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>htim<span class="op">-&gt;</span>Channel <span class="op">==</span> HAL_TIM_ACTIVE_CHANNEL_2<span class="op">)</span> <span class="op">{</span>  <span class="co">/* falling */</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">uint16_t</span> fall <span class="op">=</span> HAL_TIM_ReadCapturedValue<span class="op">(</span>htim<span class="op">,</span> TIM_CHANNEL_2<span class="op">);</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        high_us <span class="op">=</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>fall <span class="op">-</span> last<span class="op">);</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_TIM_IC_CaptureCallback<span class="op">(</span>TIM_HandleTypeDef <span class="op">*</span>htim<span class="op">)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>htim<span class="op">-&gt;</span>Instance <span class="op">!=</span> TIM4<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>htim<span class="op">-&gt;</span>Channel <span class="op">==</span> HAL_TIM_ACTIVE_CHANNEL_1<span class="op">)</span> <span class="op">{</span>         <span class="co">/* rising  */</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">uint16_t</span> now <span class="op">=</span> TIM4<span class="op">-&gt;</span>CCR1<span class="op">;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        period_us <span class="op">=</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>now <span class="op">-</span> last<span class="op">);</span>                  <span class="co">/* wrap-safe */</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        last <span class="op">=</span> now<span class="op">;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>htim<span class="op">-&gt;</span>Channel <span class="op">==</span> HAL_TIM_ACTIVE_CHANNEL_2<span class="op">)</span> <span class="op">{</span>  <span class="co">/* falling */</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">uint16_t</span> fall <span class="op">=</span> TIM4<span class="op">-&gt;</span>CCR2<span class="op">;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        high_us <span class="op">=</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>fall <span class="op">-</span> last<span class="op">);</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ol>
 <p><strong>Evidence for Checkpoint C:</strong> a breakpoint on <code>last = now;</code> is hit. Remove it, Continue, pause twice: <code>TIM4-&gt;CCR1</code> differs between the pauses, and no line of your code wrote it. The hardware timestamps every edge.</p>
 </section>
@@ -5036,9 +5047,9 @@ pre { font-size: 8.7pt; }
 <p><img role="img" aria-label="The PWM signal on PB6. Orange marks at every rising edge: channel 1 captures into CCR1. Green marks at every falling edge: channel 2 captures into CCR2. A bracket from one rising edge to the next shows period_us equals the new CCR1 minus last; a bracket from a rising edge to the falling edge shows high_us equals CCR2 minus last." src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgMjUwIiB3aWR0aD0iOTAwIiBoZWlnaHQ9IjI1MCIgcm9sZT0iaW1nIj48dGl0bGU+VGhlIFBXTSBzaWduYWwgb24gUEI2LiBDaGFubmVsIDEgY2FwdHVyZXMgZXZlcnkgcmlzaW5nIGVkZ2UgaW50byBDQ1IxOyBjaGFubmVsIDIgY2FwdHVyZXMgZXZlcnkgZmFsbGluZyBlZGdlIGludG8gQ0NSMi4gVGhlIHBlcmlvZCBpcyB0aGUgbmV3IENDUjEgbWludXMgdGhlIGxhc3QgcmlzaW5nIGNhcHR1cmU7IHRoZSBoaWdoIHRpbWUgaXMgQ0NSMiBtaW51cyB0aGUgbGFzdCByaXNpbmcgY2FwdHVyZS48L3RpdGxlPgo8dGV4dCB4PSIxMCIgeT0iOTUiIHRleHQtYW5jaG9yPSJzdGFydCIgZmlsbD0iIzE3NGY3MyIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiPlBCNjwvdGV4dD4KPHRleHQgeD0iMTAiIHk9IjExNyIgdGV4dC1hbmNob3I9InN0YXJ0IiBmaWxsPSIjNWE2Yjc2IiBmb250LXNpemU9IjEzIiBmb250LXdlaWdodD0iNDAwIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiI+KGZyb20gRDEzKTwvdGV4dD4KPHJlY3QgeD0iMTYwIiB5PSI3MCIgd2lkdGg9IjEwNSIgaGVpZ2h0PSI2MCIgZmlsbD0iI2U4ZjJmNyIvPgo8cmVjdCB4PSI0NjAiIHk9IjcwIiB3aWR0aD0iMTA1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjZThmMmY3Ii8+CjxyZWN0IHg9Ijc2MCIgeT0iNzAiIHdpZHRoPSIxMDUiIGhlaWdodD0iNjAiIGZpbGw9IiNlOGYyZjciLz4KPHBhdGggZD0iTTEyMCAxMzAgSDE2MCBWNzAgSDI2NSBWMTMwIEg0NjAgVjcwIEg1NjUgVjEzMCBINzYwIFY3MCBIODY1IFYxMzAgSDk0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTc0ZjczIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPHBhdGggZD0iTTE2MCA2NCBsLTcgLTEyIGwxNCAwIHoiIGZpbGw9IiNkNDdiMjgiLz4KPHBhdGggZD0iTTQ2MCA2NCBsLTcgLTEyIGwxNCAwIHoiIGZpbGw9IiNkNDdiMjgiLz4KPHBhdGggZD0iTTc2MCA2NCBsLTcgLTEyIGwxNCAwIHoiIGZpbGw9IiNkNDdiMjgiLz4KPHBhdGggZD0iTTI2NSAxMzYgbC03IDEyIGwxNCAwIHoiIGZpbGw9IiMzZjdmNTgiLz4KPHBhdGggZD0iTTU2NSAxMzYgbC03IDEyIGwxNCAwIHoiIGZpbGw9IiMzZjdmNTgiLz4KPHRleHQgeD0iMTYwIiB5PSI0MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2I4NjIxYSIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiPkNIMSwgcmlzaW5nOiBDQ1IxPC90ZXh0Pgo8dGV4dCB4PSI0NjAiIHk9IjQwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYjg2MjFhIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNzAwIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiI+Q0gxLCByaXNpbmc6IENDUjE8L3RleHQ+Cjx0ZXh0IHg9IjI2NSIgeT0iMTYyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMmI1YTNlIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNzAwIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiI+Q0gyLCBmYWxsaW5nOiBDQ1IyPC90ZXh0Pgo8cGF0aCBkPSJNMTYwIDE5MCB2OCBINDYwIHYtOCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDQ3YjI4IiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iMzEwIiB5PSIyMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNiODYyMWEiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIj5wZXJpb2RfdXMgPSBuZXcgQ0NSMSDiiJIgbGFzdDwvdGV4dD4KPHBhdGggZD0iTTQ2MCAxOTAgdjggSDU2NSB2LTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNmN2Y1OCIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjU0MiIgeT0iMjQwIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IiMyYjVhM2UiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmIj5oaWdoX3VzID0gQ0NSMiDiiJIgbGFzdDwvdGV4dD4KPC9zdmc+Cg==" class="img-fluid" style="width:80.0%" alt="The PWM signal on PB6. Orange marks at every rising edge: channel 1 captures into CCR1. Green marks at every falling edge: channel 2 captures into CCR2. A bracket from one rising edge to the next shows period_us equals the new CCR1 minus last; a bracket from a rising edge to the falling edge shows high_us equals CCR2 minus last."></p>
 <p>Fill the <strong>Predicted</strong> column before you look. Then measure:</p>
 <ol type="1">
-<li>Pause. In the VARIABLES (or WATCH) view set <code>breathe</code> = <strong>0</strong>; in the SFR view set <code>TIM2-&gt;CCR1</code> = <strong>350</strong>. Continue, then pause and read <code>period_us</code> and <code>high_us</code>.</li>
+<li>Press B1 until LD2 is back at the 350 level (or pause and write <strong>350</strong> into <code>TIM2-&gt;CCR1</code> in the SFR view). Continue, then pause and read <code>period_us</code> and <code>high_us</code>.</li>
 <li>Write <strong>1999</strong> into <code>TIM2-&gt;ARR</code> in the SFR view. Continue, pause, read again.</li>
-<li>Set <code>breathe</code> back to <strong>1</strong> and watch <code>high_us</code> follow the breathing.</li>
+<li>Write <strong>999</strong> back into <code>TIM2-&gt;ARR</code>. Press B1 through the levels and read <code>high_us</code> at each one. What do <code>period_us</code> and <code>high_us</code> show at level 0 and at level 1000? Why?</li>
 </ol>
 <table class="caption-top table">
 <colgroup>
@@ -5106,8 +5117,9 @@ Individual extension - Overcapture or a servo (optional, click)
 <section id="acceptance-checklist" class="level2">
 <h2 class="anchored" data-anchor-id="acceptance-checklist">Acceptance checklist</h2>
 <ul class="task-list">
-<li><label><input type="checkbox"><code>.ioc</code>: HSI 16 MHz; PA5 <code>TIM2_CH1</code>, PWM mode 1, <code>PSC</code> 15 / <code>ARR</code> 999; TIM4 CH1 direct rising, CH2 indirect falling, <code>PSC</code> 15 / <code>ARR</code> 65535; TIM2 and TIM4 enabled in NVIC.</label></li>
+<li><label><input type="checkbox"><code>.ioc</code>: HSI 16 MHz; PA5 <code>TIM2_CH1</code>, PWM mode 1, <code>PSC</code> 15 / <code>ARR</code> 999; TIM4 CH1 direct rising, CH2 indirect falling, <code>PSC</code> 15 / <code>ARR</code> 65535; TIM2, TIM4 and EXTI line[15:10] enabled in NVIC.</label></li>
 <li><label><input type="checkbox">SFR evidence for Checkpoint A: <code>CCR1</code> changed by hand, <code>MODER</code> bits 11:10 = <code>10</code>.</label></li>
+<li><label><input type="checkbox">B1 steps LD2 through the level table, one level per press.</label></li>
 <li><label><input type="checkbox">No <code>HAL_Delay()</code> anywhere.</label></li>
 <li><label><input type="checkbox">Capture callback checks the timer and the channel; both subtractions cast to <code>uint16_t</code>.</label></li>
 <li><label><input type="checkbox">Prediction table filled before measuring; measured values match.</label></li>
@@ -5118,6 +5130,7 @@ Individual extension - Overcapture or a servo (optional, click)
 <ul>
 <li>Why does <code>CCR1</code> = 999 give 99.9 % and not 100 %?</li>
 <li>TIM2 makes a 1 kHz PWM and a 1 ms tick at once. Why does that work?</li>
+<li>Why does the level table not use equal steps such as 0, 250, 500, 750, 1000?</li>
 <li>Who writes <code>TIM4-&gt;CCR2</code>, and at exactly which moment?</li>
 <li>Why is channel 2 <em>indirect</em>? What would a direct channel 2 listen to?</li>
 <li>Captures <code>64000</code>, then <code>1500</code>: what is <code>period_us</code>, and why is the cast needed?</li>
@@ -5125,12 +5138,12 @@ Individual extension - Overcapture or a servo (optional, click)
 </section>
 <section id="submit" class="level2">
 <h2 class="anchored" data-anchor-id="submit">Submit</h2>
-<p>Submit <code>main.c</code> as it is at the end of the session (with the prediction table in <code>USER CODE BEGIN Header</code>), <code>B_breathing.png</code> and <code>D_measure.png</code>.</p>
-<p><strong>Marks (10):</strong> pre-lab quiz on CATS 1 · A dimmed LD2 with SFR evidence 2 · B breathing without delay 2 · C captures arrive 1 · D measurement matches the prediction 2 · oral check (one question) 2. The extension is optional and not graded.</p>
+<p>Submit <code>main.c</code> as it is at the end of the session (with the prediction table in <code>USER CODE BEGIN Header</code>), <code>B_levels.png</code> and <code>D_measure.png</code>.</p>
+<p><strong>Marks (10):</strong> pre-lab quiz on CATS 1 · A dimmed LD2 with SFR evidence 2 · B brightness levels with B1 2 · C captures arrive 1 · D measurement matches the prediction 2 · oral check (one question) 2. The extension is optional and not graded.</p>
 </section>
 <section id="if-you-are-stuck" class="level2">
 <h2 class="anchored" data-anchor-id="if-you-are-stuck">If you are stuck</h2>
-<p>Walk the signal from left to right and fix the <strong>first</strong> silent stage: <code>TIM2-&gt;CCR1</code> value → <code>TIM2-&gt;CNT</code> moving → PA5 in alternate function (<code>MODER</code> bits 11:10 = <code>10</code>) → jumper on D13 and D10 → <code>TIM4-&gt;CNT</code> moving → <code>TIM4-&gt;CCR1</code> changing → <code>CC1IF</code> in <code>TIM4-&gt;SR</code> → NVIC enabled → breakpoint in the capture callback → <code>period_us</code>. <strong>LD2 stays dark?</strong> PA5 is still <code>GPIO_Output</code> in the <code>.ioc</code> (step 3), or <code>HAL_TIM_PWM_Start()</code> is missing. <strong>LD2 full on all the time?</strong> <code>CCR1</code> ≥ 1000, or the <code>SET_COMPARE</code> line is missing. <strong>Breathing about 5 times too fast?</strong> The Clock Configuration tab is still on the PLL at 84 MHz (step 2). <strong><code>TIM4-&gt;CCR1</code> changes, but the callback never runs?</strong> TIM4 global interrupt is not enabled in NVIC. <strong><code>period_us</code> stays 0?</strong> The jumper is loose, or <code>HAL_TIM_IC_Start_IT()</code> is missing. <strong><code>high_us</code> is 0 or larger than <code>period_us</code>?</strong> Channel 2 is direct instead of indirect, or its polarity is not falling, or channel 2 was never started.</p>
+<p>Walk the signal from left to right and fix the <strong>first</strong> silent stage: <code>TIM2-&gt;CCR1</code> value → <code>TIM2-&gt;CNT</code> moving → PA5 in alternate function (<code>MODER</code> bits 11:10 = <code>10</code>) → jumper on D13 and D10 → <code>TIM4-&gt;CNT</code> moving → <code>TIM4-&gt;CCR1</code> changing → <code>CC1IF</code> in <code>TIM4-&gt;SR</code> → NVIC enabled → breakpoint in the capture callback → <code>period_us</code>. <strong>LD2 stays dark?</strong> PA5 is still <code>GPIO_Output</code> in the <code>.ioc</code> (step 3), or <code>HAL_TIM_PWM_Start()</code> is missing. <strong>LD2 full on all the time?</strong> <code>CCR1</code> ≥ 1000, or the <code>TIM2-&gt;CCR1 = 350;</code> line is missing. <strong><code>g_ms</code> grows about 5 times faster than real time?</strong> The Clock Configuration tab is still on the PLL at 84 MHz (step 2). <strong>B1 does nothing?</strong> EXTI line[15:10] is not enabled in NVIC (step 6). <strong>One press skips two levels?</strong> The 50 ms <code>last_press_ms</code> guard is missing. <strong><code>TIM4-&gt;CCR1</code> changes, but the callback never runs?</strong> TIM4 global interrupt is not enabled in NVIC. <strong><code>period_us</code> stays 0?</strong> The jumper is loose, or <code>HAL_TIM_IC_Start_IT()</code> is missing. <strong><code>high_us</code> is 0 or larger than <code>period_us</code>?</strong> Channel 2 is direct instead of indirect, or its polarity is not falling, or channel 2 was never started.</p>
 
 
 </section>
