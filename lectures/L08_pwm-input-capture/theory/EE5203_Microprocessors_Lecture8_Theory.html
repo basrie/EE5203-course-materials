@@ -654,7 +654,7 @@ Top: a signal on PB6 with rising edges at 2.45, 12.45 and 22.45 milliseconds. Bo
 <span class="spot-line g0"><span class="spot-tag">Setup</span>One line in <code>main()</code> starts the capture. <span class="spot-mark">1</span> start channel 1 and set <code>CC1IE</code>. CubeMX already enabled <code>TIM4_IRQn</code> in the NVIC.</span>
 <span class="spot-line fragment custom g1" data-fragment-index="1"><span class="spot-tag">Hardware</span>A rising edge on PB6: the hardware copies <code>CNT</code> into <code>CCR1</code> and sets <code>CC1IF</code>. No code has run yet, and the timestamp is already exact. <strong>Read it in time:</strong> the next edge overwrites <code>CCR1</code>.</span>
 <span class="spot-line fragment custom g2" data-fragment-index="2"><span class="spot-tag">Generated</span>The NVIC jumps to <code>TIM4_IRQHandler()</code>, which calls <code>HAL_TIM_IRQHandler()</code>. It clears <code>CC1IF</code> and calls your callback, as in L07.</span>
-<span class="spot-line fragment custom g3" data-fragment-index="3"><span class="spot-tag">Your code</span><span class="spot-mark">2</span> one callback for all capture channels: check timer and channel. <span class="spot-mark">3</span> read <code>CCR1</code>. <span class="spot-mark">4</span> subtract the last timestamp as <code>uint16_t</code>.</span>
+<span class="spot-line fragment custom g3" data-fragment-index="3"><span class="spot-tag">Your code</span><span class="spot-mark">2</span> read <code>CCR1</code>. <span class="spot-mark">3</span> subtract the last timestamp as <code>uint16_t</code>. TIM4 channel 1 is the only capture interrupt, so the callback needs no <code>if</code>.</span>
 <span class="spot-line fragment custom g4 spot-all" data-fragment-index="4"><span class="spot-tag">Whole path</span>The L06 interrupt path again: only the first box is new. <code>period_us</code> is <code>volatile</code> because the callback writes it and <code>main()</code> reads it.</span>
 </div>
 
@@ -685,12 +685,9 @@ Top: a signal on PB6 with rising edges at 2.45, 12.45 and 22.45 milliseconds. Bo
 <pre><code><span class="tk-dim">void</span> <span class="tk-gpio">HAL_TIM_IC_CaptureCallback</span>(
         <span class="tk-dim">TIM_HandleTypeDef *htim</span>)
 {
-    <span class="tk-dim">if</span> (htim-&gt;Instance == <span class="tk-tim">TIM4</span> &amp;&amp;
-        htim-&gt;Channel == <span class="tk-tim">HAL_TIM_ACTIVE_CHANNEL_1</span>) {<span class="spot-n">2</span>
-        uint16_t now = <span class="tk-tim">TIM4</span>-&gt;<span class="tk-tim">CCR1</span>;<span class="spot-n">3</span>
-        <span class="tk-blue">period_us</span> = (uint16_t)(now - last);<span class="spot-n">4</span>
-        last = now;
-    }
+    uint16_t now = <span class="tk-tim">TIM4</span>-&gt;<span class="tk-tim">CCR1</span>;<span class="spot-n">2</span>
+    <span class="tk-blue">period_us</span> = (uint16_t)(now - last);<span class="spot-n">3</span>
+    last = now;
 }</code></pre>
 </div>
 </div>
@@ -793,8 +790,8 @@ One PWM signal on PB6. Channel 1 in direct mode captures each rising edge into C
 <tbody>
 <tr class="odd">
 <td>Pinout <code>PB6</code></td>
-<td><code>TIM4_CH1</code></td>
-<td><code>MODER</code> = 10, AF2 · Arduino D10</td>
+<td><code>TIM4_CH1</code>, set automatically</td>
+<td>the only <code>TIM4_CH1</code> pin on this chip · AF2 · Arduino D10</td>
 </tr>
 <tr class="even">
 <td>TIM4 Channel1</td>
@@ -819,8 +816,8 @@ One PWM signal on PB6. Channel 1 in direct mode captures each rising edge into C
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a></a>HAL_TIM_IC_Start_IT<span class="op">(&amp;</span>htim4<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span>   <span class="co">// rising, direct</span></span>
-<span id="cb2-2"><a></a>HAL_TIM_IC_Start_IT<span class="op">(&amp;</span>htim4<span class="op">,</span> TIM_CHANNEL_2<span class="op">);</span>   <span class="co">// falling, indirect</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a></a>HAL_TIM_IC_Start_IT<span class="op">(&amp;</span>htim4<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span>   <span class="co">// rising, direct: interrupt</span></span>
+<span id="cb2-2"><a></a>HAL_TIM_IC_Start<span class="op">(&amp;</span>htim4<span class="op">,</span> TIM_CHANNEL_2<span class="op">);</span>      <span class="co">// falling, indirect: capture only</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="relationship-strip">
 <p>Lab wiring: one jumper from PA5 (D13, the PWM output) to PB6 (D10, the capture input). The board measures its own signal.</p>
 </div>
