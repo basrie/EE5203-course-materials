@@ -4966,13 +4966,12 @@ pre { font-size: 8.7pt; }
 <ol type="1">
 <li><p><strong>In <code>USER CODE BEGIN PV</code></strong>, the millisecond counter, as in Lab 6:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint32_t</span> g_ms <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p><strong>In <code>USER CODE BEGIN 4</code></strong>, the tick callback, as in Lab 6:</p>
+<li><p><strong>In <code>USER CODE BEGIN 4</code></strong>, the tick callback:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_TIM_PeriodElapsedCallback<span class="op">(</span>TIM_HandleTypeDef <span class="op">*</span>htim<span class="op">)</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>htim<span class="op">-&gt;</span>Instance <span class="op">==</span> TIM2<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        g_ms<span class="op">++;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    g_ms<span class="op">++;</span>                               <span class="co">/* TIM2 update: every 1 ms */</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Every callback in this lab has exactly one source, so none of them checks which timer or pin called it. A second timer or button would need that check.</p></li>
 <li><p><strong>In <code>USER CODE BEGIN 2</code></strong>, start both jobs and set the duty:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>HAL_TIM_Base_Start_IT<span class="op">(&amp;</span>htim2<span class="op">);</span>                      <span class="co">/* 1 ms tick: g_ms   */</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>HAL_TIM_PWM_Start<span class="op">(&amp;</span>htim2<span class="op">,</span> TIM_CHANNEL_1<span class="op">);</span>           <span class="co">/* PWM on PA5 (LD2)  */</span></span>
@@ -4992,8 +4991,8 @@ pre { font-size: 8.7pt; }
 <li><p><strong>In <code>USER CODE BEGIN 4</code></strong>, next to the tick callback, the button callback:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>GPIO_Pin <span class="op">==</span> GPIO_PIN_13 <span class="op">&amp;&amp;</span> <span class="op">(</span>g_ms <span class="op">-</span> last_press_ms<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">50</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        last_press_ms <span class="op">=</span> g_ms<span class="op">;</span>         <span class="co">/* B1: one press per 50 ms */</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">((</span>g_ms <span class="op">-</span> last_press_ms<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">50</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span>  <span class="co">/* B1: one press per 50 ms */</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        last_press_ms <span class="op">=</span> g_ms<span class="op">;</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        button_event <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
