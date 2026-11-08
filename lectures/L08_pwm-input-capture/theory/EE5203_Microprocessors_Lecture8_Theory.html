@@ -420,7 +420,7 @@ One TIM2 channel drawn as a pipeline. The time base feeds a comparator that asks
 </div>
 <div class="spot-card dense">
 <div class="spot-head">HAL_TIM_MspPostInit() <em>generated in stm32f4xx_hal_msp.c</em></div>
-<pre><code><span class="spot-row spot g1 fragment custom" data-fragment-index="1">GPIO_InitStruct.Pin       = GPIO_PIN_5;<span class="spot-n">1</span></span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">GPIO_InitStruct.Mode      = <span class="tk-tim">GPIO_MODE_AF_PP</span>;</span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">GPIO_InitStruct.Alternate = <span class="tk-tim">GPIO_AF1_TIM2</span>;</span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">HAL_GPIO_Init(GPIOA, &amp;GPIO_InitStruct);</span></code></pre>
+<pre><code><span class="spot-row spot g1 fragment custom" data-fragment-index="1">__HAL_RCC_GPIOA_CLK_ENABLE();</span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">GPIO_InitStruct.Pin       = GPIO_PIN_5;<span class="spot-n">1</span></span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">GPIO_InitStruct.Mode      = <span class="tk-tim">GPIO_MODE_AF_PP</span>;</span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">GPIO_InitStruct.Alternate = <span class="tk-tim">GPIO_AF1_TIM2</span>;</span><span class="spot-row spot g1 fragment custom" data-fragment-index="1">HAL_GPIO_Init(GPIOA, &amp;GPIO_InitStruct);</span></code></pre>
 </div>
 </div>
 </div>
@@ -453,7 +453,7 @@ The counter sawtooth over four PWM periods with CCR1 at 250 and the pin high 25 
 </div>
 <div class="spot-grid flow-svg narrow">
 <!-- svg:breathe-flow -->
-<svg class="story-visual" viewbox="0 0 640 580" role="img" aria-labelledby="bf-title">
+<svg class="story-visual" viewbox="86 8 480 560" role="img" aria-labelledby="bf-title">
 <title id="bf-title">Flowchart of the brightness-level loop: start PWM, do other work, test whether B1 was pressed (button_event); if not, go back to other work; if yes, clear button_event, move idx to the next level, write level[idx] into TIM2 CCR1, and go back to other work.</title>
 <defs><marker id="bf-ah" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2b789f"></path></marker></defs>
 <g class="spot">
@@ -468,8 +468,8 @@ The counter sawtooth over four PWM periods with CCR1 at 250 and the pin high 25 
 <polygon points="320,208 490,268 320,328 150,268" fill="#ffffff" stroke="#174f73" stroke-width="3"></polygon>
 <text x="320" y="262" text-anchor="middle" fill="#174f73" font-size="23" font-weight="700" font-family="Quicksand, system-ui, sans-serif">B1 pressed?</text>
 <text x="320" y="290" text-anchor="middle" fill="#174f73" font-size="22" font-weight="700" font-family="ui-monospace, Menlo, monospace">button_event</text>
-<path d="M490 268 H580 V142 H506" fill="none" stroke="#2b789f" stroke-width="3.5" stroke-linejoin="round" stroke-dasharray="9 7" marker-end="url(#bf-ah)"></path>
-<text x="538" y="256" text-anchor="start" fill="#5a6b76" font-size="23" font-weight="400" font-family="Quicksand, system-ui, sans-serif">no</text>
+<path d="M490 268 H560 V142 H506" fill="none" stroke="#2b789f" stroke-width="3.5" stroke-linejoin="round" stroke-dasharray="9 7" marker-end="url(#bf-ah)"></path>
+<text x="516" y="256" text-anchor="start" fill="#5a6b76" font-size="23" font-weight="400" font-family="Quicksand, system-ui, sans-serif">no</text>
 </g>
 <g class="fragment custom spot g2" data-fragment-index="2">
 <line x1="320.0" y1="328.0" x2="320.0" y2="362.0" stroke="#3f7f58" stroke-width="4" stroke-linecap="round" marker-end="url(#bf-ah)"></line>
@@ -482,7 +482,7 @@ The counter sawtooth over four PWM periods with CCR1 at 250 and the pin high 25 
 <line x1="320.0" y1="460.0" x2="320.0" y2="494.0" stroke="#3f7f58" stroke-width="4" stroke-linecap="round" marker-end="url(#bf-ah)"></line>
 <rect x="140.0" y="500.0" width="360.0" height="62.0" rx="10" fill="#fff7ed" stroke="#d47b28" stroke-width="3"></rect>
 <text x="320" y="540" text-anchor="middle" fill="#b8621a" font-size="25" font-weight="700" font-family="ui-monospace, Menlo, monospace">CCR1 = level[idx]</text>
-<path d="M140 531 H70 V142 H134" fill="none" stroke="#2b789f" stroke-width="3.5" stroke-linejoin="round" stroke-dasharray="9 7" marker-end="url(#bf-ah)"></path>
+<path d="M140 531 H92 V142 H134" fill="none" stroke="#2b789f" stroke-width="3.5" stroke-linejoin="round" stroke-dasharray="9 7" marker-end="url(#bf-ah)"></path>
 </g>
 </svg>
 <!-- /svg:breathe-flow -->
@@ -553,8 +553,10 @@ Left: a hobby servo seen from above, a dark case with a mounting tab at each end
 </section>
 <section id="pulse-width-sets-the-servo-angle" class="slide level2">
 <h2>Pulse width sets the servo angle</h2>
-<div class="formula-line">
-<p>PSC = 15 → 1 µs · ARR = 19999 → 20 ms, 50 Hz · CCR = pulse width (the high time) in µs</p>
+<div class="reg-chips">
+<div class="reg-chip"><code>PSC = 15</code><span>1 µs per count</span></div>
+<div class="reg-chip frame"><code>ARR = 19999</code><span>20 ms frame · 50 Hz</span></div>
+<div class="reg-chip pulse"><code>CCR1 = 1000…2000</code><span>pulse width (high time) in µs</span></div>
 </div>
 <!-- svg:servo -->
 <svg class="story-visual" viewbox="0 0 1440 480" style="max-height:440px" role="img" aria-labelledby="servo-title">
