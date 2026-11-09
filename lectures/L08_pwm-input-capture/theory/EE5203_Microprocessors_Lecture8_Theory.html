@@ -549,7 +549,7 @@ One TIM2 counter sawtooth with four dashed compare levels, CCR1 to CCR4 at 250, 
 <section id="a-servo-turns-to-a-set-angle" class="slide level2">
 <h2>A servo turns to a set angle</h2>
 <div class="lead-line">
-<p>A hobby servo is a small motor in a box. It turns its arm, the horn, to an angle between 0° and 180°. Then it holds that angle.</p>
+<p>A hobby servo is a small motor in a box. It turns its arm, the horn, to a set angle. Then it holds that angle. Most hobby servos turn up to about 180°.</p>
 </div>
 <!-- svg:servo-intro -->
 <svg class="story-visual" viewbox="0 0 1440 420" style="max-height:460px" role="img" aria-labelledby="servo-intro-title">
@@ -579,12 +579,12 @@ Three servo signals with a 20 millisecond frame. A 1.0 millisecond pulse holds t
 </svg>
 <!-- /svg:servo -->
 <div class="relationship-strip">
-<p>Keep <code>CCR</code> inside 1000–2000: outside that range a hobby servo pushes against its end stop. It holds the angle as long as the pulses keep coming.</p>
+<p>1000–2000 µs is the standard range, but many servos turn less than 180° in it. Test your servo to find its two end points, and keep <code>CCR</code> between them: past an end point, the servo pushes against its stop.</p>
 </div>
 </section>
 <section id="practice-set-a-servo-angle-with-ccr" class="slide level2">
 <h2>Practice: set a servo angle with CCR</h2>
-<p>A servo on TIM3 CH1 with <code>PSC = 15</code> and <code>ARR = 19999</code>: 1000 µs is 0°, 2000 µs is 180°.</p>
+<p>A servo on TIM3 CH1 with <code>PSC = 15</code> and <code>ARR = 19999</code>. Use the standard model: 1000 µs is 0°, 2000 µs is 180°.</p>
 <div class="prompt-list compact-prompts">
 <div class="prompt-item">
 <p><span>1</span> Which <code>CCR1</code> value sets 45°?</p>
@@ -597,7 +597,7 @@ Three servo signals with a 20 millisecond frame. A 1.0 millisecond pulse holds t
 </div>
 </div>
 <div class="fragment relationship-strip">
-<p>45° is a quarter of 180°: 1000 + 0.25 × 1000 = <strong>1250</strong>. <strong>b</strong>: 2600 µs is outside the 1000–2000 range, so the servo pushes against its end stop. <strong>No</strong>: the channels of one timer share <code>ARR</code>, and the LED needs 1 kHz while the servo needs 50 Hz.</p>
+<p>45° is a quarter of 180°: 1000 + 0.25 × 1000 = <strong>1250</strong>. <strong>b</strong>: 2600 µs is past the end point of almost every servo, so it pushes against its stop. <strong>No</strong>: the channels of one timer share <code>ARR</code>, and the LED needs 1 kHz while the servo needs 50 Hz.</p>
 </div>
 </section>
 <section id="input-capture" class="slide level2 route-divider" data-background-color="#e8f2f7">

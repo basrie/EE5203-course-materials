@@ -5101,7 +5101,7 @@ Individual extension - Overcapture or a servo (optional, click)
 <p><strong>Optional.</strong> Open this only after Checkpoint D is shown and time remains. Pick one.</p>
 <ul>
 <li><strong>Overcapture.</strong> The timers keep counting while the debugger has stopped the CPU. Pause for a few seconds, Continue, pause again: <code>TIM4-&gt;SR</code> shows <code>CC1OF</code> set. Explain exactly which timestamp was lost, and why the callback could not read it.</li>
-<li><strong>Servo</strong> (if your kit has one). TIM3 CH1 on <strong>PA6 (D12)</strong>, <code>PSC</code> 15, <code>ARR</code> 19999: a 20 ms frame, 50 Hz. Wire the servo signal to D12, its power to 5V and GND. <code>CCR</code> is the pulse width in µs: command 1000, 1500 and 2000 (0°, 90°, 180°), and never go outside 1000–2000. Why can the servo not share TIM2?</li>
+<li><strong>Servo</strong> (if your kit has one). TIM3 CH1 on <strong>PA6 (D12)</strong>, <code>PSC</code> 15, <code>ARR</code> 19999: a 20 ms frame, 50 Hz. Wire the servo signal to D12, its power to 5V and GND. <code>CCR</code> is the pulse width in µs: command 1000, 1500 and 2000. 1500 is the middle; from 1000 to 2000 the horn often turns less than 180°. Then find your servo’s end points: move <code>CCR</code> in steps of 50 and stop when the servo buzzes. Why can the servo not share TIM2?</li>
 </ul>
 </div>
 </div>
