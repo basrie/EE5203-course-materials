@@ -44,3 +44,52 @@
 .reveal .reg-chip.pulse { background: #fff7ed; border-color: #f0d2b0; border-top-color: #d47b28; }
 .reveal .reg-chip.pulse code { color: #b8621a; }
 .reveal .reg-chip.pulse span { color: #8a4a12; }
+
+/* Worked calculation: question on the left, its calculation on the right */
+.reveal .calc-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr);
+  column-gap: 0.7em;
+  row-gap: 0.4em;
+  width: 96%;
+  margin: 0.45em auto 0.3em;
+}
+.reveal .calc-q,
+.reveal .calc-a {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  font-size: 0.76em;
+  line-height: 1.25;
+}
+.reveal .calc-q p,
+.reveal .calc-a p,
+.reveal .calc-check p { margin: 0; }
+.reveal .calc-q {
+  padding: 0.35em 0.4em;
+  border-left: 5px solid #8fb8cb;
+  color: #355262;
+}
+.reveal .calc-q p > span:first-child {
+  display: inline-block;
+  width: 1.7em;
+  color: #1682bd;
+  font-weight: 700;
+}
+.reveal .calc-a {
+  padding: 0.3em 0.7em;
+  border-radius: 10px;
+  background: #eef5f9;
+  color: #174f73;
+}
+.reveal .calc-check {
+  width: 96%;
+  margin: 0.55em auto 0;
+  box-sizing: border-box;
+  padding: 0.35em 0.7em;
+  border-left: 5px solid #3f7f58;
+  border-radius: 0 10px 10px 0;
+  background: #eef6f0;
+  color: #2b5a3e;
+  font-size: 0.76em;
+}

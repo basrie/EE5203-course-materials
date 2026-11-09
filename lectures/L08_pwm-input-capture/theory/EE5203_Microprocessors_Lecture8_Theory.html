@@ -6,8 +6,8 @@
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.43">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.42">
 
   <meta name="author" content="Basri Erdogan">
   <title>EE5203 Microprocessors</title>
@@ -355,22 +355,34 @@ Top: the TIM2 counter as a sawtooth from 0 to ARR 999, three periods. A dashed o
 <section id="practice-choose-psc-arr-and-ccr-for-2-khz" class="slide level2">
 <h2>Practice: choose PSC, ARR and CCR for 2 kHz</h2>
 <p>Required: <strong>2 kHz</strong> PWM at <strong>30 %</strong> duty from the 16 MHz timer clock, keeping the 1 µs count.</p>
-<div class="prompt-list compact-prompts">
-<div class="prompt-item">
+<div class="calc-grid">
+<div class="calc-q">
 <p><span>1</span> What is <code>PSC</code>?</p>
 </div>
-<div class="prompt-item">
-<p><span>2</span> What is <code>ARR</code>? Write the period in µs first.</p>
+<div class="calc-a fragment">
+<p><span class="math inline">\(\dfrac{16\ \text{MHz}}{\text{PSC} + 1} = 1\ \text{MHz} \;\Rightarrow\; \text{PSC} + 1 = 16 \;\Rightarrow\; \textbf{PSC = 15}\)</span></p>
 </div>
-<div class="prompt-item">
+<div class="calc-q">
+<p><span>2</span> What is <code>ARR</code>?</p>
+</div>
+<div class="calc-a fragment">
+<p><span class="math inline">\(2000 = \dfrac{16\,000\,000}{(15 + 1)\,(\text{ARR} + 1)} \;\Rightarrow\; \text{ARR} + 1 = 500 \;\Rightarrow\; \textbf{ARR = 499}\)</span></p>
+</div>
+<div class="calc-q">
 <p><span>3</span> What is <code>CCR1</code>?</p>
 </div>
-<div class="prompt-item">
+<div class="calc-a fragment">
+<p><span class="math inline">\(\text{CCR1} = 0.30 \times (\text{ARR} + 1) = 0.30 \times 500 \;\Rightarrow\; \textbf{CCR1 = 150}\)</span></p>
+</div>
+<div class="calc-q">
 <p><span>4</span> Which <code>CCR1</code> value turns the pin fully on?</p>
 </div>
+<div class="calc-a fragment">
+<p><span class="math inline">\(\text{CCR1} = \text{ARR} + 1 = 500 \;\;(\text{or larger, never } 499)\)</span></p>
 </div>
-<div class="fragment relationship-strip">
-<p><code>PSC = 15</code> (1 µs per count) · period 500 µs, so <code>ARR = 499</code> · <code>CCR1 = 0.30 × 500 = 150</code> · fully on: <code>CCR1 = 500</code>, which is <code>ARR + 1</code>.</p>
+</div>
+<div class="calc-check fragment">
+<p><strong>Read it in µs:</strong> one count is 1 µs, so the period is 500 µs and the pin is HIGH for 150 µs of it.</p>
 </div>
 </section>
 <section id="pa5-becomes-a-timer-pin" class="slide level2">
@@ -416,7 +428,7 @@ One TIM2 channel drawn as a pipeline. The time base feeds a comparator that asks
 <div class="spot-stack">
 <div class="spot-card dense">
 <div class="spot-head">MX_TIM2_Init() <em>generated in main.c</em></div>
-<pre><code><span class="spot-row spot g3 fragment custom" data-fragment-index="3">htim2.Init.Prescaler = <span class="tk-blue">15</span>;     <span class="tk-dim">// 16 MHz -&gt; 1 MHz</span><span class="spot-n">3</span></span><span class="spot-row spot g3 fragment custom" data-fragment-index="3">htim2.Init.Period    = <span class="tk-blue">999</span>;    <span class="tk-dim">// 1 MHz -&gt; 1 kHz</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2"><span class="tk-navy">HAL_TIM_PWM_Init</span>(&amp;htim2);<span class="spot-n">2</span></span><span class="spot-row spot g4 fragment custom" data-fragment-index="4">sConfigOC.OCMode = <span class="tk-gpio">TIM_OCMODE_PWM1</span>;<span class="spot-n">4</span></span><span class="spot-row spot g4 fragment custom" data-fragment-index="4">sConfigOC.Pulse  = <span class="tk-gpio">0</span>;          <span class="tk-dim">// CCR1</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2"><span class="tk-navy">HAL_TIM_PWM_ConfigChannel</span>(&amp;htim2, &amp;sConfigOC,</span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">                          <span class="tk-navy">TIM_CHANNEL_1</span>);</span></code></pre>
+<pre><code><span class="spot-row spot g3 fragment custom" data-fragment-index="3">htim2.Init.Prescaler = <span class="tk-blue">15</span>;     <span class="tk-dim">// 16 MHz -&gt; 1 MHz</span><span class="spot-n">3</span></span><span class="spot-row spot g3 fragment custom" data-fragment-index="3">htim2.Init.Period    = <span class="tk-blue">999</span>;    <span class="tk-dim">// 1 MHz -&gt; 1 kHz</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2"><span class="tk-navy">HAL_TIM_PWM_Init</span>(&amp;htim2);<span class="spot-n">2</span></span><span class="spot-row spot g4 fragment custom" data-fragment-index="4">sConfigOC.OCMode = <span class="tk-gpio">TIM_OCMODE_PWM1</span>;<span class="spot-n">4</span></span><span class="spot-row spot g4 fragment custom" data-fragment-index="4">sConfigOC.Pulse  = <span class="tk-gpio">0</span>;          <span class="tk-dim">// CCR1</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2"><span class="tk-navy">HAL_TIM_PWM_ConfigChannel</span>(&amp;htim2, &amp;sConfigOC, <span class="tk-navy">TIM_CHANNEL_1</span>);</span></code></pre>
 </div>
 <div class="spot-card dense">
 <div class="spot-head">HAL_TIM_MspPostInit() <em>generated in stm32f4xx_hal_msp.c</em></div>
