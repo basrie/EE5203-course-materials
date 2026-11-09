@@ -748,22 +748,31 @@ A 16-bit counter sawtooth that climbs to 65535 and wraps to 0 after 65.5 millise
 <section id="practice-compute-a-period-from-two-captures" class="slide level2">
 <h2>Practice: compute a period from two captures</h2>
 <p>TIM4, <code>PSC = 15</code> (1 µs per count), rising edges. Two consecutive captures: <code>64000</code>, then <code>1500</code>.</p>
-<div class="prompt-list compact-prompts">
-<div class="prompt-item">
+<div class="calc-grid">
+<div class="calc-q">
 <p><span>1</span> What is the period in µs? Careful: 16 bits.</p>
 </div>
-<div class="prompt-item">
+<div class="calc-a fragment">
+<p><span class="math inline">\(\begin{aligned} \text{by hand:}\quad &amp; (65536 - 64000) + 1500 = 1536 + 1500 = \textbf{3036 µs} \\ \text{in C:}\quad &amp; (\texttt{uint16_t})(1500 - 64000) = -62500 + 65536 = \textbf{3036} \end{aligned}\)</span></p>
+</div>
+<div class="calc-q">
 <p><span>2</span> What is the frequency?</p>
 </div>
-<div class="prompt-item">
+<div class="calc-a fragment">
+<p><span class="math inline">\(f = \dfrac{1\,000\,000}{3036} \approx \textbf{329 Hz}\)</span></p>
+</div>
+<div class="calc-q">
 <p><span>3</span> What is the slowest signal TIM4 can measure at this count rate?</p>
 </div>
-<div class="prompt-item">
+<div class="calc-a fragment">
+<p><span class="math inline">\(\text{longest period} = 65\,535\ \mu\text{s} \;\Rightarrow\; f = \dfrac{1\,000\,000}{65\,535} \approx \textbf{15 Hz}\)</span></p>
+</div>
+<div class="calc-q">
 <p><span>4</span> Name two ways to measure a 2 Hz signal correctly.</p>
 </div>
+<div class="calc-a fragment">
+<p>The period is 500 000 µs: too long for 16 bits at 1 µs per count.<br><strong>a</strong> a 32-bit timer: <code>TIM2</code> or <code>TIM5</code><br><strong>b</strong> <code>PSC = 159</code>: 10 µs per count, up to 655 ms</p>
 </div>
-<div class="fragment relationship-strip">
-<p><code>(uint16_t)(1500 − 64000)</code> = 65536 − 64000 + 1500 = <strong>3036 µs</strong> · 1 000 000 ÷ 3036 ≈ <strong>329 Hz</strong> · periods up to 65 535 µs, about <strong>15 Hz</strong> · a 32-bit timer (<code>TIM2</code>, <code>TIM5</code>), or a slower count, for example <code>PSC = 159</code> (10 µs).</p>
 </div>
 </section>
 <section id="duty-cycle-needs-two-channels" class="slide level2">

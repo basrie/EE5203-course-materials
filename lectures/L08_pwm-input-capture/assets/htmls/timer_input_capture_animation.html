@@ -1,504 +1,641 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Timer Input Capture – Two Rising Edges</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Input Capture Timeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600;700&display=swap">
 <style>
-  :root { --fg:#0b1220; --muted:#5b6b7c; --accent:#1166ff; --accent2:#ff3b30; --ok:#1aa34a; --bg:#ffffff; --panel:#f5f7fb; }
-  body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,Segoe UI,Roboto,Helvetica,Arial}
-  header{padding:16px 20px;border-bottom:1px solid #e6e9f0;background:var(--panel)}
-  h1{margin:0 0 6px 0;font-size:22px}
-  .wrap{display:grid;grid-template-columns: 320px 1fr;gap:16px;padding:16px 20px}
-  .controls{background:#fff;border:1px solid #e6e9f0;border-radius:12px;padding:12px 14px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-  .controls h2{font-size:16px;margin:4px 0 10px;color:#223}
-  .row{display:grid;grid-template-columns: 1fr 110px;gap:10px;align-items:center;margin:6px 0}
-  .row label{font-size:14px;color:#233}
-  .row input[type=number]{width:100%;padding:6px 8px;border:1px solid #d9dfeb;border-radius:8px;font-size:14px}
-  .btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
-  button{cursor:pointer;border:1px solid #cfd7e6;background:#fff;border-radius:10px;padding:8px 12px;font-weight:600}
-  button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-  .canvasWrap{background:#fff;border:1px solid #e6e9f0;border-radius:12px;padding:10px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-  canvas{width:100%;height:520px;display:block}
-  .readout{display:grid;grid-template-columns: repeat(3,minmax(0,1fr));gap:12px;margin-top:10px}
-  .card{background:var(--panel);border:1px solid #e6e9f0;border-radius:10px;padding:10px}
-  .label{font-size:12px;color:var(--muted)}
-  .value{font-size:18px;font-weight:700;margin-top:2px}
-  .legend{display:flex;gap:16px;align-items:center;margin:8px 2px 0 2px;color:#233}
-  .dot{width:14px;height:4px;border-radius:2px;background:var(--accent);display:inline-block;margin-right:6px}
-  .dot.red{background:var(--accent2)}
-  .dot.gray{background:#8899aa}
-  .formula{font-size:14px;color:#223;margin-top:10px}
-  .small{font-size:12px;color:#566}
+  /* Light theme only (projector). Same palette as the L08 deck: PB6 green, CNT blue,
+     CCR1 / rising edge orange, CCR2 / falling edge purple. */
+  :root {
+    --bg: #f5f7f9;
+    --panel: #ffffff;
+    --ink: #173a52;
+    --muted: #5b6b77;
+    --line: #d9e1e7;
+    --grid: #e9eef2;
+    --pin: #3f7f58;
+    --pin-soft: #edf6f0;
+    --cnt: #2b789f;
+    --cnt-soft: #dcecf5;
+    --rise: #d47b28;
+    --rise-ink: #a85a17;
+    --rise-soft: #fbe9d6;
+    --fall: #7f77dd;
+    --fall-ink: #5a52b8;
+    --fall-soft: #ecebfa;
+    --bad: #b23a3a;
+    --bad-soft: #f7e1e1;
+    --ok: #3f7f58;
+    --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; font-variant-ligatures: none; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.45; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 40px; display: grid; gap: 16px; }
+  header { display: grid; gap: 4px; }
+  h1 { font-size: clamp(1.5rem, 2.6vw, 2.1rem); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+  .lede { margin: 0; color: var(--muted); max-width: 82ch; }
+  .lede strong, .lede code { color: var(--ink); }
+  code, .mono { font-family: var(--font-mono); font-size: 0.9em; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-width: 0; }
+  .label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+  .label + .label { margin-top: 14px; }
+
+  /* controls */
+  .controls { display: grid; gap: 12px; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; }
+  .btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  button { font: inherit; font-weight: 700; border-radius: 8px; border: 1.5px solid var(--line); background: var(--panel); color: var(--ink); padding: 9px 16px; cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button.primary { background: var(--cnt); border-color: var(--cnt); color: #fff; min-width: 7.5rem; }
+  button.small { font-size: 0.85rem; padding: 6px 12px; }
+  button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--cnt); outline-offset: 2px; }
+  .field { display: inline-flex; gap: 8px; align-items: center; }
+  .field > span { color: var(--muted); font-weight: 700; font-size: 0.92rem; }
+  select { font: inherit; padding: 6px 8px; border: 1.5px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); }
+  input[type=range] { width: 150px; accent-color: var(--cnt); }
+  output { font-family: var(--font-mono); font-weight: 700; min-width: 3.2em; display: inline-block; }
+  .toggles { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  .toggles label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+  .toggles input { width: 1.1rem; height: 1.1rem; accent-color: var(--cnt); }
+  .toggles label.busy input { accent-color: var(--bad); }
+  .hint { color: var(--muted); font-size: 0.88rem; margin: 0; }
+  kbd { font-family: var(--font-mono); font-size: 0.82em; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: var(--bg); }
+
+  /* scope */
+  .scope-box { overflow-x: auto; }
+  .scope-box svg { display: block; min-width: 760px; width: 100%; height: auto; }
+  svg text { font-family: var(--font-body); }
+  svg .mono { font-family: var(--font-mono); }
+  svg .halo { paint-order: stroke; stroke: #fff; stroke-width: 6px; stroke-linejoin: round; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
+  .sw { display: inline-block; width: 0.95em; height: 0.95em; border-radius: 50%; vertical-align: -0.12em; margin-right: 6px; border: 2.5px solid; }
+  .status { min-height: 3em; margin: 10px 0 0; font-weight: 700; }
+
+  /* bench */
+  .bench { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 16px; align-items: start; }
+  @media (max-width: 900px) { .bench { grid-template-columns: minmax(0, 1fr); } }
+  .regs { display: grid; gap: 8px; }
+  .reg { display: grid; grid-template-columns: 9.5em 1fr auto; align-items: center; gap: 10px; border: 1.5px solid var(--line); border-radius: 8px; padding: 8px 12px; transition: background-color .5s, border-color .5s; }
+  .reg .rn { font-family: var(--font-mono); font-weight: 700; font-size: 0.92rem; }
+  .reg .rv { font-family: var(--font-mono); font-weight: 700; font-size: 1.45rem; font-variant-numeric: tabular-nums; text-align: right; }
+  .reg .rd { color: var(--muted); font-size: 0.82rem; width: 7.5em; }
+  .reg.cnt .rv { color: var(--cnt); }
+  .reg.r1 .rv { color: var(--rise-ink); }
+  .reg.r2 .rv { color: var(--fall-ink); }
+  .reg.r1.hot { background: var(--rise-soft); border-color: var(--rise); transition: none; }
+  .reg.r2.hot { background: var(--fall-soft); border-color: var(--fall); transition: none; }
+  .flags { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .flag { font-family: var(--font-mono); font-weight: 700; font-size: 0.9rem; border: 1.5px solid var(--line); border-radius: 6px; padding: 4px 10px; color: var(--muted); background: var(--bg); }
+  .flag b { font-weight: 700; margin-left: 6px; }
+  .flag.on { color: #fff; border-color: transparent; }
+  .flag.if.on { background: var(--cnt); }
+  .flag.of.on { background: var(--bad); }
+
+  pre.code { margin: 0; font-family: var(--font-mono); font-size: 0.86rem; line-height: 1.6; overflow-x: auto; }
+  .ln { display: block; padding: 0 8px; border-radius: 5px; border-left: 3px solid transparent; white-space: pre; }
+  .ln.setup { color: var(--muted); }
+  .ln.hit { background: var(--cnt-soft); border-left-color: var(--cnt); }
+  .ln .cm { color: var(--muted); }
+  .ln .r1 { color: var(--rise-ink); font-weight: 700; }
+  .ln .r2 { color: var(--fall-ink); font-weight: 700; }
+  .caller { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); margin: 6px 0 4px; padding-left: 11px; }
+  .caller.live { color: var(--cnt); font-weight: 700; }
+  .vars { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  @media (max-width: 560px) { .vars { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .var { border: 1.5px solid var(--line); border-radius: 8px; padding: 6px 10px; min-width: 0; }
+  .var .vn { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+  .var .vv { font-family: var(--font-mono); font-weight: 700; font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+  .var.hot { background: var(--cnt-soft); border-color: var(--cnt); }
+  .calc { font-family: var(--font-mono); font-size: 0.86rem; margin: 8px 0 0; min-height: 1.4em; overflow-wrap: anywhere; }
+  .result { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: var(--bg); align-items: baseline; }
+  .result .k { color: var(--muted); font-size: 0.88rem; font-weight: 700; }
+  .result .v { font-family: var(--font-mono); font-weight: 700; }
+  .result .v.bad { color: var(--bad); }
+  .result .v.good { color: var(--ok); }
+  .note { margin: 10px 0 0; padding: 8px 12px; border-radius: 8px; background: var(--bad-soft); color: #7a2525; font-size: 0.92rem; }
+  .note[hidden] { display: none; }
+
+  ol.log { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 0.92rem; }
+  ol.log li { display: grid; grid-template-columns: 6.5em 1fr; gap: 10px; padding: 3px 0; border-bottom: 1px solid var(--grid); }
+  ol.log time { font-family: var(--font-mono); color: var(--muted); font-size: 0.85rem; }
+  ol.log li.r b { color: var(--rise-ink); }
+  ol.log li.f b { color: var(--fall-ink); }
+  ol.log li.x { color: var(--bad); }
+  ol.log li.c b { color: var(--cnt); }
+  footer { color: var(--muted); font-size: 0.85rem; }
 </style>
 </head>
 <body>
+<div class="wrap">
   <header>
-    <h1>Timer Input Capture (Two Rising Edges → Δticks &amp; Δt)</h1>
-    <div class="legend">
-      <span><span class="dot"></span>Timer counter (sawtooth)</span>
-      <span><span class="dot red"></span>External input (rising edges capture)</span>
-      <span><span class="dot gray" style="background:repeating-linear-gradient(90deg,#8899aa 0 6px,transparent 6px 12px);height:6px"></span>
-        Captured CCR lines</span>
-    </div>
+    <h1>Input capture: the timer stamps each edge</h1>
+    <p class="lede">TIM4 counts once per microsecond (<code>PSC = 15</code>, <code>ARR = 65535</code>). When PB6 <strong>rises</strong>, the hardware copies <code>CNT</code> into <code>CCR1</code>. When PB6 <strong>falls</strong>, it copies <code>CNT</code> into <code>CCR2</code>. Your callback only subtracts. Time runs in slow motion.</p>
   </header>
 
-  <div class="wrap">
-    <div class="controls">
-      <h2>Parameters</h2>
-      <div class="row"><label>ARR (auto-reload)</label><input id="arr" type="number" step="1" min="10" value="9999"></div>
-      <div class="row"><label>PSC (prescaler)</label><input id="psc" type="number" step="1" min="0" value="83999"></div>
-      <div class="row"><label>Timer clock f<sub>CLK_PSC</sub> (Hz)</label><input id="fclk" type="number" step="100000" min="1000000" value="84000000"></div>
-      <div class="row"><label>Input period (ms)</label><input id="period" type="number" step="0.1" min="0.1" value="5000.0"></div>
-      <div class="row"><label>Pulse width (ms)</label><input id="pw" type="number" step="0.1" min="0.1" value="1000.0"></div>
+  <section class="panel controls" aria-label="Controls">
+    <div class="row">
       <div class="btns">
-        <button id="replay" class="primary">Replay</button>
-        <button id="pause">Pause</button>
-        <button id="runTests" title="Log checks to console">Run tests</button>
+        <button id="play" class="primary" type="button">Play</button>
+        <button id="step" type="button" title="Jump to the next edge, or run the next line of the callback">Step</button>
+        <button id="reset" type="button">Reset</button>
       </div>
-      <p class="small">Tip: Use ARR=999, rising edges ~3.6&nbsp;ms &amp; 9&nbsp;ms apart to get CCR≈300 and CCR≈750 (Δ=450 ticks) like your slide.</p>
-      <div class="formula">
-        f<sub>CLK_CNT</sub> = f<sub>CLK_PSC</sub> / (PSC+1)
-        <br/>Δt = Δticks / f<sub>CLK_CNT</sub>
-      </div>
+      <label class="field"><span>Signal on PB6</span>
+        <select id="freq">
+          <option value="500">500 Hz</option>
+          <option value="250">250 Hz</option>
+          <option value="100" selected>100 Hz</option>
+          <option value="50">50 Hz</option>
+          <option value="10">10 Hz (slow)</option>
+        </select>
+      </label>
+      <label class="field"><span>Duty</span>
+        <input id="duty" type="range" min="10" max="90" step="5" value="30">
+        <output id="dutyOut">30 %</output>
+      </label>
+      <label class="field"><span>Speed</span>
+        <select id="speed">
+          <option value="2000">2 ms per second</option>
+          <option value="5000" selected>5 ms per second</option>
+          <option value="20000">20 ms per second</option>
+          <option value="50000">50 ms per second</option>
+        </select>
+      </label>
     </div>
+    <div class="toggles">
+      <label><input id="stepCode" type="checkbox" checked> Show the callback line by line</label>
+      <label class="busy"><input id="busy" type="checkbox"> CPU busy: the capture interrupt has to wait</label>
+    </div>
+    <p class="hint">Keys: <kbd>Space</kbd> play / pause · <kbd>→</kbd> step · <kbd>R</kbd> reset. Changing the signal starts again from 0.</p>
+  </section>
 
-    <div class="canvasWrap">
-      <canvas id="cv" width="1400" height="520"></canvas>
-      <div class="readout">
-        <div class="card"><div class="label">CCR₁ (previous rising)</div><div id="ccr1" class="value">—</div></div>
-        <div class="card"><div class="label">CCR₂ (latest rising)</div><div id="ccr2" class="value">—</div></div>
-        <div class="card"><div class="label">Δticks / Δt / f</div><div id="delta" class="value">—</div></div>
-      </div>
+  <section class="panel" aria-label="Logic analyzer">
+    <p class="label">PB6 and the TIM4 counter, on one time axis</p>
+    <div class="scope-box">
+      <svg id="scope" viewBox="0 0 1200 440" role="img" aria-labelledby="scope-title">
+        <title id="scope-title">Top lane: the signal on PB6. Bottom lane: TIM4 CNT rising one count per microsecond from 0 to 65535 and wrapping. At each rising edge the counter value is copied into CCR1, at each falling edge into CCR2.</title>
+      </svg>
     </div>
+    <div class="legend">
+      <span><span class="sw" style="border-color:var(--rise)"></span>rising edge → <code>CCR1</code></span>
+      <span><span class="sw" style="border-color:var(--fall)"></span>falling edge → <code>CCR2</code></span>
+      <span>hollow: not read yet · filled: read by the callback · <span style="color:var(--bad);font-weight:700">✕</span> overwritten before it was read</span>
+      <span><span style="color:var(--cnt);font-weight:700">▲</span> callback ran</span>
+    </div>
+    <p id="status" class="status" aria-live="polite"></p>
+  </section>
+
+  <div class="bench">
+    <section class="panel" aria-label="TIM4 registers">
+      <p class="label">TIM4 registers (what the SFR view shows)</p>
+      <div class="regs">
+        <div class="reg cnt"><span class="rn">TIM4-&gt;CNT</span><span class="rv" id="v-cnt">0</span><span class="rd">counts 1 per µs</span></div>
+        <div class="reg r1" id="r-ccr1"><span class="rn">TIM4-&gt;CCR1</span><span class="rv" id="v-ccr1">0</span><span class="rd">last rising edge</span></div>
+        <div class="reg r2" id="r-ccr2"><span class="rn">TIM4-&gt;CCR2</span><span class="rv" id="v-ccr2">0</span><span class="rd">last falling edge</span></div>
+      </div>
+      <p class="label">TIM4-&gt;SR flags</p>
+      <div class="flags">
+        <span class="flag if" id="f-cc1if">CC1IF<b>0</b></span>
+        <span class="flag of" id="f-cc1of">CC1OF<b>0</b></span>
+        <span class="flag if" id="f-cc2if">CC2IF<b>0</b></span>
+        <span class="flag of" id="f-cc2of">CC2OF<b>0</b></span>
+        <button id="clearOF" class="small" type="button" title="TIM4->SR = ~(TIM_SR_CC1OF | TIM_SR_CC2OF);">Clear the OF flags</button>
+      </div>
+      <p class="hint" style="margin-top:8px"><code>CCxIF = 1</code>: a new capture waits in <code>CCRx</code>. Reading <code>CCRx</code> clears it. <code>CCxOF = 1</code>: a new edge overwrote a capture that nobody had read. The HAL does not clear <code>CCxOF</code>; your code has to.</p>
+    </section>
+
+    <section class="panel" aria-label="Callback">
+      <p class="label">Your code</p>
+      <pre class="code" id="code"></pre>
+      <p class="caller" id="caller">TIM4_IRQHandler() → HAL_TIM_IRQHandler(): clears CC1IF, then calls ↓</p>
+      <pre class="code" id="cbcode"></pre>
+      <p class="label" style="margin-top:14px">Variables</p>
+      <div class="vars">
+        <div class="var" id="w-now"><div class="vn">now</div><div class="vv" id="v-now">–</div></div>
+        <div class="var" id="w-last"><div class="vn">last</div><div class="vv" id="v-last">0</div></div>
+        <div class="var" id="w-period"><div class="vn">period_us</div><div class="vv" id="v-period">–</div></div>
+        <div class="var" id="w-high"><div class="vn">high_us</div><div class="vv" id="v-high">–</div></div>
+      </div>
+      <p class="calc" id="calc-p"></p>
+      <p class="calc" id="calc-h"></p>
+      <div class="result">
+        <span class="k">measured</span><span class="v" id="measured">–</span>
+        <span class="k">signal on PB6</span><span class="v" id="truth">–</span>
+      </div>
+      <p class="note" id="note" hidden></p>
+    </section>
   </div>
+
+  <section class="panel" aria-label="Event log">
+    <p class="label">What happened, newest first</p>
+    <ol class="log" id="log"></ol>
+  </section>
+
+  <footer>EE5203 Microprocessors · L08 PWM and input capture · Same set-up as Lab 7: TIM4 CH1 direct (rising, interrupt), CH2 indirect (falling, no interrupt), both on PB6.</footer>
+</div>
 
 <script>
 (() => {
-  const canvas = document.getElementById('cv');
-  const ctx = canvas.getContext('2d');
+  "use strict";
+  const MOD = 65536;            // 16-bit counter, ARR = 65535
+  const PHI = 2450;             // first rising edge at 2450 µs, as on the slide
+  const LINE_MS = 900;          // real time per callback line when stepping
+  const $ = id => document.getElementById(id);
 
-  // UI elements
-  const el = id => document.getElementById(id);
-  const ARR   = el('arr');
-  const PSC   = el('psc');
-  const FCLK  = el('fclk');
-  const PERIOD= el('period');
-  const PW    = el('pw');
-  const CCR1o = el('ccr1');
-  const CCR2o = el('ccr2');
-  const DELTAo= el('delta');
-  const replayBtn = el('replay');
-  const pauseBtn  = el('pause');
-  const testsBtn  = el('runTests');
+  const SETUP = [
+    ['setup', 'HAL_TIM_IC_Start_IT(&amp;htim4, TIM_CHANNEL_1);   <span class="cm">// rising: interrupt</span>'],
+    ['setup', 'HAL_TIM_IC_Start(&amp;htim4, TIM_CHANNEL_2);      <span class="cm">// falling: no interrupt</span>'],
+  ];
+  const CB = [
+    'void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)',
+    '{',
+    '    uint16_t now = TIM4-&gt;<span class="r1">CCR1</span>;                  <span class="cm">// this rising edge</span>',
+    '    period_us = (uint16_t)(now - last);         <span class="cm">// rising to rising</span>',
+    '    high_us   = (uint16_t)(TIM4-&gt;<span class="r2">CCR2</span> - last);  <span class="cm">// rising to falling</span>',
+    '    last = now;',
+    '}',
+  ];
+  $('code').innerHTML = SETUP.map(([c, h]) => `<span class="ln ${c}">${h}</span>`).join('');
+  $('cbcode').innerHTML = CB.map((h, i) => `<span class="ln" data-i="${i}">${h}</span>`).join('');
+  const cbLines = [...$('cbcode').querySelectorAll('.ln')];
 
-  // Plot layout
-  const P = {l:70, r:20, t:20, b:60};
-  const HEAD_CAP = 0.50; // park the "now" line at 50% of the width after fill
-  const W = () => canvas.width - P.l - P.r;
-  const H = () => canvas.height - P.t - P.b;
-  const y0 = () => P.t + H();
+  const S = { f: 100, duty: 30, speed: 5000, stepCode: true, busy: false, running: false };
 
-  // Pretty Hz formatter for on-canvas readout
-  function fmtHz(hz){
-    if (!Number.isFinite(hz)) return '—';
-    const units = [ ['Hz',1], ['kHz',1e3], ['MHz',1e6] ];
-    for (let i=units.length-1;i>=0;i--){
-      const [u, s] = units[i];
-      if (hz >= s) return `${(hz/s).toFixed(hz/s >= 100 ? 0 : hz/s >= 10 ? 1 : 2)} ${u}`;
+  const per = () => 1e6 / S.f;
+  const highT = () => per() * S.duty / 100;
+  const cntAt = t => Math.floor(t) % MOD;
+  const riseAt = k => PHI + k * per();
+  const fallAt = k => riseAt(k) + highT();
+  const ms = t => (t / 1000).toFixed(3) + ' ms';
+
+  function reset() {
+    Object.assign(S, {
+      t: 0, kr: 0, kf: 0,
+      CCR1: 0, CCR2: 0, cc1if: 0, cc1of: 0, cc2if: 0, cc2of: 0,
+      now: null, last: 0, period: null, high: null,
+      cbCount: 0, pending: false, cb: null, lostSinceRead: false,
+      caps: [], reads: [], log: [], hot: {}, calcP: '', calcH: '',
+    });
+    setStatus('TIM4 counts from 0, one count per µs. Press Play, or Step to jump to the next edge.');
+    render();
+  }
+
+  function setStatus(s) { S.status = s; }
+  function log(cls, html) { S.log.unshift({ t: S.t, cls, html }); if (S.log.length > 9) S.log.pop(); }
+  function heat(name) { S.hot[name] = performance.now(); }
+
+  function markLost(type) {
+    for (let i = S.caps.length - 1; i >= 0; i--) {
+      const c = S.caps[i];
+      if (c.type === type && !c.read && !c.lost) { c.lost = true; return c; }
     }
-    return `${hz.toFixed(0)} Hz`;
+    return null;
   }
 
-  // Sim & capture state
-  let running = true;
-  let t0 = performance.now();
-  let sim = null;
-
-  function resetSim(){
-    const arr = +ARR.value|0;
-    const psc = +PSC.value|0;
-    const fclk = +FCLK.value;
-    const per_ms = +PERIOD.value;
-    const pw_ms = Math.max(0.05, Math.min(+PW.value, per_ms*0.8));
-
-    const f_cnt = fclk / (psc + 1);
-    const tickPeriod = 1 / f_cnt; // seconds per tick
-
-    sim = {
-      arr, psc, fclk, f_cnt, tickPeriod,
-      per: per_ms/1000, pw: pw_ms/1000,
-      t: 0,            // simulation time (s)
-      ccrs: [],        // rolling window (prev, latest)
-      phase0: 0,       // absolute-time phase to make pulses start near right edge
-      nextRise: 0,
-      nextFall: 0,
-      justCapturedY: undefined,
-      cntPhase0: 0     // counter phase offset (seconds) so CNT starts near ARR
-    };
-
-    // reset UI readouts
-    CCR1o.textContent = '—';
-    CCR2o.textContent = '—';
-    DELTAo.textContent = '—';
-
-    // align the first rising edge with the "now" position
-    sim.phase0 = 0;            // tr = 0 at head
-    sim.nextRise = 0;          // first capture at t=0 if running
-    sim.nextFall = sim.nextRise + sim.pw;
-
-    // set counter initial phase so CNT(0) ≈ floor(0.9*(ARR+1))
-    const startFrac = 0.90; // 90% of period
-    sim.cntPhase0 = startFrac * (sim.arr + 1) * sim.tickPeriod;
-  }
-
-  function togglePause(){
-    running = !running;
-    pauseBtn.textContent = running ? 'Pause' : 'Resume';
-    t0 = performance.now();
-    requestAnimationFrame(loop);
-  }
-
-  replayBtn.onclick = () => { resetSim(); };
-  pauseBtn.onclick  = () => { togglePause(); };
-  testsBtn.onclick  = () => { runTests(); resetSim(); };
-
-  function yFor(counter) {
-    const frac = counter / sim.arr; // 0..1
-    return y0() - frac * H();
-  }
-
-  // === Time windows ===
-  function spanSec(){
-    return Math.max(sim.per*2.0, (sim.arr+1)*sim.tickPeriod*1.2);
-  }
-  function windowTimes(){
-    const span = spanSec();
-    const headRatio = Math.min(HEAD_CAP, sim.t/span); // fill until HEAD_CAP, then park
-    let tStart = sim.t - headRatio*span;
-    if (tStart < 0) tStart = 0; // avoid negative absolute time
-    const tEnd = tStart + span;
-    return {tStart, tEnd, headRatio};
-  }
-
-  // Map absolute time → x for the COUNTER (left-fill then mid-scroll)
-  function xForCounterTime(tAbs){
-    const {tStart, tEnd} = windowTimes();
-    const span = (tEnd - tStart);
-    return P.l + ((tAbs - tStart) / span) * W();
-  }
-
-  // Map absolute time → x for the INPUT (always approaches the counter head from the right)
-  function xForInputTime(tAbs){
-    const span = spanSec();
-    const {headRatio:r} = windowTimes(); // r in [0, HEAD_CAP]
-    const tStart2 = sim.t - span*r;           // place "now" at x = r*W()
-    const tEnd2   = sim.t + span*(1 - r);     // right edge
-    return P.l + ((tAbs - tStart2) / (tEnd2 - tStart2)) * W();
-  }
-
-  function drawAxes() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.strokeStyle = '#d5dbea';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(P.l, P.t, W(), H());
-    ctx.fillStyle = '#334';
-    ctx.font = '16px system-ui';
-    ctx.fillText('Timer counter', 10, 22);
-    ctx.fillText('t →', P.l + W() - 30, y0() + 40);
-
-    // Show counter clock frequency on the canvas
-    ctx.fillStyle = '#55637a';
-    ctx.font = '14px system-ui';
-    ctx.fillText(`f_CLK_CNT = ${fmtHz(sim.f_cnt)}`, P.l + 8, P.t + 16);
-
-    // ARR dashed line
-    const yARR = yFor(sim.arr);
-    ctx.save();
-    ctx.setLineDash([8,8]);
-    ctx.beginPath();
-    ctx.moveTo(P.l, yARR);
-    ctx.lineTo(P.l + W(), yARR);
-    ctx.strokeStyle = '#8899aa';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.fillStyle = '#445';
-    ctx.fillText(`ARR = ${sim.arr}`, P.l + 8, yARR - 6);
-    ctx.restore();
-
-    // Draw a NOW line at the head position to clarify capture location
-    const {headRatio} = windowTimes();
-    const headX = P.l + W()*headRatio;
-    ctx.save();
-    ctx.setLineDash([4,6]);
-    ctx.strokeStyle = '#9aa7bd';
-    ctx.beginPath(); ctx.moveTo(headX, P.t); ctx.lineTo(headX, P.t+H()); ctx.stroke();
-    ctx.restore();
-    ctx.fillStyle = '#566';
-    ctx.font = '12px system-ui';
-    ctx.fillText('now', headX + 6, P.t + 14);
-  }
-
-  // Build the counter polyline so tests can check it doesn't draw past the head.
-  function getCounterPolyline(){
-    const arrT = (sim.arr+1)*sim.tickPeriod;
-    const {tStart, tEnd, headRatio} = windowTimes();
-    const span = (tEnd - tStart);
-    const steps = Math.floor(W()/3);
-    const headXLimit = P.l + W()*headRatio;
-    const pts = [];
-    for(let i=0;i<=steps;i++){
-      const s = i/steps;
-      const tAbs = tStart + s*span;
-      const x = xForCounterTime(tAbs);
-      if (x > headXLimit) break; // never draw beyond head
-      const phase = (((tAbs + sim.cntPhase0) % arrT) + arrT) % arrT;
-      const cnt = Math.floor(phase / sim.tickPeriod);
-      const y = yFor(cnt);
-      pts.push({x,y});
+  function onEdge(type, te) {
+    const val = cntAt(te);
+    if (type === 'rise') {
+      let lost = null;
+      if (S.cc1if) { lost = markLost('rise'); S.cc1of = 1; S.lostSinceRead = true; }
+      S.CCR1 = val; S.cc1if = 1; heat('ccr1');
+      S.caps.push({ type, t: te, val, read: false, lost: false });
+      if (lost) {
+        log('x', `Rising edge: <b>CCR1 = ${val}</b> overwrote ${lost.val}, which was never read. <b>CC1OF = 1</b>.`);
+        setStatus(`Rising edge at ${ms(te)}, but the callback has not read CCR1 yet. The hardware overwrote ${lost.val} with ${val} and set CC1OF. Timestamp ${lost.val} is lost.`);
+      } else {
+        log('r', `Rising edge: hardware copies CNT → <b>CCR1 = ${val}</b>, sets CC1IF.`);
+        setStatus(`Rising edge at ${ms(te)}: the hardware copied CNT = ${val} into CCR1 and set CC1IF. No code has run yet, and the timestamp is already exact.`);
+      }
+      S.pending = true;
+      if (!S.busy) startCallback();
+    } else {
+      let lost = null;
+      if (S.cc2if) { lost = markLost('fall'); S.cc2of = 1; }
+      S.CCR2 = val; S.cc2if = 1; heat('ccr2');
+      S.caps.push({ type, t: te, val, read: false, lost: false });
+      if (lost) {
+        log('x', `Falling edge: <b>CCR2 = ${val}</b> overwrote ${lost.val}. <b>CC2OF = 1</b>.`);
+      } else {
+        log('f', `Falling edge: hardware copies CNT → <b>CCR2 = ${val}</b>, sets CC2IF. Channel 2 has no interrupt: nothing runs.`);
+      }
+      setStatus(`Falling edge at ${ms(te)}: the hardware copied CNT = ${val} into CCR2. Channel 2 has no interrupt, so no code runs. CCR2 waits for the next callback.`);
     }
-    return pts;
   }
 
-  function drawCounterRamp(){
-    const pts = getCounterPolyline();
-    if (pts.length === 0) return;
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-    ctx.beginPath();
-    ctx.moveTo(pts[0].x, pts[0].y);
-    for (let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
-    ctx.stroke();
+  // Callback phases when shown line by line:
+  //   0: the hardware copy has just happened (edge message stays on screen)
+  //   1: NVIC -> TIM4_IRQHandler -> HAL_TIM_IRQHandler clears CC1IF, calls the callback
+  //   2..5: the four lines of the callback, 6: done
+  function startCallback() {
+    S.pending = false;
+    if (S.stepCode) {
+      S.cb = { phase: 0, shown: -1, acc: 0 };
+    } else {
+      enterCallback();
+      for (let i = 2; i <= 5; i++) execLine(i);
+      finishCallback();
+      setStatus(`Callback ran: period_us = ${S.period} µs, high_us = ${S.high} µs.`);
+    }
   }
 
-  function drawInputSignal(){
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim();
+  function enterCallback() {
+    S.cc1if = 0;                       // HAL_TIM_IRQHandler clears the flag before the call
+    S.cbCount++;
+    S.reads.push(S.t);
+    S.calcP = ''; S.calcH = '';
+    log('c', `<b>Callback</b> starts (HAL cleared CC1IF).`);
+    setStatus('The NVIC runs TIM4_IRQHandler(). HAL_TIM_IRQHandler() clears CC1IF and calls your callback. Time stops while we look at each line.');
+  }
 
-    const per = sim.per, pw = sim.pw, phase0 = sim.phase0;
-    const span = spanSec();
-    const {headRatio:r} = windowTimes();
-    const tStart2 = sim.t - span*r;
-    const tEnd2   = sim.t + span*(1 - r);
+  function markRead(type) {
+    for (let i = S.caps.length - 1; i >= 0; i--) {
+      const c = S.caps[i];
+      if (c.type === type && !c.lost) { if (c.read) return; c.read = true; return; }
+    }
+  }
 
-    // Only draw pulses that are at or to the RIGHT of the head during the initial fill.
-    const headX = P.l + W()*r;
+  function execLine(i) {
+    if (i === 2) {
+      S.now = S.CCR1; markRead('rise'); heat('now');
+      setStatus(`now = TIM4->CCR1 = ${S.now}: the timestamp of this rising edge.`);
+    } else if (i === 3) {
+      S.period = (S.now - S.last) & 0xFFFF; heat('period');
+      const wrapped = S.now < S.last;
+      S.calcP = `period_us = (uint16_t)(${S.now} − ${S.last}) = ${S.period}` + (wrapped ? '   ← CNT wrapped; uint16_t subtraction still gives the right answer' : '');
+      setStatus(`period_us = now − last = ${S.period} µs.` + (wrapped ? ' The counter wrapped between the two edges, and the 16-bit subtraction still works.' : ''));
+    } else if (i === 4) {
+      S.high = (S.CCR2 - S.last) & 0xFFFF; S.cc2if = 0; markRead('fall'); heat('high');
+      S.calcH = `high_us   = (uint16_t)(${S.CCR2} − ${S.last}) = ${S.high}`;
+      setStatus(`high_us = CCR2 − last = ${S.high} µs. CCR2 still holds the falling edge just before this rising edge. Reading CCR2 cleared CC2IF.`);
+    } else if (i === 5) {
+      S.last = S.now; heat('last');
+      setStatus(`last = now = ${S.last}: this rising edge is the start of the next period.`);
+    }
+  }
 
-    // Choose k range covering current window generously (future oriented)
-    const firstK = Math.ceil((tStart2 - phase0)/per) - 1;
-    const lastK  = Math.ceil((tEnd2   - phase0 + per)/per) + 1;
+  function finishCallback() {
+    S.cb = null;
+    const ok = Math.round(per()) === S.period;
+    log('c', `Callback done: <b>period_us = ${S.period}</b>, <b>high_us = ${S.high}</b>${ok ? '' : ' (not a real period, see the note)'}.`);
+    S.lostSinceReadShown = S.lostSinceRead;
+    S.lostSinceRead = false;
+  }
 
-    for(let k=firstK; k<=lastK; k++){
-      const tr = k*per + phase0;      // rise time (phase-shifted)
-      const tf = tr + pw;              // fall time
-      const xr = xForInputTime(tr);
-      const xf = xForInputTime(tf);
-      const yb = y0()+0;              // baseline
-      const yh = y0() - H()*0.38;     // pulse height
+  function nextEdge() {
+    const r = riseAt(S.kr), f = fallAt(S.kf);
+    return r <= f ? { type: 'rise', t: r } : { type: 'fall', t: f };
+  }
 
-      // During the initial fill stage, hide any pulse that lies completely to the LEFT of the head
-      if (windowTimes().headRatio < HEAD_CAP && xr < headX && xf < headX) continue;
+  function advance(d) {
+    const target = S.t + d;
+    for (let guard = 0; guard < 1000; guard++) {
+      const e = nextEdge();
+      if (e.t > target) break;
+      S.t = e.t;
+      if (e.type === 'rise') S.kr++; else S.kf++;
+      onEdge(e.type, e.t);
+      if (S.cb) return;              // freeze while the callback is shown
+    }
+    S.t = target;
+  }
 
-      // vertical rising edge
-      if (xr >= P.l && xr <= P.l + W()){
-        ctx.beginPath(); ctx.moveTo(xr, yb); ctx.lineTo(xr, yh); ctx.stroke();
-      }
-      // high level (draw even if pulse is partially in view)
-      const clamp = (x) => Math.max(P.l, Math.min(P.l + W(), x));
-      const xStart = clamp(xr);
-      const xEnd   = clamp(xf);
-      if (xEnd > xStart){
-        ctx.beginPath();
-        ctx.moveTo(xStart, yh);
-        ctx.lineTo(xEnd,   yh);
-        ctx.stroke();
-      }
+  function step() {
+    S.running = false;
+    if (S.cb) { stepLine(); return; }
+    const e = nextEdge();
+    advance(e.t - S.t);
+  }
 
-      // vertical falling edge
-      if (xf >= P.l && xf <= P.l + W()){
-        ctx.beginPath(); ctx.moveTo(xf, yh); ctx.lineTo(xf, yb); ctx.stroke();
+  function stepLine() {
+    const c = S.cb;
+    c.acc = 0;
+    if (c.phase === 0) { enterCallback(); c.shown = 0; c.phase = 2; return; }
+    if (c.phase <= 5) { execLine(c.phase); c.shown = c.phase; c.phase++; return; }
+    finishCallback();
+    setStatus(`Callback done: period_us = ${S.period} µs, high_us = ${S.high} µs. Back to the main loop; the counter runs on.`);
+  }
+
+  /* ---------------- drawing ---------------- */
+  const X0 = 130, X1 = 1170;
+  const PH = 52, PL = 112;              // PB6 high / low
+  const CT = 168, CBt = 332;            // CNT 65535 / 0
+  const AX = 372;
+  const yc = v => CBt - (v / 65535) * (CBt - CT);
+
+  function winW() { return Math.min(Math.max(3.5 * per(), 8000), 150000); }
+  function niceStep(raw) { const p = 10 ** Math.floor(Math.log10(raw)); const m = raw / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p; }
+  function level(t) { if (t < PHI) return 0; return ((t - PHI) % per()) < highT() ? 1 : 0; }
+
+  function drawScope() {
+    const W = winW();
+    const ws = Math.max(0, S.t - 0.82 * W);   // roll: "now" stays near the right edge, the recent past stays visible
+    const x = t => X0 + (t - ws) / W * (X1 - X0);
+    let s = '';
+
+    // lanes
+    s += `<rect x="${X0}" y="${PH - 18}" width="${X1 - X0}" height="${PL - PH + 36}" rx="8" fill="#f7faf8"/>`;
+    s += `<rect x="${X0}" y="${CT - 14}" width="${X1 - X0}" height="${CBt - CT + 28}" rx="8" fill="#f6f9fb"/>`;
+    s += `<text x="16" y="${(PH + PL) / 2 - 4}" font-size="21" font-weight="700" fill="var(--pin)" class="mono">PB6</text>`;
+    s += `<text x="16" y="${(PH + PL) / 2 + 20}" font-size="15" fill="var(--muted)">input pin</text>`;
+    s += `<text x="16" y="${(CT + CBt) / 2 - 4}" font-size="19" font-weight="700" fill="var(--cnt)" class="mono">TIM4-&gt;CNT</text>`;
+    s += `<text x="16" y="${(CT + CBt) / 2 + 20}" font-size="15" fill="var(--muted)">1 count = 1 µs</text>`;
+    s += `<line x1="${X0}" y1="${CT}" x2="${X1}" y2="${CT}" stroke="#b9c9d4" stroke-width="1.5" stroke-dasharray="6 6"/>`;
+    s += `<text x="${X0 - 8}" y="${CT + 5}" font-size="14" text-anchor="end" fill="var(--muted)" class="mono">65535</text>`;
+    s += `<text x="${X0 - 8}" y="${CBt + 5}" font-size="14" text-anchor="end" fill="var(--muted)" class="mono">0</text>`;
+
+    // time axis
+    const stepT = niceStep(W / 6);
+    s += `<line x1="${X0}" y1="${AX}" x2="${X1}" y2="${AX}" stroke="#9fb1bd" stroke-width="1.5"/>`;
+    for (let tt = Math.ceil(ws / stepT) * stepT; tt <= ws + W + 1e-6; tt += stepT) {
+      const xx = x(tt);
+      s += `<line x1="${xx}" y1="${AX}" x2="${xx}" y2="${AX + 7}" stroke="#9fb1bd" stroke-width="1.5"/>`;
+      s += `<text x="${xx}" y="${AX + 26}" font-size="15" text-anchor="middle" fill="var(--muted)">${(tt / 1000).toFixed(stepT < 1000 ? 1 : 0)}</text>`;
+    }
+    s += `<text x="${X1}" y="${AX + 48}" font-size="15" text-anchor="end" fill="var(--muted)">time (ms)</text>`;
+
+    // PB6 waveform up to now
+    const edges = [];
+    const T = per();
+    for (let k = Math.max(0, Math.floor((ws - PHI) / T) - 1); ; k++) {
+      const r = riseAt(k); if (r > S.t) break;
+      if (r > ws) edges.push({ t: r, v: 1 });
+      const f = fallAt(k); if (f > ws && f <= S.t) edges.push({ t: f, v: 0 });
+    }
+    edges.sort((a, b) => a.t - b.t);
+    let lv = level(ws), d = `M${x(ws)} ${lv ? PH : PL}`;
+    for (const e of edges) d += ` H${x(e.t).toFixed(1)} V${e.v ? PH : PL}`;
+    d += ` H${x(S.t).toFixed(1)}`;
+    s += `<path d="${d}" fill="none" stroke="var(--pin)" stroke-width="4" stroke-linejoin="round"/>`;
+
+    // CNT sawtooth up to now
+    for (let k = Math.floor(ws / MOD); k * MOD <= S.t; k++) {
+      const a = Math.max(ws, k * MOD), b = Math.min(S.t, (k + 1) * MOD);
+      if (b <= a) continue;
+      s += `<line x1="${x(a).toFixed(1)}" y1="${yc(a - k * MOD).toFixed(1)}" x2="${x(b).toFixed(1)}" y2="${yc(Math.min(65535, b - k * MOD)).toFixed(1)}" stroke="var(--cnt)" stroke-width="4" stroke-linecap="round"/>`;
+      const w = (k + 1) * MOD;
+      if (w > ws && w <= S.t) {
+        s += `<line x1="${x(w)}" y1="${CT}" x2="${x(w)}" y2="${CBt}" stroke="var(--cnt)" stroke-width="2" stroke-dasharray="5 6"/>`;
+        s += `<text x="${x(w) + 6}" y="${CT - 20}" font-size="14" font-weight="700" fill="var(--cnt)">wraps to 0</text>`;
       }
     }
 
-    // baseline
-    ctx.strokeStyle = '#cc4455';
-    ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(P.l, y0()); ctx.lineTo(P.l + W(), y0()); ctx.stroke();
-    ctx.fillStyle = '#a33'; ctx.font = '14px system-ui';
-    ctx.fillText('External input signal', P.l + 8, y0() + 24);
-  }
-
-  function captureIfRisingEdgesCrossed(){
-    // Continuously capture every rising edge and keep a rolling window of the last two
-    while(sim.t >= sim.nextRise){
-      const arrT = (sim.arr+1)*sim.tickPeriod;
-      const phase = (((sim.nextRise + sim.cntPhase0) % arrT) + arrT) % arrT;
-      const cnt = Math.floor(phase / sim.tickPeriod);
-
-      // push and keep a rolling window of the last two captures
-      sim.ccrs.push(cnt);
-      if (sim.ccrs.length > 2) sim.ccrs.shift();
-
-      sim.justCapturedY = yFor(cnt); // for drawing a marker at the head
-      sim.nextRise = sim.nextRise + sim.per;
-      sim.nextFall += sim.per;
-
-      // Update readouts using rolling two
-      if (sim.ccrs.length >= 1) CCR1o.textContent = sim.ccrs[0].toString();
-      if (sim.ccrs.length === 2) {
-        CCR2o.textContent = sim.ccrs[1].toString();
-        const deltaTicks = (sim.ccrs[1] - sim.ccrs[0] + (sim.arr+1)) % (sim.arr+1);
-        const dt = deltaTicks / sim.f_cnt;
-        const freq = dt>0 ? (1/dt) : 0;
-        DELTAo.textContent = `${deltaTicks} ticks  |  ${dt.toFixed(6)} s  |  ${freq.toFixed(2)} Hz`;
+    // captures
+    for (const c of S.caps) {
+      if (c.t <= ws || c.t > S.t) continue;
+      const cx = x(c.t), cy = yc(c.val);
+      const rise = c.type === 'rise';
+      const col = rise ? 'var(--rise)' : 'var(--fall)';
+      const ink = rise ? 'var(--rise-ink)' : 'var(--fall-ink)';
+      s += `<line x1="${cx}" y1="${PL + 4}" x2="${cx}" y2="${cy - 9}" stroke="${col}" stroke-width="2.5" stroke-dasharray="6 5"/>`;
+      s += `<circle cx="${cx}" cy="${cy}" r="8" fill="${c.read ? col : '#fff'}" stroke="${col}" stroke-width="3.5"/>`;
+      const label = `${rise ? 'CCR1' : 'CCR2'} ← ${c.val}`;
+      let lx = rise ? cx - 12 : cx + 12, anchor = rise ? 'end' : 'start';
+      const lw = 10.4 * (label.length + (c.lost ? 6 : 0));   // approx. text width, 17 px mono
+      if (rise && lx - lw < X0 + 4) { lx = cx + 12; anchor = 'start'; }
+      if (!rise && lx + lw > X1 - 4) { lx = cx - 12; anchor = 'end'; }
+      const ly = rise ? cy - 16 : cy + 30;
+      s += `<text x="${lx}" y="${ly}" font-size="17" font-weight="700" text-anchor="${anchor}" fill="${c.lost ? 'var(--bad)' : ink}" class="mono halo">${label}${c.lost ? '  lost' : ''}</text>`;
+      if (c.lost) {
+        s += `<path d="M${cx - 9} ${cy - 9} L${cx + 9} ${cy + 9} M${cx + 9} ${cy - 9} L${cx - 9} ${cy + 9}" stroke="var(--bad)" stroke-width="4" stroke-linecap="round"/>`;
       }
     }
-  }
 
-  function drawCapturedLines(){
-    // dashed CCR lines for captured values (only last two)
-    if(sim.ccrs.length>0){
-      ctx.save();
-      ctx.setLineDash([10,8]);
-      ctx.strokeStyle = '#8899aa';
-      ctx.lineWidth = 2;
-      ctx.font = '16px system-ui';
-      ctx.fillStyle = '#445';
-      const labels = ['CCR₁','CCR₂'];
-      sim.ccrs.forEach((val,i)=>{
-        const y = yFor(val);
-        ctx.beginPath(); ctx.moveTo(P.l,y); ctx.lineTo(P.l+W(),y); ctx.stroke();
-        ctx.fillText(`${labels[i]} = ${val}`, P.l + 8, y - 6);
-      });
-      ctx.restore();
-    }
-    // draw a capture marker at the head position when a capture just occurred
-    if (typeof sim.justCapturedY === 'number'){
-      const {headRatio} = windowTimes();
-      const headX = P.l + W()*headRatio;
-      ctx.fillStyle = '#1aa34a';
-      ctx.beginPath(); ctx.arc(headX, sim.justCapturedY, 6, 0, Math.PI*2); ctx.fill();
-      // fade marker after one frame
-      sim.justCapturedY = undefined;
-    }
-  }
-
-  function loop(now){
-    if(!running){return;}
-    const dt_ms = now - t0; t0 = now;
-    const dt = Math.min(0.05, dt_ms/1000);
-    sim.t += dt;
-
-    captureIfRisingEdgesCrossed();
-
-    drawAxes();
-    drawCounterRamp();
-    drawInputSignal();
-    drawCapturedLines();
-
-    requestAnimationFrame(loop);
-  }
-
-  // === Tests (console) ===
-  function runTests(){
-    let fails = 0; const assert = (cond, msg)=>{ if(!cond){ console.error('FAIL:', msg); fails++; } else { console.log('ok:', msg);} };
-    resetSim();
-
-    // 0) Counter starts ~90% of ARR+1
-    const arrT0 = (sim.arr+1)*sim.tickPeriod;
-    const cnt0 = Math.floor((((0 + sim.cntPhase0) % arrT0) + arrT0) % arrT0 / sim.tickPeriod);
-    const target0 = Math.floor(0.90*(sim.arr+1));
-    assert(Math.abs(cnt0 - target0) <= 1, 'counter starts near 90% of ARR+1');
-
-    // 1) windowTimes basic properties
-    let w = windowTimes();
-    assert(w.tEnd > w.tStart, 'windowTimes returns valid range');
-    assert(w.headRatio >= 0 && w.headRatio <= HEAD_CAP, 'headRatio within [0,HEAD_CAP] at start');
-
-    // 2) xForCounterTime monotonic over window
-    const leftX = xForCounterTime(w.tStart);
-    const rightX = xForCounterTime(w.tEnd);
-    assert(rightX > leftX, 'xForCounterTime maps start→left, end→right');
-
-    // 3) xForInputTime places "now" at head position
-    const headX = P.l + w.headRatio * W();
-    const nowX  = xForInputTime(sim.t);
-    assert(Math.abs(nowX - headX) < 1e-6 * W() + 1, 'xForInputTime(sim.t) ≈ head position');
-
-    // 4) Far-future edge is near right border (slides in from right)
-    const span = spanSec();
-    const nearRightX = xForInputTime(sim.t + span*(1 - w.headRatio));
-    assert(nearRightX > P.l + 0.9*W(), 'future edge drawn near right border');
-
-    // 5) Repeated calls to xForInputTime are finite (no recursion)
-    for(let i=0;i<200;i++){
-      const xx = xForInputTime(sim.t + i*0.001);
-      assert(Number.isFinite(xx), 'xForInputTime returns finite number');
+    // callback reads
+    for (const r of S.reads) {
+      if (r <= ws || r > S.t) continue;
+      const rx = x(r);
+      s += `<path d="M${rx} ${AX - 2} l-8 -13 h16 z" fill="var(--cnt)"/>`;
     }
 
-    // 6) Trigger two captures and check CCRs
-    const saveNext = sim.nextRise;
-    sim.t = sim.nextRise + 1e-6; captureIfRisingEdgesCrossed();
-    const afterFirst = sim.nextRise;
-    sim.t = sim.nextRise + 1e-6; captureIfRisingEdgesCrossed();
-    assert(sim.ccrs.length===2, 'two CCR captures after two rising edges');
-    assert(Math.abs(afterFirst - (saveNext + sim.per)) < 1e-9, 'nextRise advanced by one period after first capture');
-    sim.ccrs.forEach((v)=> assert(v>=0 && v<=sim.arr, 'CCR within [0, ARR]'));
+    // now cursor
+    const nx = x(S.t);
+    s += `<line x1="${nx}" y1="24" x2="${nx}" y2="${AX}" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="3 5"/>`;
+    s += `<text x="${nx}" y="18" font-size="15" font-weight="700" text-anchor="middle" fill="var(--ink)">now</text>`;
+    s += `<circle cx="${nx}" cy="${yc(cntAt(S.t))}" r="6" fill="var(--cnt)"/>`;
 
-    // 7) After enough time, headRatio pins at HEAD_CAP
-    sim.t += spanSec()*10;
-    const w2 = windowTimes();
-    assert(Math.abs(w2.headRatio - HEAD_CAP) < 1e-9, 'headRatio pins at HEAD_CAP after fill');
-
-    // 8) Counter polyline never exceeds head x-position
-    resetSim();
-    const pts = getCounterPolyline();
-    const headX2 = P.l + windowTimes().headRatio * W();
-    const maxX = pts.reduce((m,p)=> Math.max(m,p.x), -Infinity);
-    assert(maxX <= headX2 + 1, 'counter drawing clips at head position');
-
-    // 9) Rolling window keeps last two & delta computed from them
-    resetSim();
-    sim.t = sim.nextRise + 1e-6; captureIfRisingEdgesCrossed(); // first
-    sim.t = sim.nextRise + 1e-6; captureIfRisingEdgesCrossed(); // second
-    const prevSecond = sim.ccrs[1];
-    sim.t = sim.nextRise + 1e-6; captureIfRisingEdgesCrossed(); // third
-    assert(sim.ccrs.length===2, 'rolling window keeps exactly two CCRs');
-    assert(sim.ccrs[0] === prevSecond, 'rolling window shifts: old second becomes new first');
-    const dNew = (sim.ccrs[1] - sim.ccrs[0] + (sim.arr+1)) % (sim.arr+1);
-    assert(Number.isFinite(dNew) && dNew >= 0 && dNew <= sim.arr+1, 'delta from rolling window is valid');
-
-    // 10) While-loop capture handles multiple missed edges in one step
-    resetSim();
-    const startRise = sim.nextRise;
-    sim.t = startRise + sim.per*5 + 1e-6; // jump ahead past 5 edges
-    captureIfRisingEdgesCrossed();
-    assert(Math.abs(sim.nextRise - (startRise + 6*sim.per)) < 1e-9, 'nextRise advanced across multiple edges');
-    assert(sim.ccrs.length===2, 'still only last two CCRs kept after batch capture');
-
-    console.log(fails? `Tests: ${fails} failure(s)` : 'All tests passed');
+    $('scope').innerHTML = `<title id="scope-title">${$('scope-title') ? $('scope-title').textContent : ''}</title>` + s;
   }
 
-  // Initialize and start
-  resetSim();
-  runTests();
-  resetSim();
-  requestAnimationFrame(ts => { t0 = ts; loop(ts); });
+  function setText(id, v) { const e = $(id); const t = String(v); if (e.textContent !== t) e.textContent = t; }
+  function flag(id, v) { const e = $(id); e.classList.toggle('on', !!v); e.querySelector('b').textContent = v ? '1' : '0'; }
 
-  // Hi-DPI canvas
-  function resizeCanvas(){
-    const dpr = window.devicePixelRatio || 1;
-    const cssW = canvas.clientWidth;
-    const cssH = canvas.clientHeight;
-    canvas.width  = Math.round(cssW * dpr);
-    canvas.height = Math.round(cssH * dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
+  function render() {
+    drawScope();
+    const now = performance.now();
+    const hot = n => S.hot[n] && now - S.hot[n] < 900;
+    setText('v-cnt', cntAt(S.t));
+    setText('v-ccr1', S.CCR1);
+    setText('v-ccr2', S.CCR2);
+    $('r-ccr1').classList.toggle('hot', hot('ccr1'));
+    $('r-ccr2').classList.toggle('hot', hot('ccr2'));
+    flag('f-cc1if', S.cc1if); flag('f-cc1of', S.cc1of); flag('f-cc2if', S.cc2if); flag('f-cc2of', S.cc2of);
+
+    cbLines.forEach((l, i) => l.classList.toggle('hit', !!S.cb && S.cb.shown === i));
+    $('caller').classList.toggle('live', !!S.cb && S.cb.shown >= 0);
+
+    setText('v-now', S.now === null ? '–' : S.now);
+    setText('v-last', S.last);
+    setText('v-period', S.period === null ? '–' : S.period);
+    setText('v-high', S.high === null ? '–' : S.high);
+    ['now', 'last', 'period', 'high'].forEach(n => $('w-' + n).classList.toggle('hot', hot(n)));
+    setText('calc-p', S.calcP);
+    setText('calc-h', S.calcH);
+
+    const T = per(), H = highT();
+    setText('truth', `${S.f} Hz, ${S.duty} %  →  period ${Math.round(T)} µs, high ${Math.round(H)} µs`);
+    const m = $('measured'), note = $('note');
+    if (S.period === null || S.cb) {
+      if (S.period === null) { setText('measured', '– (no callback yet)'); m.className = 'v'; }
+      note.hidden = true;
+    } else {
+      const fHz = S.period ? 1e6 / S.period : 0;
+      const duty = S.period ? 100 * S.high / S.period : 0;
+      setText('measured', `${fHz.toFixed(2)} Hz, ${duty.toFixed(1)} %  ←  1 000 000 / ${S.period}`);
+      const ok = S.period === Math.round(T) && S.high === Math.round(H);
+      m.className = 'v ' + (ok ? 'good' : 'bad');
+      let why = '';
+      if (!ok) {
+        if (S.cbCount === 1) why = 'First callback: there was no earlier rising edge, so last was still 0. This is not a period yet. Use the results from the second callback on.';
+        else if (T > 65535) why = `The real period, ${Math.round(T)} µs, is longer than 65 535 µs, the most a 16-bit counter can span at 1 count per µs. The counter wrapped more than once, so the subtraction is wrong. A slower count (larger PSC) fixes it.`;
+        else if (S.lostSinceReadShown) why = 'Captures were overwritten before the callback read them (CC1OF = 1). now − last spans more than one period, so the result is wrong.';
+        else why = 'This result does not match the signal.';
+      }
+      note.hidden = ok; if (!ok) setText('note', why);
+    }
+
+    setText('status', S.status);
+    $('play').textContent = S.running ? 'Pause' : 'Play';
+
+    const logEl = $('log');
+    const html = S.log.map(e => `<li class="${e.cls}"><time>${ms(e.t)}</time><span>${e.html}</span></li>`).join('');
+    if (logEl.dataset.h !== html) { logEl.innerHTML = html; logEl.dataset.h = html; }
   }
-  const ro = new ResizeObserver(resizeCanvas);
-  ro.observe(canvas);
-  resizeCanvas();
 
-  [ARR, PSC, FCLK, PERIOD, PW].forEach(inp => inp.addEventListener('change', resetSim));
+  /* ---------------- loop ---------------- */
+  let lastFrame = performance.now();
+  function frame(ts) {
+    const dt = Math.min(100, ts - lastFrame); lastFrame = ts;
+    if (S.running) {
+      if (S.cb) {
+        S.cb.acc += dt;
+        if (S.cb.acc >= (S.cb.phase === 0 ? 1.6 : 1) * LINE_MS) stepLine();
+      } else {
+        advance(dt / 1000 * S.speed);
+      }
+    }
+    render();
+    requestAnimationFrame(frame);
+  }
+
+  /* ---------------- controls ---------------- */
+  $('play').addEventListener('click', () => { S.running = !S.running; render(); });
+  $('step').addEventListener('click', () => { step(); render(); });
+  $('reset').addEventListener('click', () => { S.running = false; reset(); });
+  $('freq').addEventListener('change', e => {
+    S.f = +e.target.value;
+    if (S.f === 10 && S.speed < 50000) { S.speed = 50000; $('speed').value = '50000'; }
+    if (S.f === 500 && S.speed > 5000) { S.speed = 2000; $('speed').value = '2000'; }
+    S.running = false; reset();
+  });
+  $('duty').addEventListener('input', e => { S.duty = +e.target.value; $('dutyOut').textContent = S.duty + ' %'; S.running = false; reset(); });
+  $('speed').addEventListener('change', e => { S.speed = +e.target.value; });
+  $('stepCode').addEventListener('change', e => {
+    S.stepCode = e.target.checked;
+    if (!S.stepCode && S.cb) { while (S.cb) stepLine(); }
+    render();
+  });
+  $('busy').addEventListener('change', e => {
+    S.busy = e.target.checked;
+    if (S.busy) {
+      log('x', 'CPU busy: the capture interrupt has to wait.');
+      setStatus('The CPU is busy (for example in a long interrupt with higher priority). Edges are still captured by the hardware, but nobody reads CCR1.');
+    } else {
+      log('c', 'CPU free again.');
+      if (S.pending && !S.cb) startCallback();
+      else setStatus('The CPU is free again.');
+    }
+    render();
+  });
+  $('clearOF').addEventListener('click', () => { S.cc1of = 0; S.cc2of = 0; log('c', 'Software clears <b>CC1OF</b> and <b>CC2OF</b>.'); render(); });
+  document.addEventListener('keydown', e => {
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'select' || tag === 'input' || tag === 'button' || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === ' ') { e.preventDefault(); S.running = !S.running; }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); step(); render(); }
+    else if (e.key === 'r' || e.key === 'R') { S.running = false; reset(); }
+  });
+
+  // keep the select values in step with the state after a browser restores the form
+  S.f = +$('freq').value; S.duty = +$('duty').value; S.speed = +$('speed').value;
+  S.stepCode = $('stepCode').checked; S.busy = $('busy').checked;
+  $('dutyOut').textContent = S.duty + ' %';
+  reset();
+  requestAnimationFrame(ts => { lastFrame = ts; frame(ts); });
 })();
 </script>
 </body>
