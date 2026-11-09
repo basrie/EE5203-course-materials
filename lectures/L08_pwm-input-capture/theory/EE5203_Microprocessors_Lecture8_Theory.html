@@ -405,8 +405,21 @@ One TIM2 channel drawn as a pipeline. The time base feeds a comparator that asks
 <p>Deep dive: <a href="https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf#page=162">RM0368 Rev 6, <code>GPIOx_AFRL</code> — p.&nbsp;162</a>; which AF number belongs to which pin: STM32F401RE datasheet (DS10086), <em>Alternate function mapping</em>.</p>
 </div>
 </section>
-<section id="configure-pwm-in-cubemx" class="slide level2 spot-rest-all">
+<section id="configure-pwm-in-cubemx" class="slide level2">
 <h2>Configure PWM in CubeMX</h2>
+<div class="lead-line">
+<p>Four settings make the PWM channel: <span class="cmx-n">1</span> pin <span class="cmx-n">2</span> channel <span class="cmx-n">3</span> frequency <span class="cmx-n">4</span> duty.</p>
+</div>
+<div class="cmx-shot">
+<img src="../assets/images/cubemx_tim2_pwm.png" alt="STM32CubeMX for TIM2. Left: TIM2 Mode with Clock Source Internal Clock and Channel1 PWM Generation CH1, and below it the PA5 pin menu with TIM2_CH1 selected. Right: Parameter Settings with Prescaler 15, Counter Period 999, PWM mode 1 and Pulse 0.">
+<span class="cmx-hl" style="left:1.07%;top:72.05%;width:15.66%;height:4.98%"><b>1</b></span>
+<span class="cmx-hl" style="left:1.85%;top:28.71%;width:46.88%;height:4.77%"><b>2</b></span>
+<span class="cmx-hl" style="left:56.34%;top:10.73%;width:42.49%;height:14.3%"><b>3</b></span>
+<span class="cmx-hl" style="left:56.34%;top:41.06%;width:42.49%;height:10.08%"><b>4</b></span>
+</div>
+</section>
+<section id="find-the-four-pwm-settings-in-the-generated-code" class="slide level2 spot-rest-all">
+<h2>Find the four PWM settings in the generated code</h2>
 <div class="spot-sub">
 <span class="spot-line g0"><span class="spot-tag">CubeMX</span>Four settings make the PWM channel. CubeMX writes the code; you find each setting in it. <span class="spot-mark">1</span> pin <span class="spot-mark">2</span> channel <span class="spot-mark">3</span> frequency <span class="spot-mark">4</span> duty.</span>
 <span class="spot-line fragment custom g1" data-fragment-index="1"><span class="spot-tag">Pin</span>Click <code>PA5</code>, choose <code>TIM2_CH1</code>. The generated pin setup is <code>GPIO_MODE_AF_PP</code> with <code>GPIO_AF1_TIM2</code>: <code>MODER</code> = 10, <code>AFR</code> = AF1.</span>
@@ -794,6 +807,21 @@ One PWM signal on PB6. Channel 1 in direct mode captures each rising edge into C
 </section>
 <section id="configure-input-capture-in-cubemx" class="slide level2">
 <h2>Configure input capture in CubeMX</h2>
+<div class="lead-line">
+<p><code>PB6</code> becomes <code>TIM4_CH1</code> by itself. <span class="cmx-n">1</span> CH1 rising <span class="cmx-n">2</span> CH2 falling <span class="cmx-n">3</span> 1 µs counter <span class="cmx-n">4</span> interrupt</p>
+</div>
+<div class="cmx-shot capture">
+<img src="../assets/images/cubemx_tim4_capture.png" alt="STM32CubeMX for TIM4. Left: Mode with Internal Clock, Channel1 Input Capture direct mode, Channel2 Input Capture indirect mode, and below it the NVIC table with TIM4 global interrupt ticked. Right: Parameter Settings with Prescaler 15, Counter Period 65535, Input Capture Channel 1 Rising Edge and Direct, Input Capture Channel 2 Falling Edge and Indirect.">
+<span class="cmx-hl" style="left:1.85%;top:38.46%;width:46.88%;height:6.68%"><b>1</b></span>
+<span class="cmx-hl" style="left:55.85%;top:55.01%;width:42.98%;height:13.5%"><b>1</b></span>
+<span class="cmx-hl" style="left:1.85%;top:46.01%;width:46.88%;height:6.82%"><b>2</b></span>
+<span class="cmx-hl" style="left:55.85%;top:84.03%;width:42.98%;height:13.5%"><b>2</b></span>
+<span class="cmx-hl" style="left:55.85%;top:14.37%;width:42.98%;height:19.16%"><b>3</b></span>
+<span class="cmx-hl" style="left:1.17%;top:65.6%;width:47.56%;height:6.39%"><b>4</b></span>
+</div>
+</section>
+<section id="what-each-tim4-capture-setting-gives-you" class="slide level2">
+<h2>What each TIM4 capture setting gives you</h2>
 <div class="cube-table">
 <table class="caption-top">
 <colgroup>
