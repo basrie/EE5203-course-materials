@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.43">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -4987,7 +4987,7 @@ pre { font-size: 8.7pt; }
 <li><p><strong>In <code>USER CODE BEGIN PV</code></strong>, below <code>g_ms</code>, the press flag and the level table:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint8_t</span>  button_event  <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">uint32_t</span> last_press_ms <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">const</span> <span class="dt">uint16_t</span> level<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">30</span><span class="op">,</span> <span class="dv">120</span><span class="op">,</span> <span class="dv">350</span><span class="op">,</span> <span class="dv">1000</span> <span class="op">};</span>  <span class="co">/* CCR1 values */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">uint16_t</span> level<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">30</span><span class="op">,</span> <span class="dv">120</span><span class="op">,</span> <span class="dv">350</span><span class="op">,</span> <span class="dv">1000</span> <span class="op">};</span>  <span class="co">/* fixed CCR1 values, never written */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p><strong>In <code>USER CODE BEGIN 4</code></strong>, next to the tick callback, the button callback:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_GPIO_EXTI_Callback<span class="op">(</span><span class="dt">uint16_t</span> GPIO_Pin<span class="op">)</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
