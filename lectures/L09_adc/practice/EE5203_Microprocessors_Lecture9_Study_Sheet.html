@@ -100,8 +100,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-</head><body class="nav-fixed">\usepackage{titlesec}
-\titlespacing*{\section}{0pt}{6pt}{2pt}
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -134,9 +132,9 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../assets/materials.css">
+</head>
 
-
-
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -318,17 +316,17 @@ window.Quarto = {
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    s<span class="op">.</span>Channel      <span class="op">=</span> channel<span class="op">;</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    s<span class="op">.</span>Rank         <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    s<span class="op">.</span>SamplingTime <span class="op">=</span> ADC_SAMPLETIME_84CYCLES<span class="op">;</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    HAL_ADC_ConfigChannel<span class="op">(&amp;</span>hadc1<span class="op">,</span> <span class="op">&amp;</span>s<span class="op">);</span>       <span class="co">/* select the channel */</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    HAL_ADC_ConfigChannel<span class="op">(&amp;</span>hadc1<span class="op">,</span> <span class="op">&amp;</span>s<span class="op">);</span>     <span class="co">/* select the channel */</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    HAL_ADC_Start<span class="op">(&amp;</span>hadc1<span class="op">);</span>                   <span class="co">/* start one conversion */</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    HAL_ADC_PollForConversion<span class="op">(&amp;</span>hadc1<span class="op">,</span> <span class="dv">2</span><span class="op">);</span>    <span class="co">/* wait for EOC, about 12 us */</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> HAL_ADC_GetValue<span class="op">(&amp;</span>hadc1<span class="op">);</span>         <span class="co">/* read DR */</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    HAL_ADC_Start<span class="op">(&amp;</span>hadc1<span class="op">);</span>                 <span class="co">/* start one conversion */</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    HAL_ADC_PollForConversion<span class="op">(&amp;</span>hadc1<span class="op">,</span> <span class="dv">2</span><span class="op">);</span>  <span class="co">/* wait for EOC, 12 us */</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> HAL_ADC_GetValue<span class="op">(&amp;</span>hadc1<span class="op">);</span>       <span class="co">/* read DR */</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Pace the reads from the tick, never from <code>HAL_Delay</code>:</strong></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">((</span>g_ms <span class="op">-</span> t_adc<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">10</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span>            <span class="co">/* L07 tick schedules the read */</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">((</span>g_ms <span class="op">-</span> t_adc<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">10</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span>               <span class="co">/* every 10 ms */</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    t_adc <span class="op">=</span> g_ms<span class="op">;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint32_t</span> raw  <span class="op">=</span> adc_read<span class="op">(</span>ADC_CHANNEL_0<span class="op">);</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint32_t</span> duty <span class="op">=</span> <span class="op">(</span>raw <span class="op">*</span> <span class="dv">1000</span><span class="bu">u</span><span class="op">)</span> <span class="op">/</span> <span class="dv">4095</span><span class="bu">u</span><span class="op">;</span>            <span class="co">/* 0 ... 1000 = ARR + 1 */</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint32_t</span> duty <span class="op">=</span> <span class="op">(</span>raw <span class="op">*</span> <span class="dv">1000</span><span class="bu">u</span><span class="op">)</span> <span class="op">/</span> <span class="dv">4095</span><span class="bu">u</span><span class="op">;</span> <span class="co">/* 0 ... 1000 */</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    TIM2<span class="op">-&gt;</span>CCR1 <span class="op">=</span> duty<span class="op">;</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Conversion time</strong> = (sampling time + 12 cycles) ÷ ADC clock. The ADC clock is 16 MHz ÷ 2 = 8 MHz, so 84 cycles give (84 + 12) ÷ 8 MHz = <strong>12 µs</strong>; the CubeMX default of 3 cycles gives 1.9 µs.</p>
