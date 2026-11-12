@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.43">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -35,7 +35,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -141,8 +141,8 @@ ul.task-list li input[type="checkbox"] {
 <tr class="header">
 <th style="text-align: right;"><code>raw</code></th>
 <th style="text-align: right;">mV</th>
-<th style="text-align: right;">LED duty (<code>×999/4095</code>)</th>
-<th style="text-align: right;">Servo µs (<code>1000 + ×1000/4095</code>)</th>
+<th style="text-align: right;">LED duty (<code>×1000/4095</code>)</th>
+<th style="text-align: right;">Servo µs (<code>500 + ×2000/4095</code>)</th>
 </tr>
 </thead>
 <tbody>
@@ -182,7 +182,7 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="part-b---configuration">Part B - Configuration</h2>
 <ol start="6" type="1">
 <li><p>Give the <code>MODER</code> bit pattern for an analog pin, and say what else changes inside the pin when analog mode is selected.</p></li>
-<li><p>In one sentence each: what do <strong>sampling time</strong> and <strong>conversion time</strong> mean, and which one do you choose in CubeMX?</p></li>
+<li><p>In one sentence each: what do <strong>sampling time</strong> and <strong>conversion time</strong> mean, and which one do you choose in CubeMX? Then calculate the conversion time for 84 cycles and for 3 cycles at an 8 MHz ADC clock.</p></li>
 <li><p>Explain why a high-impedance source needs a longer sampling time. What symptom appears if it is too short <em>and you are switching channels</em>?</p></li>
 <li><p>There is one ADC and sixteen channels. Describe what actually happens when <code>adc_read(ADC_CHANNEL_0)</code> is followed by <code>adc_read(ADC_CHANNEL_1)</code>, and state one consequence for a project that must correlate two sensors.</p></li>
 <li><p>Contrast <strong>single</strong> and <strong>continuous</strong> conversion mode. Give one situation where each is the right choice.</p></li>
@@ -191,8 +191,8 @@ ul.task-list li input[type="checkbox"] {
 <section id="part-c---reading-and-flags" class="level2">
 <h2 class="anchored" data-anchor-id="part-c---reading-and-flags">Part C - Reading and flags</h2>
 <ol start="11" type="1">
-<li><p>What sets <code>EOC</code>, and what clears it? Which HAL call does the clearing?</p></li>
-<li><p>A polling loop reads <code>ADC1-&gt;DR</code> twice per conversion “to be safe”. Explain what the second read returns and why the loop then drifts out of step.</p></li>
+<li><p>What sets <code>EOC</code>? Name the HAL call that waits for it, and say what clears the flag.</p></li>
+<li><p>A loop calls <code>HAL_ADC_PollForConversion()</code> and <code>HAL_ADC_GetValue()</code> on every tick, but <code>HAL_ADC_Start()</code> only once, before the loop. Single conversion mode. Explain what <code>PollForConversion</code> returns from the second tick on, and what value the program reads.</p></li>
 <li><p>Why is <code>HAL_ADC_PollForConversion</code> unacceptable inside an interrupt callback? Give the alternative and name the flag it relies on.</p></li>
 <li><p>List the three flag families you have met so far, their peripherals, and what clears each one.</p></li>
 </ol>
@@ -200,10 +200,10 @@ ul.task-list li input[type="checkbox"] {
 <section id="part-d---from-counts-to-control" class="level2">
 <h2 class="anchored" data-anchor-id="part-d---from-counts-to-control">Part D - From counts to control</h2>
 <ol start="15" type="1">
-<li><p>Write the loop body that reads the pot every 10 ms from the L07 tick and sets the L08 LED duty. No <code>HAL_Delay()</code>.</p></li>
-<li><p><code>duty = (raw * 999u) / 4095u;</code> — show that this cannot overflow a <code>uint32_t</code>, and state what would happen with <code>uint16_t</code> intermediates.</p></li>
-<li><p>Write <code>servo_from_raw(uint16_t raw)</code> returning a pulse width clamped to the 1000–2000 µs contract. Give the value for <code>raw = 2867</code>.</p></li>
-<li><p>The knob is noisy: the last count flickers between two values and the servo buzzes. Give <strong>two</strong> different mitigations, one in software and one in hardware, and state a cost of each.</p></li>
+<li><p>Write the loop body that reads the potentiometer every 10 ms from the L07 tick and sets the L08 LED duty. No <code>HAL_Delay()</code>.</p></li>
+<li><p><code>duty = (raw * 1000u) / 4095u;</code> — show that this cannot overflow a <code>uint32_t</code>, state what would happen with <code>uint16_t</code> intermediates, and explain why the factor is 1000 and not 999.</p></li>
+<li><p>Write <code>servo_from_raw(uint16_t raw)</code> returning a pulse width clamped to the 500–2500 µs range of the lab SG90s. Give the value for <code>raw = 2867</code>.</p></li>
+<li><p>The potentiometer is noisy: the last count flickers between two values and the servo buzzes. Give <strong>two</strong> different mitigations, one in software and one in hardware, and state a cost of each.</p></li>
 </ol>
 </section>
 <section id="part-e---sensors-and-evidence" class="level2">
@@ -226,25 +226,25 @@ ul.task-list li input[type="checkbox"] {
 <td></td>
 </tr>
 <tr class="even">
-<td>A conversion has completed</td>
+<td>The value in <code>raw</code> is the value in the hardware</td>
 <td></td>
 </tr>
 <tr class="odd">
-<td>Reading the result clears the flag</td>
+<td>The converter tracks the potentiometer</td>
 <td></td>
 </tr>
 <tr class="even">
-<td>The converter tracks the knob</td>
+<td>The sampling time is 84 cycles</td>
 <td></td>
 </tr>
 <tr class="odd">
-<td>Continuous mode is genuinely free-running</td>
+<td>The LDR channel was converted last</td>
 <td></td>
 </tr>
 </tbody>
 </table>
 <ol start="22" type="1">
-<li>Describe an SFR-view experiment that demonstrates continuous mode without changing a line of code, and state what you would see that you do not see in single mode.</li>
+<li>A classmate’s light reading never reacts to the light. Describe how the SFR view shows which channel the ADC really converts, and name the two most likely mistakes.</li>
 </ol>
 </section>
 <section id="exit-self-assessment" class="level2">
@@ -252,7 +252,7 @@ ul.task-list li input[type="checkbox"] {
 <ul class="task-list">
 <li><label><input type="checkbox">I can convert counts to millivolts in integer arithmetic.</label></li>
 <li><label><input type="checkbox">I can justify a sampling time from source impedance.</label></li>
-<li><label><input type="checkbox">I can explain what clears <code>EOC</code>.</label></li>
+<li><label><input type="checkbox">I can calculate a conversion time and name what waits for <code>EOC</code>.</label></li>
 <li><label><input type="checkbox">I can map a reading to a duty or a servo pulse, clamped.</label></li>
 <li><label><input type="checkbox">I can diagnose threshold chatter and fix it.</label></li>
 </ul>
