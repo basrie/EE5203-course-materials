@@ -2,628 +2,360 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>8-bit SAR ADC Animation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SAR ADC: one comparison for each bit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+    /* EE5203 L09 in-lecture demo. Same words, colours and example as the slide
+       "A SAR ADC finds one bit per step": input 2.40 V, 4 bits, result 1011. */
     :root {
-      --bg: #f5f5f5;
-      --panel-bg: #ffffff;
-      --border: #cccccc;
-      --accent: #0066cc;
-      --accent-soft: #e0f0ff;
-      --text: #222222;
-      --danger: #cc0000;
+      --ink: #174f73; --mid: #2b789f; --or: #d47b28; --ort: #b8621a;
+      --gr: #3f7f58; --grt: #2b5a3e; --red: #a32d2d; --mu: #5a6b76;
+      --grid: #c8d8e2; --txt: #355262; --fb: #e8f2f7; --fg: #edf6f0;
+      --kept: #d3e6f0; --bg: #f8fafc;
+      --mono: ui-monospace, Menlo, Consolas, monospace;
     }
-
+    * { box-sizing: border-box; }
     body {
-      margin: 0;
-      padding: 24px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      margin: 0; padding: 14px 28px 16px;
+      font-family: Quicksand, system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 18px; color: var(--txt); background: var(--bg);
     }
-
-    h1 {
-      font-size: 28px;
-      margin: 0 0 8px;
-      text-align: center;
-    }
-
-    .subtitle {
-      font-size: 18px;
-      text-align: center;
-      margin-bottom: 18px;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      background: var(--panel-bg);
-      border-radius: 16px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-      padding: 20px 24px 24px;
-      box-sizing: border-box;
-    }
-
-    .top-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .slider-group {
-      flex: 1 1 260px;
-      min-width: 260px;
-    }
-
-    .slider-group label {
-      font-size: 18px;
-      font-weight: 600;
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .slider-group input[type="range"] {
-      width: 100%;
-    }
-
-    .slider-value {
-      font-size: 18px;
-      margin-top: 4px;
-    }
+    .wrap { max-width: 1500px; margin: 0 auto; }
+    h1 { margin: 0; font-size: 32px; font-weight: 700; color: var(--ink); }
+    .lead { margin: 2px 0 10px; font-size: 19px; }
 
     .controls {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      align-items: flex-end;
-      justify-content: center;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px;
+      padding: 9px 18px; margin-bottom: 12px;
+      background: #ffffff; border: 2px solid var(--grid); border-radius: 14px;
+    }
+    .ctl { display: flex; align-items: center; gap: 10px; }
+    .ctl > span.name { font-weight: 700; color: var(--ink); }
+    #vinSlider { width: 300px; accent-color: var(--ink); }
+    #vinValue { font-family: var(--mono); font-weight: 700; font-size: 22px; color: var(--ink); min-width: 5.2em; }
+    button {
+      font: inherit; font-weight: 700; cursor: pointer;
+      padding: 7px 16px; border-radius: 999px;
+      border: 2px solid var(--grid); background: #ffffff; color: var(--ink);
+    }
+    button:hover { border-color: var(--mid); }
+    button.primary { background: var(--ink); border-color: var(--ink); color: #ffffff; }
+    button.on { background: var(--fb); border-color: var(--mid); }
+    button:disabled { opacity: 0.45; cursor: default; }
+    .keys { margin-left: auto; font-size: 15px; color: var(--mu); }
+    kbd {
+      font-family: var(--mono); font-size: 14px; padding: 1px 6px;
+      border: 1px solid var(--grid); border-radius: 6px; background: #ffffff;
     }
 
-    .button-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+    .main { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 16px; }
+    .card { background: #ffffff; border: 2px solid var(--grid); border-radius: 14px; padding: 12px 16px; }
+    .card h2 {
+      margin: 0 0 4px; font-size: 16px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--mid);
     }
+    svg { display: block; width: 100%; height: auto; }
+    #zoom { max-height: 270px; }
+    svg text { font-family: Quicksand, system-ui, sans-serif; }
+    svg text.m { font-family: var(--mono); }
 
-    .controls button {
-      font-size: 16px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--accent-soft);
-      color: var(--accent);
-      cursor: pointer;
-      font-weight: 600;
-      min-width: 90px;
+    #stepTitle { font-size: 24px; font-weight: 700; color: var(--ink); margin: 2px 0 0; }
+    #stepText { margin: 4px 0 0; font-size: 19px; line-height: 1.3; min-height: 3.9em; }
+    #stepText b.hi { color: var(--grt); } #stepText b.lo { color: var(--red); }
+    #stepText .v { font-family: var(--mono); font-weight: 700; color: var(--ink); white-space: nowrap; }
+
+    .reg-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+    .reg-row .name { font-weight: 700; color: var(--ink); }
+    #register { display: flex; gap: 5px; }
+    .cell {
+      width: 34px; height: 38px; border-radius: 7px; border: 2px dashed var(--grid);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-weight: 700; font-size: 22px; color: var(--ink); background: #ffffff;
     }
+    .cell.set { border-style: solid; border-color: var(--mu); }
+    .cell.new1 { border: 3px solid var(--gr); background: var(--fg); color: var(--grt); }
+    .cell.new0 { border: 3px solid var(--red); background: #fbeaea; color: var(--red); }
+    .bits12 .cell { width: 25px; height: 32px; font-size: 18px; }
+    .reg-ends { display: flex; justify-content: space-between; font-size: 13px; color: var(--mu); margin-top: 2px; }
 
-    .controls button.primary {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
+    #result {
+      margin-top: 10px; padding: 8px 14px; border-radius: 12px;
+      border: 3px solid var(--gr); background: var(--fg); color: var(--grt);
     }
+    #result.wait { border: 2px dashed var(--grid); background: #ffffff; color: var(--mu); }
+    #result .big { font-family: var(--mono); font-weight: 700; font-size: 28px; color: var(--ink); }
+    #result p { margin: 3px 0 0; font-size: 16.5px; line-height: 1.3; }
+    #result .v { font-family: var(--mono); font-weight: 700; white-space: nowrap; }
 
-    .controls button:disabled {
-      opacity: 0.5;
-      cursor: default;
-    }
-
-    .speed-group {
-      font-size: 14px;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .speed-group input[type="range"] {
-      width: 140px;
-    }
-
-    .info-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin: 8px 0 10px;
-      font-size: 16px;
-    }
-
-    .info-block {
-      padding: 8px 10px;
-      border-radius: 12px;
-      background: #f9fafb;
-      flex: 1 1 260px;
-      min-width: 260px;
-    }
-
-    .info-block strong {
-      font-weight: 700;
-    }
-
-    .bits-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      align-items: center;
-      margin-top: 6px;
-    }
-
-    .bit-box {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      border: 2px solid #cccccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 16px;
-      background: #ffffff;
-      box-sizing: border-box;
-    }
-
-    .bit-box.bit-1 {
-      background: #e3f5ff;
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .bit-box.current {
-      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.4);
-    }
-
-    canvas {
-      display: block;
-      width: 100%;
-      max-width: 100%;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: #ffffff;
-      margin: 8px auto 0;
-      height: 300px;
-    }
-
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
-      font-size: 15px;
-      margin-top: 6px;
-      justify-content: center;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .legend-line {
-      width: 20px;
-      height: 0;
-      border-top: 3px solid #000;
-    }
-
-    .legend-line.dashed {
-      border-style: dashed;
-    }
-
-    .legend-line.vin {
-      border-color: var(--danger);
-    }
-
-    .legend-line.dac {
-      border-color: var(--accent);
-    }
-
-    .footer-note {
-      margin-top: 10px;
-      font-size: 14px;
-      text-align: center;
-      opacity: 0.9;
-    }
-
-    @media (max-width: 700px) {
-      h1 { font-size: 22px; }
-      .subtitle { font-size: 16px; }
-      .slider-group label,
-      .slider-value,
-      .info-row { font-size: 15px; }
-      .controls button { font-size: 14px; }
-      .bit-box {
-        width: 28px;
-        height: 28px;
-        font-size: 14px;
-      }
-      canvas { height: 260px; }
+    @media (max-width: 1000px) {
+      .main { grid-template-columns: 1fr; }
+      .keys { display: none; }
+      #vinSlider { width: 220px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>8-bit SAR ADC</h1>
-    <div class="subtitle">Successive Approximation – V_DAC vs Time</div>
+<div class="wrap">
+  <h1>SAR ADC: one comparison for each bit</h1>
+  <p class="lead">The ADC compares the input with a test voltage, keeps the half where the input is, and repeats.</p>
 
-    <div class="top-row">
-      <div class="slider-group">
-        <label for="vinSlider">Input Voltage V_in (as fraction of V_ref)</label>
-        <input id="vinSlider" type="range" min="0" max="1000" step="1" value="600" />
-        <div class="slider-value" id="vinLabel"></div>
-      </div>
-
-      <div class="controls">
-        <div class="button-row">
-          <button id="playBtn" class="primary">Play</button>
-          <button id="stepBtn">Step</button>
-          <button id="resetBtn">Reset</button>
-        </div>
-        <div class="speed-group">
-          <span>Step duration:</span>
-          <input id="speedSlider" type="range" min="300" max="1500" step="100" value="700" />
-          <span id="speedLabel">700 ms</span>
-        </div>
-      </div>
+  <div class="controls">
+    <div class="ctl">
+      <span class="name">Input</span>
+      <input id="vinSlider" type="range" min="0" max="330" step="1" value="240" aria-label="Input voltage" />
+      <span id="vinValue">2.40 V</span>
     </div>
-
-    <div class="info-row">
-      <div class="info-block" id="numericInfo"></div>
-      <div class="info-block">
-        <div><strong>Bit Decisions (MSB → LSB)</strong></div>
-        <div class="bits-row" id="bitsRow"></div>
-      </div>
+    <div class="ctl" role="group" aria-label="Number of bits">
+      <span class="name">Bits</span>
+      <button class="bitsBtn on" data-bits="4">4</button>
+      <button class="bitsBtn" data-bits="8">8</button>
+      <button class="bitsBtn" data-bits="12">12</button>
     </div>
-
-    <canvas id="sarCanvas" width="1024" height="300"></canvas>
-    <div class="legend">
-      <div class="legend-item">
-        <div class="legend-line vin dashed"></div>
-        <span>V_in (sample)</span>
-      </div>
-      <div class="legend-item">
-        <div class="legend-line dac"></div>
-        <span>V_DAC (test value per step)</span>
-      </div>
+    <div class="ctl">
+      <button id="backBtn">&#9664; Back</button>
+      <button id="stepBtn" class="primary">Step &#9654;</button>
+      <button id="playBtn">Play</button>
+      <button id="resetBtn">Reset</button>
     </div>
-
-    <div class="footer-note">
-      8-bit resolution → 256 levels (0–255).  
-      At each step: if V_DAC ≤ V_in, that bit is 1; otherwise it is 0.
-    </div>
+    <div class="keys"><kbd>&rarr;</kbd> step &nbsp; <kbd>&larr;</kbd> back &nbsp; <kbd>R</kbd> reset</div>
   </div>
 
-  <script>
-    (function () {
-      const BITS = 8;
-      const MAX_CODE = (1 << BITS) - 1; // 255
+  <div class="main">
+    <div class="card">
+      <h2>All steps on one voltage scale</h2>
+      <svg id="plot" viewBox="0 0 1000 580" role="img" aria-label="The range that is left after each step, on a scale from 0 to 3.3 volts"></svg>
+    </div>
+    <div class="card">
+      <h2>This step, enlarged</h2>
+      <div id="stepTitle"></div>
+      <svg id="zoom" viewBox="0 0 520 262" role="img" aria-label="The range before this step, the test voltage in its middle, and the input"></svg>
+      <p id="stepText"></p>
+      <div class="reg-row">
+        <span class="name">Register</span>
+        <div>
+          <div id="register"></div>
+          <div class="reg-ends"><span id="regMsb"></span><span>bit 0</span></div>
+        </div>
+      </div>
+      <div id="result" class="wait"></div>
+    </div>
+  </div>
+</div>
 
-      const vinSlider   = document.getElementById("vinSlider");
-      const vinLabel    = document.getElementById("vinLabel");
-      const playBtn     = document.getElementById("playBtn");
-      const stepBtn     = document.getElementById("stepBtn");
-      const resetBtn    = document.getElementById("resetBtn");
-      const numericInfo = document.getElementById("numericInfo");
-      const bitsRow     = document.getElementById("bitsRow");
-      const canvas      = document.getElementById("sarCanvas");
-      const ctx         = canvas.getContext("2d");
+<script>
+(function () {
+  "use strict";
+  var VREF = 3.3, SVGNS = "http://www.w3.org/2000/svg";
+  var C = { ink: "#174f73", mid: "#2b789f", or: "#d47b28", ort: "#b8621a", gr: "#3f7f58", grt: "#2b5a3e",
+            red: "#a32d2d", mu: "#5a6b76", grid: "#c8d8e2", kept: "#d3e6f0", fb: "#e8f2f7" };
 
-      const speedSlider = document.getElementById("speedSlider");
-      const speedLabel  = document.getElementById("speedLabel");
+  var bits = 4, vin = 2.40, done = 0, timer = null;      // done = number of finished steps
 
-      let vin = 0.6;
-      let steps = [];
-      let finalCode = 0;
-      let currentStepIndex = -1;
-      let isPlaying = false;
-      let timerId = null;
-      let stepInterval = Number(speedSlider.value);
+  var $ = function (id) { return document.getElementById(id); };
+  var plot = $("plot"), zoom = $("zoom");
 
-      function formatPercent(x) {
-        return (x * 100).toFixed(1) + " %";
-      }
+  // Volts with d decimals, halves rounded up (2.475 -> 2.48, as on the slide).
+  function fmt(v, d) {
+    var m = Math.pow(10, d);
+    return (Math.round(v * m + 1e-7) / m).toFixed(d);
+  }
+  function decimals() { return bits === 4 ? 2 : (bits === 8 ? 3 : 4); }
+  function volts(v) { return fmt(v, decimals()) + " V"; }
 
-      function computeSarSteps() {
-        steps = [];
-        let resultCode = 0;
-        for (let bit = BITS - 1; bit >= 0; bit--) {
-          const trial = resultCode | (1 << bit);
-          const dacVal = trial / MAX_CODE;
-          const keep = dacVal <= vin;
-          if (keep) resultCode = trial;
-          steps.push({ bit, trial, dacVal, keep, codeAfter: resultCode });
-        }
-        finalCode = steps.length ? steps[steps.length - 1].codeAfter : 0;
-      }
+  function compute() {
+    var steps = [], lo = 0, hi = VREF, code = 0;
+    for (var i = 0; i < bits; i++) {
+      var lo0 = lo, hi0 = hi, test = (lo + hi) / 2, bit = vin >= test ? 1 : 0;
+      if (bit) { lo = test; } else { hi = test; }
+      code = code * 2 + bit;
+      steps.push({ n: i + 1, bitIndex: bits - 1 - i, lo0: lo0, hi0: hi0, test: test, bit: bit, lo: lo, hi: hi, code: code });
+    }
+    return steps;
+  }
 
-      function updateVinFromSlider() {
-        vin = Number(vinSlider.value) / 1000.0;
-        vinLabel.textContent =
-          "V_in ≈ " +
-          formatPercent(vin) +
-          " of V_ref  (ideal code ≈ " +
-          Math.round(vin * MAX_CODE) +
-          ")";
-        computeSarSteps();
-        currentStepIndex = -1;
-        stopPlaying();
-        updateBitsRow();
-        draw();
-        updateNumericInfo();
-      }
+  function el(parent, name, attrs, text) {
+    var e = document.createElementNS(SVGNS, name);
+    for (var k in attrs) { e.setAttribute(k, attrs[k]); }
+    if (text !== undefined) { e.textContent = text; }
+    parent.appendChild(e);
+    return e;
+  }
+  function clear(node) { while (node.firstChild) { node.removeChild(node.firstChild); } }
 
-      function buildBitsRow() {
-        bitsRow.innerHTML = "";
-        for (let b = BITS - 1; b >= 0; b--) {
-          const box = document.createElement("div");
-          box.className = "bit-box";
-          box.dataset.bit = String(b);
-          box.textContent = "0";
-          bitsRow.appendChild(box);
-        }
-      }
+  // ---- left: every step on the same 0 to 3.3 V scale ---------------------
+  function drawPlot(steps) {
+    clear(plot);
+    var L = 150, R = 935, T = 44, B = 452, H = B - T;
+    var slot = (R - L) / bits, gap = bits === 4 ? 26 : (bits === 8 ? 12 : 8), w = slot - gap;
+    var y = function (v) { return B - v / VREF * H; };
 
-      function updateBitsRow() {
-        const boxes = bitsRow.querySelectorAll(".bit-box");
-        boxes.forEach(box => {
-          box.classList.remove("bit-1", "current");
-          box.textContent = "0";
-        });
+    el(plot, "text", { x: R + 10, y: T + 6, "font-size": 17, "font-weight": 700, fill: C.mu }, "3.3 V");
+    el(plot, "text", { x: R + 10, y: B + 6, "font-size": 17, "font-weight": 700, fill: C.mu }, "0 V");
+    el(plot, "line", { x1: L, y1: T, x2: R, y2: T, stroke: C.grid, "stroke-width": 2, "stroke-dasharray": "4 7" });
+    el(plot, "line", { x1: L, y1: B, x2: R, y2: B, stroke: C.ink, "stroke-width": 2 });
+    el(plot, "text", { x: L - 12, y: B + 36, "text-anchor": "end", "font-size": 16, "font-weight": 700, fill: C.mu }, "test");
+    el(plot, "text", { x: L - 12, y: B + 64, "text-anchor": "end", "font-size": 16, "font-weight": 700, fill: C.mu }, "input is");
+    el(plot, "text", { x: L - 12, y: B + 100, "text-anchor": "end", "font-size": 16, "font-weight": 700, fill: C.mu }, "bit");
 
-        if (currentStepIndex < 0) return;
-
-        const state = steps[currentStepIndex];
-        const codeAfter = state.codeAfter;
-
-        boxes.forEach(box => {
-          const bit = Number(box.dataset.bit);
-          const bitVal = (codeAfter >> bit) & 1;
-          if (bitVal) {
-            box.textContent = "1";
-            box.classList.add("bit-1");
-          }
-        });
-
-        const currentBit = state.bit;
-        boxes.forEach(box => {
-          const b = Number(box.dataset.bit);
-          if (b === currentBit) box.classList.add("current");
-        });
-      }
-
-      function updateNumericInfo() {
-        const stepNum = currentStepIndex + 1;
-        const totalSteps = steps.length;
-
-        if (currentStepIndex < 0) {
-          numericInfo.innerHTML =
-            "<strong>Status:</strong> Ready to start conversion<br>" +
-            "Resolution: " + BITS + " bits → " + (MAX_CODE + 1) + " levels" +
-            "<br>Press <strong>Play</strong> or <strong>Step</strong> to begin.";
-          return;
-        }
-
-        const s = steps[currentStepIndex];
-        const relation = s.keep
-          ? "V_DAC ≤ V_in → bit = 1"
-          : "V_DAC > V_in → bit = 0";
-        const codeAfter = s.codeAfter;
-
-        numericInfo.innerHTML =
-          "<strong>Step " + stepNum + " / " + totalSteps + "</strong><br>" +
-          "Current bit: b<sub>" + s.bit + "</sub><br>" +
-          "Trial code: " + s.trial +
-          "  (V_DAC ≈ " + formatPercent(s.dacVal) + " of V_ref)<br>" +
-          relation + "<br>" +
-          "Code after step: <strong>" + codeAfter + "</strong>";
-      }
-
-      function draw() {
-        const w = canvas.width;
-        const h = canvas.height;
-        ctx.clearRect(0, 0, w, h);
-
-        const left = 80;
-        const right = w - 30;
-        const top = 30;
-        const bottom = h - 50;
-
-        // axes
-        ctx.lineWidth = 2.5;
-        ctx.strokeStyle = "#000";
-        ctx.beginPath();
-        ctx.moveTo(left, top);
-        ctx.lineTo(left, bottom);
-        ctx.lineTo(right, bottom);
-        ctx.stroke();
-
-        ctx.font = "16px system-ui";
-        ctx.fillStyle = "#000";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "top";
-        ctx.fillText("Time / Steps", (left + right) / 2, bottom + 20);
-
-        ctx.save();
-        ctx.translate(20, (top + bottom) / 2);
-        ctx.rotate(-Math.PI / 2);
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("V_DAC (code, 0…255)", 0, 0);
-        ctx.restore();
-
-        function yFromVal(val) {
-          return bottom - val * (bottom - top);
-        }
-
-        // Y ticks for 8-bit codes
-        const ticks = [
-          { code: 0 },
-          { code: 64 },
-          { code: 128 },
-          { code: 192 },
-          { code: 255 }
-        ];
-        ctx.textAlign = "right";
-        ctx.textBaseline = "middle";
-        ticks.forEach(t => {
-          const v = t.code / MAX_CODE;
-          const y = yFromVal(v);
-          ctx.beginPath();
-          ctx.moveTo(left - 6, y);
-          ctx.lineTo(left, y);
-          ctx.stroke();
-          const label = t.code === 255 ? "255 (FS)" : String(t.code);
-          ctx.fillText(label, left - 8, y);
-        });
-
-        // Vin horizontal dashed line
-        const yVin = yFromVal(vin);
-        ctx.save();
-        ctx.setLineDash([8, 6]);
-        ctx.lineWidth = 2.5;
-        ctx.strokeStyle = "#cc0000";
-        ctx.beginPath();
-        ctx.moveTo(left, yVin);
-        ctx.lineTo(right, yVin);
-        ctx.stroke();
-        ctx.restore();
-
-        ctx.fillStyle = "#cc0000";
-        ctx.textAlign = "left";
-        ctx.textBaseline = "bottom";
-        ctx.font = "16px system-ui";
-        ctx.fillText("V_in", left + 6, yVin - 4);
-
-        // Steps along time axis
-        const nSteps = steps.length;
-        if (nSteps === 0) return;
-
-        const usableWidth = right - left - 20;
-        const dx = usableWidth / (nSteps + 1);
-
-        ctx.textAlign = "center";
-        ctx.textBaseline = "top";
-        ctx.font = "14px system-ui";
-
-        for (let i = 0; i < nSteps; i++) {
-          const s = steps[i];
-          const x = left + 10 + (i + 1) * dx;
-
-          if (i > currentStepIndex) {
-            // future step marker only
-            ctx.strokeStyle = "#dddddd";
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(x, bottom);
-            ctx.lineTo(x, bottom - 8);
-            ctx.stroke();
-          } else {
-            // DAC bar for completed step
-            const yDac = yFromVal(s.dacVal);
-            const barWidth = dx * 0.4;
-
-            ctx.fillStyle = (i === currentStepIndex) ? "#0066cc" : "#66aaff";
-            ctx.strokeStyle = (i === currentStepIndex) ? "#004488" : "#225577";
-            ctx.lineWidth = (i === currentStepIndex) ? 3 : 2;
-
-            ctx.beginPath();
-            ctx.rect(x - barWidth / 2, yDac, barWidth, bottom - yDac);
-            ctx.fill();
-            ctx.stroke();
-
-            // Bit value label directly above bar (1 if keep, 0 otherwise)
-            const bitVal = s.keep ? 1 : 0;
-            const labelY = Math.min(yDac - 4, top + 18); // clamp near top
-            ctx.font = "18px system-ui";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "bottom";
-            ctx.fillStyle = bitVal ? "#008800" : "#cc0000";
-            ctx.fillText(String(bitVal), x, labelY);
-          }
-
-          // bit index along time axis
-          ctx.fillStyle = "#000000";
-          ctx.font = "14px system-ui";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "top";
-          ctx.fillText("b" + s.bit, x, bottom + 4);
+    steps.forEach(function (s, i) {
+      var x = L + i * slot + gap / 2, cx = x + w / 2, isDone = i < done, isNow = i === done - 1;
+      el(plot, "text", { x: cx, y: T - 16, "text-anchor": "middle", "font-size": 17, "font-weight": 700,
+                         fill: isDone ? C.mid : C.grid }, bits === 4 ? "step " + s.n : String(s.n));
+      if (!isDone) { return; }
+      var yTop0 = y(s.hi0), h0 = Math.max(y(s.lo0) - yTop0, 2), yTop = y(s.hi), h = Math.max(y(s.lo) - yTop, 2);
+      el(plot, "rect", { x: x, y: yTop0, width: w, height: h0, fill: "#ffffff", stroke: C.mu,
+                         "stroke-width": 1.5, "stroke-dasharray": "6 6" });
+      el(plot, "rect", { x: x, y: yTop, width: w, height: h, fill: C.kept });
+      if (bits === 4) {                      // one stripe for each code that is still possible
+        var left = Math.round((s.hi - s.lo) / VREF * 16);
+        for (var c = 1; c < left; c++) {
+          el(plot, "line", { x1: x, y1: y(s.lo) - c * H / 16, x2: x + w, y2: y(s.lo) - c * H / 16, stroke: "#9dbfd1", "stroke-width": 1.5 });
         }
       }
-
-      function stopPlaying() {
-        isPlaying = false;
-        if (timerId !== null) {
-          clearInterval(timerId);
-          timerId = null;
-        }
-        playBtn.textContent = "Play";
+      el(plot, "line", { x1: x, y1: y(s.test), x2: x + w, y2: y(s.test), stroke: C.or, "stroke-width": 4, "stroke-linecap": "round" });
+      if (isNow) {
+        el(plot, "rect", { x: x - 4, y: T - 4, width: w + 8, height: H + 8, fill: "none", stroke: C.ink, "stroke-width": 2, rx: 6 });
       }
+      var col = s.bit ? C.grt : C.red;
+      el(plot, "text", { x: cx, y: B + 36, "text-anchor": "middle", "font-size": bits === 12 ? 15 : 18, "font-weight": 700,
+                         fill: C.ort, "class": "m" }, fmt(s.test, decimals()));
+      el(plot, "text", { x: cx, y: B + 64, "text-anchor": "middle", "font-size": bits === 12 ? 15 : 17, "font-weight": 700,
+                         fill: col }, s.bit ? "higher" : "lower");
+      el(plot, "rect", { x: cx - 15, y: B + 78, width: 30, height: 32, rx: 6, fill: s.bit ? "#edf6f0" : "#fbeaea",
+                         stroke: col, "stroke-width": isNow ? 3 : 2 });
+      el(plot, "text", { x: cx, y: B + 102, "text-anchor": "middle", "font-size": 22, "font-weight": 700, fill: col, "class": "m" }, String(s.bit));
+    });
 
-      function stepOnce() {
-        if (currentStepIndex < steps.length - 1) {
-          currentStepIndex++;
-          updateBitsRow();
-          draw();
-          updateNumericInfo();
-        } else {
-          stopPlaying();
-        }
-      }
+    // the input, drawn last so it stays on top of every range
+    var yi = y(vin);
+    el(plot, "line", { x1: L - 14, y1: yi, x2: R, y2: yi, stroke: C.ink, "stroke-width": 3.5, "stroke-dasharray": "14 9" });
+    el(plot, "text", { x: L - 24, y: yi - 6, "text-anchor": "end", "font-size": 17, "font-weight": 700, fill: C.ink }, "input");
+    el(plot, "text", { x: L - 24, y: yi + 17, "text-anchor": "end", "font-size": 20, "font-weight": 700, fill: C.ink, "class": "m" },
+       fmt(vin, 2) + " V");
+  }
 
-      function startPlaying() {
-        if (isPlaying) return;
-        isPlaying = true;
-        playBtn.textContent = "Pause";
-        timerId = setInterval(stepOnce, stepInterval);
-      }
+  // ---- right: the range of one step, always the same height --------------
+  function drawZoom(steps) {
+    clear(zoom);
+    var pending = done === 0, s = steps[Math.max(done, 1) - 1];
+    var X0 = 200, X1 = 330, T = 16, B = 246, H = B - T, mid = (T + B) / 2;
 
-      // events
-      vinSlider.addEventListener("input", updateVinFromSlider);
+    if (!pending) {
+      el(zoom, "rect", { x: X0, y: s.bit ? T : mid, width: X1 - X0, height: H / 2, fill: C.kept });
+      el(zoom, "rect", { x: X0, y: s.bit ? mid : T, width: X1 - X0, height: H / 2, fill: "#f3f5f7" });
+      el(zoom, "text", { x: (X0 + X1) / 2, y: (s.bit ? T : mid) + H / 4 + 6, "text-anchor": "middle", "font-size": 18,
+                         "font-weight": 700, fill: C.mid }, "kept");
+      el(zoom, "text", { x: (X0 + X1) / 2, y: (s.bit ? mid : T) + H / 4 + 6, "text-anchor": "middle", "font-size": 16,
+                         "font-weight": 600, fill: C.mu }, "dropped");
+    }
+    el(zoom, "rect", { x: X0, y: T, width: X1 - X0, height: H, fill: "none", stroke: C.mu, "stroke-width": 2, "stroke-dasharray": "6 6" });
+    el(zoom, "text", { x: X1 + 14, y: T + 6, "font-size": 18, "font-weight": 700, fill: C.mu, "class": "m" }, volts(s.hi0));
+    el(zoom, "text", { x: X1 + 14, y: B + 6, "font-size": 18, "font-weight": 700, fill: C.mu, "class": "m" }, volts(s.lo0));
+    el(zoom, "line", { x1: X0 - 8, y1: mid, x2: X1 + 8, y2: mid, stroke: C.or, "stroke-width": 5, "stroke-linecap": "round" });
+    el(zoom, "text", { x: X1 + 14, y: mid - 7, "font-size": 16, "font-weight": 700, fill: C.ort }, "test");
+    el(zoom, "text", { x: X1 + 14, y: mid + 18, "font-size": 21, "font-weight": 700, fill: C.ort, "class": "m" }, volts(s.test));
 
-      playBtn.addEventListener("click", () => {
-        if (!isPlaying) {
-          if (currentStepIndex >= steps.length - 1) {
-            currentStepIndex = -1;
-            updateBitsRow();
-            draw();
-            updateNumericInfo();
-          }
-          startPlaying();
-        } else {
-          stopPlaying();
-        }
-      });
+    var f = (vin - s.lo0) / (s.hi0 - s.lo0);
+    var yi = B - Math.min(1, Math.max(0, f)) * H, below = yi < T + 44;
+    el(zoom, "line", { x1: 30, y1: yi, x2: X1, y2: yi, stroke: C.ink, "stroke-width": 3.5, "stroke-dasharray": "12 8" });
+    el(zoom, "text", { x: 30, y: below ? yi + 22 : yi - 31, "font-size": 16, "font-weight": 700, fill: C.ink }, "input");
+    el(zoom, "text", { x: 30, y: below ? yi + 45 : yi - 9, "font-size": 21, "font-weight": 700, fill: C.ink, "class": "m" },
+       fmt(vin, bits === 4 ? 2 : 3) + " V");
+  }
 
-      stepBtn.addEventListener("click", () => {
-        stopPlaying();
-        stepOnce();
-      });
+  function drawText(steps) {
+    var pending = done === 0, s = steps[Math.max(done, 1) - 1], v = function (x) { return '<span class="v">' + volts(x) + "</span>"; };
+    $("stepTitle").textContent = pending ? "Next: step 1 of " + bits : "Step " + s.n + " of " + bits;
+    if (pending) {
+      $("stepText").innerHTML = "The input is somewhere between " + v(s.lo0) + " and " + v(s.hi0) +
+        ". Step 1 tests the middle: " + v(s.test) + ".";
+    } else {
+      $("stepText").innerHTML = "The input is <b class=\"" + (s.bit ? "hi\">higher" : "lo\">lower") + "</b> than " + v(s.test) +
+        ", so bit " + s.bitIndex + " = <b class=\"" + (s.bit ? "hi" : "lo") + "\">" + s.bit + "</b>. The " +
+        (s.bit ? "upper" : "lower") + " half is kept: " + v(s.lo) + " to " + v(s.hi) + ".";
+    }
 
-      resetBtn.addEventListener("click", () => {
-        stopPlaying();
-        currentStepIndex = -1;
-        updateBitsRow();
-        draw();
-        updateNumericInfo();
-      });
+    var reg = $("register");
+    reg.innerHTML = "";
+    reg.parentNode.parentNode.classList.toggle("bits12", bits === 12);
+    steps.forEach(function (st, i) {
+      var c = document.createElement("div");
+      c.className = "cell" + (i < done ? (i === done - 1 ? (st.bit ? " new1" : " new0") : " set") : "");
+      c.textContent = i < done ? String(st.bit) : "";
+      reg.appendChild(c);
+    });
+    $("regMsb").textContent = "bit " + (bits - 1);
 
-      speedSlider.addEventListener("input", () => {
-        stepInterval = Number(speedSlider.value);
-        speedLabel.textContent = stepInterval + " ms";
-        if (isPlaying) {
-          clearInterval(timerId);
-          timerId = setInterval(stepOnce, stepInterval);
-        }
-      });
+    var res = $("result"), last = steps[bits - 1], top = Math.pow(2, bits) - 1;
+    if (done < bits) {
+      res.className = "wait";
+      res.innerHTML = "<p>" + (bits - done) + (bits - done === 1 ? " bit" : " bits") + " still to find. One step = " +
+        '<span class="v">' + fmt(VREF / Math.pow(2, bits) * 1000, bits === 12 ? 1 : 0) + " mV</span>.</p>";
+    } else {
+      var bin = last.code.toString(2);
+      while (bin.length < bits) { bin = "0" + bin; }
+      res.className = "";
+      res.innerHTML = "Result <span class=\"big\">" + bin + "</span> = <span class=\"v\">" + last.code + " of " + top + "</span>" +
+        "<p>The input is between " + v(last.lo) + " and " + v(last.hi) + ": one step. That is all a " + bits + "-bit ADC can say.</p>" +
+        "<p>Lecture formula: <span class=\"v\">" + last.code + " &times; 3300 &divide; " + top + " = " +
+        Math.floor(last.code * 3300 / top) + " mV</span></p>";
+    }
+  }
 
-      // init
-      buildBitsRow();
-      computeSarSteps();
-      updateVinFromSlider();
-      speedLabel.textContent = stepInterval + " ms";
-    })();
-  </script>
+  function render() {
+    var steps = compute();
+    drawPlot(steps); drawZoom(steps); drawText(steps);
+    $("vinValue").textContent = fmt(vin, 2) + " V";
+    $("backBtn").disabled = done === 0;
+    $("stepBtn").disabled = done === bits;
+    $("playBtn").textContent = timer ? "Pause" : "Play";
+  }
+
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  function step() { if (done < bits) { done++; } if (done === bits) { stop(); } render(); }
+  function back() { stop(); if (done > 0) { done--; } render(); }
+  function reset() { stop(); done = 0; render(); }
+  function play() {
+    if (timer) { stop(); render(); return; }
+    if (done === bits) { done = 0; }
+    timer = setInterval(step, bits === 4 ? 1100 : 650);
+    render();
+  }
+
+  $("vinSlider").addEventListener("input", function () { vin = Number(this.value) / 100; render(); });
+  $("stepBtn").addEventListener("click", function () { stop(); step(); });
+  $("backBtn").addEventListener("click", back);
+  $("resetBtn").addEventListener("click", reset);
+  $("playBtn").addEventListener("click", play);
+  Array.prototype.forEach.call(document.querySelectorAll(".bitsBtn"), function (b) {
+    b.addEventListener("click", function () {
+      stop(); bits = Number(b.getAttribute("data-bits")); done = 0;
+      Array.prototype.forEach.call(document.querySelectorAll(".bitsBtn"), function (o) { o.classList.toggle("on", o === b); });
+      render();
+    });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.target && e.target.id === "vinSlider") { return; }       // the arrow keys move the slider there
+    if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); stop(); step(); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); back(); }
+    else if (e.key === "r" || e.key === "R") { reset(); }
+  });
+
+  // A link can open the demo in a given state: sac.html?bits=12&vin=2.4&step=5
+  (function () {
+    var q = new URLSearchParams(location.search), b = Number(q.get("bits")), v = Number(q.get("vin")), st = Number(q.get("step"));
+    if (b === 4 || b === 8 || b === 12) {
+      bits = b;
+      Array.prototype.forEach.call(document.querySelectorAll(".bitsBtn"), function (o) { o.classList.toggle("on", Number(o.getAttribute("data-bits")) === b); });
+    }
+    if (q.get("vin") !== null && v >= 0 && v <= VREF) { vin = Math.round(v * 100) / 100; $("vinSlider").value = String(Math.round(vin * 100)); }
+    if (st > 0) { done = Math.min(bits, Math.floor(st)); }
+  })();
+
+  render();
+})();
+</script>
 </body>
 </html>
