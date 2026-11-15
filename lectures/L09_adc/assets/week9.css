@@ -1,0 +1,75 @@
+/* EE5203 L09 theory deck. Loaded after week7.css and week8.css. */
+
+/* Practice slides: question | calculation | result, one row per question.
+   The calculation and the result of one row share a fragment index, so one
+   click shows both. The results stand in one column and can be read alone. */
+.reveal .prac-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1.1fr) minmax(0, 0.62fr);
+  column-gap: 0.45em;
+  row-gap: 0.4em;
+  width: 96%;
+  margin: 0.45em auto 0.3em;
+  font-size: 0.76em;
+  line-height: 1.25;
+}
+/* short questions and long calculations, on a slide that also has a code block:
+   lower rows */
+.reveal .prac-grid.short-q {
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.45fr) minmax(0, 0.7fr);
+  row-gap: 0.32em;
+}
+.reveal .prac-grid.short-q > div { min-height: 2.7em; }
+.reveal .prac-grid p { margin: 0; }
+.reveal .prac-q,
+.reveal .prac-c,
+.reveal .prac-r {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 3.2em;
+}
+.reveal .prac-q {
+  gap: 0.55em;
+  padding: 0.3em 0.5em;
+  border-left: 5px solid #8fb8cb;
+  color: #355262;
+}
+.reveal .prac-q > p:first-child { flex: none; }
+.reveal .prac-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.55em;
+  height: 1.55em;
+  border-radius: 50%;
+  background: #174f73;
+  color: #ffffff;
+  font-size: 0.9em;
+  font-weight: 700;
+}
+.reveal .prac-c {
+  padding: 0.3em 0.7em;
+  border-radius: 10px;
+  background: #eef5f9;
+  color: #174f73;
+}
+.reveal .prac-r {
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.3em 0.5em;
+  border-radius: 10px;
+  background: #e3f1e8;
+  color: #2b5a3e;
+  font-weight: 700;
+  text-align: center;
+}
+.reveal .prac-note {
+  display: block;
+  font-size: 0.68em;
+  font-weight: 600;
+  color: #3f7f58;
+}
+/* a result that shows a mistake */
+.reveal .prac-r.bad { background: #fbeaea; color: #a32d2d; }
+.reveal .prac-r.bad .prac-note { color: #a32d2d; }
