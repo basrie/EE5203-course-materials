@@ -4850,6 +4850,9 @@ color: var(--ee-muted); cursor: pointer;
 .shot-close:hover { color: var(--ee-ink); border-color: var(--ee-muted); }
 .shot-box.full .shot-close { position: fixed; top: calc(3vh + 0.45rem); right: calc(2vw + 0.6rem); background: #fff; }
 @media print { .shot-link, .shot-box { display: none; } }
+
+.answer table td { height: 2.8em; vertical-align: top; }
+.answer table th { vertical-align: bottom; }
 </style>
 </head>
 
@@ -5132,7 +5135,7 @@ document.querySelectorAll('.shot-box').forEach(function (d) {
 </section>
 <section id="checkpoint-d---the-potentiometer-sets-a-servo-angle-optional-not-graded" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-d---the-potentiometer-sets-a-servo-angle-optional-not-graded">Checkpoint D - The potentiometer sets a servo angle (optional, not graded)</h2>
-<p>Only if your kit has a servo and time remains. TIM3 makes the 50 Hz servo signal on PA6 (D12), as in the Lab 7 extension. Predict first: <code>raw_pot</code> = 1024 gives which <code>TIM3-&gt;CCR1</code>, and which angle?</p>
+<p>Do this checkpoint if time remains. TIM3 makes the 50 Hz servo signal on PA6 (D12), as in the Lab 7 extension. Predict first: <code>raw_pot</code> = 1024 gives which <code>TIM3-&gt;CCR1</code>, and which angle?</p>
 <ol type="1">
 <li><p><strong>CubeMX:</strong> click <strong>PA6</strong> and choose <strong><code>TIM3_CH1</code></strong>. <strong>Timers → TIM3:</strong> Clock Source = <code>Internal Clock</code>; Channel1 = <code>PWM Generation CH1</code>; Prescaler <code>15</code>, Counter Period <code>19999</code>, Pulse <code>1500</code>. Generate Code: your <code>USER CODE</code> lines stay.</p></li>
 <li><p><strong>Wiring:</strong> servo signal (orange) to <strong>D12</strong>, red to <strong>5V</strong>, brown to <strong>GND</strong>. The servo is the only part on the 5V pin: wire it straight to the servo, never to the breadboard rows.</p></li>
