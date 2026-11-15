@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>EE5203 L09 Worksheet – EE5203 Microprocessors</title>
+<title>EE5203 L09 Practice Worksheet – EE5203 Microprocessors</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -116,6 +150,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
     <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="EE5203_Microprocessors_Lecture9_Worksheet.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -123,25 +158,325 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="ee5203-l09-worksheet" class="level1">
-<h1>EE5203 L09 Worksheet</h1>
-<p><em>ADC and sensor acquisition - Basri Erdogan</em></p>
+<section id="ee5203-l09-practice-worksheet" class="level1 unlisted">
+<h1 class="unlisted">EE5203 L09 Practice Worksheet</h1>
+<p><em>Analog-to-digital conversion: from a pin voltage to a number - Basri Erdogan</em></p>
 <p><strong>Time:</strong> 30-45 minutes</p>
-<p><strong>Rule:</strong> Try every question before you open the solutions.</p>
-<p>12-bit ADC, 3.3 V reference, <code>raw</code> in 0…4095 throughout.</p>
-<section id="part-a---counts-volts-and-resolution" class="level2">
-<h2 class="anchored" data-anchor-id="part-a---counts-volts-and-resolution">Part A - Counts, volts, and resolution</h2>
+<p><strong>Rule:</strong> Try every question before you open the solutions. Short answers are fine. One sentence is usually enough.</p>
+<p><strong>In every question:</strong> <code>ADC1</code> has 12 bits and a 3.3 V reference, so <code>raw</code> is a number from 0 to 4095. The program uses integer arithmetic: after a division, drop the fraction. Example: 2310.4 becomes 2310.</p>
+<section id="part-a---from-a-voltage-to-a-number-10-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-a---from-a-voltage-to-a-number-10-minutes">Part A - From a voltage to a number (10 minutes)</h2>
 <ol type="1">
-<li><p>Write the counts→millivolts formula, and state the LSB size in millivolts.</p></li>
-<li><p>Complete the table using integer arithmetic only.</p></li>
+<li><p>Complete the line of C that turns <code>raw</code> into millivolts.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>mv <span class="op">=</span> <span class="op">(</span>raw <span class="op">*</span> ______<span class="op">)</span> <span class="op">/</span> ______<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Fill in the table. Use the line from question 1.</p></li>
 </ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><code>raw</code></th>
+<th style="text-align: center;"><code>mv</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1024</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2048</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2867</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4095</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="3" type="1">
+<li><p>The pin is at 2475 mV. What is <code>raw</code>? Write the calculation. Then check your answer: is it about three quarters of 4095? <strong>Yes / No.</strong></p></li>
+<li><p>A student writes this line:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mv <span class="op">=</span> <span class="op">(</span>raw <span class="op">/</span> <span class="dv">4095</span><span class="bu">u</span><span class="op">)</span> <span class="op">*</span> <span class="dv">3300</span><span class="bu">u</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol type="a">
+<li>What is <code>mv</code> for <code>raw = 2000</code>?<br>
+</li>
+<li>Write the correct line.<br>
+</li>
+<li>What is <code>mv</code> for <code>raw = 2000</code> with the correct line?</li>
+</ol></li>
+<li><p>The program can read PA0 in two ways. A digital input changes from 0 to 1 at about 1650 mV. Fill in the table.</p></li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Voltage on PA0</th>
+<th style="text-align: center;"><code>HAL_GPIO_ReadPin()</code> gives</th>
+<th style="text-align: right;">The ADC gives <code>raw</code> =</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">400 mV</td>
+<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1200 mV</td>
+<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2000 mV</td>
+<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3300 mV</td>
+<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Look at the first two rows. Which input shows that the two voltages are different: the digital input or the ADC?</p>
+</section>
+<section id="part-b---levels-steps-and-bits-8-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-b---levels-steps-and-bits-8-minutes">Part B - Levels, steps and bits (8 minutes)</h2>
+<ol start="6" type="1">
+<li>A small ADC has 3 bits and a 3.3 V reference. It has 8 levels, numbered 0 to 7. One step is 412 mV. Each sample goes <strong>down</strong> to the nearest level. Fill in the table. The first row is an example.</li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Sample</th>
+<th style="text-align: center;">Level (0 to 7)</th>
+<th style="text-align: center;">3-bit code</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">500 mV</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"><code>001</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1300 mV</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2000 mV</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3200 mV</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="7" type="1">
+<li>Fill in the table for a 3.3 V reference.</li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Resolution</th>
+<th style="text-align: right;">Number of levels</th>
+<th style="text-align: right;">Largest value</th>
+<th style="text-align: right;">One step in mV</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8 bits</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td>10 bits</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td>12 bits</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="8" type="1">
+<li>A 4-bit SAR ADC with a 3.3 V reference converts an input of 1.00 V. In each step it compares the input with a test voltage. Input higher: the bit is 1. Input lower: the bit is 0.</li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Step</th>
+<th style="text-align: right;">Test voltage</th>
+<th style="text-align: center;">Is the input higher or lower?</th>
+<th style="text-align: center;">Bit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: right;">1.65 V</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">bit 3 =</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: right;">0.83 V</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">bit 2 =</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: right;">1.24 V</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">bit 1 =</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: right;">1.03 V</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">bit 0 =</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol type="a">
+<li>Write the 4-bit result. Which number from 0 to 15 is it?<br>
+</li>
+<li><code>ADC1</code> has 12 bits. How many comparisons does it make for one conversion?</li>
+</ol>
+</section>
+<section id="part-c---adc1-on-the-stm32-10-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-c---adc1-on-the-stm32-10-minutes">Part C - ADC1 on the STM32 (10 minutes)</h2>
+<ol start="9" type="1">
+<li>The ADC clock is 8 MHz, so one cycle is 0.125 µs. One conversion takes the sampling time plus 12 cycles. Fill in the table.</li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Sampling time</th>
+<th style="text-align: right;">Cycles for one conversion</th>
+<th style="text-align: right;">Conversion time in µs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3 cycles</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td>84 cycles</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td>480 cycles</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Which of the two parts do you choose in CubeMX: the sampling time or the 12 cycles?</p>
+<ol start="10" type="1">
+<li><p>The sampling time is <code>3 Cycles</code>. The program reads the potentiometer first and the LDR after it. The LDR value follows the potentiometer.</p>
+<ol type="a">
+<li>Explain in one sentence why. Use the word <strong>capacitor</strong>.<br>
+</li>
+<li>Which value do you choose for the sampling time in CubeMX to fix it?</li>
+</ol></li>
+<li><p>PA0 is an ADC input.</p>
+<ol type="a">
+<li>Which two bits does <code>MODER</code> hold for PA0?<br>
+</li>
+<li>What does <code>HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)</code> give in this pin mode?<br>
+</li>
+<li>What is the Arduino name of PA0 on the board, and which <code>ADC1</code> channel is it?<br>
+</li>
+<li>A sensor gives up to 5 V. Can you connect it to PA0 directly? <strong>Yes / No.</strong></li>
+</ol></li>
+<li><p>One ADC reading needs three HAL calls. Write the function name for each step.</p></li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>HAL function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. Start the conversion</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2. Wait until the conversion has ended</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>3. Read the value</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Which flag does the hardware set when the conversion has ended?</p>
+<ol start="13" type="1">
+<li><p>A program calls <code>HAL_ADC_Start()</code> <strong>once</strong>, before <code>while (1)</code>. Continuous Conversion Mode is <code>Disabled</code>. The loop has only these two lines:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>HAL_ADC_PollForConversion<span class="op">(&amp;</span>hadc1<span class="op">,</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> HAL_ADC_GetValue<span class="op">(&amp;</span>hadc1<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol type="a">
+<li>How many conversions does the ADC make?<br>
+</li>
+<li>You turn the potentiometer. Does <code>raw</code> change? <strong>Yes / No.</strong><br>
+</li>
+<li>Which line do you move, and where?</li>
+</ol></li>
+</ol>
+</section>
+<section id="part-d---from-the-adc-value-to-an-output-10-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-d---from-the-adc-value-to-an-output-10-minutes">Part D - From the ADC value to an output (10 minutes)</h2>
+<ol start="14" type="1">
+<li><p>The potentiometer sets the brightness of LD2 and the position of a servo.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>duty  <span class="op">=</span> <span class="op">(</span>raw <span class="op">*</span> <span class="dv">1000</span><span class="bu">u</span><span class="op">)</span> <span class="op">/</span> <span class="dv">4095</span><span class="bu">u</span><span class="op">;</span>             <span class="co">// LD2 on TIM2, ARR = 999</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pulse <span class="op">=</span> <span class="dv">500</span><span class="bu">u</span> <span class="op">+</span> <span class="op">(</span>raw <span class="op">*</span> <span class="dv">2000</span><span class="bu">u</span><span class="op">)</span> <span class="op">/</span> <span class="dv">4095</span><span class="bu">u</span><span class="op">;</span>      <span class="co">// servo pulse in µs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+<div class="answer">
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th style="text-align: right;"><code>raw</code></th>
-<th style="text-align: right;">mV</th>
-<th style="text-align: right;">LED duty (<code>×1000/4095</code>)</th>
-<th style="text-align: right;">Servo µs (<code>500 + ×2000/4095</code>)</th>
+<th style="text-align: right;"><code>duty</code></th>
+<th style="text-align: right;">LD2 duty cycle in %</th>
+<th style="text-align: right;"><code>pulse</code> in µs</th>
 </tr>
 </thead>
 <tbody>
@@ -171,89 +506,130 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<ol start="3" type="1">
-<li><p><code>mV = (raw / 4095) * 3300;</code> — explain exactly what this computes for <code>raw = 2000</code>, and give the corrected expression.</p></li>
-<li><p>Would 16-bit resolution on the same 3.3 V reference help you distinguish two voltages 0.5 mV apart? Compute the LSB for both 12-bit and 16-bit and justify your answer — including one reason the extra bits might not help in practice.</p></li>
-<li><p>A team wants to measure a 0–5 V sensor with this ADC. Explain what happens if they connect it directly, and describe a resistor divider that brings 5 V to just under 3.3 V. Give the two resistor values and the resulting <code>raw</code> for a 5 V input.</p></li>
-</ol>
-</section>
-<section id="part-b---configuration" class="level2">
-<h2 class="anchored" data-anchor-id="part-b---configuration">Part B - Configuration</h2>
-<ol start="6" type="1">
-<li><p>Give the <code>MODER</code> bit pattern for an analog pin, and say what else changes inside the pin when analog mode is selected.</p></li>
-<li><p>In one sentence each: what do <strong>sampling time</strong> and <strong>conversion time</strong> mean, and which one do you choose in CubeMX? Then calculate the conversion time for 84 cycles and for 3 cycles at an 8 MHz ADC clock.</p></li>
-<li><p>Explain why a high-impedance source needs a longer sampling time. What symptom appears if it is too short <em>and you are switching channels</em>?</p></li>
-<li><p>There is one ADC and sixteen channels. Describe what actually happens when <code>adc_read(ADC_CHANNEL_0)</code> is followed by <code>adc_read(ADC_CHANNEL_1)</code>, and state one consequence for a project that must correlate two sensors.</p></li>
-<li><p>Contrast <strong>single</strong> and <strong>continuous</strong> conversion mode. Give one situation where each is the right choice.</p></li>
-</ol>
-</section>
-<section id="part-c---reading-and-flags" class="level2">
-<h2 class="anchored" data-anchor-id="part-c---reading-and-flags">Part C - Reading and flags</h2>
-<ol start="11" type="1">
-<li><p>What sets <code>EOC</code>? Name the HAL call that waits for it, and say what clears the flag.</p></li>
-<li><p>A loop calls <code>HAL_ADC_PollForConversion()</code> and <code>HAL_ADC_GetValue()</code> on every tick, but <code>HAL_ADC_Start()</code> only once, before the loop. Single conversion mode. Explain what <code>PollForConversion</code> returns from the second tick on, and what value the program reads.</p></li>
-<li><p>Why is <code>HAL_ADC_PollForConversion</code> unacceptable inside an interrupt callback? Give the alternative and name the flag it relies on.</p></li>
-<li><p>List the three flag families you have met so far, their peripherals, and what clears each one.</p></li>
-</ol>
-</section>
-<section id="part-d---from-counts-to-control" class="level2">
-<h2 class="anchored" data-anchor-id="part-d---from-counts-to-control">Part D - From counts to control</h2>
+</div>
 <ol start="15" type="1">
-<li><p>Write the loop body that reads the potentiometer every 10 ms from the L07 tick and sets the L08 LED duty. No <code>HAL_Delay()</code>.</p></li>
-<li><p><code>duty = (raw * 1000u) / 4095u;</code> — show that this cannot overflow a <code>uint32_t</code>, state what would happen with <code>uint16_t</code> intermediates, and explain why the factor is 1000 and not 999.</p></li>
-<li><p>Write <code>servo_from_raw(uint16_t raw)</code> returning a pulse width clamped to the 500–2500 µs range of the lab SG90s. Give the value for <code>raw = 2867</code>.</p></li>
-<li><p>The potentiometer is noisy: the last count flickers between two values and the servo buzzes. Give <strong>two</strong> different mitigations, one in software and one in hardware, and state a cost of each.</p></li>
+<li><p>The program reads the potentiometer every 10 ms and writes the duty. Fill in the five blanks.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">((</span>g_ms <span class="op">-</span> t_adc<span class="op">)</span> <span class="op">&gt;=</span> ______<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    t_adc <span class="op">=</span> g_ms<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    HAL_ADC_Start<span class="op">(&amp;</span>hadc1<span class="op">);</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    HAL_ADC_PollForConversion<span class="op">(&amp;</span>hadc1<span class="op">,</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    raw  <span class="op">=</span> ____________________<span class="op">(&amp;</span>hadc1<span class="op">);</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    duty <span class="op">=</span> <span class="op">(</span>raw <span class="op">*</span> ______<span class="op">)</span> <span class="op">/</span> ______<span class="op">;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    TIM2<span class="op">-&gt;</span>______ <span class="op">=</span> duty<span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Look at <code>raw * 1000u</code>.</p>
+<ol type="a">
+<li>What is its largest value?<br>
+</li>
+<li>Does this value fit in 16 bits? The largest 16-bit number is 65 535. <strong>Yes / No.</strong><br>
+</li>
+<li>Which type do <code>raw</code> and <code>duty</code> have in the lecture code?<br>
+</li>
+<li>Why is the factor 1000 and not 999? Use <code>ARR = 999</code> in your answer.</li>
+</ol></li>
+<li><p>A 10 kΩ resistor goes from 3.3 V to PA1. An LDR goes from PA1 to GND. The LDR has a high resistance in the dark and a low resistance in light.</p>
+<p>V(PA1) = 3300 mV × R<sub>LDR</sub> ÷ (R<sub>LDR</sub> + 10 kΩ)</p></li>
 </ol>
-</section>
-<section id="part-e---sensors-and-evidence" class="level2">
-<h2 class="anchored" data-anchor-id="part-e---sensors-and-evidence">Part E - Sensors and evidence</h2>
-<ol start="19" type="1">
-<li><p>An LDR in series with a 10 kΩ resistor between 3V3 and GND, junction to PA1. As the room gets <strong>darker</strong>, does <code>raw</code> rise or fall? Justify from the divider, given that an LDR’s resistance rises in darkness.</p></li>
-<li><p>Your night-light toggles LD2 rapidly when the light sits near the threshold. Name the phenomenon and give a fix that does not change the sensor. Then say what you would set the two thresholds to if the trip point is <code>raw = 2000</code>.</p></li>
-<li><p>Fill in the evidence you would show for each claim.</p></li>
-</ol>
+<div class="answer">
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Claim</th>
-<th>SFR observation</th>
+<th style="text-align: right;">R<sub>LDR</sub></th>
+<th style="text-align: right;">V(PA1) in mV</th>
+<th style="text-align: right;"><code>raw</code></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>The pin is in analog mode</td>
-<td></td>
+<td style="text-align: right;">5 kΩ</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
 </tr>
 <tr class="even">
-<td>The value in <code>raw</code> is the value in the hardware</td>
-<td></td>
+<td style="text-align: right;">10 kΩ</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
 </tr>
 <tr class="odd">
-<td>The converter tracks the potentiometer</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>The sampling time is 84 cycles</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>The LDR channel was converted last</td>
-<td></td>
+<td style="text-align: right;">30 kΩ</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
 </tr>
 </tbody>
 </table>
-<ol start="22" type="1">
-<li>A classmate’s light reading never reacts to the light. Describe how the SFR view shows which channel the ADC really converts, and name the two most likely mistakes.</li>
+</div>
+<ol type="a">
+<li>The room gets darker. Does <code>raw</code> go <strong>up</strong> or <strong>down</strong>?<br>
+</li>
+<li>With <code>duty = (raw * 1000u) / 4095u</code>, is LD2 <strong>brighter</strong> or <strong>dimmer</strong> in the dark?</li>
 </ol>
 </section>
-<section id="exit-self-assessment" class="level2">
-<h2 class="anchored" data-anchor-id="exit-self-assessment">Exit self-assessment</h2>
+<section id="part-e---two-channels-and-the-registers-7-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-e---two-channels-and-the-registers-7-minutes">Part E - Two channels and the registers (7 minutes)</h2>
+<ol start="18" type="1">
+<li><p>The program reads two sensors on every tick. The sampling time is 84 cycles.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>raw_pot <span class="op">=</span> adc_read<span class="op">(</span>ADC_CHANNEL_0<span class="op">);</span>   <span class="co">// potentiometer on PA0</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>raw_ldr <span class="op">=</span> adc_read<span class="op">(</span>ADC_CHANNEL_1<span class="op">);</span>   <span class="co">// LDR on PA1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol type="a">
+<li>How many converters does <code>ADC1</code> have for the two channels?<br>
+</li>
+<li>How long do the two readings take together, in µs?<br>
+</li>
+<li>Are the two values from the same instant? <strong>Yes / No.</strong></li>
+</ol></li>
+<li><p>You pause the program after <code>adc_read(ADC_CHANNEL_1)</code> and open the SFR view. Write the register for each line. Choose from: <code>GPIOA-&gt;MODER</code>, <code>ADC1-&gt;SMPR2</code>, <code>ADC1-&gt;SQR3</code>, <code>ADC1-&gt;DR</code>.</p></li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>You want to check that</th>
+<th>Register</th>
+<th>What you see there</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>PA0 is an analog pin</td>
+<td></td>
+<td>bits 1:0 =</td>
+</tr>
+<tr class="even">
+<td>the sampling time of channel 0 is 84 cycles</td>
+<td></td>
+<td><code>SMP0</code> = <code>100</code></td>
+</tr>
+<tr class="odd">
+<td>the LDR channel was converted last</td>
+<td></td>
+<td><code>SQ1</code> =</td>
+</tr>
+<tr class="even">
+<td><code>raw_ldr</code> holds the value from the hardware</td>
+<td></td>
+<td>the same number as</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="20" type="1">
+<li><p>The LDR is on A1. A classmate’s light value never changes with the light. In the SFR view, <code>SQ1</code> in <code>ADC1-&gt;SQR3</code> reads 0.</p>
+<ol type="a">
+<li>Which pin does the ADC convert?<br>
+</li>
+<li>What do you change in the code?</li>
+</ol></li>
+</ol>
+</section>
+<section id="check-yourself" class="level2">
+<h2 class="anchored" data-anchor-id="check-yourself">Check yourself</h2>
 <ul class="task-list">
-<li><label><input type="checkbox">I can convert counts to millivolts in integer arithmetic.</label></li>
-<li><label><input type="checkbox">I can justify a sampling time from source impedance.</label></li>
-<li><label><input type="checkbox">I can calculate a conversion time and name what waits for <code>EOC</code>.</label></li>
-<li><label><input type="checkbox">I can map a reading to a duty or a servo pulse, clamped.</label></li>
-<li><label><input type="checkbox">I can diagnose threshold chatter and fix it.</label></li>
+<li><label><input type="checkbox">I can convert an ADC value to millivolts and back with integer arithmetic.</label></li>
+<li><label><input type="checkbox">I can say what sample, quantize and encode mean, and what 12 bits give.</label></li>
+<li><label><input type="checkbox">I can calculate a conversion time from the sampling time and the ADC clock.</label></li>
+<li><label><input type="checkbox">I can write the three HAL calls of one ADC reading.</label></li>
+<li><label><input type="checkbox">I can scale an ADC value to a PWM duty or a servo pulse.</label></li>
+<li><label><input type="checkbox">I can find <code>MODER</code>, <code>SQR3</code> and <code>DR</code> in the SFR view and say what they show.</label></li>
 </ul>
 
 
