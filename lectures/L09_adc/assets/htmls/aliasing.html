@@ -1,516 +1,292 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aliasing Interactive Lab</title>
-    <style>
-        :root {
-            --primary-blue: #007bff;
-            --sample-red: #dc3545;
-            --recon-magenta: #e83e8c;
-            --text-dark: #212529;
-            --bg-light: #f8f9fa;
-            --accent-green: #28a745;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ADC sampling rate and aliasing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* EE5203 L09 in-lecture demo. Same words, colours and example as the slide
+       "ADC sampling rate and aliasing": a 5 Hz signal read 6 times per second
+       looks like a 1 Hz signal. */
+    :root {
+      --ink: #174f73; --mid: #2b789f; --or: #d47b28; --ort: #b8621a; --ord: #8a4a12;
+      --gr: #3f7f58; --grt: #2b5a3e; --mu: #5a6b76; --grid: #c8d8e2; --txt: #355262;
+      --fb: #e8f2f7; --fg: #edf6f0; --fo: #fff7ed; --bg: #f8fafc;
+      --mono: ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 14px 28px 16px;
+      font-family: Quicksand, system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 18px; color: var(--txt); background: var(--bg);
+    }
+    .wrap { max-width: 1500px; margin: 0 auto; }
+    h1 { margin: 0; font-size: 32px; font-weight: 700; color: var(--ink); }
+    .lead { margin: 2px 0 10px; font-size: 19px; }
 
-        body {
-            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            color: var(--text-dark);
-            background-color: #fff;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
+    .controls {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 10px 28px;
+      padding: 9px 18px; margin-bottom: 12px;
+      background: #ffffff; border: 2px solid var(--grid); border-radius: 14px;
+    }
+    .ctl { display: flex; align-items: center; gap: 10px; }
+    .ctl .name { font-weight: 700; }
+    .ctl.sig .name, .ctl.sig .val { color: var(--mid); }
+    .ctl.smp .name, .ctl.smp .val { color: var(--ort); }
+    .ctl input[type="range"] { width: 210px; }
+    #sigSlider { accent-color: var(--mid); } #rateSlider { accent-color: var(--or); }
+    .val { font-family: var(--mono); font-weight: 700; font-size: 22px; min-width: 3.6em; }
+    button {
+      font: inherit; font-weight: 700; cursor: pointer;
+      padding: 7px 16px; border-radius: 999px;
+      border: 2px solid var(--grid); background: #ffffff; color: var(--ink);
+    }
+    button:hover { border-color: var(--mid); }
+    button.primary { background: var(--ink); border-color: var(--ink); color: #ffffff; }
 
-        .container {
-            max-width: 1000px;
-            width: 100%;
-        }
+    .card { background: #ffffff; border: 2px solid var(--grid); border-radius: 14px; padding: 10px 16px 12px; }
+    .top-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 4px; }
+    .top-row .label { font-size: 16px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--mid); margin-right: 6px; }
+    .layer { display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; font-size: 17px; }
+    .layer i { display: inline-block; width: 26px; height: 0; border-top: 4px solid; }
+    .layer.sig i { border-color: var(--mid); }
+    .layer.dots i { width: 14px; height: 14px; border: 0; border-radius: 50%; background: var(--or); }
+    .layer.fit i { border-top-style: dashed; border-color: var(--ord); }
+    .layer.off { opacity: 0.45; text-decoration: line-through; }
+    svg { display: block; width: 100%; height: auto; }
+    #plot { max-height: max(230px, calc(100vh - 485px)); }
+    svg text { font-family: Quicksand, system-ui, sans-serif; }
 
-        h1 { color: #1a5c91; margin-bottom: 5px; }
-        .subtitle { color: #666; margin-bottom: 20px; }
+    .bottom { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; margin-top: 12px; }
+    #status { border-radius: 14px; padding: 10px 16px; border: 3px solid var(--gr); background: var(--fg); color: var(--grt); }
+    #status.bad { border-color: var(--or); background: var(--fo); color: var(--ord); }
+    #status .head { font-size: 24px; font-weight: 700; }
+    #status p { margin: 4px 0 0; font-size: 19px; line-height: 1.3; }
+    #status .v { font-family: var(--mono); font-weight: 700; white-space: nowrap; }
+    .rule { margin: 6px 0 0; font-size: 16.5px; color: var(--txt); }
 
-        .card {
-            background: var(--bg-light);
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
+    .side h2 { margin: 0 0 6px; font-size: 16px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--mid); }
+    .presets { display: flex; flex-wrap: wrap; gap: 8px; }
+    .presets button { font-size: 16.5px; padding: 6px 13px; }
+    .numbers { margin: 8px 0 0; font-size: 17px; line-height: 1.45; }
+    .numbers .v { font-family: var(--mono); font-weight: 700; color: var(--ink); }
 
-        /* Controls Grid */
-        .controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 20px;
-            background: white;
-            padding: 15px;
-            border-radius: 6px;
-            border: 1px solid #ddd;
-        }
-
-        .control-group label {
-            display: flex;
-            justify-content: space-between;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-
-        .slider-row { display: flex; align-items: center; gap: 15px; }
-        input[type=range] { flex-grow: 1; cursor: pointer; height: 6px; }
-        .val-box { 
-            background: #eee; padding: 4px 8px; border-radius: 4px; 
-            font-family: monospace; font-weight: bold; min-width: 70px; text-align: center;
-        }
-
-        /* Visualization Area */
-        .canvas-wrapper {
-            background: white;
-            border: 1px solid #ccc;
-            position: relative;
-            cursor: crosshair;
-            border-radius: 4px;
-        }
-        canvas { width: 100%; height: 400px; display: block; }
-
-        .axis-label {
-            position: absolute;
-            font-size: 0.75rem;
-            color: #888;
-            pointer-events: none;
-            background: rgba(255,255,255,0.8);
-            padding: 2px;
-        }
-
-        /* Toolbar */
-        .toolbar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-        }
-        .btn-primary { background: var(--primary-blue); color: white; }
-        .btn-primary:hover { background: #0056b3; }
-        
-        .btn-outline { background: transparent; border: 1px solid #aaa; color: #555; }
-        .btn-outline:hover { background: #eee; }
-        .btn-outline.active { background: #555; color: white; border-color: #555; }
-
-        .legend { display: flex; gap: 20px; font-size: 0.9rem; margin-left: auto; }
-        .legend-item { display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;}
-        .dot { width: 10px; height: 10px; border-radius: 50%; }
-        .legend-item.muted { opacity: 0.4; text-decoration: line-through; }
-
-        /* Status Panel */
-        .status-panel {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 6px;
-            border-left: 5px solid #ccc;
-            background: #fff;
-        }
-        .status-ok { border-color: var(--accent-green); background: #f0fff4; }
-        .status-bad { border-color: var(--sample-red); background: #fff5f5; }
-        
-        .math-highlight { font-family: monospace; font-weight: bold; }
-        .alias-freq { font-size: 1.2rem; font-weight: bold; color: var(--recon-magenta); }
-
-        /* Preset Buttons */
-        .presets {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-        .preset-label { font-weight: bold; margin-right: 10px; align-self: center; }
-        .btn-sm { font-size: 0.8rem; padding: 5px 10px; background: #e2e6ea; color: #333; }
-        .btn-sm:hover { background: #dbe0e5; }
-
-    </style>
+    @media (max-width: 1000px) {
+      .bottom { grid-template-columns: 1fr; }
+      .ctl input[type="range"] { width: 180px; }
+    }
+  </style>
 </head>
 <body>
+<div class="wrap">
+  <h1>ADC sampling rate and aliasing</h1>
+  <p class="lead">The sampling rate is the number of ADC readings per second. Between two readings the program sees nothing.</p>
 
-<div class="container">
-    <h1>Aliasing Interactive Lab</h1>
-    <div class="subtitle">Explore how Sampling Rate (f<sub>s</sub>) affects signal reconstruction.</div>
-
-    <div class="card">
-        
-        <!-- Visualization Controls -->
-        <div class="toolbar">
-            <button id="btnPlayPause" class="btn-primary">▶ Animate Signal</button>
-            
-            <div class="legend">
-                <div class="legend-item" id="toggleAnalog" title="Click to toggle">
-                    <div class="dot" style="background: var(--primary-blue);"></div> <span>Input (Analog)</span>
-                </div>
-                <div class="legend-item" id="toggleSamples" title="Click to toggle">
-                    <div class="dot" style="background: var(--sample-red);"></div> <span>Samples</span>
-                </div>
-                <div class="legend-item" id="toggleRecon" title="Click to toggle">
-                    <div class="dot" style="background: var(--recon-magenta);"></div> <span>Digital Reconstruction</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="canvas-wrapper">
-            <div class="axis-label" style="top: 5px; left: 5px;">Amplitude</div>
-            <div class="axis-label" style="bottom: 5px; right: 5px;">Time (1.0s)</div>
-            <canvas id="simCanvas"></canvas>
-        </div>
-
-        <!-- Status & Math -->
-        <div id="statusPanel" class="status-panel status-ok">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                <div>
-                    <div id="statusTitle" style="font-weight:bold; font-size:1.1rem; margin-bottom:5px;">Nyquist Satisfied</div>
-                    <div id="statusDesc" style="font-size:0.95rem;">The Digital Reconstruction perfectly matches the Input.</div>
-                </div>
-                <div style="text-align:right;">
-                    <div>Apparent Frequency:</div>
-                    <div class="alias-freq" id="aliasDisplay">10.0 Hz</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sliders -->
-        <div class="controls">
-            <div class="control-group">
-                <label>
-                    <span>Input Signal Freq (f<sub>signal</sub>)</span>
-                    <span class="math-highlight" id="valSignal">10.0 Hz</span>
-                </label>
-                <div class="slider-row">
-                    <span style="font-size:0.8rem">1Hz</span>
-                    <input type="range" id="freqSignal" min="1" max="50" step="0.5" value="10">
-                    <span style="font-size:0.8rem">50Hz</span>
-                </div>
-            </div>
-            <div class="control-group">
-                <label>
-                    <span>Sampling Rate (f<sub>s</sub>)</span>
-                    <span class="math-highlight" id="valSample">30.0 Hz</span>
-                </label>
-                <div class="slider-row">
-                    <span style="font-size:0.8rem">1Hz</span>
-                    <input type="range" id="freqSample" min="1" max="60" step="1" value="30">
-                    <span style="font-size:0.8rem">60Hz</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Educational Presets -->
-        <div class="presets">
-            <span class="preset-label">Load Scenario:</span>
-            <button class="btn-sm" onclick="setScenario(5, 20)">Perfect Sampling</button>
-            <button class="btn-sm" onclick="setScenario(19, 20)">Beating (Almost Aliased)</button>
-            <button class="btn-sm" onclick="setScenario(20, 20)">Critical Limit (Flatline)</button>
-            <button class="btn-sm" onclick="setScenario(29, 30)">Wagon Wheel (Reverse 1Hz)</button>
-            <button class="btn-sm" onclick="setScenario(40, 10)">Heavy Aliasing (Input 40, Looks like DC)</button>
-        </div>
+  <div class="controls">
+    <div class="ctl sig">
+      <span class="name">Signal</span>
+      <input id="sigSlider" type="range" min="1" max="25" step="1" value="5" aria-label="Signal frequency in hertz" />
+      <span class="val" id="sigValue">5 Hz</span>
     </div>
+    <div class="ctl smp">
+      <span class="name">Samples per second</span>
+      <input id="rateSlider" type="range" min="2" max="100" step="1" value="6" aria-label="Samples per second" />
+      <span class="val" id="rateValue">6</span>
+    </div>
+    <div class="ctl">
+      <button id="moveBtn">Move the signal</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="top-row">
+      <span class="label">One second of the pin voltage</span>
+      <button class="layer sig" data-layer="sig"><i></i>the real signal</button>
+      <button class="layer dots" data-layer="dots"><i></i>the samples</button>
+      <button class="layer fit" data-layer="fit"><i></i>the wave that the samples fit</button>
+    </div>
+    <svg id="plot" viewBox="0 0 1400 372" role="img" aria-label="One second of a sine-wave signal, the samples taken from it, and the slowest wave that fits the samples"></svg>
+  </div>
+
+  <div class="bottom">
+    <div>
+      <div id="status"></div>
+      <p class="rule"><b>Rule:</b> sample more than 2 times faster than the fastest change in the signal.</p>
+    </div>
+    <div class="card side">
+      <h2>Try these</h2>
+      <div class="presets">
+        <button data-sig="5" data-rate="6">The slide: 5 Hz, 6</button>
+        <button data-sig="5" data-rate="50">Fast enough: 5 Hz, 50</button>
+        <button data-sig="5" data-rate="10">Exactly 2 times: 5 Hz, 10</button>
+        <button data-sig="9" data-rate="10">Too slow: 9 Hz, 10</button>
+        <button data-sig="2" data-rate="100">The lab: 2 Hz, 100</button>
+      </div>
+      <p class="numbers" id="numbers"></p>
+    </div>
+  </div>
 </div>
 
 <script>
-    // --- Configuration ---
-    const canvas = document.getElementById('simCanvas');
-    const ctx = canvas.getContext('2d');
-    
-    // State Variables
-    let fSignal = 10.0;
-    let fSample = 30.0;
-    let isAnimating = false;
-    let timeOffset = 0; // For animation
-    let lastFrameTime = 0;
+(function () {
+  "use strict";
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var C = { ink: "#174f73", mid: "#2b789f", or: "#d47b28", ord: "#8a4a12", gr: "#3f7f58", mu: "#5a6b76", grid: "#c8d8e2" };
 
-    // Toggles
-    let showAnalog = true;
-    let showSamples = true;
-    let showRecon = true;
+  var sig = 5, rate = 6, shift = 0, moving = false, lastFrame = 0;      // shift: how far the signal has moved, in seconds
+  var show = { sig: true, dots: true, fit: true };
 
-    // Elements
-    const sliderSignal = document.getElementById('freqSignal');
-    const sliderSample = document.getElementById('freqSample');
-    const valSignal = document.getElementById('valSignal');
-    const valSample = document.getElementById('valSample');
-    const btnPlayPause = document.getElementById('btnPlayPause');
-    const statusPanel = document.getElementById('statusPanel');
-    const statusTitle = document.getElementById('statusTitle');
-    const statusDesc = document.getElementById('statusDesc');
-    const aliasDisplay = document.getElementById('aliasDisplay');
+  var $ = function (id) { return document.getElementById(id); };
+  var plot = $("plot");
 
-    // Constants
-    const TIME_WINDOW = 1.0; // Seconds shown on x-axis
-    const AMPLITUDE = 0.8;   // Visual vertical scaling
+  function el(name, attrs, text) {
+    var e = document.createElementNS(SVGNS, name);
+    for (var k in attrs) { e.setAttribute(k, attrs[k]); }
+    if (text !== undefined) { e.textContent = text; }
+    plot.appendChild(e);
+    return e;
+  }
 
-    // --- Sinc Math ---
-    // Normalized sinc: sin(pi*x)/(pi*x)
-    function sinc(x) {
-        if (Math.abs(x) < 0.0001) return 1.0;
-        const piX = Math.PI * x;
-        return Math.sin(piX) / piX;
-    }
+  // The slowest wave that goes through all the samples. Its frequency is the signal
+  // frequency moved by a whole number of sampling rates; it can be negative (a wave
+  // that runs the other way) or 0 (a constant).
+  function fitted() { return sig - Math.round(sig / rate) * rate; }
 
-    // --- Drawing Logic ---
-    function resize() {
-        const rect = canvas.parentElement.getBoundingClientRect();
-        canvas.width = rect.width * window.devicePixelRatio;
-        canvas.height = 400 * window.devicePixelRatio;
-        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-        // CSS scaling
-        canvas.style.width = rect.width + 'px';
-        canvas.style.height = '400px';
-        draw();
-    }
+  function draw() {
+    while (plot.firstChild) { plot.removeChild(plot.firstChild); }
+    var L = 92, R = 1378, T = 16, B = 318, mid = (T + B) / 2, A = (B - T) / 2 - 14;
+    var x = function (t) { return L + t * (R - L); };
+    var ySig = function (t) { return mid - A * Math.sin(2 * Math.PI * sig * (t + shift)); };
+    var f = fitted();
+    var ok = rate > 2 * sig, exact = rate === 2 * sig;
+    // At exactly 2 samples per cycle many waves fit; draw the smallest one, which is flat when the
+    // samples land on the zero crossings.
+    var yFit = exact
+      ? function (t) { return mid - A * Math.sin(2 * Math.PI * sig * shift) * Math.cos(2 * Math.PI * sig * t); }
+      : function (t) { return mid - A * Math.sin(2 * Math.PI * (f * t + sig * shift)); };
 
-    function draw() {
-        const w = canvas.width / window.devicePixelRatio;
-        const h = canvas.height / window.devicePixelRatio;
-        const midY = h / 2;
-        const scaleY = midY * AMPLITUDE;
-
-        ctx.clearRect(0, 0, w, h);
-
-        // 1. Draw Grid
-        drawGrid(w, h, midY);
-
-        // 2. Calculate Samples (We calculate them first because Recon needs them)
-        // We pad the range to ensure Sinc summation is accurate at the edges
-        const padding = 0.5; // seconds
-        const startT = -padding;
-        const endT = TIME_WINDOW + padding;
-        
-        // Samples array: stores { t_display, val }
-        // t_display is relative to the canvas window (0 to 1.0)
-        const samples = [];
-        const totalSamples = Math.ceil((endT - startT) * fSample);
-        
-        // Align grid of samples to absolute time 0
-        const startK = Math.floor(startT * fSample); 
-        
-        for (let i = 0; i < totalSamples; i++) {
-            let k = startK + i;
-            let t_absolute = k / fSample; // The absolute time of this sample
-            
-            // Value depends on fSignal and the current animation timeOffset
-            let val = Math.sin(2 * Math.PI * fSignal * (t_absolute + timeOffset));
-            samples.push({ t: t_absolute, val: val });
-        }
-
-        // 3. Draw Analog Signal (Blue)
-        if (showAnalog) {
-            ctx.beginPath();
-            ctx.strokeStyle = "rgba(0, 123, 255, 0.6)";
-            ctx.lineWidth = 2;
-            ctx.setLineDash([]);
-            
-            let first = true;
-            // Use a fixed step for drawing the analog curve
-            const step = w / 400; 
-            for (let x = 0; x <= w; x += step) {
-                const t_local = (x / w) * TIME_WINDOW;
-                const val = Math.sin(2 * Math.PI * fSignal * (t_local + timeOffset));
-                const y = midY - val * scaleY;
-                if (first) { ctx.moveTo(x, y); first = false; }
-                else { ctx.lineTo(x, y); }
-            }
-            ctx.stroke();
-        }
-
-        // 4. Draw Reconstruction (Magenta Dashed)
-        if (showRecon) {
-            ctx.beginPath();
-            ctx.strokeStyle = "#e83e8c";
-            ctx.lineWidth = 3;
-            ctx.setLineDash([8, 6]); // dashed
-
-            let first = true;
-            const step = w / 200; // optimization
-            for (let x = 0; x <= w; x += step) {
-                const t_local = (x / w) * TIME_WINDOW;
-                let reconVal = 0;
-
-                // Sum sincs
-                for (let s of samples) {
-                    // Normalized time difference
-                    // x in sinc is (t - t_sample) * fSample
-                    const sincArg = (t_local - s.t) * fSample;
-                    // Optimization: Sinc decays fast. 
-                    if (Math.abs(sincArg) < 10) {
-                        reconVal += s.val * sinc(sincArg);
-                    }
-                }
-
-                const y = midY - reconVal * scaleY;
-                if (first) { ctx.moveTo(x, y); first = false; }
-                else { ctx.lineTo(x, y); }
-            }
-            ctx.stroke();
-        }
-
-        // 5. Draw Samples (Red Dots)
-        if (showSamples) {
-            ctx.fillStyle = "#dc3545";
-            for (let s of samples) {
-                if (s.t >= 0 && s.t <= TIME_WINDOW) {
-                    const x = (s.t / TIME_WINDOW) * w;
-                    const y = midY - s.val * scaleY;
-                    ctx.beginPath();
-                    ctx.arc(x, y, 5, 0, 2 * Math.PI);
-                    ctx.fill();
-                }
-            }
-        }
-    }
-
-    function drawGrid(w, h, midY) {
-        ctx.beginPath();
-        ctx.strokeStyle = "#f0f0f0";
-        ctx.lineWidth = 1;
-        // Horizontal center
-        ctx.moveTo(0, midY); ctx.lineTo(w, midY);
-        // Vertical ticks
-        for(let i=0; i<=10; i++) {
-            let x = (i/10)*w;
-            ctx.moveTo(x, 0); ctx.lineTo(x, h);
-        }
-        ctx.stroke();
-    }
-
-    // --- Logic & Updates ---
-
-    function updateStatus() {
-        const nyquist = fSignal * 2;
-        const ratio = fSample / fSignal;
-        
-        // Calculate Aliased Frequency
-        // Formula: f_alias = | f_signal - N * f_sample |
-        // We find the N that brings the result closest to 0
-        let k = Math.round(fSignal / fSample);
-        let fAlias = Math.abs(fSignal - k * fSample);
-        
-        // Direction detection for educational text
-        // If k * fSample > fSignal, the alias is "negative" (reversed phase)
-        let isReversed = (k * fSample > fSignal);
-
-        if (fSample >= nyquist) {
-            statusPanel.className = "status-panel status-ok";
-            statusTitle.textContent = "✔ Nyquist Satisfied (Accurate Reconstruction)";
-            statusDesc.innerHTML = `Since f<sub>s</sub> (${fSample}Hz) > 2·f<sub>signal</sub>, the reconstruction is perfect.`;
-            aliasDisplay.style.color = "#28a745";
-            aliasDisplay.textContent = fSignal.toFixed(1) + " Hz (Match)";
-        } else {
-            statusPanel.className = "status-panel status-bad";
-            statusTitle.textContent = "⚠ Aliasing Detected!";
-            
-            let desc = `Sampling is too slow. The digital system 'sees' a ${fAlias.toFixed(1)} Hz signal instead of ${fSignal} Hz.`;
-            
-            if (fAlias < 0.01) desc += " (Appears as DC / Flat line)";
-            else if (isReversed) desc += " <strong>(Phase Reversed / Moving Backwards)</strong>";
-            
-            statusDesc.innerHTML = desc;
-            aliasDisplay.style.color = "#dc3545";
-            aliasDisplay.textContent = fAlias.toFixed(1) + " Hz";
-        }
-
-        valSignal.textContent = fSignal.toFixed(1) + " Hz";
-        valSample.textContent = fSample.toFixed(1) + " Hz";
-    }
-
-    function animate(timestamp) {
-        if (!isAnimating) return;
-        if (!lastFrameTime) lastFrameTime = timestamp;
-        const dt = (timestamp - lastFrameTime) / 1000;
-        lastFrameTime = timestamp;
-
-        // Advance time
-        timeOffset += dt;
-        
-        draw();
-        requestAnimationFrame(animate);
-    }
-
-    function toggleAnimation() {
-        isAnimating = !isAnimating;
-        btnPlayPause.textContent = isAnimating ? "⏸ Stop Animation" : "▶ Animate Signal";
-        if (isAnimating) {
-            lastFrameTime = 0;
-            requestAnimationFrame(animate);
-        }
-    }
-
-    // --- Event Listeners ---
-
-    sliderSignal.addEventListener('input', (e) => {
-        fSignal = parseFloat(e.target.value);
-        updateStatus();
-        if(!isAnimating) draw();
+    el("line", { x1: L, y1: mid, x2: R, y2: mid, stroke: C.grid, "stroke-width": 2 });
+    el("line", { x1: L, y1: T, x2: L, y2: B, stroke: C.grid, "stroke-width": 2 });
+    [0, 0.25, 0.5, 0.75, 1].forEach(function (t) {
+      el("line", { x1: x(t), y1: B, x2: x(t), y2: B + 8, stroke: C.mu, "stroke-width": 2 });
+      el("text", { x: x(t), y: B + 30, "text-anchor": "middle", "font-size": 18, "font-weight": 700, fill: C.mu },
+         t === 0 ? "0 s" : (t === 1 ? "1 s" : t + " s"));
     });
+    el("text", { x: L - 12, y: T + 16, "text-anchor": "end", "font-size": 16, "font-weight": 700, fill: C.mu }, "pin");
+    el("text", { x: L - 12, y: T + 36, "text-anchor": "end", "font-size": 16, "font-weight": 700, fill: C.mu }, "voltage");
 
-    sliderSample.addEventListener('input', (e) => {
-        fSample = parseFloat(e.target.value);
-        updateStatus();
-        if(!isAnimating) draw();
-    });
-
-    btnPlayPause.addEventListener('click', toggleAnimation);
-
-    // Layer Toggles
-    function setupToggle(id, flagVar, setFlag) {
-        const el = document.getElementById(id);
-        el.addEventListener('click', () => {
-            setFlag(!flagVar);
-            flagVar = !flagVar; // update local closure
-            el.classList.toggle('muted', !flagVar);
-            if(!isAnimating) draw();
-        });
-    }
-    setupToggle('toggleAnalog', showAnalog, (v) => showAnalog = v);
-    setupToggle('toggleSamples', showSamples, (v) => showSamples = v);
-    setupToggle('toggleRecon', showRecon, (v) => showRecon = v);
-
-    window.addEventListener('resize', resize);
-
-    // Helper for preset buttons
-    window.setScenario = function(sig, samp) {
-        fSignal = sig;
-        fSample = samp;
-        sliderSignal.value = sig;
-        sliderSample.value = samp;
-        updateStatus();
-        // Reset animation time to 0 for clarity
-        timeOffset = 0; 
-        draw();
-        
-        // Auto start animation for Wagon Wheel scenarios
-        if (!isAnimating && (sig === 29 || sig === 19)) {
-            toggleAnimation();
-        }
+    var path = function (fn, n) {
+      var d = "";
+      for (var i = 0; i <= n; i++) { var t = i / n; d += (i ? "L" : "M") + x(t).toFixed(1) + " " + fn(t).toFixed(1); }
+      return d;
     };
+    if (show.sig) {
+      el("path", { d: path(ySig, Math.max(400, sig * 60)), fill: "none", stroke: C.mid, "stroke-width": 3, "stroke-linejoin": "round" });
+    }
+    var n = Math.floor(rate + 1e-9), few = rate <= 30;
+    if (show.dots && few) {
+      for (var k = 0; k <= n; k++) {
+        el("line", { x1: x(k / rate), y1: T, x2: x(k / rate), y2: B, stroke: C.or, "stroke-width": 1.5, "stroke-dasharray": "4 6", opacity: 0.6 });
+      }
+    }
+    if (show.fit) {
+      el("path", { d: path(yFit, Math.max(300, (exact ? sig : Math.abs(f)) * 60)), fill: "none", stroke: ok ? C.gr : C.ord,
+                   "stroke-width": 5, "stroke-dasharray": "14 10", "stroke-linejoin": "round" });
+    }
+    if (show.dots) {
+      for (var j = 0; j <= n; j++) {
+        el("circle", { cx: x(j / rate), cy: ySig(j / rate), r: few ? 9 : 5.5, fill: C.or, stroke: "#ffffff", "stroke-width": few ? 3 : 2 });
+      }
+    }
+  }
 
-    // Init
-    resize();
-    updateStatus();
-    // Optional: Start animated to grab attention?
-    // toggleAnimation(); 
+  function text() {
+    var f = Math.abs(fitted()), st = $("status"), v = function (s) { return '<span class="v">' + s + "</span>"; };
+    var twice = 2 * sig;
+    if (rate > twice) {
+      st.className = "";
+      st.innerHTML = '<div class="head">Fast enough</div><p>' + v(rate + " samples per second") + " is more than 2 &times; " +
+        v(sig + " Hz") + " = " + v(String(twice)) + ". The samples follow the real signal.</p>";
+    } else if (rate === twice) {
+      st.className = "bad";
+      st.innerHTML = '<div class="head">Exactly 2 times is not enough</div><p>' + v(rate + " samples per second") + " = 2 &times; " + v(sig + " Hz") +
+        ". The samples can miss the peaks" + (shift === 0 ? ": here every sample lands where the signal is 0, and the program sees a flat line." : ".") + "</p>";
+    } else if (f === 0) {
+      st.className = "bad";
+      st.innerHTML = '<div class="head">Too slow</div><p>' + v(rate + " samples per second") + " is less than 2 &times; " + v(sig + " Hz") + " = " +
+        v(String(twice)) + ". Every sample lands on the same point of the wave: the program sees a constant voltage.</p>";
+    } else {
+      st.className = "bad";
+      st.innerHTML = '<div class="head">Too slow</div><p>' + v(rate + " samples per second") + " is less than 2 &times; " + v(sig + " Hz") + " = " +
+        v(String(twice)) + ". The samples fit a " + v(f + " Hz") + " signal that does not exist.</p>";
+    }
+    var ms = 1000 / rate;
+    $("numbers").innerHTML = "Time between two readings: " + v((ms >= 10 ? Math.round(ms) : ms.toFixed(1)) + " ms") +
+      "<br>Samples in one cycle of the signal: " + v((rate / sig).toFixed(rate % sig === 0 ? 0 : 1));
+    $("sigValue").textContent = sig + " Hz";
+    $("rateValue").textContent = String(rate);
+    $("moveBtn").textContent = moving ? "Stop" : "Move the signal";
+    $("moveBtn").classList.toggle("primary", moving);
+  }
 
+  function render() { draw(); text(); }
+
+  function frame(ts) {
+    if (!moving) { return; }
+    if (lastFrame) { shift += (ts - lastFrame) / 1000 * 0.05; }       // slow motion: 1 s of signal in 20 s
+    lastFrame = ts;
+    draw();
+    requestAnimationFrame(frame);
+  }
+  function setMoving(on) {
+    moving = on; lastFrame = 0;
+    if (on) { requestAnimationFrame(frame); }
+    text();
+  }
+
+  $("sigSlider").addEventListener("input", function () { sig = Number(this.value); render(); });
+  $("rateSlider").addEventListener("input", function () { rate = Number(this.value); render(); });
+  $("moveBtn").addEventListener("click", function () { setMoving(!moving); });
+  function set(s, r) {
+    setMoving(false); shift = 0; sig = s; rate = r;
+    $("sigSlider").value = String(s); $("rateSlider").value = String(r);
+    render();
+  }
+  $("resetBtn").addEventListener("click", function () {
+    show = { sig: true, dots: true, fit: true };
+    Array.prototype.forEach.call(document.querySelectorAll(".layer"), function (b) { b.classList.remove("off"); });
+    set(5, 6);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".presets button"), function (b) {
+    b.addEventListener("click", function () { set(Number(b.getAttribute("data-sig")), Number(b.getAttribute("data-rate"))); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".layer"), function (b) {
+    b.addEventListener("click", function () {
+      var k = b.getAttribute("data-layer");
+      show[k] = !show[k];
+      b.classList.toggle("off", !show[k]);
+      draw();
+    });
+  });
+
+  // A link can open the demo in a given state: aliasing.html?signal=9&rate=10&hide=fit
+  (function () {
+    var q = new URLSearchParams(location.search), s = Number(q.get("signal")), r = Number(q.get("rate"));
+    if (s >= 1 && s <= 25) { sig = Math.round(s); $("sigSlider").value = String(sig); }
+    if (r >= 2 && r <= 100) { rate = Math.round(r); $("rateSlider").value = String(rate); }
+    (q.get("hide") || "").split(",").forEach(function (k) {
+      if (show.hasOwnProperty(k)) {
+        show[k] = false;
+        document.querySelector('.layer[data-layer="' + k + '"]').classList.add("off");
+      }
+    });
+  })();
+
+  render();
+})();
 </script>
-
 </body>
 </html>
