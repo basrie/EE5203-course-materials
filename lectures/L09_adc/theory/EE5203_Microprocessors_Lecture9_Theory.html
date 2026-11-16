@@ -201,6 +201,8 @@
   .reveal .slides .formula-line .MathJax_Display .MathJax { font-size: 100% !important; }
   .reveal .slides .formula-line span.math.display { font-size: 130%; }
   .reveal .slides .formula-line.big span.math.display { font-size: 120%; }
+  /* generated-code slide: one code line more than the week7.css layout was made for */
+  .reveal .spot-stack.tight { gap: 10px; }
   </style>
 </head>
 <body class="quarto-light">
@@ -643,7 +645,7 @@ Pin PA0, Arduino A0, with the potentiometer. Inside the chip the pin mode block 
 <span class="spot-line g0"><span class="spot-tag">CubeMX</span>Four settings make one ADC channel. CubeMX writes the code; you find each setting in it. <span class="spot-mark">1</span> pin <span class="spot-mark">2</span> resolution <span class="spot-mark">3</span> mode <span class="spot-mark">4</span> channel and sampling time.</span>
 <span class="spot-line fragment custom g1" data-fragment-index="1"><span class="spot-tag">Pin</span>Click <code>PA0</code>, choose <code>ADC1_IN0</code>. The generated pin setup is <code>GPIO_MODE_ANALOG</code>: <code>MODER</code> = 11. The same function switches on the ADC1 clock.</span>
 <span class="spot-line fragment custom g2" data-fragment-index="2"><span class="spot-tag">Resolution</span><code>ADC_RESOLUTION_12B</code>: values 0 to 4095. <code>ADC_CLOCK_SYNC_PCLK_DIV2</code>: 16 MHz ÷ 2, an 8 MHz ADC clock.</span>
-<span class="spot-line fragment custom g3" data-fragment-index="3"><span class="spot-tag">Mode</span><code>ContinuousConvMode = DISABLE</code>: one conversion for each start. <code>ADC_SOFTWARE_START</code>: your code starts it.</span>
+<span class="spot-line fragment custom g3" data-fragment-index="3"><span class="spot-tag">Mode</span><code>ContinuousConvMode = DISABLE</code>: one conversion for each start. <code>ADC_SOFTWARE_START</code>: your code starts it. <code>HAL_ADC_Init()</code> writes <span class="spot-mark">2</span> and <span class="spot-mark">3</span> into the ADC registers.</span>
 <span class="spot-line fragment custom g4" data-fragment-index="4"><span class="spot-tag">Channel</span><code>ADC_CHANNEL_0</code> is <code>IN0</code>, pin PA0. <code>ADC_SAMPLETIME_84CYCLES</code>: (84 + 12) cycles at 8 MHz, 12 µs.</span>
 <span class="spot-line fragment custom g5 spot-all" data-fragment-index="5"><span class="spot-tag">Check</span>Find these lines in the generated files and check the values. <code>ADC_SAMPLETIME_3CYCLES</code> means the sampling time was not changed in CubeMX. Write nothing here.</span>
 </div>
@@ -657,10 +659,10 @@ Pin PA0, Arduino A0, with the potentiometer. Inside the chip the pin mode block 
 <span class="spot-arrow fragment custom spot g4" data-fragment-index="4">↓</span>
 <span class="spot-pill p-cb fragment custom spot g4" data-fragment-index="4">Channel 0 · 84 Cycles</span>
 </div>
-<div class="spot-stack">
+<div class="spot-stack tight">
 <div class="spot-card dense">
 <div class="spot-head">MX_ADC1_Init() <em>generated in main.c</em></div>
-<pre><code><span class="spot-row spot g2 fragment custom" data-fragment-index="2">hadc1.Init.ClockPrescaler     = <span class="tk-blue">ADC_CLOCK_SYNC_PCLK_DIV2</span>;<span class="spot-n">2</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">hadc1.Init.Resolution         = <span class="tk-blue">ADC_RESOLUTION_12B</span>;</span><span class="spot-row spot g3 fragment custom" data-fragment-index="3">hadc1.Init.ContinuousConvMode = <span class="tk-navy">DISABLE</span>;<span class="spot-n">3</span></span><span class="spot-row spot g3 fragment custom" data-fragment-index="3">hadc1.Init.ExternalTrigConv   = <span class="tk-navy">ADC_SOFTWARE_START</span>;</span><span class="spot-row spot g4 fragment custom" data-fragment-index="4">sConfig.Channel      = <span class="tk-gpio">ADC_CHANNEL_0</span>;<span class="spot-n">4</span></span><span class="spot-row spot g4 fragment custom" data-fragment-index="4">sConfig.SamplingTime = <span class="tk-gpio">ADC_SAMPLETIME_84CYCLES</span>;</span><span class="spot-row spot g4 fragment custom" data-fragment-index="4">HAL_ADC_ConfigChannel(&amp;hadc1, &amp;sConfig);</span></code></pre>
+<pre><code><span class="spot-row spot g2 fragment custom" data-fragment-index="2">hadc1.Init.ClockPrescaler     = <span class="tk-blue">ADC_CLOCK_SYNC_PCLK_DIV2</span>;<span class="spot-n">2</span></span><span class="spot-row spot g2 fragment custom" data-fragment-index="2">hadc1.Init.Resolution         = <span class="tk-blue">ADC_RESOLUTION_12B</span>;</span><span class="spot-row spot g3 fragment custom" data-fragment-index="3">hadc1.Init.ContinuousConvMode = <span class="tk-navy">DISABLE</span>;<span class="spot-n">3</span></span><span class="spot-row spot g3 fragment custom" data-fragment-index="3">hadc1.Init.ExternalTrigConv   = <span class="tk-navy">ADC_SOFTWARE_START</span>;</span><span class="spot-row spot g3 fragment custom" data-fragment-index="3">HAL_ADC_Init(&amp;hadc1);</span><span class="spot-row spot g4 fragment custom" data-fragment-index="4">sConfig.Channel      = <span class="tk-gpio">ADC_CHANNEL_0</span>;<span class="spot-n">4</span></span><span class="spot-row spot g4 fragment custom" data-fragment-index="4">sConfig.SamplingTime = <span class="tk-gpio">ADC_SAMPLETIME_84CYCLES</span>;</span><span class="spot-row spot g4 fragment custom" data-fragment-index="4">HAL_ADC_ConfigChannel(&amp;hadc1, &amp;sConfig);</span></code></pre>
 </div>
 <div class="spot-card dense">
 <div class="spot-head">HAL_ADC_MspInit() <em>generated in stm32f4xx_hal_msp.c</em></div>
