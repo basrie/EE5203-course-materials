@@ -203,6 +203,11 @@
   .reveal .slides .formula-line.big span.math.display { font-size: 120%; }
   /* generated-code slide: one code line more than the week7.css layout was made for */
   .reveal .spot-stack.tight { gap: 10px; }
+  /* practice slide: the given fact with a small picture of the potentiometer beside it */
+  .reveal .given-row { display: flex; align-items: center; gap: 0.6em; margin: 0 0 0.15em; }
+  .reveal .given-row svg.pot-given { height: 124px; width: auto; flex: none; }
+  .reveal .given-row .lead-line { margin: 0; font-size: 0.9em; }
+  .reveal .given-row .lead-line strong { color: #8a4a12; }
   </style>
 </head>
 <body class="quarto-light">
@@ -807,8 +812,18 @@ Pin PA0, Arduino A0, with the potentiometer. Inside the chip the pin mode block 
 </section>
 <section id="practice-adc-value-to-duty-and-servo-pulse" class="slide level2">
 <h2>Practice: ADC value to duty and servo pulse</h2>
+<div class="given-row">
+<!-- svg:potmid -->
+<svg class="pot-given" viewbox="22 4 208 126" role="img" aria-labelledby="a9potmid-title">
+<title id="a9potmid-title">
+A potentiometer seen from above. A scale goes round it from 0 volts at the lower left to 3.3 volts at the lower right. The pointer of the knob is straight up, at the middle of the scale, and the first half of the scale is filled.
+</title>
+<line x1="107.0" y1="106.0" x2="107.0" y2="124.0" stroke="#8f9aa2" stroke-width="5" stroke-linecap="round"></line> <line x1="120.0" y1="106.0" x2="120.0" y2="124.0" stroke="#8f9aa2" stroke-width="5" stroke-linecap="round"></line> <line x1="133.0" y1="106.0" x2="133.0" y2="124.0" stroke="#8f9aa2" stroke-width="5" stroke-linecap="round"></line> <path d="M81.1 108.9 A55 55 0 1 1 158.9 108.9" fill="none" stroke="#c8d8e2" stroke-width="7" stroke-linejoin="round"></path> <path d="M81.1 108.9 A55 55 0 0 1 120 15" fill="none" stroke="#d47b28" stroke-width="7" stroke-linejoin="round"></path> <line x1="120.0" y1="6.0" x2="120.0" y2="24.0" stroke="#8a4a12" stroke-width="4" stroke-linecap="round"></line> <circle cx="120.0" cy="70.0" r="40" fill="#2b789f" stroke="#174f73" stroke-width="3"></circle> <circle cx="120.0" cy="70.0" r="25" fill="#eef2f5" stroke="#7d8b95" stroke-width="3"></circle> <line x1="120.0" y1="70.0" x2="120.0" y2="49.0" stroke="#b8621a" stroke-width="6" stroke-linecap="round"></line> <text x="71" y="118" text-anchor="end" fill="#5a6b76" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">0 V</text> <text x="169" y="118" text-anchor="start" fill="#5a6b76" font-size="22" font-weight="700" font-family="Quicksand, system-ui, sans-serif">3.3 V</text>
+</svg>
+<!-- /svg:potmid -->
 <div class="lead-line">
-<p>The potentiometer is at the middle of its range.</p>
+<p>The potentiometer is <strong>at the middle</strong> of its range.</p>
+</div>
 </div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a></a>duty  <span class="op">=</span> <span class="op">(</span>raw <span class="op">*</span> <span class="dv">1000</span><span class="bu">u</span><span class="op">)</span> <span class="op">/</span> <span class="dv">4095</span><span class="bu">u</span><span class="op">;</span>             <span class="co">// LD2 on TIM2, ARR = 999</span></span>
 <span id="cb2-2"><a></a>pulse <span class="op">=</span> <span class="dv">500</span><span class="bu">u</span> <span class="op">+</span> <span class="op">(</span>raw <span class="op">*</span> <span class="dv">2000</span><span class="bu">u</span><span class="op">)</span> <span class="op">/</span> <span class="dv">4095</span><span class="bu">u</span><span class="op">;</span>      <span class="co">// L08 servo: 500 to 2500 µs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
