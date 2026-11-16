@@ -161,7 +161,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="ee5203-l09-practice-worksheet" class="level1 unlisted">
 <h1 class="unlisted">EE5203 L09 Practice Worksheet</h1>
 <p><em>Analog-to-digital conversion: from a pin voltage to a number - Basri Erdogan</em></p>
-<p><strong>Time:</strong> 30-45 minutes</p>
+<p><strong>Time:</strong> 35-50 minutes</p>
 <p><strong>Rule:</strong> Try every question before you open the solutions. Short answers are fine. One sentence is usually enough.</p>
 <p><strong>In every question:</strong> <code>ADC1</code> has 12 bits and a 3.3 V reference, so <code>raw</code> is a number from 0 to 4095. The program uses integer arithmetic: after a division, drop the fraction. Example: 2310.4 becomes 2310.</p>
 <section id="part-a---from-a-voltage-to-a-number-10-minutes" class="level2">
@@ -620,6 +620,58 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>What do you change in the code?</li>
 </ol></li>
 </ol>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="part-f---signal-conditioning-5-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-f---signal-conditioning-5-minutes">Part F - Signal conditioning (5 minutes)</h2>
+<ol start="21" type="1">
+<li>An ADC pin accepts only 0 V to 3.3 V. Three sensor signals do not fit this range. Fill in the table. Problem: <strong>too large</strong>, <strong>too small</strong> or <strong>goes below 0 V</strong>. Circuit: <strong>voltage divider</strong>, <strong>amplifier</strong> or <strong>offset voltage</strong>.</li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Sensor signal</th>
+<th>What is the problem?</th>
+<th>Circuit between the sensor and the pin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0 V to 5 V</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>0 mV to 100 mV</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>−1 V to +1 V</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="22" type="1">
+<li><p>Calculate the voltage on PA0 and <code>raw</code> for each circuit of question 21.</p>
+<ol type="a">
+<li>Voltage divider: 10 kΩ from the sensor to PA0, 15 kΩ from PA0 to GND. The sensor gives 5 V. What is the voltage on PA0?<br>
+</li>
+<li>No amplifier: the sensor gives 100 mV. What is <code>raw</code>?<br>
+</li>
+<li>Amplifier with a gain of 30: the sensor gives 100 mV. What is the voltage on PA0, and what is <code>raw</code>?<br>
+</li>
+<li>Offset voltage of 1650 mV: the sensor gives −1000 mV. What is the voltage on PA0, and what is <code>raw</code>?</li>
+</ol></li>
+</ol>
 </section>
 <section id="check-yourself" class="level2">
 <h2 class="anchored" data-anchor-id="check-yourself">Check yourself</h2>
@@ -630,6 +682,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><label><input type="checkbox">I can write the three HAL calls of one ADC reading.</label></li>
 <li><label><input type="checkbox">I can scale an ADC value to a PWM duty or a servo pulse.</label></li>
 <li><label><input type="checkbox">I can find <code>MODER</code>, <code>SQR3</code> and <code>DR</code> in the SFR view and say what they show.</label></li>
+<li><label><input type="checkbox">I can choose a divider, an amplifier or an offset to fit a sensor signal into 0 V to 3.3 V.</label></li>
 </ul>
 
 
