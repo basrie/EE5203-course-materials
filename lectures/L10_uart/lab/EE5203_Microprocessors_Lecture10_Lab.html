@@ -4887,7 +4887,7 @@ pre { font-size: 8.7pt; }
 <ol type="1">
 <li>configure USART2 for 115200 baud, 8N1, and check <code>BRR</code> against your own calculation;</li>
 <li>send a line every 100 ms and receive commands by interrupt;</li>
-<li>find a device on the I2C bus, and explain why an unshifted address gives <code>HAL_ERROR</code>;</li>
+<li>find a device on the I2C bus with a scan, and say which address value HAL needs;</li>
 <li>write to an I2C LCD only when the value changes, and give the time one update takes.</li>
 </ol>
 </section>
@@ -5014,63 +5014,17 @@ Close the Serial Monitor before you flash
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">/* USER CODE </span><span class="re">BEGIN</span><span class="co"> 4: HAL_TIM_PeriodElapsedCallback() with g_ms++, as in Lab 8 */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="checkpoint-a---a-uart-start-up-line-and-the-brr-value" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-a---a-uart-start-up-line-and-the-brr-value">Checkpoint A - A UART start-up line and the BRR value</h2>
+<section id="checkpoint-a---the-board-sends-start-up-line-brr-and-telemetry" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-a---the-board-sends-start-up-line-brr-and-telemetry">Checkpoint A - The board sends: start-up line, BRR and telemetry</h2>
 <p><strong>In <code>USER CODE BEGIN 2</code></strong>, below the Lab 8 lines, write your own student number into the text. <code>sizeof hello</code> also counts the <code>&#39;\0&#39;</code> at the end, so <code>- 1</code> sends only the characters.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">char</span> hello<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;EE5203 Lab 9 - 20231234</span><span class="sc">\r\n</span><span class="st">&quot;</span><span class="op">;</span>        <span class="co">/* your student number */</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>HAL_UART_Transmit<span class="op">(&amp;</span>huart2<span class="op">,</span> <span class="op">(</span><span class="dt">uint8_t</span> <span class="op">*)</span>hello<span class="op">,</span> <span class="kw">sizeof</span> hello <span class="op">-</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
 <li>Build (<strong>Ctrl+Shift+B</strong>). Stop Monitoring, then start the debugger (<strong>F5</strong>). It stops at <code>main()</code>.</li>
 <li>Start Monitoring, then Continue (<strong>F5</strong>). The start-up line appears. (Without the debugger: press the black <strong>RESET</strong> button.)</li>
-<li>Pause. In the SFR view, open <strong>USART2</strong> and <strong>GPIOA</strong> and fill in the table. Then <strong>close USART2 again</strong>: the view reads <code>DR</code>, and that read takes a received byte from your program.</li>
+<li>Pause. In the SFR view, open <strong>USART2</strong> and read <strong><code>BRR</code></strong>: it must equal your hand calculation. Then <strong>close USART2 again</strong>: the view reads <code>DR</code>, and that read takes a received byte from your program.</li>
 </ol>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 18%">
-<col style="width: 20%">
-<col style="width: 42%">
-<col style="width: 20%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Register</th>
-<th>Field</th>
-<th>Expected</th>
-<th>Yours</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>USART2-&gt;BRR</code></td>
-<td>whole register</td>
-<td>your hand calculation</td>
-<td></td>
-</tr>
-<tr class="even">
-<td><code>USART2-&gt;CR1</code></td>
-<td><code>UE</code>, <code>TE</code>, <code>RE</code></td>
-<td>1, 1, 1: USART, TX and RX on</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td><code>GPIOA-&gt;MODER</code></td>
-<td>PA2, PA3</td>
-<td><code>10</code>, <code>10</code>: alternate function</td>
-<td></td>
-</tr>
-<tr class="even">
-<td><code>GPIOA-&gt;AFR[0]</code></td>
-<td><code>AFRL2</code>, <code>AFRL3</code></td>
-<td><code>0111</code>, <code>0111</code>: AF7 = USART2</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Evidence for Checkpoint A:</strong> the start-up line with your student number, and <code>BRR</code> equal to your calculation. Write the calculation in <code>USER CODE BEGIN Header</code> as a comment: USARTDIV, the mantissa, the fraction in sixteenths, and <code>BRR</code> in hex. <strong>Screenshot <code>A_brr.png</code>:</strong> the start-up line and the SFR view with <code>BRR</code>.</p>
-</section>
-<section id="checkpoint-b---uart-telemetry-every-100-ms" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-b---uart-telemetry-every-100-ms">Checkpoint B - UART telemetry every 100 ms</h2>
-<p>The board sends one line every 100 ms: time in ms, <code>raw</code>, <code>mv</code>. The tick decides when to send. No <code>HAL_Delay()</code>. Add <code>#include &lt;stdio.h&gt;</code> in <code>USER CODE BEGIN Includes</code>, then:</p>
+<p><strong>Now the telemetry.</strong> The board sends one line every 100 ms: time in ms, <code>raw</code>, <code>mv</code>. The tick decides when to send. No <code>HAL_Delay()</code>. Add <code>#include &lt;stdio.h&gt;</code> in <code>USER CODE BEGIN Includes</code>, then:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* USER CODE </span><span class="re">BEGIN</span><span class="co"> PV, below raw and mv */</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> buf<span class="op">[</span><span class="dv">32</span><span class="op">];</span>                         <span class="co">/* one line of text */</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  n<span class="op">;</span>                               <span class="co">/* characters in buf */</span></span>
@@ -5083,11 +5037,10 @@ Close the Serial Monitor before you flash
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    HAL_UART_Transmit<span class="op">(&amp;</span>huart2<span class="op">,</span> <span class="op">(</span><span class="dt">uint8_t</span> <span class="op">*)</span>buf<span class="op">,</span> n<span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>snprintf()</code> never writes past <code>sizeof buf</code>. A 17-character line such as <code>12300,1241,1000\r\n</code> takes 1.48 ms at 115200 baud.</p>
-<p><strong>Plot 30 lines.</strong> Turn the potentiometer slowly from end to end while the lines come. Stop Monitoring, select 30 lines and copy them. In Excel, paste into A1, then <strong>Data → Text to Columns → Delimited → Comma</strong>. Select columns A and B: <strong>Insert → Scatter with Straight Lines</strong>.</p>
-<p><strong>Evidence for Checkpoint B:</strong> a line every 100 ms; the first number grows by 100. <strong>Screenshot <code>B_plot.png</code>:</strong> your chart of <code>raw</code> against time.</p>
+<p><strong>Evidence for Checkpoint A:</strong> the start-up line with your student number; <code>BRR</code> equal to your calculation; a line every 100 ms, and the first number grows by 100. Write the calculation in <code>USER CODE BEGIN Header</code> as a comment: USARTDIV, the mantissa, the fraction in sixteenths, and <code>BRR</code> in hex. <strong>Screenshot <code>A_brr.png</code>:</strong> the start-up line and the SFR view with <code>BRR</code>.</p>
 </section>
-<section id="checkpoint-c---uart-commands-received-by-interrupt" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-c---uart-commands-received-by-interrupt">Checkpoint C - UART commands received by interrupt</h2>
+<section id="checkpoint-b---the-board-receives-commands-by-interrupt" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-b---the-board-receives-commands-by-interrupt">Checkpoint B - The board receives: commands by interrupt</h2>
 <p>A person types at any time, so the board receives by interrupt. The callback only stores each byte in a ring buffer; <code>main()</code> collects the bytes into a line and acts on it. Add <code>#include &lt;string.h&gt;</code> and <code>#include &lt;stdlib.h&gt;</code> in <code>USER CODE BEGIN Includes</code>, then:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* USER CODE </span><span class="re">BEGIN</span><span class="co"> PV */</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint8_t</span> rx_byte<span class="op">;</span>                      <span class="co">/* the HAL writes each received byte here */</span></span>
@@ -5181,10 +5134,10 @@ Close the Serial Monitor before you flash
 </tr>
 </tbody>
 </table>
-<p><strong>Evidence for Checkpoint C:</strong> show the TA every column of the table. The telemetry lines keep coming while you type.</p>
+<p><strong>Evidence for Checkpoint B:</strong> show the TA every column of the table. The telemetry lines keep coming while you type.</p>
 </section>
-<section id="checkpoint-d---find-the-lcd-with-an-i2c-bus-scan" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-d---find-the-lcd-with-an-i2c-bus-scan">Checkpoint D - Find the LCD with an I2C bus scan</h2>
+<section id="checkpoint-c---the-lcd-on-the-i2c-bus" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-c---the-lcd-on-the-i2c-bus">Checkpoint C - The LCD on the I2C bus</h2>
 <p>Wire the LCD backpack as in the Hardware table. Each I2C device has a 7-bit address. HAL wants it shifted left by one: <code>0x27 &lt;&lt; 1</code> = <code>0x4E</code>, the first byte on the bus. <strong>In <code>USER CODE BEGIN 2</code></strong>, below the start-up line, try every address once:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">uint32_t</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> a <span class="op">&lt;</span> <span class="dv">128</span><span class="op">;</span> a<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>HAL_I2C_IsDeviceReady<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>a <span class="op">&lt;&lt;</span> <span class="dv">1</span><span class="op">),</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">5</span><span class="op">)</span> <span class="op">==</span> HAL_OK<span class="op">)</span> <span class="op">{</span></span>
@@ -5192,39 +5145,51 @@ Close the Serial Monitor before you flash
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        HAL_UART_Transmit<span class="op">(&amp;</span>huart2<span class="op">,</span> <span class="op">(</span><span class="dt">uint8_t</span> <span class="op">*)</span>buf<span class="op">,</span> n<span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Now the wrong address, on purpose.</strong> Below the scan, write one byte to your LCD address <strong>without</strong> the shift. Use the address your scan found:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint8_t</span> data <span class="op">=</span> <span class="bn">0x08</span><span class="op">;</span>                                   <span class="co">/* backlight bit only */</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>HAL_StatusTypeDef st <span class="op">=</span> HAL_I2C_Master_Transmit<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="bn">0x27</span><span class="op">,</span> <span class="op">&amp;</span>data<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">100</span><span class="op">);</span>   <span class="co">/* not shifted */</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> snprintf<span class="op">(</span>buf<span class="op">,</span> <span class="kw">sizeof</span> buf<span class="op">,</span> <span class="st">&quot;0x27 no shift: </span><span class="sc">%s\r\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">(</span>st <span class="op">==</span> HAL_OK<span class="op">)</span> <span class="op">?</span> <span class="st">&quot;HAL_OK&quot;</span> <span class="op">:</span> <span class="st">&quot;HAL_ERROR&quot;</span><span class="op">);</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>HAL_UART_Transmit<span class="op">(&amp;</span>huart2<span class="op">,</span> <span class="op">(</span><span class="dt">uint8_t</span> <span class="op">*)</span>buf<span class="op">,</span> n<span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Evidence for Checkpoint D:</strong> after RESET the Serial Monitor shows <code>found 0x27</code> (or your address) and <code>0x27 no shift: HAL_ERROR</code>. Change <code>0x27</code> to <code>0x27 &lt;&lt; 1</code> once: the line says <code>HAL_OK</code>. Put the wrong address back. In <code>USER CODE BEGIN Header</code>, write one sentence: which address went out on the bus without the shift, and why nobody answered. <strong>Screenshot <code>D_scan.png</code>:</strong> the two lines in the Serial Monitor.</p>
-</section>
-<section id="checkpoint-e---show-the-reading-on-the-lcd" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-e---show-the-reading-on-the-lcd">Checkpoint E - Show the reading on the LCD</h2>
-<p>If your scan found <code>0x3F</code>, change <code>0x27</code> to <code>0x3F</code> in the <code>LCD_ADDR</code> line of <code>lcd_i2c.h</code>. Add <code>#include &quot;lcd_i2c.h&quot;</code> in <code>USER CODE BEGIN Includes</code>. <strong>In <code>USER CODE BEGIN 2</code></strong>, below the bus scan, start the LCD and write line 1 once:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>lcd_init<span class="op">()</span> <span class="op">!=</span> HAL_OK<span class="op">)</span> reply<span class="op">(</span><span class="st">&quot;LCD: no answer</span><span class="sc">\r\n</span><span class="st">&quot;</span><span class="op">);</span>   <span class="co">/* about 60 ms, only here */</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>lcd_set_cursor<span class="op">(</span><span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>lcd_print<span class="op">(</span><span class="st">&quot;EE5203 Lab 9&quot;</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>After RESET the Serial Monitor shows <code>found 0x27</code>. If it shows <code>found 0x3F</code>, change <code>0x27</code> to <code>0x3F</code> in the <code>LCD_ADDR</code> line of <code>lcd_i2c.h</code>.</p>
+<p><strong>Now the LCD.</strong> Add <code>#include &quot;lcd_i2c.h&quot;</code> in <code>USER CODE BEGIN Includes</code>. <strong>In <code>USER CODE BEGIN 2</code></strong>, below the bus scan, start the LCD and write line 1 once:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>lcd_init<span class="op">()</span> <span class="op">!=</span> HAL_OK<span class="op">)</span> reply<span class="op">(</span><span class="st">&quot;LCD: no answer</span><span class="sc">\r\n</span><span class="st">&quot;</span><span class="op">);</span>   <span class="co">/* about 60 ms, only here */</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>lcd_set_cursor<span class="op">(</span><span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>lcd_print<span class="op">(</span><span class="st">&quot;EE5203 Lab 9&quot;</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Line 2 shows <code>mv = 1000</code>. One character costs one I2C transfer: the address and 4 bytes, 45 clocks, <strong>450 µs</strong> at 100 kHz. So write line 2 <strong>only when <code>mv</code> changed, and at most every 200 ms</strong>. Add to <code>USER CODE BEGIN PV</code> and to <code>USER CODE BEGIN 3</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> mv_shown <span class="op">=</span> <span class="bn">0xFFFFFFFF</span><span class="bu">u</span><span class="op">;</span>      <span class="co">/* the value on the LCD now (none at start) */</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> t_lcd <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>                   <span class="co">/* time of the last LCD update */</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> lcd_ms <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>                  <span class="co">/* how long the last update took, in ms */</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> lcd_line<span class="op">[</span><span class="dv">17</span><span class="op">];</span>                    <span class="co">/* 16 characters and the &#39;\0&#39; */</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span> <span class="co">/* your condition */</span> <span class="op">)</span> <span class="op">{</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    t_lcd <span class="op">=</span> g_ms<span class="op">;</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    mv_shown <span class="op">=</span> mv<span class="op">;</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    snprintf<span class="op">(</span>lcd_line<span class="op">,</span> <span class="kw">sizeof</span> lcd_line<span class="op">,</span> <span class="st">&quot;mv = </span><span class="sc">%-11lu</span><span class="st">&quot;</span><span class="op">,</span> mv<span class="op">);</span>   <span class="co">/* 16 characters */</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint32_t</span> t0 <span class="op">=</span> g_ms<span class="op">;</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    lcd_set_cursor<span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    lcd_print<span class="op">(</span>lcd_line<span class="op">);</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    lcd_ms <span class="op">=</span> g_ms <span class="op">-</span> t0<span class="op">;</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> mv_shown <span class="op">=</span> <span class="bn">0xFFFFFFFF</span><span class="bu">u</span><span class="op">;</span>      <span class="co">/* the value on the LCD now (none at start) */</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> t_lcd <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>                   <span class="co">/* time of the last LCD update */</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> lcd_line<span class="op">[</span><span class="dv">17</span><span class="op">];</span>                    <span class="co">/* 16 characters and the &#39;\0&#39; */</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span> <span class="co">/* your condition */</span> <span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    t_lcd <span class="op">=</span> g_ms<span class="op">;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    mv_shown <span class="op">=</span> mv<span class="op">;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    snprintf<span class="op">(</span>lcd_line<span class="op">,</span> <span class="kw">sizeof</span> lcd_line<span class="op">,</span> <span class="st">&quot;mv = </span><span class="sc">%-11lu</span><span class="st">&quot;</span><span class="op">,</span> mv<span class="op">);</span>   <span class="co">/* 16 characters */</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    lcd_set_cursor<span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    lcd_print<span class="op">(</span>lcd_line<span class="op">);</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Your own code: the condition.</strong> True when at least 200 ms have passed since <code>t_lcd</code> <strong>and</strong> <code>mv</code> differs from <code>mv_shown</code>. <code>%-11lu</code> fills the line with spaces, so old digits disappear without <code>lcd_clear()</code>.</p>
-<p><strong>Calculate, then measure.</strong> One update is <code>lcd_set_cursor()</code> plus 16 characters. How many transfers, and how many ms at 450 µs each? Then pause and read <code>lcd_ms</code> in <strong>WATCH</strong>.</p>
-<p><strong>Evidence for Checkpoint E:</strong> line 1 <code>EE5203 Lab 9</code>; line 2 follows the potentiometer. No <code>HAL_Delay()</code> in the loop. In <code>USER CODE BEGIN Header</code>: your calculated time and <code>lcd_ms</code>. <strong>Photo <code>E_lcd.jpg</code>:</strong> the LCD with both lines.</p>
+<p><strong>Calculate.</strong> One update is <code>lcd_set_cursor()</code> plus 16 characters. How many transfers, and how many ms at 450 µs each?</p>
+<p><strong>Evidence for Checkpoint C:</strong> the <code>found</code> line with your LCD address; line 1 <code>EE5203 Lab 9</code>; line 2 follows the potentiometer. No <code>HAL_Delay()</code> in the loop. In <code>USER CODE BEGIN Header</code>: your calculated time for one update. <strong>Photo <code>C_lcd.jpg</code>:</strong> the LCD with both lines.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Extensions - if you have time (optional, not graded, click)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1. Plot 30 lines.</strong> Turn the potentiometer slowly from end to end while the lines come. Stop Monitoring, select 30 lines and copy them. In Excel, paste into A1, then <strong>Data → Text to Columns → Delimited → Comma</strong>. Select columns A and B: <strong>Insert → Scatter with Straight Lines</strong>.</p>
+<p><strong>2. The wrong address, on purpose.</strong> Below the scan, write one byte to your LCD address <strong>without</strong> the shift. Use the address your scan found:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint8_t</span> data <span class="op">=</span> <span class="bn">0x08</span><span class="op">;</span>                                   <span class="co">/* backlight bit only */</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>HAL_StatusTypeDef st <span class="op">=</span> HAL_I2C_Master_Transmit<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="bn">0x27</span><span class="op">,</span> <span class="op">&amp;</span>data<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">100</span><span class="op">);</span>   <span class="co">/* not shifted */</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> snprintf<span class="op">(</span>buf<span class="op">,</span> <span class="kw">sizeof</span> buf<span class="op">,</span> <span class="st">&quot;0x27 no shift: </span><span class="sc">%s\r\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">(</span>st <span class="op">==</span> HAL_OK<span class="op">)</span> <span class="op">?</span> <span class="st">&quot;HAL_OK&quot;</span> <span class="op">:</span> <span class="st">&quot;HAL_ERROR&quot;</span><span class="op">);</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>HAL_UART_Transmit<span class="op">(&amp;</span>huart2<span class="op">,</span> <span class="op">(</span><span class="dt">uint8_t</span> <span class="op">*)</span>buf<span class="op">,</span> n<span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>After RESET the Serial Monitor shows <code>0x27 no shift: HAL_ERROR</code>. Change <code>0x27</code> to <code>0x27 &lt;&lt; 1</code> once: the line says <code>HAL_OK</code>. Which address went out on the bus without the shift, and why did nobody answer?</p>
+<p><strong>3. Measure the LCD time.</strong> Add <code>uint32_t lcd_ms = 0;</code> to <code>USER CODE BEGIN PV</code>. Put <code>uint32_t t0 = g_ms;</code> before <code>lcd_set_cursor(1, 0);</code> and <code>lcd_ms = g_ms - t0;</code> after <code>lcd_print(lcd_line);</code>. Pause and read <code>lcd_ms</code> in <strong>WATCH</strong>. Compare it with your calculation.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -5233,7 +5198,7 @@ Extension - An overrun on purpose (optional, not graded, click)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>At 115200 baud a byte can arrive every 87 µs. If nobody reads <code>DR</code> in time, the next byte finds <code>RXNE</code> still at 1: the USART sets <code>ORE</code> (overrun), <code>DR</code> keeps the old byte and the next bytes are lost. A stopped CPU reads nothing, so a breakpoint makes an overrun.</p>
 <ol type="1">
@@ -5256,11 +5221,9 @@ Extension - An overrun on purpose (optional, not graded, click)
 <h2 class="anchored" data-anchor-id="acceptance-checklist">Acceptance checklist</h2>
 <ul class="task-list">
 <li><label><input type="checkbox"><code>.ioc</code>: USART2 115200 8N1 TX and RX; I2C1 on PB8/PB9, 100 kHz; USART2 and TIM2 interrupts; 16 MHz.</label></li>
-<li><label><input type="checkbox">A: the start-up line; <code>USART2-&gt;BRR</code> matches your calculation.</label></li>
-<li><label><input type="checkbox">B: a line every 100 ms from the tick; 30 lines plotted.</label></li>
-<li><label><input type="checkbox">C: every column of the command table works; the lines keep coming while you type.</label></li>
-<li><label><input type="checkbox">D: <code>found</code> with your LCD address; <code>HAL_ERROR</code> for the unshifted address.</label></li>
-<li><label><input type="checkbox">E: both LCD lines; line 2 only on change, at most every 200 ms; <code>lcd_ms</code> and your calculation.</label></li>
+<li><label><input type="checkbox">A: the start-up line; <code>USART2-&gt;BRR</code> matches your calculation; a line every 100 ms from the tick.</label></li>
+<li><label><input type="checkbox">B: every column of the command table works; the lines keep coming while you type.</label></li>
+<li><label><input type="checkbox">C: <code>found</code> with your LCD address; both LCD lines; line 2 only on change, at most every 200 ms; your calculation.</label></li>
 <li><label><input type="checkbox">No <code>HAL_Delay()</code> in the loop, and no <code>HAL_UART_Transmit()</code> inside a callback.</label></li>
 </ul>
 </section>
@@ -5276,8 +5239,8 @@ Extension - An overrun on purpose (optional, not graded, click)
 </section>
 <section id="submit" class="level2">
 <h2 class="anchored" data-anchor-id="submit">Submit</h2>
-<p>Submit <code>main.c</code> as it is at the end of the session, <code>A_brr.png</code>, <code>B_plot.png</code>, <code>D_scan.png</code> and <code>E_lcd.jpg</code>.</p>
-<p><strong>Marks (10):</strong> pre-lab quiz on CATS 1 · A start-up line and <code>BRR</code> 1 · B telemetry and plot 1 · C commands with the range check 2 · D bus scan and wrong address 1 · E LCD 2 · oral check (one question) 2. The overrun extension is optional and not graded.</p>
+<p>Submit <code>main.c</code> as it is at the end of the session, <code>A_brr.png</code> and <code>C_lcd.jpg</code>.</p>
+<p><strong>Marks (10):</strong> pre-lab quiz on CATS 1 · A start-up line, <code>BRR</code> and telemetry 2 · B commands with the range check 2 · C bus scan and LCD 3 · oral check (one question) 2. The extensions are optional and not graded.</p>
 </section>
 <section id="if-you-are-stuck" class="level2">
 <h2 class="anchored" data-anchor-id="if-you-are-stuck">If you are stuck</h2>
@@ -5335,7 +5298,7 @@ Extension - An overrun on purpose (optional, not graded, click)
 </tr>
 <tr class="odd">
 <td>Line 2 flickers, or the lines come late</td>
-<td>The LCD is written on every pass: check your condition in E.</td>
+<td>The LCD is written on every pass: check your condition in C.</td>
 </tr>
 </tbody>
 </table>
