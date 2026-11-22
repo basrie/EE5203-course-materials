@@ -249,6 +249,38 @@
   box-shadow: none;
 }
 
+/* Spotlight held over more than one click (L10, 2026-11-22): a group with
+   .also-N stays lit while narration line .gN is the current one. Used when one
+   function call is explained in two clicks: its name stays lit, the arguments
+   take turns. The fragment index of the group is the first click that lights it.
+   The rule keys on the line's gN class: reveal.js renumbers data-fragment-index. */
+.reveal .slides section:has(.spot-line.g2.current-fragment) .spot.also-2,
+.reveal .slides section:has(.spot-line.g3.current-fragment) .spot.also-3,
+.reveal .slides section:has(.spot-line.g4.current-fragment) .spot.also-4,
+.reveal .slides section:has(.spot-line.g5.current-fragment) .spot.also-5,
+.reveal .slides section:has(.spot-line.g6.current-fragment) .spot.also-6,
+.reveal .slides section:has(.spot-line.g7.current-fragment) .spot.also-7,
+.reveal .slides section:has(.spot-line.g8.current-fragment) .spot.also-8 {
+  opacity: 1;
+  filter: none;
+}
+.reveal .slides section:has(.spot-line.g2.current-fragment) .spot-grid.flow-svg > svg .spot.also-2 rect,
+.reveal .slides section:has(.spot-line.g2.current-fragment) .spot-grid.flow-svg > svg .spot.also-2 polygon,
+.reveal .slides section:has(.spot-line.g3.current-fragment) .spot-grid.flow-svg > svg .spot.also-3 rect,
+.reveal .slides section:has(.spot-line.g3.current-fragment) .spot-grid.flow-svg > svg .spot.also-3 polygon,
+.reveal .slides section:has(.spot-line.g4.current-fragment) .spot-grid.flow-svg > svg .spot.also-4 rect,
+.reveal .slides section:has(.spot-line.g4.current-fragment) .spot-grid.flow-svg > svg .spot.also-4 polygon,
+.reveal .slides section:has(.spot-line.g5.current-fragment) .spot-grid.flow-svg > svg .spot.also-5 rect,
+.reveal .slides section:has(.spot-line.g5.current-fragment) .spot-grid.flow-svg > svg .spot.also-5 polygon,
+.reveal .slides section:has(.spot-line.g6.current-fragment) .spot-grid.flow-svg > svg .spot.also-6 rect,
+.reveal .slides section:has(.spot-line.g6.current-fragment) .spot-grid.flow-svg > svg .spot.also-6 polygon,
+.reveal .slides section:has(.spot-line.g7.current-fragment) .spot-grid.flow-svg > svg .spot.also-7 rect,
+.reveal .slides section:has(.spot-line.g7.current-fragment) .spot-grid.flow-svg > svg .spot.also-7 polygon,
+.reveal .slides section:has(.spot-line.g8.current-fragment) .spot-grid.flow-svg > svg .spot.also-8 rect,
+.reveal .slides section:has(.spot-line.g8.current-fragment) .spot-grid.flow-svg > svg .spot.also-8 polygon {
+  stroke-width: 7;
+}
+
 /* SVG groups cannot carry a box-shadow ring: thicken the stroke instead */
 .reveal .slides section svg .fragment.spot.current-fragment rect,
 .reveal .slides section svg .fragment.spot.current-fragment polygon {
