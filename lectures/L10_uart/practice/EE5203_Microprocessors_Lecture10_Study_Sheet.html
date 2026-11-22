@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -101,35 +101,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../assets/materials.css">
 </head>
@@ -188,260 +159,203 @@ window.Quarto = {
 
 <section id="ee5203-l10-study-sheet" class="level1">
 <h1>EE5203 L10 Study Sheet</h1>
-<p><em>UART and PC communication - Basri Erdogan</em></p>
+<p><em>Serial communication: UART, I2C and SPI - Basri Erdogan</em></p>
 <div class="mission">
-<p><strong>Essential question:</strong> Two devices share one wire and no clock. How do they agree on where each bit begins — and what happens when they disagree?</p>
+<p><strong>Essential question:</strong> In L09 the ADC value stayed inside the board. How does the board send it to your PC, show it on an LCD, and read a sensor, one bit after another on a few wires?</p>
 </div>
 <section id="what-you-should-be-able-to-do" class="level2">
 <h2 class="anchored" data-anchor-id="what-you-should-be-able-to-do">What you should be able to do</h2>
 <ul>
-<li>Draw an <code>8N1</code> frame and count its bit times.</li>
-<li>Convert between baud, microseconds per byte, and lines per second.</li>
-<li>Compute <code>BRR</code> from <code>PCLK</code> and a baud rate, and the resulting error.</li>
-<li>Transmit formatted telemetry from the tick without blocking the loop.</li>
-<li>Receive by interrupt, re-arm correctly, and act in <code>main()</code>.</li>
+<li>UART: calculate the time of a line and <code>BRR</code>; send with <code>HAL_UART_Transmit()</code>, receive by interrupt.</li>
+<li>I2C: shift the address, read START, STOP, ACK and NACK, read a register, and time an LCD write.</li>
+<li>SPI: drive CS, find the mode from CPOL and CPHA, and read a register with one full-duplex transfer.</li>
 </ul>
 </section>
-<section id="the-frame" class="level2">
-<h2 class="anchored" data-anchor-id="the-frame">The frame</h2>
-<pre class="text"><code>idle    START   D0 D1 D2 D3 D4 D5 D6 D7   STOP   idle
- high    low    &lt;---- LSB first ------&gt;    high
-        |&lt;------------ 10 bit times ------------&gt;|</code></pre>
-<p><code>8N1</code> = <strong>8</strong> data bits, <strong>N</strong>o parity, <strong>1</strong> stop bit. One byte therefore costs <strong>10 bit times</strong> — the framing overhead is 20 %.</p>
-<p><span class="math display">\[\text{time per byte} = \frac{10}{\text{baud}}
-\qquad
-\text{bytes per second} = \frac{\text{baud}}{10}\]</span></p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th style="text-align: right;">Baud</th>
-<th style="text-align: right;">µs/byte</th>
-<th style="text-align: right;">bytes/s</th>
-<th style="text-align: right;">18-char line</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">9 600</td>
-<td style="text-align: right;">1041.67</td>
-<td style="text-align: right;">960</td>
-<td style="text-align: right;">18.75 ms</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">57 600</td>
-<td style="text-align: right;">173.61</td>
-<td style="text-align: right;">5 760</td>
-<td style="text-align: right;">3.13 ms</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">115 200</td>
-<td style="text-align: right;">86.81</td>
-<td style="text-align: right;">11 520</td>
-<td style="text-align: right;">1.56 ms</td>
-</tr>
-</tbody>
-</table>
-<p><strong>There is no clock wire.</strong> Both ends agree the rate in advance; the receiver re-synchronises on each start bit and then samples in the middle of each bit time. Agreement on baud, data bits, parity, and stop bits must be exact — a UART cannot report a disagreement, only hand you its consequences.</p>
+<section id="uart-a-frame-of-10-bit-times" class="level2">
+<h2 class="anchored" data-anchor-id="uart-a-frame-of-10-bit-times">UART: a frame of 10 bit times</h2>
+<p>A UART has <strong>no clock wire</strong>: the receiver uses its own clock at the agreed <strong>baud rate</strong> (bits per second). The line is <strong>high when idle</strong>. 8N1 frame = 1 start bit (low) + 8 data bits, <strong>D0 first</strong> + 1 stop bit (high), so one byte = 10 bits ÷ baud: <strong>86.8 µs</strong> at 115200, 1.04 ms at 9600. The line <code>12300,1241,1000\r\n</code> has <strong>17 characters</strong> (count <code>\r</code> and <code>\n</code>) = 170 bits = <strong>1.48 ms</strong> at 115200, 17.7 ms at 9600.</p>
+<p><strong>USART2</strong> goes to the PC through the ST-LINK: <code>PA2</code> = USART2_TX, <code>PA3</code> = USART2_RX, AF7. CubeMX: <code>Asynchronous</code>, 115200, 8N1, tick <code>USART2 global interrupt</code>. <code>PCLK1</code> = 16 MHz. <strong>BRR:</strong> USARTDIV = 16 000 000 ÷ (16 × baud) = 8.68 for 115200. Bits 15:4 hold the whole part (8), bits 3:0 the fraction in sixteenths (0.68 × 16 = 10.9 → 11 = <code>0xB</code>): <code>BRR</code> = <strong><code>0x08B</code></strong>, real rate 115 108 (−0.08 %). The receiver accepts <strong>3.33 %</strong> total error, shared by both ends.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">((</span>g_ms <span class="op">-</span> t_tx<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">100</span><span class="bu">U</span><span class="op">)</span> <span class="op">{</span>                    <span class="co">/* main(): one line every 100 ms */</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    t_tx <span class="op">=</span> g_ms<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> snprintf<span class="op">(</span>buf<span class="op">,</span> <span class="kw">sizeof</span> buf<span class="op">,</span> <span class="st">"</span><span class="sc">%lu</span><span class="st">,</span><span class="sc">%lu</span><span class="st">,</span><span class="sc">%lu\r\n</span><span class="st">"</span><span class="op">,</span> g_ms<span class="op">,</span> raw<span class="op">,</span> mv<span class="op">);</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    HAL_UART_Transmit<span class="op">(&amp;</span>huart2<span class="op">,</span> <span class="op">(</span><span class="dt">uint8_t</span> <span class="op">*)</span>buf<span class="op">,</span> n<span class="op">,</span> <span class="dv">100</span><span class="op">);</span>   <span class="co">/* 100 = time limit in ms */</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>HAL_UART_Receive_IT<span class="op">(&amp;</span>huart2<span class="op">,</span> <span class="op">&amp;</span>rx_byte<span class="op">,</span> <span class="dv">1</span><span class="op">);</span>      <span class="co">/* once, before while (1) */</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_UART_RxCpltCallback<span class="op">(</span>UART_HandleTypeDef <span class="op">*</span>huart<span class="op">)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>huart<span class="op">-&gt;</span>Instance <span class="op">==</span> USART2<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        rx_ring<span class="op">[</span>head<span class="op">]</span> <span class="op">=</span> <span class="op">(</span><span class="dt">char</span><span class="op">)</span>rx_byte<span class="op">;</span>  head <span class="op">=</span> <span class="op">(</span><span class="dt">uint8_t</span><span class="op">)((</span>head <span class="op">+</span> <span class="dv">1</span><span class="op">)</span> <span class="op">%</span> <span class="dv">64</span><span class="op">);</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        HAL_UART_Receive_IT<span class="op">(&amp;</span>huart2<span class="op">,</span> <span class="op">&amp;</span>rx_byte<span class="op">,</span> <span class="dv">1</span><span class="op">);</span>   <span class="co">/* arm again for the next byte */</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>HAL_UART_Transmit()</code> writes each byte into <code>DR</code> when <strong><code>TXE</code></strong> = 1 and waits for <strong><code>TC</code></strong> = 1. It blocks for the time of the bits (1.48 ms), so never call it in an interrupt callback. A received byte sets <strong><code>RXNE</code></strong>; reading <code>DR</code> clears it. <strong>Overrun (<code>ORE</code>):</strong> a new byte is complete before <code>DR</code> was read, and the bytes after it are lost. The HAL gives the waiting byte to the receive callback with <code>huart2.ErrorCode</code> = <code>0x08</code>; the arm there resets it, and receiving continues.</p>
 </section>
-<section id="vocabulary-table" class="level2">
-<h2 class="anchored" data-anchor-id="vocabulary-table">Vocabulary table</h2>
+<section id="i2c-two-wires-addresses-and-ack" class="level2">
+<h2 class="anchored" data-anchor-id="i2c-two-wires-addresses-and-ack">I2C: two wires, addresses and ACK</h2>
+<p><strong>SCL</strong> (clock, from the controller) and <strong>SDA</strong> (data). On the Nucleo: I2C1, <code>PB8</code> = SCL, <code>PB9</code> = SDA, AF4, 100 kHz. The pins are <strong>open drain</strong>: <strong>pull-up resistors</strong> pull both lines high. <strong>START</strong> = SDA falls while SCL is high. <strong>STOP</strong> = SDA rises while SCL is high. Data changes only while SCL is low and is read while SCL is high, <strong>MSB first</strong>. After every byte the receiver pulls SDA low: <strong>ACK</strong>. SDA stays high: <strong>NACK</strong>.</p>
+<p>The first byte is the 7-bit address and the R/W bit (0 = write). <strong>HAL wants the address shifted:</strong> <code>0x27 &lt;&lt; 1</code> = <code>0x4E</code>. Unshifted <code>0x27</code> addresses <code>0x13</code>: NACK, <code>HAL_ERROR</code>. One byte with its ACK is <strong>9 clocks</strong>: <strong>90 µs</strong> at 100 kHz.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
+<col style="width: 15%">
+<col style="width: 85%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Name</th>
-<th>Job</th>
+<th>Transfer</th>
+<th>Bits on SDA (C = the controller sends, T = the target sends)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Baud</td>
-<td>bits per second <strong>on the wire</strong>, including framing</td>
+<td>write <code>0x08</code> to <code>0x27</code></td>
+<td>S · <code>0x4E</code> (C) · ACK (T) · <code>0x08</code> (C) · ACK (T) · P</td>
 </tr>
 <tr class="even">
-<td><code>BRR</code></td>
-<td>the divider that makes the baud from <code>PCLK</code></td>
-</tr>
-<tr class="odd">
-<td><code>TXE</code></td>
-<td>transmit register empty — write the <em>next</em> byte</td>
-</tr>
-<tr class="even">
-<td><code>TC</code></td>
-<td>transmission complete — the line is genuinely idle</td>
-</tr>
-<tr class="odd">
-<td><code>RXNE</code></td>
-<td>a byte has arrived; reading <code>DR</code> clears it</td>
-</tr>
-<tr class="even">
-<td><code>ORE</code></td>
-<td>overrun — a byte arrived before you read the last one; it is lost</td>
-</tr>
-<tr class="odd">
-<td>VCP</td>
-<td>virtual COM port — the ST-LINK’s USB-to-serial bridge</td>
+<td>read register <code>0xD0</code> of <code>0x76</code></td>
+<td>S · <code>0xEC</code> (C) · ACK (T) · <code>0xD0</code> (C) · ACK (T) · <strong>Sr</strong> · <code>0xED</code> (C) · ACK (T) · <code>0x60</code> (T) · <strong>NACK</strong> (C) · P</td>
 </tr>
 </tbody>
 </table>
+<p><strong>Sr</strong> is a repeated START: the direction changes from write to read without a STOP. The controller answers the last data byte with <strong>NACK</strong>: it wants no more data.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HAL_I2C_Master_Transmit<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="bn">0x27</span> <span class="op">&lt;&lt;</span> <span class="dv">1</span><span class="op">,</span> <span class="op">&amp;</span>data<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">100</span><span class="op">);</span>           <span class="co">/* write one byte */</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>HAL_I2C_Mem_Read<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="bn">0x76</span> <span class="op">&lt;&lt;</span> <span class="dv">1</span><span class="op">,</span> <span class="bn">0xD0</span><span class="op">,</span> I2C_MEMADD_SIZE_8BIT<span class="op">,</span> <span class="op">&amp;</span>id<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">100</span><span class="op">);</span> <span class="co">/* id = 0x60 */</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">uint32_t</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> a <span class="op">&lt;</span> <span class="dv">128</span><span class="op">;</span> a<span class="op">++)</span>                                    <span class="co">/* bus scan */</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>HAL_I2C_IsDeviceReady<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>a <span class="op">&lt;&lt;</span> <span class="dv">1</span><span class="op">),</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">5</span><span class="op">)</span> <span class="op">==</span> HAL_OK<span class="op">)</span> <span class="op">{</span> <span class="co">/* print a */</span> <span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Check every return value: <code>HAL_OK</code>, or <code>HAL_ERROR</code> after a NACK.</p>
+<p><strong>The I2C LCD.</strong> A PCF8574 backpack drives the 16x2 LCD (HD44780, 4-bit mode). PCF8574 bits: P0 = RS (1 = character, 0 = command), P1 = RW, P2 = EN, P3 = backlight, P4–P7 = D4–D7. <strong>One character = 4 bytes:</strong> high nibble with EN = 1, then EN = 0, low nibble with EN = 1, then EN = 0. Example: <code>A</code> (<code>0x41</code>), backlight on, gives <code>0x4D 0x49 0x1D 0x19</code>. One transmit of 4 bytes = address + 4 bytes = 5 × 9 clocks = <strong>450 µs</strong> at 100 kHz. A 16-character line takes about <strong>7.2 ms</strong>. Write the LCD only when the text changes, at most every 200 ms.</p>
 </section>
-<section id="computing-brr" class="level2">
-<h2 class="anchored" data-anchor-id="computing-brr">Computing <code>BRR</code></h2>
-<p>USART2 is on <strong>APB1</strong>; at the default HSI, <code>PCLK1</code> = 16 MHz. Oversampling by 16:</p>
-<p><span class="math display">\[\text{USARTDIV} = \frac{f_{\text{PCLK}}}{16 \times \text{baud}}\]</span></p>
-<p><code>BRR</code> stores this as fixed point: <strong>top 12 bits = integer part, bottom 4 bits = sixteenths</strong>.</p>
-<p>For 115 200: 16 000 000 / (16 × 115 200) = 8.6806 → mantissa <strong>8</strong>, fraction 0.6806 × 16 ≈ <strong>11</strong> → <code>BRR</code> = (8 &lt;&lt; 4) | 11 = <strong>139</strong> = <code>0x08B</code> → actual = 16 000 000 / (16 × 8.6875) = <strong>115 108 baud</strong>, error <strong>−0.08 %</strong></p>
+<section id="spi-chip-select-full-duplex-modes" class="level2">
+<h2 class="anchored" data-anchor-id="spi-chip-select-full-duplex-modes">SPI: chip select, full duplex, modes</h2>
+<p><strong>SCK</strong> (clock), <strong>MOSI</strong> (controller to device) and <strong>MISO</strong> (device to controller) are shared. Each device has its own <strong>CS</strong>, a GPIO output: low before the transfer, high after it. No addresses, no ACK: a missing device reads <code>0x00</code> or <code>0xFF</code>. <strong>Full duplex:</strong> each clock sends one bit and receives one, so to read you must send a byte. Speed: 1 to 20 MHz.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th style="text-align: right;">Baud</th>
-<th style="text-align: right;"><code>BRR</code></th>
-<th style="text-align: right;">Actual</th>
-<th style="text-align: right;">Error</th>
+<th style="text-align: center;">Mode</th>
+<th style="text-align: center;">CPOL</th>
+<th style="text-align: center;">CPHA</th>
+<th style="text-align: center;">SCK when idle</th>
+<th style="text-align: center;">Data read on</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">9 600</td>
-<td style="text-align: right;"><code>0x683</code></td>
-<td style="text-align: right;">9 598</td>
-<td style="text-align: right;">−0.02 %</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">low</td>
+<td style="text-align: center;">rising edge</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">38 400</td>
-<td style="text-align: right;"><code>0x1A1</code></td>
-<td style="text-align: right;">38 369</td>
-<td style="text-align: right;">−0.08 %</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">low</td>
+<td style="text-align: center;">falling edge</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">115 200</td>
-<td style="text-align: right;"><code>0x08B</code></td>
-<td style="text-align: right;">115 108</td>
-<td style="text-align: right;">−0.08 %</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">high</td>
+<td style="text-align: center;">falling edge</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">230 400</td>
-<td style="text-align: right;"><code>0x045</code></td>
-<td style="text-align: right;">231 884</td>
-<td style="text-align: right;"><strong>+0.64 %</strong></td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">high</td>
+<td style="text-align: center;">rising edge</td>
 </tr>
 </tbody>
 </table>
-<p>A UART tolerates roughly <strong>±2 %</strong> total across both ends. Small errors are invisible; 0.64 % consumes a third of the budget before the other device has contributed anything.</p>
-</section>
-<section id="the-board-already-has-the-wire" class="level2">
-<h2 class="anchored" data-anchor-id="the-board-already-has-the-wire">The board already has the wire</h2>
-<p>PA2 (<code>USART2_TX</code>) and PA3 (<code>USART2_RX</code>) are wired to the ST-LINK, which presents a serial port over the same USB cable that flashes the board. No dongle, no level shifter. <strong>Close the Serial Monitor before flashing</strong> — an open port blocks the programmer.</p>
-</section>
-<section id="transmitting" class="level2">
-<h2 class="anchored" data-anchor-id="transmitting">Transmitting</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> buf<span class="op">[</span><span class="dv">48</span><span class="op">];</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> n <span class="op">=</span> snprintf<span class="op">(</span>buf<span class="op">,</span> <span class="kw">sizeof</span> buf<span class="op">,</span> <span class="st">"</span><span class="sc">%lu</span><span class="st">,</span><span class="sc">%u\r\n</span><span class="st">"</span><span class="op">,</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                 <span class="op">(</span><span class="dt">unsigned</span> <span class="dt">long</span><span class="op">)</span>g_ms<span class="op">,</span> <span class="op">(</span><span class="dt">unsigned</span><span class="op">)</span>raw<span class="op">);</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>HAL_UART_Transmit<span class="op">(&amp;</span>huart2<span class="op">,</span> <span class="op">(</span><span class="dt">uint8_t</span> <span class="op">*)</span>buf<span class="op">,</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)</span>n<span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li><strong><code>snprintf</code>, never <code>sprintf</code>.</strong> <code>snprintf</code> truncates at the buffer size; <code>sprintf</code> writes past the end and corrupts whatever is next on the stack.</li>
-<li><strong><code>HAL_UART_Transmit</code> blocks</strong> until the last byte is handed over — 1.56 ms for an 18-character line at 115 200. Acceptable in <code>main()</code> at 10 Hz; never acceptable in a callback.</li>
-<li><code>\r\n</code>, not <code>\n</code> alone — most monitors need both to return to column 1.</li>
-<li>Comma-separated with a timestamp pastes straight into a spreadsheet.</li>
-</ul>
-<p><strong><code>TXE</code> versus <code>TC</code>.</strong> <code>TXE</code> means “the holding register is free, give me the next byte” — the previous byte may still be shifting out. <code>TC</code> means the shift register is empty too and the line is idle. Powering down, or turning a half-duplex transceiver around, needs <code>TC</code>.</p>
-</section>
-<section id="receiving" class="level2">
-<h2 class="anchored" data-anchor-id="receiving">Receiving</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>HAL_UART_Receive_IT<span class="op">(&amp;</span>huart2<span class="op">,</span> <span class="op">&amp;</span>rx_byte<span class="op">,</span> <span class="dv">1</span><span class="op">);</span>        <span class="co">/* arm once */</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_UART_RxCpltCallback<span class="op">(</span>UART_HandleTypeDef <span class="op">*</span>huart<span class="op">)</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>huart<span class="op">-&gt;</span>Instance <span class="op">==</span> USART2<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        rx_ring<span class="op">[</span>head<span class="op">]</span> <span class="op">=</span> rx_byte<span class="op">;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        head <span class="op">=</span> <span class="op">(</span>head <span class="op">+</span> <span class="dv">1</span><span class="op">)</span> <span class="op">%</span> RX_SIZE<span class="op">;</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        HAL_UART_Receive_IT<span class="op">(&amp;</span>huart2<span class="op">,</span> <span class="op">&amp;</span>rx_byte<span class="op">,</span> <span class="dv">1</span><span class="op">);</span>  <span class="co">/* RE-ARM - mandatory */</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li><strong>Never <code>HAL_UART_Receive</code> blocking.</strong> It waits for a human; meanwhile nothing else in the system runs.</li>
-<li><strong>The re-arm is mandatory.</strong> HAL disarms after each completed receive. Omit it and you receive exactly one byte, ever — a silence that looks like broken hardware.</li>
-<li>The callback <strong>records</strong>; <code>main()</code> <strong>decides</strong>. Same discipline as every interrupt since L06.</li>
-<li>Reading <code>DR</code> clears <code>RXNE</code> — read-to-clear, like the ADC’s <code>EOC</code>.</li>
-</ul>
-<p><strong><code>ORE</code>.</strong> Set when a byte arrives before the previous one was read. That byte is gone, and HAL delivers nothing further until the error is cleared. Usual causes: blocking somewhere long, a missing re-arm, or a breakpoint held while data arrives.</p>
-</section>
-<section id="sfr-evidence" class="level2">
-<h2 class="anchored" data-anchor-id="sfr-evidence">SFR evidence</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint8_t</span> tx<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="bn">0xD0</span><span class="op">,</span> <span class="bn">0x00</span><span class="op">},</span> rx<span class="op">[</span><span class="dv">2</span><span class="op">];</span>    <span class="co">/* BME280: bit 7 = 1 means read; 0xD0 has it */</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_WritePin<span class="op">(</span>CS_GPIO_Port<span class="op">,</span> CS_Pin<span class="op">,</span> GPIO_PIN_RESET<span class="op">);</span>   <span class="co">/* CS low  */</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>HAL_SPI_TransmitReceive<span class="op">(&amp;</span>hspi1<span class="op">,</span> tx<span class="op">,</span> rx<span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">100</span><span class="op">);</span>           <span class="co">/* rx[1] = 0x60 */</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_WritePin<span class="op">(</span>CS_GPIO_Port<span class="op">,</span> CS_Pin<span class="op">,</span> GPIO_PIN_SET<span class="op">);</span>     <span class="co">/* CS high */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>First test of a new SPI bus: connect MOSI to MISO (loopback); <code>rx</code> must equal <code>tx</code>.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 25%">
+<col style="width: 29%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Claim</th>
-<th>Evidence</th>
+<th></th>
+<th>UART</th>
+<th>I2C</th>
+<th>SPI</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>the baud divider is right</td>
-<td><code>USART2-&gt;BRR</code> = <code>0x08B</code> for 115 200 at 16 MHz</td>
+<td>Wires</td>
+<td>TX, RX, GND</td>
+<td>SCL, SDA, GND, 2 pull-ups</td>
+<td>SCK, MOSI, MISO, GND, 1 CS each</td>
 </tr>
 <tr class="even">
-<td>the pins belong to the USART</td>
-<td><code>MODER</code> = <code>10</code> for PA2/PA3; <code>AFR[0]</code> selects AF7</td>
+<td>Clock wire · ACK</td>
+<td>no · no</td>
+<td>yes · yes, after every byte</td>
+<td>yes · no</td>
 </tr>
 <tr class="odd">
-<td>a byte is waiting</td>
-<td><code>USART2-&gt;SR</code> <code>RXNE</code> = 1; it clears when <code>DR</code> is read</td>
+<td>Devices</td>
+<td>2</td>
+<td>many, by 7-bit address</td>
+<td>many, by CS line</td>
 </tr>
 <tr class="even">
-<td>bytes were lost</td>
-<td><code>USART2-&gt;SR</code> <code>ORE</code> = 1 after a held breakpoint</td>
-</tr>
-<tr class="odd">
-<td>the line is idle</td>
-<td><code>TC</code> = 1 after the last byte</td>
+<td>Typical speed</td>
+<td>9600 to 115200 baud</td>
+<td>100 or 400 kHz</td>
+<td>1 to 20 MHz</td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="common-mistakes" class="level2">
 <h2 class="anchored" data-anchor-id="common-mistakes">Common mistakes</h2>
-<ul>
-<li>Baud mismatch between board and monitor — consistent garbage, no warning.</li>
-<li>Receive interrupt never re-armed — one byte, then permanent silence.</li>
-<li><code>sprintf</code> into a small buffer — silent corruption.</li>
-<li><code>HAL_UART_Transmit</code> inside a callback — milliseconds of blocking in interrupt context.</li>
-<li><code>ORE</code> never cleared — reception dead for good.</li>
-<li><code>\n</code> without <code>\r</code> — the display stair-steps.</li>
-<li>Serial Monitor left open while flashing — the programmer cannot claim the port.</li>
-<li><code>printf</code> with floats for telemetry — huge, slow, one transmit per character.</li>
-</ul>
-</section>
-<section id="mastery-self-check" class="level2">
-<h2 class="anchored" data-anchor-id="mastery-self-check">Mastery self-check</h2>
-<ul class="task-list">
-<li><label><input type="checkbox">I can draw an <code>8N1</code> frame and say why a byte costs 10 bit times.</label></li>
-<li><label><input type="checkbox">I can compute µs/byte and max lines/s for any baud.</label></li>
-<li><label><input type="checkbox">I can compute <code>BRR</code> and the resulting baud error.</label></li>
-<li><label><input type="checkbox">I can state the ±2 % tolerance and why it matters.</label></li>
-<li><label><input type="checkbox">I can distinguish <code>TXE</code> from <code>TC</code>, and <code>RXNE</code> from <code>ORE</code>.</label></li>
-<li><label><input type="checkbox">I can write an interrupt receive with a correct re-arm.</label></li>
-<li><label><input type="checkbox">I can diagnose garbage, silence, and one-byte-then-nothing by symptom.</label></li>
-</ul>
-</section>
-<section id="five-review-questions" class="level2">
-<h2 class="anchored" data-anchor-id="five-review-questions">Five review questions</h2>
-<ol type="1">
-<li>At 57 600 baud, <code>8N1</code>, how long does a 17-character line take? What fraction of a 50 ms budget is that, and how many such lines per second could the link carry flat out?</li>
-<li>Compute <code>BRR</code> for 19 200 baud with <code>PCLK1</code> = 16 MHz. Give mantissa, fraction, hex value, actual baud, and error.</li>
-<li>A student’s board sends its banner correctly, but every character the <em>PC</em> sends is ignored after the first one. Name the single missing line.</li>
-<li>Explain why <code>HAL_UART_Transmit(&amp;huart2, buf, 18, 100)</code> is acceptable in <code>main()</code> at 10 Hz but not inside <code>HAL_TIM_PeriodElapsedCallback</code> on a 1 ms tick. Use numbers.</li>
-<li>Your monitor shows readable text that occasionally drops characters, and <code>ORE</code> is set. Give two distinct causes and the fix for each.</li>
-</ol>
-<p>See the L10 worksheet for extended practice. Worked solutions are released after the practice window.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mistake</th>
+<th>What you see</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>UART baud rate differs on the two ends</td>
+<td>the same wrong characters every time</td>
+</tr>
+<tr class="even">
+<td>No <code>HAL_UART_Receive_IT()</code> in the callback</td>
+<td>one byte, then nothing</td>
+</tr>
+<tr class="odd">
+<td>I2C address not shifted (<code>0x27</code> instead of <code>0x27 &lt;&lt; 1</code>)</td>
+<td>NACK and <code>HAL_ERROR</code></td>
+</tr>
+<tr class="even">
+<td>No pull-ups on SCL and SDA</td>
+<td>the lines never go high; every I2C call fails</td>
+</tr>
+<tr class="odd">
+<td>Wrong SPI mode</td>
+<td>no error, only wrong bits, often shifted by one place</td>
+</tr>
+<tr class="even">
+<td>CS not driven (left high, or released between bytes)</td>
+<td><code>0x00</code> or <code>0xFF</code>, or a broken transfer</td>
+</tr>
+</tbody>
+</table>
 
 
 </section>

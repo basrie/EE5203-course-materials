@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>EE5203 L10 Worksheet – EE5203 Microprocessors</title>
+<title>EE5203 L10 Practice Worksheet – EE5203 Microprocessors</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -35,7 +69,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -66,6 +100,10 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<style>
+.answer table td { height: 2.8em; vertical-align: top; }
+.answer table th { vertical-align: bottom; }
+</style>
 
 
 <link rel="stylesheet" href="../assets/materials.css">
@@ -116,6 +154,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
     <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="EE5203_Microprocessors_Lecture10_Worksheet.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -123,218 +162,566 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="ee5203-l10-worksheet" class="level1">
-<h1>EE5203 L10 Worksheet</h1>
-<p><em>UART and PC communication - Basri Erdogan</em></p>
+<section id="ee5203-l10-practice-worksheet" class="level1 unlisted">
+<h1 class="unlisted">EE5203 L10 Practice Worksheet</h1>
+<p><em>Serial communication: UART, I2C and SPI - Basri Erdogan</em></p>
 <p><strong>Expected time:</strong> 30-45 minutes</p>
-<p><strong>Policy:</strong> Attempt every question before consulting the worked solutions.</p>
-<p><code>PCLK1</code> = 16 MHz, oversampling by 16, <code>8N1</code> framing throughout.</p>
-<section id="part-a---the-frame-and-its-cost" class="level2">
-<h2 class="anchored" data-anchor-id="part-a---the-frame-and-its-cost">Part A - The frame and its cost</h2>
+<p><strong>Rule:</strong> Try every question before you open the solutions. Short answers are fine. One sentence is usually enough.</p>
+<p><strong>In every question:</strong> USART2 uses the frame 8N1, so one character is 10 bits on the wire. <code>PCLK1</code> = 16 MHz. I2C1 runs at 100 kHz unless the question says otherwise. One I2C byte with its ACK takes 9 SCL clocks.</p>
+<section id="part-a---the-uart-frame-and-the-time-for-a-line-6-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-a---the-uart-frame-and-the-time-for-a-line-6-minutes">Part A - The UART frame and the time for a line (6 minutes)</h2>
 <ol type="1">
-<li><p>Draw an <code>8N1</code> frame for the byte <code>0x41</code> (<code>'A'</code>), labelling the start bit, each data bit in transmission order, and the stop bit. State the idle level.</p></li>
-<li><p>Why does a byte cost 10 bit times rather than 8? What is the framing overhead as a percentage?</p></li>
-<li><p>Complete the table.</p></li>
+<li>The board sends the character <code>5</code>. Its code is <code>0x35</code> = <code>0011 0101</code>. Write the line level, 0 or 1, for each bit time. Write the bits in the order they travel on the wire.</li>
 </ol>
+<div class="answer">
 <table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Bit time</th>
+<th style="text-align: center;">Start</th>
+<th style="text-align: center;">D0</th>
+<th style="text-align: center;">D1</th>
+<th style="text-align: center;">D2</th>
+<th style="text-align: center;">D3</th>
+<th style="text-align: center;">D4</th>
+<th style="text-align: center;">D5</th>
+<th style="text-align: center;">D6</th>
+<th style="text-align: center;">D7</th>
+<th style="text-align: center;">Stop</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Level</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol type="a">
+<li>What is the level of the line before the start bit? Write 0 or 1.<br>
+</li>
+<li>A student reads the 8 data bits from left to right, D0 first, as one binary number. Which hex value does the student get?</li>
+</ol>
+<ol start="2" type="1">
+<li><p>The board sends this line: <code>8200,2867,2310\r\n</code></p>
+<ol type="a">
+<li>How many characters does the line have? <code>\r</code> is one character, and <code>\n</code> is one character.<br>
+</li>
+<li>How many bits are on the wire for the whole line?<br>
+</li>
+<li>How long does the line take at 115200 baud? Give the answer in ms.<br>
+</li>
+<li>How long does the line take at 9600 baud?<br>
+</li>
+<li>The program sends one line every 10 ms. Does this work at 9600 baud? <strong>Yes / No.</strong> Explain in one sentence.</li>
+</ol></li>
+</ol>
+</section>
+<section id="part-b---the-brr-register-5-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-b---the-brr-register-5-minutes">Part B - The BRR register (5 minutes)</h2>
+<ol start="3" type="1">
+<li>Fill in the table. USARTDIV = 16 000 000 ÷ (16 × baud). The fraction goes into <code>BRR</code> in sixteenths: fraction × 16, rounded to a whole number. Real baud = 16 000 000 ÷ (16 × (mantissa + fraction ÷ 16)). The first row is an example.</li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: right;">Baud</th>
-<th style="text-align: right;">µs per byte</th>
-<th style="text-align: right;">bytes/s</th>
-<th style="text-align: right;">20-char line (ms)</th>
+<th style="text-align: right;">USARTDIV</th>
+<th style="text-align: right;">Mantissa in hex</th>
+<th style="text-align: right;">Fraction × 16, rounded</th>
+<th style="text-align: right;"><code>BRR</code> in hex</th>
+<th style="text-align: right;">Real baud</th>
+<th style="text-align: right;">Error in %</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">9 600</td>
+<td style="text-align: right;">115200</td>
+<td style="text-align: right;">8.68</td>
+<td style="text-align: right;"><code>0x8</code></td>
+<td style="text-align: right;">11 = <code>0xB</code></td>
+<td style="text-align: right;"><code>0x08B</code></td>
+<td style="text-align: right;">115 108</td>
+<td style="text-align: right;">−0.08</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">38400</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">460800</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">38 400</td>
+<td style="text-align: right;">921600</td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">115 200</td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 </tr>
 </tbody>
 </table>
+</div>
+<ol type="a">
+<li>The receiver accepts 3.33 % total error. The two ends share it. Which baud rate in the table uses the largest part of the 3.33 %?<br>
+</li>
+<li>For that baud rate, how much of the 3.33 % is left for the other device?</li>
+</ol>
 <ol start="4" type="1">
-<li><p>A UART has no clock line. Explain how the receiver knows where each bit begins, and what it does at the start of every frame.</p></li>
-<li><p>Two devices agree on baud, data bits and stop bits, but one uses even parity and the other none. Describe what the receiving side observes.</p></li>
+<li><p>The SFR view shows <code>USART2-&gt;BRR</code> = <code>0x341</code>.</p>
+<ol type="a">
+<li>Write the mantissa and the fraction (in sixteenths) as decimal numbers.<br>
+</li>
+<li>What is the real baud rate?<br>
+</li>
+<li>Which baud rate was set in CubeMX? Choose from: 9600, 19200, 38400, 115200.</li>
+</ol></li>
 </ol>
 </section>
-<section id="part-b---brr-arithmetic" class="level2">
-<h2 class="anchored" data-anchor-id="part-b---brr-arithmetic">Part B - <code>BRR</code> arithmetic</h2>
-<ol start="6" type="1">
-<li><p>Write the formula for USARTDIV, and explain how the result is stored in <code>BRR</code>.</p></li>
-<li><p>Compute mantissa, fraction, <code>BRR</code> (hex), actual baud, and error for each:</p></li>
+<section id="part-c---receive-by-interrupt-and-overrun-5-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-c---receive-by-interrupt-and-overrun-5-minutes">Part C - Receive by interrupt and overrun (5 minutes)</h2>
+<ol start="5" type="1">
+<li><p>Fill in the three blanks in the receive callback.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> HAL_UART_RxCpltCallback<span class="op">(</span>UART_HandleTypeDef <span class="op">*</span>huart<span class="op">)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>huart<span class="op">-&gt;</span>Instance <span class="op">==</span> USART2<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        rx_ring<span class="op">[</span>head<span class="op">]</span> <span class="op">=</span> <span class="op">(</span><span class="dt">char</span><span class="op">)</span>__________<span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        head <span class="op">=</span> <span class="op">(</span><span class="dt">uint8_t</span><span class="op">)((</span>head <span class="op">+</span> <span class="dv">1</span><span class="op">)</span> <span class="op">%</span> ____<span class="op">);</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        ____________________<span class="op">(&amp;</span>huart2<span class="op">,</span> <span class="op">&amp;</span>rx_byte<span class="op">,</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol type="a">
+<li>You delete the last line of the callback. Then you type <code>led on</code> and press Enter. How many characters does the board receive?<br>
+</li>
+<li>Which setting must be ticked in CubeMX, or the callback never runs?</li>
+</ol></li>
+<li><p><strong>Optional (the overrun: study sheet, and the optional extension of Lab 9).</strong> The program stops at a breakpoint. While it is stopped, the Serial Monitor sends <code>led on</code>: 6 characters (no Enter). Then you run the program again.</p>
+<ol type="a">
+<li><code>l</code> is complete and waits in <code>DR</code>. Then <code>e</code> is complete. Which flag becomes 1?<br>
+</li>
+<li>Which character reaches <code>HAL_UART_RxCpltCallback()</code> when the program runs again?<br>
+</li>
+<li>How many of the 6 characters are lost?<br>
+</li>
+<li>You stop in <code>HAL_UART_RxCpltCallback()</code>. Which value does <code>huart2.ErrorCode</code> show? Choose from: <code>0x00</code>, <code>0x04</code>, <code>0x08</code>.<br>
+</li>
+<li>Now you type <code>led on</code> and press Enter. Which text reaches <code>handle_command()</code>, and what does the board answer?</li>
+</ol></li>
 </ol>
+</section>
+<section id="part-d---i2c-bits-addresses-and-a-register-read-8-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-d---i2c-bits-addresses-and-a-register-read-8-minutes">Part D - I2C bits, addresses and a register read (8 minutes)</h2>
+<ol start="7" type="1">
+<li>Write <strong>START</strong>, <strong>STOP</strong> or <strong>data bit</strong> for each event on the bus.</li>
+</ol>
+<div class="answer">
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th style="text-align: right;">Requested baud</th>
-<th style="text-align: right;">Mantissa</th>
-<th style="text-align: right;">Fraction</th>
-<th style="text-align: right;"><code>BRR</code></th>
-<th style="text-align: right;">Actual</th>
-<th style="text-align: right;">Error</th>
+<th>What happens on SCL and SDA</th>
+<th style="text-align: center;">START, STOP or data bit</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">9 600</td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
+<td>SDA falls while SCL is high.</td>
+<td style="text-align: center;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">19 200</td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
+<td>SDA changes while SCL is low, then stays stable while SCL is high.</td>
+<td style="text-align: center;"></td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">115 200</td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">230 400</td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
+<td>SDA rises while SCL is high.</td>
+<td style="text-align: center;"></td>
 </tr>
 </tbody>
 </table>
+</div>
 <ol start="8" type="1">
-<li><p>A UART link tolerates roughly ±2 % total error across both ends. Which entry in your table would worry you, and why — given that the <em>other</em> device has its own error budget?</p></li>
-<li><p>The board is moved to a configuration where <code>PCLK1</code> becomes 42 MHz. Compute <code>BRR</code> for 115 200 baud, and state whether the error improves or worsens.</p></li>
+<li>HAL wants the 7-bit address shifted left by one. Fill in the table. The first row is an example.</li>
 </ol>
-</section>
-<section id="part-c---transmitting" class="level2">
-<h2 class="anchored" data-anchor-id="part-c---transmitting">Part C - Transmitting</h2>
+<div class="answer">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Address in the datasheet</th>
+<th style="text-align: center;">Value in the HAL call (<code>&lt;&lt; 1</code>)</th>
+<th style="text-align: center;">First byte on the bus for a read (R/W = 1)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>0x27</code></td>
+<td style="text-align: center;"><code>0x4E</code></td>
+<td style="text-align: center;"><code>0x4F</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>0x3F</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>0x77</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="9" type="1">
+<li>An MPU-6050 motion sensor has the address <code>0x68</code>. Its register <code>0x75</code> (WHO_AM_I) holds the value <code>0x68</code>. The controller reads this register. Fill in the table: the value of each part, and who sends it (<strong>controller</strong> or <strong>target</strong>).</li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Part of the transfer</th>
+<th style="text-align: center;">Value</th>
+<th style="text-align: center;">Who sends it?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>START</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">controller</td>
+</tr>
+<tr class="even">
+<td>address + W</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td>ACK</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td>register number</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td>ACK</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td>repeated START</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td>address + R</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td>ACK</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td>data</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td>ACK or NACK?</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td>STOP</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">controller</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol type="a">
+<li>Fill in the HAL call for this read: <code>HAL_I2C_Mem_Read(&amp;hi2c1, ______, ______, I2C_MEMADD_SIZE_8BIT, &amp;id, 1, 100);</code><br>
+</li>
+<li>Why does the controller answer the data byte with a NACK? One sentence.</li>
+</ol>
 <ol start="10" type="1">
-<li><p>Explain the difference between <code>TXE</code> and <code>TC</code>, and give one situation where only <code>TC</code> will do.</p></li>
-<li><p><code>HAL_UART_Transmit(&amp;huart2, buf, 18, 100)</code> at 115 200 baud. How long does it block? Express that as a fraction of a 1 ms tick period, and state whether it belongs in a timer callback.</p></li>
-<li><p>Why is <code>snprintf</code> preferred over <code>sprintf</code>? Describe precisely what goes wrong when a 60-character line is written into a <code>char buf[32]</code> with each.</p></li>
-<li><p>Write the loop body that sends <code>&lt;g_ms&gt;,&lt;raw&gt;,&lt;mv&gt;</code> at exactly 5 Hz from the L07 tick, with CRLF endings and no blocking beyond the transmit itself.</p></li>
-<li><p>A team retargets <code>printf</code> through <code>__io_putchar</code> and uses it for 10 Hz telemetry. Give two distinct reasons this is worse than <code>snprintf</code> plus one <code>HAL_UART_Transmit</code>.</p></li>
+<li><p>An OLED display has the address <code>0x3C</code>. A student writes:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HAL_I2C_Master_Transmit<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="bn">0x3C</span><span class="op">,</span> <span class="op">&amp;</span>data<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol type="a">
+<li>Which 7-bit address does the first byte on the bus carry?<br>
+</li>
+<li>Does a device pull SDA low after this byte? Write <strong>ACK</strong> or <strong>NACK</strong>.<br>
+</li>
+<li>What does the call return?</li>
 </ol>
-</section>
-<section id="part-d---receiving" class="level2">
-<h2 class="anchored" data-anchor-id="part-d---receiving">Part D - Receiving</h2>
-<ol start="15" type="1">
-<li><p>Name the flag that says a byte has arrived, and state what clears it.</p></li>
-<li><p>Write the interrupt receive callback for USART2 that stores one byte into a ring buffer and re-arms. Mark the line that is most often forgotten.</p></li>
-<li><p>Explain why blocking <code>HAL_UART_Receive</code> is unacceptable in this project. Name what stops working while it waits.</p></li>
-<li><p>What is <code>ORE</code>, when does it set, and what happens to reception if it is never cleared? Give three plausible causes in order of likelihood.</p></li>
-<li><p>Design a rule for assembling a command line from single bytes: state your terminator, your maximum length, and what you do when the maximum is exceeded. Explain why the bounds check cannot be omitted.</p></li>
+<p>Now two other boards. Write the most likely cause. Choose from: <strong>no pull-up resistors</strong>, <strong>the address is not shifted in the driver call</strong>.</p></li>
 </ol>
-</section>
-<section id="part-e---diagnosis-and-evidence" class="level2">
-<h2 class="anchored" data-anchor-id="part-e---diagnosis-and-evidence">Part E - Diagnosis and evidence</h2>
-<ol start="20" type="1">
-<li>For each symptom, give the most likely cause and the first thing you would check.</li>
-</ol>
+<div class="answer">
 <table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Symptom</th>
-<th>Likely cause</th>
-<th>First check</th>
+<th>What you see</th>
+<th>Most likely cause</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Nothing appears at all</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Consistent garbage characters</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>Exactly one byte received, then silence</td>
-<td></td>
+<td>The bus scan prints nothing. SDA is not high when the bus is idle.</td>
 <td></td>
 </tr>
 <tr class="even">
-<td>Text stair-steps down the screen</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>Everything freezes when you type</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Flashing fails with a port error</td>
-<td></td>
+<td>The bus scan prints <code>found 0x3C</code>. The driver call returns <code>HAL_ERROR</code>.</td>
 <td></td>
 </tr>
 </tbody>
 </table>
-<ol start="21" type="1">
-<li>Fill in the evidence you would show for each claim.</li>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="part-e---the-i2c-lcd-8-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-e---the-i2c-lcd-8-minutes">Part E - The I2C LCD (8 minutes)</h2>
+<ol start="11" type="1">
+<li>The LCD shows <code>mv = 1000</code>. The program writes the character <code>1</code> = <code>0x31</code>. The PCF8574 bits are: P7–P4 = D7–D4, P3 = backlight, P2 = EN, P1 = RW, P0 = RS. The backlight is on, RW = 0, and RS = 1 for a character. Fill in the four bytes. The first row is an example.</li>
 </ol>
+<div class="answer">
 <table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Claim</th>
-<th>SFR observation</th>
+<th style="text-align: center;">Byte</th>
+<th style="text-align: center;">D7–D4 (P7–P4)</th>
+<th style="text-align: center;">Backlight (P3)</th>
+<th style="text-align: center;">EN (P2)</th>
+<th style="text-align: center;">RW (P1)</th>
+<th style="text-align: center;">RS (P0)</th>
+<th style="text-align: center;">Byte in hex</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>The baud divider is what I computed</td>
-<td></td>
+<td style="text-align: center;">1: high nibble, EN = 1</td>
+<td style="text-align: center;"><code>0011</code></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"><code>0x3D</code></td>
 </tr>
 <tr class="even">
-<td>The pins belong to the USART</td>
-<td></td>
+<td style="text-align: center;">2: high nibble, EN = 0</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
 </tr>
 <tr class="odd">
-<td>A byte is waiting to be read</td>
-<td></td>
+<td style="text-align: center;">3: low nibble, EN = 1</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
 </tr>
 <tr class="even">
-<td>Bytes were lost</td>
-<td></td>
+<td style="text-align: center;">4: low nibble, EN = 0</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
 </tr>
 </tbody>
 </table>
-<ol start="22" type="1">
-<li>Your telemetry is 18 characters at 10 Hz on a 115 200 baud link. A teammate proposes raising the rate to 200 Hz “since the link is only 1.6 % used.” Evaluate the proposal with numbers, and name the constraint that bites before bandwidth does.</li>
+</div>
+<p>For a command (RS = 0), how does each byte change?</p>
+<ol start="12" type="1">
+<li>The LCD driver sends each character with one <code>HAL_I2C_Master_Transmit()</code> of 4 bytes. Count the address byte too. Ignore START and STOP. Fill in the table.</li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>What is written</th>
+<th style="text-align: center;">Bytes with ACK</th>
+<th style="text-align: right;">Time at 100 kHz</th>
+<th style="text-align: right;">Time at 400 kHz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>one character</td>
+<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="even">
+<td>one line, 16 characters</td>
+<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td>both lines, 32 characters</td>
+<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol type="a">
+<li>The program rewrites both lines on every 10 ms tick at 100 kHz. Does this fit in 10 ms? <strong>Yes / No.</strong><br>
+</li>
+<li>The lab rule: write the LCD only when the text changes, and at most every 200 ms. What part of 200 ms do both lines use at 100 kHz? Give a percentage.</li>
 </ol>
 </section>
-<section id="exit-self-assessment" class="level2">
-<h2 class="anchored" data-anchor-id="exit-self-assessment">Exit self-assessment</h2>
+<section id="part-f---spi-8-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="part-f---spi-8-minutes">Part F - SPI (8 minutes)</h2>
+<ol start="13" type="1">
+<li>Fill in CPOL, CPHA and the mode number.</li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">SCK when idle</th>
+<th style="text-align: center;">Data read on</th>
+<th style="text-align: center;">CPOL</th>
+<th style="text-align: center;">CPHA</th>
+<th style="text-align: center;">Mode</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">low</td>
+<td style="text-align: center;">rising edge</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">low</td>
+<td style="text-align: center;">falling edge</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">high</td>
+<td style="text-align: center;">falling edge</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="14" type="1">
+<li><p>A LIS3DH accelerometer is on the SPI bus. Its register <code>0x0F</code> (WHO_AM_I) holds <code>0x33</code>. For a read, bit 7 of the first byte must be 1.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint8_t</span> tx<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span>______<span class="op">,</span> <span class="bn">0x00</span><span class="op">},</span> rx<span class="op">[</span><span class="dv">2</span><span class="op">];</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_WritePin<span class="op">(</span>CS_GPIO_Port<span class="op">,</span> CS_Pin<span class="op">,</span> GPIO_PIN_______<span class="op">);</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>HAL_SPI_TransmitReceive<span class="op">(&amp;</span>hspi1<span class="op">,</span> tx<span class="op">,</span> rx<span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>HAL_GPIO_WritePin<span class="op">(</span>CS_GPIO_Port<span class="op">,</span> CS_Pin<span class="op">,</span> GPIO_PIN_______<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol type="a">
+<li>Fill in the three blanks.<br>
+</li>
+<li>Why does <code>tx</code> have a second byte, <code>0x00</code>?<br>
+</li>
+<li>Which byte holds <code>0x33</code> after the call: <code>rx[0]</code> or <code>rx[1]</code>?<br>
+</li>
+<li>The CS line is never pulled low. Does HAL return an error? <strong>Yes / No.</strong> Which values does <code>rx[1]</code> show?</li>
+</ol></li>
+<li><p>Choose UART, I2C or SPI for each device. Write one word.</p></li>
+</ol>
+<div class="answer">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Device</th>
+<th style="text-align: center;">Bus</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>a BME280 sensor and a 16x2 LCD on the same two pins</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td>a colour display that needs a 10 MHz clock</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td>the PC with the Serial Monitor</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="check-yourself" class="level2">
+<h2 class="anchored" data-anchor-id="check-yourself">Check yourself</h2>
 <ul class="task-list">
-<li><label><input type="checkbox">I can compute <code>BRR</code> and the resulting error from memory.</label></li>
-<li><label><input type="checkbox">I can convert baud to line time and to lines per second.</label></li>
-<li><label><input type="checkbox">I can explain <code>TXE</code>/<code>TC</code> and <code>RXNE</code>/<code>ORE</code>.</label></li>
-<li><label><input type="checkbox">I can write an interrupt receive with a correct re-arm.</label></li>
-<li><label><input type="checkbox">I can diagnose the six standard UART symptoms.</label></li>
+<li><label><input type="checkbox">I can write the bits of an 8N1 frame and calculate the time of a line.</label></li>
+<li><label><input type="checkbox">I can calculate <code>BRR</code> and the real baud rate, and compare the error with 3.33 %.</label></li>
+<li><label><input type="checkbox">I can explain why the receive callback arms again, and what an overrun loses.</label></li>
+<li><label><input type="checkbox">I can name START, STOP, ACK and NACK, and shift an I2C address for HAL.</label></li>
+<li><label><input type="checkbox">I can write the parts of an I2C register read and the <code>HAL_I2C_Mem_Read()</code> call.</label></li>
+<li><label><input type="checkbox">I can write the four PCF8574 bytes of one LCD character and time an LCD line.</label></li>
+<li><label><input type="checkbox">I can find an SPI mode from CPOL and CPHA, and read a register with <code>HAL_SPI_TransmitReceive()</code>.</label></li>
 </ul>
 
 
