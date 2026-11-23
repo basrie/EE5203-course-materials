@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.43">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -219,7 +219,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Sr</strong> is a repeated START: the direction changes from write to read without a STOP. The controller answers the last data byte with <strong>NACK</strong>: it wants no more data.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HAL_I2C_Master_Transmit<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="bn">0x27</span> <span class="op">&lt;&lt;</span> <span class="dv">1</span><span class="op">,</span> <span class="op">&amp;</span>data<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">100</span><span class="op">);</span>           <span class="co">/* write one byte */</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>HAL_I2C_Mem_Read<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="bn">0x76</span> <span class="op">&lt;&lt;</span> <span class="dv">1</span><span class="op">,</span> <span class="bn">0xD0</span><span class="op">,</span> I2C_MEMADD_SIZE_8BIT<span class="op">,</span> <span class="op">&amp;</span>id<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">100</span><span class="op">);</span> <span class="co">/* id = 0x60 */</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">uint32_t</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> a <span class="op">&lt;</span> <span class="dv">128</span><span class="op">;</span> a<span class="op">++)</span>                                    <span class="co">/* bus scan */</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">uint8_t</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> a <span class="op">&lt;</span> <span class="dv">128</span><span class="op">;</span> a<span class="op">++)</span>                                     <span class="co">/* bus scan */</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>HAL_I2C_IsDeviceReady<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>a <span class="op">&lt;&lt;</span> <span class="dv">1</span><span class="op">),</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">5</span><span class="op">)</span> <span class="op">==</span> HAL_OK<span class="op">)</span> <span class="op">{</span> <span class="co">/* print a */</span> <span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Check every return value: <code>HAL_OK</code>, or <code>HAL_ERROR</code> after a NACK.</p>
 <p><strong>The I2C LCD.</strong> A PCF8574 backpack drives the 16x2 LCD (HD44780, 4-bit mode). PCF8574 bits: P0 = RS (1 = character, 0 = command), P1 = RW, P2 = EN, P3 = backlight, P4–P7 = D4–D7. <strong>One character = 4 bytes:</strong> high nibble with EN = 1, then EN = 0, low nibble with EN = 1, then EN = 0. Example: <code>A</code> (<code>0x41</code>), backlight on, gives <code>0x4D 0x49 0x1D 0x19</code>. One transmit of 4 bytes = address + 4 bytes = 5 × 9 clocks = <strong>450 µs</strong> at 100 kHz. A 16-character line takes about <strong>7.2 ms</strong>. Write the LCD only when the text changes, at most every 200 ms.</p>

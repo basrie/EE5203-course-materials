@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.43">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -5139,9 +5139,9 @@ Close the Serial Monitor before you flash
 <section id="checkpoint-c---the-lcd-on-the-i2c-bus" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-c---the-lcd-on-the-i2c-bus">Checkpoint C - The LCD on the I2C bus</h2>
 <p>Wire the LCD backpack as in the Hardware table. Each I2C device has a 7-bit address. HAL wants it shifted left by one: <code>0x27 &lt;&lt; 1</code> = <code>0x4E</code>, the first byte on the bus. <strong>In <code>USER CODE BEGIN 2</code></strong>, below the start-up line, try every address once:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">uint32_t</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> a <span class="op">&lt;</span> <span class="dv">128</span><span class="op">;</span> a<span class="op">++)</span> <span class="op">{</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">uint8_t</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> a <span class="op">&lt;</span> <span class="dv">128</span><span class="op">;</span> a<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>HAL_I2C_IsDeviceReady<span class="op">(&amp;</span>hi2c1<span class="op">,</span> <span class="op">(</span><span class="dt">uint16_t</span><span class="op">)(</span>a <span class="op">&lt;&lt;</span> <span class="dv">1</span><span class="op">),</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">5</span><span class="op">)</span> <span class="op">==</span> HAL_OK<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        n <span class="op">=</span> snprintf<span class="op">(</span>buf<span class="op">,</span> <span class="kw">sizeof</span> buf<span class="op">,</span> <span class="st">&quot;found 0x</span><span class="sc">%02lX\r\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        n <span class="op">=</span> snprintf<span class="op">(</span>buf<span class="op">,</span> <span class="kw">sizeof</span> buf<span class="op">,</span> <span class="st">&quot;found 0x</span><span class="sc">%02X\r\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        HAL_UART_Transmit<span class="op">(&amp;</span>huart2<span class="op">,</span> <span class="op">(</span><span class="dt">uint8_t</span> <span class="op">*)</span>buf<span class="op">,</span> n<span class="op">,</span> <span class="dv">100</span><span class="op">);</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
