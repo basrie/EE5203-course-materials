@@ -5157,14 +5157,14 @@ Close the Serial Monitor before you flash
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dt">uint32_t</span> t_lcd <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>                   <span class="co">/* time of the last LCD update */</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> lcd_line<span class="op">[</span><span class="dv">17</span><span class="op">];</span>                    <span class="co">/* 16 characters and the &#39;\0&#39; */</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span> <span class="co">/* your condition */</span> <span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">((</span>g_ms <span class="op">-</span> t_lcd<span class="op">)</span> <span class="op">&gt;=</span> <span class="dv">200</span><span class="bu">U</span> <span class="op">&amp;&amp;</span> mv <span class="op">!=</span> mv_shown<span class="op">)</span> <span class="op">{</span>   <span class="co">/* 200 ms passed and mv changed */</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    t_lcd <span class="op">=</span> g_ms<span class="op">;</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    mv_shown <span class="op">=</span> mv<span class="op">;</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    snprintf<span class="op">(</span>lcd_line<span class="op">,</span> <span class="kw">sizeof</span> lcd_line<span class="op">,</span> <span class="st">&quot;mv = </span><span class="sc">%-11lu</span><span class="st">&quot;</span><span class="op">,</span> mv<span class="op">);</span>   <span class="co">/* 16 characters */</span></span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    lcd_set_cursor<span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    lcd_print<span class="op">(</span>lcd_line<span class="op">);</span></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Your own code: the condition.</strong> True when at least 200 ms have passed since <code>t_lcd</code> <strong>and</strong> <code>mv</code> differs from <code>mv_shown</code>. <code>%-11lu</code> fills the line with spaces, so old digits disappear without <code>lcd_clear()</code>.</p>
+<p><strong>The condition</strong> is true when at least 200 ms have passed since <code>t_lcd</code> <strong>and</strong> <code>mv</code> differs from <code>mv_shown</code>. <code>%-11lu</code> fills the line with spaces, so old digits disappear without <code>lcd_clear()</code>.</p>
 <p><strong>Evidence for Checkpoint C:</strong> the <code>found</code> line with your LCD address; line 1 <code>EE5203 Lab 9</code>; line 2 follows the potentiometer. No <code>HAL_Delay()</code> in the loop. <strong>Photo <code>C_lcd.jpg</code>:</strong> the LCD with both lines.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -5299,7 +5299,7 @@ Extension - An overrun on purpose (optional, not graded, click)
 </tr>
 <tr class="odd">
 <td>Line 2 flickers, or the lines come late</td>
-<td>The LCD is written on every pass: check your condition in C.</td>
+<td>The LCD is written on every pass: check the <code>if</code> condition in C.</td>
 </tr>
 </tbody>
 </table>
